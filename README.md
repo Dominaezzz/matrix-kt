@@ -1,4 +1,5 @@
 [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Build Status](https://dev.azure.com/dominicfischer7/matrix-kt/_apis/build/status/Dominaezzz.matrix-kt?branchName=master)](https://dev.azure.com/dominicfischer7/matrix-kt/_build/latest?definitionId=4&branchName=master)
 
 # Matrix in Kotlin
 
