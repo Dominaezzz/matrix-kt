@@ -6,6 +6,7 @@ plugins {
 val ktorVersion: String by extra("1.3.2")
 val serialVersion: String by extra("0.20.0")
 val coroutineVersion: String by extra("1.3.4")
+val jnaVersion: String by extra("5.5.0")
 
 subprojects {
     repositories {
