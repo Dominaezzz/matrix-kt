@@ -19,7 +19,7 @@ kotlin {
     iosArm64()
     iosX64()
 
-    val coroutineVersion = "1.2.2"
+    val coroutineVersion = "1.3.0"
 
     sourceSets {
         commonMain {

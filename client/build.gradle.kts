@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 plugins {
     kotlin("multiplatform")
     id("kotlinx-serialization")
+    `maven-publish`
 }
 
 kotlin {
@@ -18,8 +19,8 @@ kotlin {
     iosArm64()
     iosX64()
 
-    val ktorVersion = "1.2.3"
-    val serialVersion = "0.11.1"
+    val ktorVersion = "1.2.4"
+    val serialVersion = "0.12.0"
 
     sourceSets {
         commonMain {
