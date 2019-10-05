@@ -19,8 +19,8 @@ kotlin {
     iosArm64()
     iosX64()
 
-    val ktorVersion = "1.2.4"
-    val serialVersion = "0.12.0"
+    val ktorVersion = "1.2.5"
+    val serialVersion = "0.13.0"
 
     sourceSets {
         commonMain {
