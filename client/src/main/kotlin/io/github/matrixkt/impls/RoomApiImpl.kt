@@ -24,11 +24,6 @@ import kotlin.reflect.KProperty0
 internal class RoomApiImpl(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) : RoomApi {
     private inline val accessToken: String get() = accessTokenProp.get()
 
-    private val eventJson = Json(
-        MatrixJsonConfig.copy(classDiscriminator = "type"),
-        MatrixSerialModule
-    )
-
     override suspend fun createRoom(params: CreateRoomRequest): String {
         val response = client.post<HttpResponse>(path = "/_matrix/client/r0/createRoom") {
             header("Authorization", "Bearer $accessToken")
@@ -314,13 +309,21 @@ internal class RoomApiImpl(private val client: HttpClient, private val accessTok
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "messages")
             }
+            parameter("from", from)
+            if (to != null) parameter("to", to)
+            parameter("dir", when (dir) {
+                Direction.F -> 'f'
+                Direction.B -> 'b'
+            })
+            if (limit != null) parameter("limit", limit)
+            if (filter != null) parameter("filter", filter)
 
             header("Authorization", "Bearer $accessToken")
         }
 
         response.use {
             when (it.status) {
-                HttpStatusCode.OK -> return eventJson.parse(MessagesResponse.serializer(), it.readText())
+                HttpStatusCode.OK -> return it.receive()
                 else -> throw it.receive<MatrixError>()
             }
         }
