@@ -1,5 +1,5 @@
 [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Build Status](https://github.com/Dominaezzz/matrix-kt/workflows/build/badge.svg)](https://github.com/Dominaezzz/matrix-kt/actions)
+[![](https://github.com/Dominaezzz/matrix-kt/workflows/Build/badge.svg)](https://github.com/Dominaezzz/matrix-kt/actions)
 
 # Matrix in Kotlin
 
