@@ -12,6 +12,7 @@ val serialVersion = "0.14.0"
 kotlin {
     jvm()
     js {
+        nodejs()
     }
     linuxX64()
     mingwX64()
