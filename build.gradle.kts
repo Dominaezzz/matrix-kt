@@ -1,6 +1,6 @@
 plugins {
-    kotlin("multiplatform") version "1.3.50" apply false
-    id("kotlinx-serialization") version "1.3.50" apply false
+    kotlin("multiplatform") version "1.3.61" apply false
+    kotlin("plugin.serialization") version "1.3.61" apply false
 }
 
 subprojects {

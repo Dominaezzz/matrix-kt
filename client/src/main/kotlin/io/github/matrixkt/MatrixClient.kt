@@ -8,15 +8,20 @@ import io.github.matrixkt.models.events.contents.RoomRedactionContent
 import io.github.matrixkt.models.filter.Filter
 import io.github.matrixkt.models.push.PushRule
 import io.github.matrixkt.models.wellknown.DiscoveryInformation
+import io.github.matrixkt.utils.MatrixJson
 import io.github.matrixkt.utils.MatrixJsonConfig
 import io.github.matrixkt.utils.MatrixSerialModule
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.features.HttpCallValidator
 import io.ktor.client.features.defaultRequest
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.request.host
-import kotlinx.io.core.Closeable
+import io.ktor.client.statement.readBytes
+import io.ktor.http.HttpStatusCode
+import io.ktor.utils.io.core.Closeable
+import io.ktor.utils.io.core.String
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
@@ -24,116 +29,39 @@ import kotlinx.serialization.modules.SerializersModule
 
 class MatrixClient(engine: HttpClientEngine, host: String = "matrix.org") : Closeable {
     private val client = HttpClient(engine) {
-        install(JsonFeature) {
-            val json = Json(
-                MatrixJsonConfig.copy(classDiscriminator = "errcode"),
-                SerializersModule {
-                    include(MatrixSerialModule)
+        val json = Json(
+            MatrixJsonConfig.copy(classDiscriminator = "errcode"),
+            SerializersModule {
+                include(MatrixSerialModule)
 
-                    polymorphic<MatrixError> {
-                        addSubclass(MatrixError.Unknown.serializer())
-                        addSubclass(MatrixError.NotFound.serializer())
-                        addSubclass(MatrixError.Forbidden.serializer())
-                        addSubclass(MatrixError.UnsupportedRoomVersion.serializer())
-                        addSubclass(MatrixError.LimitExceeded.serializer())
-                        addSubclass(MatrixError.TooLarge.serializer())
-                        addSubclass(MatrixError.UserInUse.serializer())
-                        addSubclass(MatrixError.Exclusive.serializer())
-                        addSubclass(MatrixError.InvalidUsername.serializer())
-                        addSubclass(MatrixError.ThreePIdDenied.serializer())
-                        addSubclass(MatrixError.ThreePIdInUse.serializer())
-                        addSubclass(MatrixError.UnknownToken.serializer())
-                        addSubclass(MatrixError.ThreePIdNotFound.serializer())
-                        addSubclass(MatrixError.ThreePIdAuthFailed.serializer())
-                        addSubclass(MatrixError.MissingParam.serializer())
-                    }
+                polymorphic<MatrixError> {
+                    addSubclass(MatrixError.Unknown.serializer())
+                    addSubclass(MatrixError.NotFound.serializer())
+                    addSubclass(MatrixError.Forbidden.serializer())
+                    addSubclass(MatrixError.UnsupportedRoomVersion.serializer())
+                    addSubclass(MatrixError.LimitExceeded.serializer())
+                    addSubclass(MatrixError.TooLarge.serializer())
+                    addSubclass(MatrixError.UserInUse.serializer())
+                    addSubclass(MatrixError.Exclusive.serializer())
+                    addSubclass(MatrixError.InvalidUsername.serializer())
+                    addSubclass(MatrixError.ThreePIdDenied.serializer())
+                    addSubclass(MatrixError.ThreePIdInUse.serializer())
+                    addSubclass(MatrixError.UnknownToken.serializer())
+                    addSubclass(MatrixError.ThreePIdNotFound.serializer())
+                    addSubclass(MatrixError.ThreePIdAuthFailed.serializer())
+                    addSubclass(MatrixError.MissingParam.serializer())
                 }
-            )
-
-            serializer = KotlinxSerializer(json).apply {
-                register(MatrixError.serializer())
-                register(JsonElement.serializer())
-                register(GetMembersResponse.serializer())
-                register(MessagesResponse.serializer())
-                register(SendStateEventResponse.serializer())
-                register(SendMessageEventResponse.serializer())
-                register(CreateRoomResponse.serializer())
-                register(ResolveRoomAliasResponse.serializer())
-                register(GetJoinedRoomsResponse.serializer())
-                register(JoinRoomRequest.serializer())
-                register(JoinRoomResponse.serializer())
-                register(KickRequest.serializer())
-                register(UnBanRequest.serializer())
-                register(VisibilityResponse.serializer())
-                register(VisibilityRequest.serializer())
-                register(PublicRoomsResponse.serializer())
-                register(SearchPublicRoomsRequest.serializer())
-                register(UpgradeRoomRequest.serializer())
-                register(UpgradeRoomResponse.serializer())
-                register(SyncResponse.serializer())
-                register(SearchUsersRequest.serializer())
-                register(SearchUsersResponse.serializer())
-                register(SetDisplayNameRequest.serializer())
-                register(GetDisplayNameResponse.serializer())
-                register(GetAvatarUrlResponse.serializer())
-                register(SetAvatarUrlRequest.serializer())
-                register(GetUserProfileResponse.serializer())
-                register(UploadResponse.serializer())
-                register(UrlPreviewResponse.serializer())
-                register(ConfigResponse.serializer())
-                register(LoginFlowsResponse.serializer())
-                register(LoginFlow.serializer())
-                register(RegisterRequest.serializer())
-                register(RegisterResponse.serializer())
-                register(EmailValidationRequest.serializer())
-                register(TokenValidationResponse.serializer())
-                register(MSISDNValidationRequest.serializer())
-                register(ChangePasswordRequest.serializer())
-                register(DeactivateRequest.serializer())
-                register(DeactivateResponse.serializer())
-                register(Filter.serializer())
-                register(TurnServerResponse.serializer())
-                register(MatrixEvent.serializer())
-                register(Remove3PidRequest.serializer())
-                register(Remove3PidResponse.serializer())
-                register(Get3PidsResponse.serializer())
-                register(BanRequest.serializer())
-                register(Capabilities.serializer())
-                register(CreateRoomAliasRequest.serializer())
-                register(GetDevicesResponse.serializer())
-                register(Device.serializer())
-                register(PushRule.serializer())
-                register(PushRuleActions.serializer())
-                register(Pushers.serializer())
-                register(GetPresenceResponse.serializer())
-                register(Versions.serializer())
-                register(InviteRequest.serializer())
-                register(PushRuleEnabled.serializer())
-                register(KeyChangesResponse.serializer())
-                register(UploadKeysRequest.serializer())
-                register(UploadKeysResponse.serializer())
-                register(LoginRequest.serializer())
-                register(LoginResponse.serializer())
-                register(ReadMarkersRequest.serializer())
-                register(SetPresenceRequest.serializer())
-                register(SyncResponse.serializer())
-                register(TypingRequest.serializer())
-                register(DiscoveryInformation.serializer())
-                register(WhoAmIResponse.serializer())
-                register(GetCapabilitiesResponse.serializer())
-                register(JsonObject.serializer())
-                register(QueryKeysRequest.serializer())
-                register(QueryKeysResponse.serializer())
-                register(GetPushRulesResponse.serializer())
-                register(GetMembersResponse.serializer())
-                register(DeviceKeys.serializer())
-                register(SendStateEventResponse.serializer())
-                register(Pusher.serializer())
-                register(SetPushRuleRequest.serializer())
-                register(JoinedMembersResponse.serializer())
-                register(RoomRedactionContent.serializer())
-                register(Add3PidRequest.serializer())
-                register(SetPushRuleRequest.serializer())
+            }
+        )
+        install(JsonFeature) {
+            serializer = KotlinxSerializer(json)
+        }
+        install(HttpCallValidator) {
+            validateResponse {
+                if (it.status != HttpStatusCode.OK) {
+                    val errorJson = String(it.readBytes())
+                    throw json.parse(MatrixError.serializer(), errorJson) // it.receive<MatrixError>()
+                }
             }
         }
 

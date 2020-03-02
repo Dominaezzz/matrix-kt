@@ -4,6 +4,8 @@ plugins {
     kotlin("multiplatform")
 }
 
+val coroutineVersion = "1.3.3"
+
 kotlin {
     jvm()
     js {
@@ -18,8 +20,6 @@ kotlin {
     iosArm32()
     iosArm64()
     iosX64()
-
-    val coroutineVersion = "1.3.2"
 
     sourceSets {
         commonMain {
@@ -58,22 +58,19 @@ kotlin {
                 implementation(kotlin("test-js"))
             }
         }
-    }
-
-    targets.withType<KotlinNativeTarget> {
-        compilations.named("main") {
-            defaultSourceSet {
-                kotlin.srcDir("src/nativeMain/kotlin")
-            }
-
+        val nativeMain by creating {
             dependencies {
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:$coroutineVersion")
             }
         }
-        compilations.named("test") {
-            defaultSourceSet {
-                kotlin.srcDir("src/nativeTest/kotlin")
-            }
+        val nativeTest by creating
+
+        for (target in targets.withType<KotlinNativeTarget>()) {
+            val main = getByName("${target.name}Main")
+            main.dependsOn(nativeMain)
+
+            val test = getByName("${target.name}Test")
+            test.dependsOn(nativeTest)
         }
     }
 }

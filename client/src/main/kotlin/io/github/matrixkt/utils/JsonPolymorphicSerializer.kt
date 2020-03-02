@@ -12,7 +12,7 @@ internal abstract class JsonPolymorphicSerializer<T : Any>(
    private val fallback: KSerializer<T>? = null
 ) : KSerializer<T> {
    override val descriptor: SerialDescriptor = object : SerialClassDescImpl(klass.simpleName!!) {
-       override val kind: SerialKind get() = UnionKind.SEALED
+       override val kind: SerialKind get() = PolymorphicKind.SEALED
    }
 
    override fun serialize(encoder: Encoder, obj: T) {

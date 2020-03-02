@@ -27,14 +27,12 @@ data class CallHangupContent(
      */
     val reason: Reason? = null
 ): Content() {
-    @Serializable(Reason.Companion::class)
+    @Serializable
     enum class Reason {
-        ICE_FAILED, INVITE_TIMEOUT;
+        @SerialName("ice_failed")
+        ICE_FAILED,
 
-        companion object : CommonEnumSerializer<Reason>(
-            "Reason",
-            values(),
-            values().map { it.name.toLowerCase() }.toTypedArray()
-        )
+        @SerialName("invite_timeout")
+        INVITE_TIMEOUT;
     }
 }

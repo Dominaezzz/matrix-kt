@@ -1,6 +1,5 @@
 package io.github.matrixkt.models
 
-import io.github.matrixkt.models.events.contents.Content
 import io.github.matrixkt.models.events.MatrixEvent
 import io.github.matrixkt.models.events.contents.RoomMemberContent
 import io.github.matrixkt.models.events.UnsignedData
@@ -8,45 +7,37 @@ import io.github.matrixkt.models.push.PushCondition
 import io.github.matrixkt.models.push.RuleSet
 import io.github.matrixkt.models.wellknown.DiscoveryInformation
 import kotlinx.serialization.*
-import kotlinx.serialization.internal.CommonEnumSerializer
 import kotlinx.serialization.internal.SerialClassDescImpl
 import kotlinx.serialization.json.JsonInput
 import kotlinx.serialization.json.JsonLiteral
 import kotlinx.serialization.json.JsonObject
 
-@Serializable(with = RoomVisibility.Companion::class)
+@Serializable
 enum class RoomVisibility {
-    PUBLIC, PRIVATE;
-
-    companion object : CommonEnumSerializer<RoomVisibility>(
-        "RoomVisibility",
-        values(),
-        values().map { it.name.toLowerCase() }.toTypedArray()
-    )
+    @SerialName("public")
+    PUBLIC,
+    @SerialName("private")
+    PRIVATE;
 }
 
-@Serializable(Presence.Companion::class)
+@Serializable
 enum class Presence {
-    OFFLINE, ONLINE, UNAVAILABLE;
-
-    companion object : CommonEnumSerializer<Presence>(
-        "Presence",
-        values(),
-        values().map { it.name.toLowerCase() }.toTypedArray()
-    )
+    @SerialName("offline")
+    OFFLINE,
+    @SerialName("online")
+    ONLINE,
+    @SerialName("unavailable")
+    UNAVAILABLE;
 }
 
-@Serializable(RoomPreset.Companion::class)
+@Serializable
 enum class RoomPreset {
     PRIVATE_CHAT,
+    @SerialName("public_chat")
     PUBLIC_CHAT,
-    TRUSTED_PRIVATE_CHAT;
 
-    companion object : CommonEnumSerializer<RoomPreset>(
-        "RoomPreset",
-        values(),
-        values().map { it.name.toLowerCase() }.toTypedArray()
-    )
+    @SerialName("trusted_private_chat")
+    TRUSTED_PRIVATE_CHAT;
 }
 
 @Serializable
@@ -841,15 +832,12 @@ data class JoinedMembersResponse(
     val joined: Map<String, RoomMember>
 )
 
-@Serializable(Direction.Companion::class)
+@Serializable
 enum class Direction {
-    F, B;
-
-    companion object : CommonEnumSerializer<Direction>(
-        "Direction",
-        values(),
-        values().map { it.name.toLowerCase() }.toTypedArray()
-    )
+    @SerialName("f")
+    F,
+    @SerialName("b")
+    B;
 }
 
 @Serializable
@@ -1012,15 +1000,12 @@ data class UploadResponse(
     val contentUri: String
 )
 
-@Serializable(with = ThumbnailMethod.Companion::class)
+@Serializable
 enum class ThumbnailMethod {
-    CROP, SCALE;
-
-    companion object : CommonEnumSerializer<ThumbnailMethod>(
-        "ThumbnailMethod",
-        values(),
-        values().map { it.name.toLowerCase() }.toTypedArray()
-    )
+    @SerialName("crop")
+    CROP,
+    @SerialName("scale")
+    SCALE;
 }
 
 @Serializable
@@ -1178,15 +1163,12 @@ data class LoginResponse(
     val wellKnown: DiscoveryInformation? = null
 )
 
-@Serializable(RegistrationKind.Companion::class)
+@Serializable
 enum class RegistrationKind {
-    GUEST, USER;
-
-    companion object : CommonEnumSerializer<RegistrationKind>(
-        "RegistrationKind",
-        values(),
-        values().map { it.name.toLowerCase() }.toTypedArray()
-    )
+    @SerialName("guest")
+    GUEST,
+    @SerialName("user")
+    USER;
 }
 
 @Serializable
@@ -1508,15 +1490,12 @@ data class Get3PidsResponse(
     val threepids: List<ThirdPartyIdentifier>
 )
 
-@Serializable(Medium.Companion::class)
+@Serializable
 enum class Medium {
-    EMAIL, MSISDN;
-
-    companion object : CommonEnumSerializer<Medium>(
-        "Medium",
-        values(),
-        values().map { it.name.toLowerCase() }.toTypedArray()
-    )
+    @SerialName("email")
+    EMAIL,
+    @SerialName("msisdn")
+    MSISDN;
 }
 
 @Serializable
@@ -1589,15 +1568,12 @@ data class Remove3PidResponse(
     val idServerUnbindResult: IdServerUnbindResult
 )
 
-@Serializable(IdServerUnbindResult.Companion::class)
+@Serializable
 enum class IdServerUnbindResult {
-    NO_SUPPORT, SUCCESS;
-
-    companion object : CommonEnumSerializer<IdServerUnbindResult>(
-        "IdServerUnbindResult",
-        arrayOf(NO_SUPPORT, SUCCESS),
-        arrayOf("no-support", "success")
-    )
+    @SerialName("no-support")
+    NO_SUPPORT,
+    @SerialName("success")
+    SUCCESS;
 }
 
 @Serializable
@@ -1672,19 +1648,26 @@ data class RoomVersionsCapability(
 /**
  * The stability of the room version.
  */
-@Serializable(RoomVersionStability.Companion::class)
+@Serializable
 enum class RoomVersionStability {
-    STABLE, UNSTABLE;
-
-    companion object : CommonEnumSerializer<RoomVersionStability>(
-        "RoomVersionStability",
-        values(),
-        values().map { it.name.toLowerCase() }.toTypedArray()
-    )
+    @SerialName("stable")
+    STABLE,
+    @SerialName("unstable")
+    UNSTABLE;
 }
 
+@Serializable
 enum class PushRuleKind {
-    OVERRIDE, UNDERRIDE, SENDER, ROOM, CONTENT
+    @SerialName("override")
+    OVERRIDE,
+    @SerialName("underride")
+    UNDERRIDE,
+    @SerialName("sender")
+    SENDER,
+    @SerialName("room")
+    ROOM,
+    @SerialName("content")
+    CONTENT;
 }
 
 @Serializable
@@ -1692,15 +1675,17 @@ data class GetPushRulesResponse(
     val global: RuleSet
 )
 
-@Serializable(PushRuleAction.Companion::class)
+@Serializable
 enum class PushRuleAction {
-    NOTIFY, DONT_NOTIFY, COALESCE, SET_TWEAK;
+    @SerialName("notify")
+    NOTIFY,
+    @SerialName("dont_notify")
+    DONT_NOTIFY,
+    @SerialName("coalesce")
+    COALESCE,
+    @SerialName("set_tweak")
+    SET_TWEAK;
 
-    companion object : CommonEnumSerializer<PushRuleAction>(
-        "PushRuleAction",
-        values(),
-        values().map { it.name.toLowerCase() }.toTypedArray()
-    )
 }
 
 @Serializable

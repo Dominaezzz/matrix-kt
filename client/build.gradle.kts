@@ -2,15 +2,16 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 
 plugins {
     kotlin("multiplatform")
-    id("kotlinx-serialization")
+    kotlin("plugin.serialization")
     `maven-publish`
 }
+
+val ktorVersion = "1.3.1"
+val serialVersion = "0.14.0"
 
 kotlin {
     jvm()
     js {
-        browser {
-        }
     }
     linuxX64()
     mingwX64()
@@ -18,9 +19,6 @@ kotlin {
     iosArm32()
     iosArm64()
     iosX64()
-
-    val ktorVersion = "1.2.5"
-    val serialVersion = "0.13.0"
 
     sourceSets {
         commonMain {
@@ -72,6 +70,9 @@ kotlin {
 
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialVersion")
                 implementation("io.ktor:ktor-client-serialization-js:$ktorVersion")
+
+                // https://github.com/Kotlin/kotlinx-io/issues/57
+                api(npm("text-encoding"))
             }
         }
         named("jsTest") {

@@ -245,7 +245,7 @@ sealed class RoomMessageContent : Content() {
 
     companion object : KSerializer<RoomMessageContent> {
         override val descriptor: SerialDescriptor = object : SerialClassDescImpl("RoomMessageContent") {
-            override val kind: SerialKind get() = UnionKind.SEALED
+            override val kind: SerialKind get() = PolymorphicKind.SEALED
         }
 
         override fun serialize(encoder: Encoder, obj: RoomMessageContent) {

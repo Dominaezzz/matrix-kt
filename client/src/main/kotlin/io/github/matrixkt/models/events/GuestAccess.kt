@@ -1,15 +1,14 @@
 package io.github.matrixkt.models.events
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.internal.CommonEnumSerializer
 
-@Serializable(GuestAccess.Companion::class)
+@Serializable
 enum class GuestAccess {
-    CAN_JOIN, FORBIDDEN;
+    @SerialName("can_join")
+    CAN_JOIN,
 
-    companion object : CommonEnumSerializer<GuestAccess>(
-        "GuestAccess",
-        values(),
-        values().map { it.name.toLowerCase() }.toTypedArray()
-    )
+    @SerialName("forbidden")
+    FORBIDDEN;
 }

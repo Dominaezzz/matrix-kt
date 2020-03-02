@@ -1,15 +1,21 @@
 package io.github.matrixkt.models.events
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.internal.CommonEnumSerializer
 
-@Serializable(JoinRule.Companion::class)
+@Serializable
 enum class JoinRule {
-    PUBLIC, KNOCK, INVITE, PRIVATE;
+    @SerialName("public")
+	PUBLIC,
 
-    companion object : CommonEnumSerializer<JoinRule>(
-        "JoinRule",
-        values(),
-        values().map { it.name.toLowerCase() }.toTypedArray()
-    )
+	@SerialName("knock")
+	KNOCK,
+
+	@SerialName("invite")
+	INVITE,
+
+	@SerialName("private")
+	PRIVATE;
+
 }

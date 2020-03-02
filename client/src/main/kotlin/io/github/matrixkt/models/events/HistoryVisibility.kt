@@ -1,15 +1,19 @@
 package io.github.matrixkt.models.events
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.internal.CommonEnumSerializer
 
-@Serializable(HistoryVisibility.Companion::class)
+@Serializable
 enum class HistoryVisibility {
-    INVITED, JOINED, SHARED, WORLD_READABLE;
+    @SerialName("invited")
+	INVITED,
 
-    companion object : CommonEnumSerializer<HistoryVisibility>(
-        "HistoryVisibility",
-        values(),
-        values().map { it.name.toLowerCase() }.toTypedArray()
-    )
+    @SerialName("joined")
+	JOINED,
+
+    @SerialName("shared")
+	SHARED,
+
+    @SerialName("world_readable")
+	WORLD_READABLE;
 }

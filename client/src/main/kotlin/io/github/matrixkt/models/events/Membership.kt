@@ -1,15 +1,24 @@
 package io.github.matrixkt.models.events
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.internal.CommonEnumSerializer
 
-@Serializable(Membership.Companion::class)
+@Serializable
 enum class Membership {
-    INVITE, JOIN, KNOCK, LEAVE, BAN;
+    @SerialName("invite")
+	INVITE,
 
-    companion object : CommonEnumSerializer<Membership>(
-        "Membership",
-        values(),
-        values().map { it.name.toLowerCase() }.toTypedArray()
-    )
+    @SerialName("join")
+	JOIN,
+
+    @SerialName("knock")
+	KNOCK,
+
+    @SerialName("leave")
+	LEAVE,
+
+    @SerialName("ban")
+	BAN;
+
 }
