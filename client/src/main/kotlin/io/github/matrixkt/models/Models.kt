@@ -484,13 +484,13 @@ data class SyncResponse(
     @SerialName("account_data")
     val accountData: AccountData? = null,
 
-//    /**
-//     * Information on the send-to-device messages for the client device,
-//     * as defined in [Send-to-Device messaging](https://matrix.org/docs/spec/client_server/r0.5.0#send-to-device-sync).
-//     */
-//    @SerialName("to_device")
-//    val toDevice: ToDevice? = null,
-//
+    /**
+     * Information on the send-to-device messages for the client device,
+     * as defined in [Send-to-Device messaging](https://matrix.org/docs/spec/client_server/r0.5.0#send-to-device-sync).
+     */
+    @SerialName("to_device")
+    val toDevice: ToDevice? = null,
+
 //    /**
 //     * Information on end-to-end device updates, as specified in [End-to-end encryption](https://matrix.org/docs/spec/client_server/r0.5.0#device-lists-sync).
 //     */
@@ -739,7 +739,20 @@ data class SyncResponse(
          * The type of event.
          * This SHOULD be namespaced similar to Java package naming conventions e.g. 'com.example.subdomain.event.type'
          */
-        val type: String
+        val type: String,
+
+        /**
+         * The Matrix user ID of the user who sent this event.
+         */
+        val sender: String? = null
+    )
+
+    @Serializable
+    data class ToDevice(
+        /**
+         * List of send-to-device messages.
+         */
+        val events: List<Event> = emptyList()
     )
 }
 
@@ -1826,7 +1839,7 @@ data class KeyObject(
     /**
      * Signature for the device. Mapped from user ID to signature object.
      */
-    val signatures: Map<String, String>
+    val signatures: Map<String, Map<String, String>>
 )
 
 object OneTimeKeySerializer : KSerializer<Any> {
@@ -1916,7 +1929,7 @@ data class UnsignedDeviceInfo(
      * The display name which the user set on the device.
      */
     @SerialName("device_display_name")
-    val deviceDisplayName: String
+    val deviceDisplayName: String? = null
 )
 
 @Serializable
@@ -1952,7 +1965,7 @@ data class ClaimKeysResponse(
      * See the `key algorithms <#key-algorithms>`_ section for information on the Key Object format.
      */
     @SerialName("one_time_keys")
-    val oneTimeKeys: Map<String, Map<String, @Serializable(with = OneTimeKeySerializer::class) Any>>
+    val oneTimeKeys: Map<String, Map<String, Map<String, @Serializable(with = OneTimeKeySerializer::class) Any>>>
 )
 
 /**

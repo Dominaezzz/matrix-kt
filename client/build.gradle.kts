@@ -12,6 +12,7 @@ val serialVersion = "0.14.0"
 kotlin {
     jvm()
     js {
+        browser()
         nodejs()
     }
     linuxX64()
@@ -29,9 +30,9 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-common"))
 
-                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialVersion")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serialVersion")
 
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
+                api("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-serialization:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
@@ -71,9 +72,6 @@ kotlin {
 
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialVersion")
                 implementation("io.ktor:ktor-client-serialization-js:$ktorVersion")
-
-                // https://github.com/Kotlin/kotlinx-io/issues/57
-                api(npm("text-encoding"))
             }
         }
         named("jsTest") {

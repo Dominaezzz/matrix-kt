@@ -3313,7 +3313,6 @@ class ClientTests {
     }
 
     @Test
-    @Ignore
     fun testSendToDevice() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
@@ -3328,9 +3327,9 @@ class ClientTests {
 
         val messages = mapOf(
             "@alice:example.com" to mapOf(
-                "TLLBEANAAG" to mapOf(
+                "TLLBEANAAG" to json {
                     "example_content_key" to "value"
-                )
+                }
             )
         )
 
@@ -3644,7 +3643,6 @@ class ClientTests {
     }
 
     @Test
-    @Ignore
     fun testKeysClaim() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
@@ -3686,7 +3684,7 @@ class ClientTests {
             val response = client.keysApi.claimKeys(query)
             assertTrue(response.failures!!.isEmpty())
             assertEquals(1, response.oneTimeKeys.size)
-            assertTrue(response.oneTimeKeys.getValue("@alice:example.com")["JLAFKJWSCS"] is KeyObject)
+            assertTrue(response.oneTimeKeys.getValue("@alice:example.com").getValue("JLAFKJWSCS")["signed_curve25519:AAAAHg"] is KeyObject)
         }
     }
 
@@ -5210,5 +5208,22 @@ class ClientTests {
             }
             assertEquals("You cannot upgrade this room", error.error)
         }
+    }
+
+    // This is here to fix Kotlin/JS tests.
+    private inline fun <reified T : Throwable> assertFailsWith(block: () -> Unit): T {
+        val result = runCatching(block)
+        result.fold(
+            {
+                throw Exception("Expected exception of type ${T::class} but got none")
+            },
+            {
+                if (it is T) {
+                    return it
+                } else {
+                    throw Exception("Expected exception of type ${T::class} but got ${it::class}")
+                }
+            }
+        )
     }
 }
