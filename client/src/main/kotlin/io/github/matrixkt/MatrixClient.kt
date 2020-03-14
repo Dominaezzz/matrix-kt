@@ -9,7 +9,9 @@ import io.github.matrixkt.utils.MatrixSerialModule
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.features.HttpCallValidator
+import io.ktor.client.features.HttpResponseValidator
 import io.ktor.client.features.defaultRequest
+import io.ktor.client.features.json.Json
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.request.host
@@ -21,10 +23,17 @@ import kotlinx.serialization.json.Json
 
 class MatrixClient(engine: HttpClientEngine, host: String = "matrix.org") : Closeable {
     private val client = HttpClient(engine) {
-        install(JsonFeature) {
+        expectSuccess = false
+
+        defaultRequest {
+            this.host = host
+        }
+
+        Json {
             serializer = KotlinxSerializer(MatrixJson)
         }
-        install(HttpCallValidator) {
+
+        HttpResponseValidator {
             val json = Json(
                 MatrixJsonConfig.copy(classDiscriminator = "errcode"),
                 MatrixSerialModule
@@ -35,12 +44,6 @@ class MatrixClient(engine: HttpClientEngine, host: String = "matrix.org") : Clos
                     throw json.parse(MatrixError.serializer(), errorJson) // it.receive<MatrixError>()
                 }
             }
-        }
-
-        expectSuccess = false
-
-        defaultRequest {
-            this.host = host
         }
     }
 

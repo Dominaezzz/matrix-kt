@@ -1,0 +1,16 @@
+package io.github.matrixkt.models
+
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+enum class RoomPreset {
+    @SerialName("private_chat")
+    PRIVATE_CHAT,
+
+    @SerialName("public_chat")
+    PUBLIC_CHAT,
+
+    @SerialName("trusted_private_chat")
+    TRUSTED_PRIVATE_CHAT;
+}

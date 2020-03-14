@@ -1,8 +1,8 @@
 package io.github.matrixkt.models
 
 import io.github.matrixkt.models.events.MatrixEvent
-import io.github.matrixkt.models.events.contents.RoomMemberContent
 import io.github.matrixkt.models.events.UnsignedData
+import io.github.matrixkt.models.events.contents.RoomMemberContent
 import io.github.matrixkt.models.push.PushCondition
 import io.github.matrixkt.models.push.RuleSet
 import io.github.matrixkt.models.wellknown.DiscoveryInformation
@@ -10,34 +10,6 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.JsonInput
 import kotlinx.serialization.json.JsonLiteral
 import kotlinx.serialization.json.JsonObject
-
-@Serializable
-enum class RoomVisibility {
-    @SerialName("public")
-    PUBLIC,
-    @SerialName("private")
-    PRIVATE;
-}
-
-@Serializable
-enum class Presence {
-    @SerialName("offline")
-    OFFLINE,
-    @SerialName("online")
-    ONLINE,
-    @SerialName("unavailable")
-    UNAVAILABLE;
-}
-
-@Serializable
-enum class RoomPreset {
-    PRIVATE_CHAT,
-    @SerialName("public_chat")
-    PUBLIC_CHAT,
-
-    @SerialName("trusted_private_chat")
-    TRUSTED_PRIVATE_CHAT;
-}
 
 @Serializable
 data class Invite3pid(
