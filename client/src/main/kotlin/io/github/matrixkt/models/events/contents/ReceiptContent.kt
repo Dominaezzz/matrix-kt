@@ -3,9 +3,9 @@ package io.github.matrixkt.models.events.contents
 import io.github.matrixkt.utils.InlineMapSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.serializer
+import kotlinx.serialization.builtins.serializer
 
-@Serializable(ReceiptContent.Companion::class)
+@Serializable(ReceiptContent.Serializer::class)
 data class ReceiptContent(
     /**
      * The mapping of event ID to a collection of receipts for this event ID.
@@ -22,14 +22,14 @@ data class ReceiptContent(
         val read: Users? = null
     )
 
-    @Serializable(Users.Companion::class)
+    @Serializable(Users.Serializer::class)
     data class Users(
         /**
          * The mapping of user ID to receipt. The user ID is the entity who sent this receipt.
          */
         val content: Map<String, Receipt> = emptyMap()
     ): Map<String, Receipt> by content {
-        companion object : InlineMapSerializer<String, Receipt, Users>(
+        object Serializer : InlineMapSerializer<String, Receipt, Users>(
             String.serializer(),
             Receipt.serializer(),
             ::Users)
@@ -44,7 +44,7 @@ data class ReceiptContent(
         val timestamp: Long? = null
     )
 
-    companion object : InlineMapSerializer<String, Receipts, ReceiptContent>(
+    object Serializer : InlineMapSerializer<String, Receipts, ReceiptContent>(
         String.serializer(),
         Receipts.serializer(),
         ::ReceiptContent)

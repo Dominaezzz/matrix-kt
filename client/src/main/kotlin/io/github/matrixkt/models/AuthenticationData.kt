@@ -1,10 +1,9 @@
 package io.github.matrixkt.models
 
-import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Serializable(PolymorphicSerializer::class)
+@Serializable
 sealed class AuthenticationData {
     // /**
     //  * The login type that the client is attempting to complete.

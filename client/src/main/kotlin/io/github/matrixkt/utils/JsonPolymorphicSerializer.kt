@@ -1,7 +1,6 @@
 package io.github.matrixkt.utils
 
 import kotlinx.serialization.*
-import kotlinx.serialization.internal.SerialClassDescImpl
 import kotlinx.serialization.json.JsonInput
 import kotlinx.serialization.json.content
 import kotlin.reflect.KClass
@@ -11,23 +10,21 @@ internal abstract class JsonPolymorphicSerializer<T : Any>(
    private val discriminator: String,
    private val fallback: KSerializer<T>? = null
 ) : KSerializer<T> {
-   override val descriptor: SerialDescriptor = object : SerialClassDescImpl(klass.simpleName!!) {
-       override val kind: SerialKind get() = PolymorphicKind.SEALED
-   }
+   override val descriptor = SerialDescriptor(klass.simpleName!!, PolymorphicKind.SEALED)
 
-   override fun serialize(encoder: Encoder, obj: T) {
-       val serializer = encoder.context.getPolymorphic(klass, obj)
+   override fun serialize(encoder: Encoder, value: T) {
+       val serializer = encoder.context.getPolymorphic(klass, value)
        return if (serializer != null) {
-           val compositeEncoder = encoder.beginStructure(descriptor)
-           compositeEncoder.encodeStringElement(descriptor, 0, serializer.descriptor.name)
-           @Suppress("UNCHECKED_CAST")
-           compositeEncoder.encodeSerializableElement(descriptor, 1, serializer as KSerializer<T>, obj)
-           compositeEncoder.endStructure(descriptor)
+           encoder.encodeStructure(descriptor) {
+               encodeStringElement(descriptor, 0, serializer.descriptor.serialName)
+               @Suppress("UNCHECKED_CAST")
+               encodeSerializableElement(descriptor, 1, serializer as KSerializer<T>, value)
+           }
        } else {
            if (fallback != null) {
-               encoder.encode(fallback, obj)
+               encoder.encode(fallback, value)
            } else {
-               throw SerializationException("No serializer for class ${obj::class}")
+               throw SerializationException("No serializer for class ${value::class}")
            }
        }
    }

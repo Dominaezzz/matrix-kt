@@ -1,7 +1,11 @@
 plugins {
-    kotlin("multiplatform") version "1.3.61" apply false
-    kotlin("plugin.serialization") version "1.3.61" apply false
+    kotlin("multiplatform") version "1.3.70" apply false
+    kotlin("plugin.serialization") version "1.3.70" apply false
 }
+
+val ktorVersion: String by extra("1.3.2")
+val serialVersion: String by extra("0.20.0")
+val coroutineVersion: String by extra("1.3.4")
 
 subprojects {
     repositories {

@@ -3,11 +3,6 @@ package io.github.matrixkt
 import io.github.matrixkt.apis.*
 import io.github.matrixkt.impls.*
 import io.github.matrixkt.models.*
-import io.github.matrixkt.models.events.MatrixEvent
-import io.github.matrixkt.models.events.contents.RoomRedactionContent
-import io.github.matrixkt.models.filter.Filter
-import io.github.matrixkt.models.push.PushRule
-import io.github.matrixkt.models.wellknown.DiscoveryInformation
 import io.github.matrixkt.utils.MatrixJson
 import io.github.matrixkt.utils.MatrixJsonConfig
 import io.github.matrixkt.utils.MatrixSerialModule
@@ -23,40 +18,17 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.utils.io.core.Closeable
 import io.ktor.utils.io.core.String
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.modules.SerializersModule
 
 class MatrixClient(engine: HttpClientEngine, host: String = "matrix.org") : Closeable {
     private val client = HttpClient(engine) {
-        val json = Json(
-            MatrixJsonConfig.copy(classDiscriminator = "errcode"),
-            SerializersModule {
-                include(MatrixSerialModule)
-
-                polymorphic<MatrixError> {
-                    addSubclass(MatrixError.Unknown.serializer())
-                    addSubclass(MatrixError.NotFound.serializer())
-                    addSubclass(MatrixError.Forbidden.serializer())
-                    addSubclass(MatrixError.UnsupportedRoomVersion.serializer())
-                    addSubclass(MatrixError.LimitExceeded.serializer())
-                    addSubclass(MatrixError.TooLarge.serializer())
-                    addSubclass(MatrixError.UserInUse.serializer())
-                    addSubclass(MatrixError.Exclusive.serializer())
-                    addSubclass(MatrixError.InvalidUsername.serializer())
-                    addSubclass(MatrixError.ThreePIdDenied.serializer())
-                    addSubclass(MatrixError.ThreePIdInUse.serializer())
-                    addSubclass(MatrixError.UnknownToken.serializer())
-                    addSubclass(MatrixError.ThreePIdNotFound.serializer())
-                    addSubclass(MatrixError.ThreePIdAuthFailed.serializer())
-                    addSubclass(MatrixError.MissingParam.serializer())
-                }
-            }
-        )
         install(JsonFeature) {
-            serializer = KotlinxSerializer(json)
+            serializer = KotlinxSerializer(MatrixJson)
         }
         install(HttpCallValidator) {
+            val json = Json(
+                MatrixJsonConfig.copy(classDiscriminator = "errcode"),
+                MatrixSerialModule
+            )
             validateResponse {
                 if (it.status != HttpStatusCode.OK) {
                     val errorJson = String(it.readBytes())

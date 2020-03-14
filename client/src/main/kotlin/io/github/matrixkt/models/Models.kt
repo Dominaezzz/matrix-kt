@@ -7,7 +7,6 @@ import io.github.matrixkt.models.push.PushCondition
 import io.github.matrixkt.models.push.RuleSet
 import io.github.matrixkt.models.wellknown.DiscoveryInformation
 import kotlinx.serialization.*
-import kotlinx.serialization.internal.SerialClassDescImpl
 import kotlinx.serialization.json.JsonInput
 import kotlinx.serialization.json.JsonLiteral
 import kotlinx.serialization.json.JsonObject
@@ -1843,7 +1842,7 @@ data class KeyObject(
 )
 
 object OneTimeKeySerializer : KSerializer<Any> {
-    override val descriptor: SerialDescriptor = SerialClassDescImpl("OneTimeKey")
+    override val descriptor = SerialDescriptor("OneTimeKey")
 
     override fun deserialize(decoder: Decoder): Any {
         if (decoder !is JsonInput) throw SerializationException("This class can be loaded only by Json")
@@ -1858,10 +1857,10 @@ object OneTimeKeySerializer : KSerializer<Any> {
         }
     }
 
-    override fun serialize(encoder: Encoder, obj: Any) {
-        return when (obj) {
-            is KeyObject -> encoder.encode(KeyObject.serializer(), obj)
-            is String -> encoder.encodeString(obj)
+    override fun serialize(encoder: Encoder, value: Any) {
+        return when (value) {
+            is KeyObject -> encoder.encode(KeyObject.serializer(), value)
+            is String -> encoder.encodeString(value)
             else -> TODO("Only KeyObject and String supported")
         }
     }

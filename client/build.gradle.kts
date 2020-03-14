@@ -6,8 +6,8 @@ plugins {
     `maven-publish`
 }
 
-val ktorVersion = "1.3.1"
-val serialVersion = "0.14.0"
+val ktorVersion: String by rootProject.extra
+val serialVersion: String by rootProject.extra
 
 kotlin {
     jvm()
@@ -31,8 +31,8 @@ kotlin {
                 implementation(kotlin("stdlib-common"))
 
                 api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serialVersion")
-
                 api("io.ktor:ktor-client-core:$ktorVersion")
+
                 implementation("io.ktor:ktor-client-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-serialization:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
@@ -54,6 +54,8 @@ kotlin {
             dependencies {
                 implementation(kotlin("stdlib-jdk8"))
 
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialVersion")
+
                 implementation("io.ktor:ktor-client-serialization-jvm:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
             }
@@ -72,6 +74,10 @@ kotlin {
 
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialVersion")
                 implementation("io.ktor:ktor-client-serialization-js:$ktorVersion")
+
+                implementation(npm("text-encoding", "0.7.0")) {
+                    because("https://github.com/ktorio/ktor/issues/961")
+                }
             }
         }
         named("jsTest") {
@@ -84,15 +90,17 @@ kotlin {
     }
 
     targets.withType<KotlinNativeTarget> {
-        compilations.named("main") {
-            dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:$serialVersion")
-                implementation("io.ktor:ktor-client-serialization-native:$ktorVersion")
+        compilations {
+            "main" {
+                dependencies {
+                    implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:$serialVersion")
+                    implementation("io.ktor:ktor-client-serialization-native:$ktorVersion")
+                }
             }
-        }
-        compilations.named("test") {
-            dependencies {
-                implementation("io.ktor:ktor-client-mock-native:$ktorVersion")
+            "test" {
+                dependencies {
+                    implementation("io.ktor:ktor-client-mock-native:$ktorVersion")
+                }
             }
         }
     }

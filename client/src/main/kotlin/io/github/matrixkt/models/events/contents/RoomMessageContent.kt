@@ -3,12 +3,11 @@ package io.github.matrixkt.models.events.contents
 import io.github.matrixkt.models.EncryptedFile
 import io.github.matrixkt.models.events.contents.msginfo.*
 import kotlinx.serialization.*
-import kotlinx.serialization.internal.SerialClassDescImpl
-import kotlinx.serialization.json.JsonInput
-import kotlinx.serialization.json.content
+import kotlinx.serialization.json.*
 
 
-@Serializable(RoomMessageContent.Companion::class)
+@Polymorphic
+@Serializable(RoomMessageContent.Serializer::class)
 sealed class RoomMessageContent : Content() {
     /**
      * The textual representation of this message.
@@ -243,20 +242,18 @@ sealed class RoomMessageContent : Content() {
         override fun toString() = "Redacted"
     }
 
-    companion object : KSerializer<RoomMessageContent> {
-        override val descriptor: SerialDescriptor = object : SerialClassDescImpl("RoomMessageContent") {
-            override val kind: SerialKind get() = PolymorphicKind.SEALED
-        }
+    object Serializer : KSerializer<RoomMessageContent> {
+        override val descriptor = SerialDescriptor("RoomMessageContent", PolymorphicKind.SEALED)
 
-        override fun serialize(encoder: Encoder, obj: RoomMessageContent) {
-            val serializer = encoder.context.getPolymorphic(RoomMessageContent::class, obj)
-            requireNotNull(serializer) { "Could not find serializer for '${obj::class.simpleName}'" }
+        override fun serialize(encoder: Encoder, value: RoomMessageContent) {
+            val serializer = encoder.context.getPolymorphic(RoomMessageContent::class, value)
+            requireNotNull(serializer) { "Could not find serializer for '${value::class.simpleName}'" }
 
-            val compositeEncoder = encoder.beginStructure(descriptor)
-            compositeEncoder.encodeStringElement(descriptor, 0, serializer.descriptor.name)
-            @Suppress("UNCHECKED_CAST")
-            compositeEncoder.encodeSerializableElement(descriptor, 1, serializer as KSerializer<Any>, obj)
-            compositeEncoder.endStructure(descriptor)
+            encoder.encodeStructure(descriptor) {
+                encodeStringElement(descriptor, 0, serializer.descriptor.serialName)
+                @Suppress("UNCHECKED_CAST")
+                encodeSerializableElement(descriptor, 1, serializer as KSerializer<Any>, value)
+            }
         }
 
         override fun deserialize(decoder: Decoder): RoomMessageContent {
