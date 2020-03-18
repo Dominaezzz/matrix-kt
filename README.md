@@ -4,9 +4,9 @@
 # Matrix in Kotlin
 
 Kotlin multiplatform libraries for [Matrix](https://matrix.org/).
-- [ ] Http Client [WIP]
+- [x] Http Client [WIP]
+- [x] olm
 - [ ] SDK
-- [ ] olm
 
 # Supported platforms
 - JVM
@@ -20,6 +20,7 @@ Kotlin multiplatform libraries for [Matrix](https://matrix.org/).
 - IosX64
 
 ## Sample
+### Client
 ```kotlin
 val client = MatrixClient(Apache.create(), "matrix.org")
 client.accessToken = "Super secure Token"
@@ -33,4 +34,17 @@ val content = json {
 val eventId = client.roomApi.sendMessage(roomId, "m.room.message", "nonce", content)
 
 client.roomApi.redactEvent(roomId, eventId, "nonce2", "Was a bot!")
+```
+
+### Olm
+```kotlin
+val account = Account()
+upload(account.identityKeys)
+val signature = account.sign("""{"key":"super secure key for security things"}""")
+
+val session = Sessions.createInboundSession(account, "PREKEY message")
+val message = session.decrypt(Message("oun02024f=ocnaowincd;53tnv024ok/7u", 0))
+
+session.clear()
+account.clear()
 ```
