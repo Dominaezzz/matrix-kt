@@ -35,7 +35,6 @@ kotlin {
 
                 implementation("io.ktor:ktor-client-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-                implementation("io.ktor:ktor-client-logging:$ktorVersion")
             }
         }
         commonTest {
@@ -57,7 +56,6 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialVersion")
 
                 implementation("io.ktor:ktor-client-serialization-jvm:$ktorVersion")
-                implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
             }
         }
         named("jvmTest") {

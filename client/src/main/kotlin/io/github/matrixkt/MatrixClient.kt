@@ -7,12 +7,11 @@ import io.github.matrixkt.utils.MatrixJson
 import io.github.matrixkt.utils.MatrixJsonConfig
 import io.github.matrixkt.utils.MatrixSerialModule
 import io.ktor.client.HttpClient
+import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.HttpClientEngine
-import io.ktor.client.features.HttpCallValidator
 import io.ktor.client.features.HttpResponseValidator
 import io.ktor.client.features.defaultRequest
 import io.ktor.client.features.json.Json
-import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.request.host
 import io.ktor.client.statement.readBytes
@@ -21,7 +20,9 @@ import io.ktor.utils.io.core.Closeable
 import io.ktor.utils.io.core.String
 import kotlinx.serialization.json.Json
 
-class MatrixClient(engine: HttpClientEngine, host: String = "matrix.org") : Closeable {
+class MatrixClient(engine: HttpClientEngine,
+                   host: String = "matrix.org",
+                   block: HttpClientConfig<*>.() -> Unit = {}) : Closeable {
     private val client = HttpClient(engine) {
         expectSuccess = false
 
@@ -45,6 +46,8 @@ class MatrixClient(engine: HttpClientEngine, host: String = "matrix.org") : Clos
                 }
             }
         }
+
+        block()
     }
 
     var accessToken: String = ""
