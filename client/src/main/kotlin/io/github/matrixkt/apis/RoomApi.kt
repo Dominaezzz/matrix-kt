@@ -3,9 +3,18 @@ package io.github.matrixkt.apis
 import io.github.matrixkt.models.*
 import io.github.matrixkt.models.events.MatrixEvent
 import io.github.matrixkt.models.events.Membership
+import io.github.matrixkt.models.events.contents.RoomRedactionContent
+import io.ktor.client.HttpClient
+import io.ktor.client.request.*
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import io.ktor.http.encodeURLQueryComponent
 import kotlinx.serialization.json.JsonObject
+import kotlin.reflect.KProperty0
 
-interface RoomApi {
+class RoomApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+    private inline val accessToken: String get() = accessTokenProp.get()
+
     /**
      * Create a new room with various configuration options.
      *
@@ -35,7 +44,15 @@ interface RoomApi {
      *
      * @return The created room's ID.
      */
-    suspend fun createRoom(params: CreateRoomRequest): String
+    suspend fun createRoom(params: CreateRoomRequest): String {
+        val response = client.post<CreateRoomResponse>(path = "/_matrix/client/r0/createRoom") {
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+        return response.roomId
+    }
 
     /**
      * Create a new mapping from room alias to room ID.
@@ -47,7 +64,19 @@ interface RoomApi {
      * @param[roomAlias] The room alias to set.
      * @param[roomId] The room ID to set.
      */
-    suspend fun setRoomAlias(roomAlias: String, roomId: String)
+    suspend fun setRoomAlias(roomAlias: String, roomId: String) {
+        return client.put {
+            url {
+                encodedPath = "/_matrix/client/r0/directory/room/${roomAlias.encodeURLQueryComponent(encodeFull = true)}"
+                // path("_matrix", "client", "r0", "directory", "room", roomAlias)
+            }
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = CreateRoomAliasRequest(roomId)
+        }
+    }
 
     /**
      * Requests that the server resolve a room alias to a room ID.
@@ -61,7 +90,14 @@ interface RoomApi {
      *
      * @param[roomAlias] The room alias.
      */
-    suspend fun getRoomIdByAlias(roomAlias: String): ResolveRoomAliasResponse
+    suspend fun getRoomIdByAlias(roomAlias: String): ResolveRoomAliasResponse {
+        return client.get {
+            url("/_matrix/client/r0/directory/room/${roomAlias.encodeURLQueryComponent(encodeFull = true)}")
+            // path("_matrix", "client", "r0", "directory", "room", roomAlias)
+
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 
     /**
      * Remove a mapping of room alias to room ID.
@@ -75,7 +111,16 @@ interface RoomApi {
      *
      * @param[roomAlias] The room alias to remove.
      */
-    suspend fun deleteRoomAlias(roomAlias: String)
+    suspend fun deleteRoomAlias(roomAlias: String) {
+        return client.delete {
+            url {
+                encodedPath = "/_matrix/client/r0/directory/room/${roomAlias.encodeURLQueryComponent(encodeFull = true)}"
+                // path("_matrix", "client", "r0", "directory", "room", roomAlias)
+            }
+
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 
     /**
      * This API returns a list of the user's current rooms.
@@ -86,7 +131,12 @@ interface RoomApi {
      *
      * @return The ID of each room in which the user has joined membership.
      */
-    suspend fun getJoinedRooms(): List<String>
+    suspend fun getJoinedRooms(): List<String> {
+        val response = client.get<GetJoinedRoomsResponse>("/_matrix/client/r0/joined_rooms") {
+            header("Authorization", "Bearer $accessToken")
+        }
+        return response.joinedRooms
+    }
 
     /**
      * Note that there are two forms of this API, which are documented separately.
@@ -107,7 +157,18 @@ interface RoomApi {
      * @param[roomId] The room identifier (not alias) to which to invite the user.
      * @param[userId] The fully qualified user ID of the invitee.
      */
-    suspend fun inviteUser(roomId: String, userId: String)
+    suspend fun inviteUser(roomId: String, userId: String) {
+        return client.post {
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "invite")
+            }
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = InviteRequest(userId)
+        }
+    }
 
     /**
      * Note that this API requires a room ID, not alias.
@@ -132,7 +193,19 @@ interface RoomApi {
      * @param[roomId] The room identifier (not alias) to join.
      * @return The joined room ID.
      */
-    suspend fun joinRoomById(roomId: String, params: JoinRoomRequest): String
+    suspend fun joinRoomById(roomId: String, params: JoinRoomRequest): String {
+        val response = client.post<JoinRoomResponse> {
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "join")
+            }
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+        return response.roomId
+    }
 
     /**
      * Note that this API takes either a room ID or alias, unlike `/room/{roomId}/join`.
@@ -157,7 +230,20 @@ interface RoomApi {
      * @param[servers] The servers to attempt to join the room through. One of the servers must be participating in the room.
      * @return The joined room ID.
      */
-    suspend fun joinRoom(roomIdOrAlias: String, servers: List<String>, params: JoinRoomRequest): String
+    suspend fun joinRoom(roomIdOrAlias: String, servers: List<String>, params: JoinRoomRequest): String {
+        val response = client.post<JoinRoomResponse> {
+            url {
+                path("_matrix", "client", "r0", "join", roomIdOrAlias)
+            }
+            parameter("server_name", servers)
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+        return response.roomId
+    }
 
     /**
      * This API stops a user participating in a particular room.
@@ -175,7 +261,15 @@ interface RoomApi {
      *
      * @param[roomId] The room identifier to leave.
      */
-    suspend fun leaveRoom(roomId: String)
+    suspend fun leaveRoom(roomId: String) {
+        return client.post {
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "leave")
+            }
+
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 
     /**
      * This API stops a user remembering about a particular room.
@@ -192,7 +286,15 @@ interface RoomApi {
      *
      * @param[roomId] The room identifier to forget.
      */
-    suspend fun forgetRoom(roomId: String)
+    suspend fun forgetRoom(roomId: String) {
+        return client.post {
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "forget")
+            }
+
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 
     /**
      * Kick a user from the room.
@@ -210,7 +312,18 @@ interface RoomApi {
      *
      * @param[roomId] The room identifier (not alias) from which the user should be kicked.
      */
-    suspend fun kick(roomId: String, params: KickRequest)
+    suspend fun kick(roomId: String, params: KickRequest) {
+        return client.post {
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "kick")
+            }
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+    }
 
     /**
      * Ban a user in the room. If the user is currently in the room, also kick them.
@@ -225,7 +338,18 @@ interface RoomApi {
      *
      * @param[roomId] The room identifier (not alias) from which the user should be banned.
      */
-    suspend fun ban(roomId: String, params: BanRequest)
+    suspend fun ban(roomId: String, params: BanRequest) {
+        return client.post {
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "ban")
+            }
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+    }
 
     /**
      * Unban a user from the room.
@@ -241,7 +365,18 @@ interface RoomApi {
      * @param[roomId] The room identifier (not alias) from which the user should be unbanned.
      * @param[userId] The fully qualified user ID of the user being unbanned.
      */
-    suspend fun unban(roomId: String, userId: String)
+    suspend fun unban(roomId: String, userId: String) {
+        return client.post {
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "unban")
+            }
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = UnBanRequest(userId)
+        }
+    }
 
     /**
      * Lists the public rooms on the server.
@@ -257,7 +392,13 @@ interface RoomApi {
      * @param[since] A pagination token from a previous request, allowing clients to get the next (or previous) batch of rooms. The direction of pagination is specified solely by which token is supplied, rather than via an explicit flag.
      * @param[server] The server to fetch the public room lists from. Defaults to the local server.
      */
-    suspend fun getPublicRooms(limit: Int? = null, since: String? = null, server: String? = null): PublicRoomsResponse
+    suspend fun getPublicRooms(limit: Int? = null, since: String? = null, server: String? = null): PublicRoomsResponse {
+        return client.get("/_matrix/client/r0/publicRooms") {
+            if (limit != null) parameter("limit", limit)
+            if (since != null) parameter("since", since)
+            if (server != null) parameter("server", server)
+        }
+    }
 
     /**
      * Lists the public rooms on the server, with optional filter.
@@ -271,7 +412,16 @@ interface RoomApi {
      *
      * @param[server] The server to fetch the public room lists from. Defaults to the local server.
      */
-    suspend fun queryPublicRooms(server: String? = null, params: SearchPublicRoomsRequest): PublicRoomsResponse
+    suspend fun queryPublicRooms(server: String? = null, params: SearchPublicRoomsRequest): PublicRoomsResponse {
+        return client.post("/_matrix/client/r0/publicRooms") {
+            if (server != null) parameter("server", server)
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+    }
 
     /**
      * Upgrades the given room to a particular room version.
@@ -284,7 +434,19 @@ interface RoomApi {
      * @param[newVersion] The new version for the room.
      * @return The ID of the new room.
      */
-    suspend fun upgradeRoom(roomId: String, newVersion: String): String
+    suspend fun upgradeRoom(roomId: String, newVersion: String): String {
+        val response = client.post<UpgradeRoomResponse> {
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "upgrade")
+            }
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = UpgradeRoomRequest(newVersion)
+        }
+        return response.replacementRoom
+    }
 
     /**
      * This tells the server that the user is typing for the next N milliseconds where N is the value specified in the `timeout` key.
@@ -297,7 +459,18 @@ interface RoomApi {
      * @param[userId] The user who has started to type.
      * @param[roomId] The room in which the user is typing.
      */
-    suspend fun setTyping(userId: String, roomId: String, params: TypingRequest)
+    suspend fun setTyping(userId: String, roomId: String, params: TypingRequest) {
+        return client.put {
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "typing", userId)
+            }
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+    }
 
     /**
      * This API updates the marker for the given receipt type to the event ID specified.
@@ -310,7 +483,15 @@ interface RoomApi {
      * @param[receiptType] The type of receipt to send. One of: ["m.read"]
      * @param[eventId] The event ID to acknowledge up to.
      */
-    suspend fun postReceipt(roomId: String, receiptType: String, eventId: String)
+    suspend fun postReceipt(roomId: String, receiptType: String, eventId: String) {
+        return client.post {
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "receipt", receiptType, eventId)
+            }
+
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 
     /**
      * Sets the position of the read marker for a given room, and optionally the read receipt's location.
@@ -321,7 +502,18 @@ interface RoomApi {
      *
      * @param[roomId] The room ID to set the read marker in for the user.
      */
-    suspend fun setReadMarker(roomId: String, params: ReadMarkersRequest)
+    suspend fun setReadMarker(roomId: String, params: ReadMarkersRequest) {
+        return client.post {
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "read_markers")
+            }
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+    }
 
     /**
      * Get the list of members for this room.
@@ -342,7 +534,15 @@ interface RoomApi {
      * @param[notMembership] The kind of membership to exclude from the results.
      * Defaults to no filtering if unspecified. One of: ["join", "invite", "leave", "ban"]
      */
-    suspend fun getMembersByRoom(roomId: String, at: String? = null, membership: Membership? = null, notMembership: Membership? = null): GetMembersResponse
+    suspend fun getMembersByRoom(roomId: String, at: String? = null, membership: Membership? = null, notMembership: Membership? = null): GetMembersResponse {
+        return client.get{
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "members")
+            }
+
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 
     /**
      * This API returns a map of MXIDs to member info objects for members of the room.
@@ -358,7 +558,16 @@ interface RoomApi {
      * @param[roomId] The room to get the members of.
      * @return A map from user ID to a [RoomMember] object.
      */
-    suspend fun getJoinedMembersByRoom(roomId: String): Map<String, RoomMember>
+    suspend fun getJoinedMembersByRoom(roomId: String): Map<String, RoomMember> {
+        val response = client.get<JoinedMembersResponse>{
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "joined_members")
+            }
+
+            header("Authorization", "Bearer $accessToken")
+        }
+        return response.joined
+    }
 
     /**
      * This API returns a list of message and state events for a room.
@@ -382,7 +591,23 @@ interface RoomApi {
      * @param[limit] The maximum number of events to return. Default: 10.
      * @param[filter] A JSON RoomEventFilter to filter returned events with.
      */
-    suspend fun getRoomEvents(roomId: String, from: String, to: String? = null, dir: Direction, limit: Long? = null, filter: String? = null): MessagesResponse
+    suspend fun getRoomEvents(roomId: String, from: String, to: String? = null, dir: Direction, limit: Long? = null, filter: String? = null): MessagesResponse {
+        return client.get{
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "messages")
+            }
+            parameter("from", from)
+            if (to != null) parameter("to", to)
+            parameter("dir", when (dir) {
+                Direction.F -> 'f'
+                Direction.B -> 'b'
+            })
+            if (limit != null) parameter("limit", limit)
+            if (filter != null) parameter("filter", filter)
+
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 
     /**
      * State events can be sent using this endpoint.
@@ -405,7 +630,19 @@ interface RoomApi {
      * When an empty string, the trailing slash on this endpoint is optional.
      * @return A unique identifier for the event.
      */
-    suspend fun setRoomStateWithKey(roomId: String, eventType: String, stateKey: String, eventContent: Any): String
+    suspend fun setRoomStateWithKey(roomId: String, eventType: String, stateKey: String, eventContent: Any): String {
+        val response = client.put<SendStateEventResponse> {
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "state", eventType, stateKey)
+            }
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = eventContent
+        }
+        return response.eventId
+    }
 
     /**
      * Looks up the contents of a state event in a room.
@@ -420,7 +657,15 @@ interface RoomApi {
      * @param[eventType] The type of state to look up.
      * @param[stateKey] The key of the state to look up. Defaults to an empty string. When an empty string, the trailing slash on this endpoint is optional.
      */
-    suspend fun getRoomStateWithKey(roomId: String, eventType: String, stateKey: String): JsonObject
+    suspend fun getRoomStateWithKey(roomId: String, eventType: String, stateKey: String): JsonObject {
+        return client.get {
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "state", eventType, stateKey)
+            }
+
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 
     /**
      * This endpoint is used to send a message event to a room.
@@ -441,7 +686,19 @@ interface RoomApi {
      * Clients should generate an ID unique across requests with the same access token;
      * it will be used by the server to ensure idempotency of requests.
      */
-    suspend fun sendMessage(roomId: String, eventType: String, txnId: String, content: JsonObject): String
+    suspend fun sendMessage(roomId: String, eventType: String, txnId: String, content: JsonObject): String {
+        val response = client.put<SendMessageEventResponse>{
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "send", eventType, txnId)
+            }
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = content
+        }
+        return response.eventId
+    }
 
     /**
      * Strips all information out of an event which isn't critical to the
@@ -463,7 +720,19 @@ interface RoomApi {
      * @param[reason] The reason for the event being redacted.
      * @return A unique identifier for the event.
      */
-    suspend fun redactEvent(roomId: String, eventId: String, txnId: String, reason: String? = null): String
+    suspend fun redactEvent(roomId: String, eventId: String, txnId: String, reason: String? = null): String {
+        val response = client.put<SendMessageEventResponse>{
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "redact", eventId, txnId)
+            }
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = RoomRedactionContent(reason)
+        }
+        return response.eventId
+    }
 
     /**
      * Get a single event based on `roomId/eventId`.
@@ -476,7 +745,15 @@ interface RoomApi {
      * @param[roomId] The ID of the room the event is in.
      * @param[eventId] The event ID to get.
      */
-    suspend fun getOneRoomEvent(roomId: String, eventId: String): MatrixEvent
+    suspend fun getOneRoomEvent(roomId: String, eventId: String): MatrixEvent {
+        return client.get{
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "event", eventId)
+            }
+
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 
     /**
      * Get the state events for the current state of a room.
@@ -487,7 +764,15 @@ interface RoomApi {
      *
      * @param[roomId] The room to look up the state for.
      */
-    suspend fun getRoomState(roomId: String): List<MatrixEvent>
+    suspend fun getRoomState(roomId: String): List<MatrixEvent> {
+        return client.get {
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "state")
+            }
+
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 
 
     /**
@@ -500,7 +785,14 @@ interface RoomApi {
      * @param[roomId] The room ID.
      * @return The visibility of the room in the directory. One of: ["private", "public"]
      */
-    suspend fun getVisibility(roomId: String): RoomVisibility
+    suspend fun getVisibility(roomId: String): RoomVisibility {
+        val response = client.get<VisibilityResponse> {
+            url {
+                path("_matrix", "client", "r0", "directory", "list", "room", roomId)
+            }
+        }
+        return response.visibility
+    }
 
     /**
      * Sets the visibility of a given room in the server's public room directory.
@@ -515,7 +807,18 @@ interface RoomApi {
      * @param[roomId] The room ID.
      * @param[visibility] The new visibility setting for the room. Defaults to 'public'. One of: ["private", "public"]
      */
-    suspend fun setVisibility(roomId: String, visibility: RoomVisibility)
+    suspend fun setVisibility(roomId: String, visibility: RoomVisibility) {
+        return client.put {
+            url {
+                path("_matrix", "client", "r0", "directory", "list", "room", roomId)
+            }
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = VisibilityRequest(visibility)
+        }
+    }
 }
 
 // GET /_matrix/client/r0/rooms/{roomId}/context/{eventId} -> getEventContext

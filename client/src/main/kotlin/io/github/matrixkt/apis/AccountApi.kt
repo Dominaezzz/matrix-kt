@@ -1,8 +1,17 @@
 package io.github.matrixkt.apis
 
 import io.github.matrixkt.models.*
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import kotlin.reflect.KProperty0
 
-interface AccountApi {
+class AccountApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+    private inline val accessToken: String get() = accessTokenProp.get()
+
     /**
      * Gets a list of the third party identifiers that the homeserver has associated with the user's account.
      *
@@ -14,7 +23,12 @@ interface AccountApi {
      *
      * **Requires auth**: Yes.
      */
-    suspend fun getAccount3PIDs(): List<ThirdPartyIdentifier>
+    suspend fun getAccount3PIDs(): List<ThirdPartyIdentifier> {
+        val response = client.get<Get3PidsResponse>("/_matrix/client/r0/account/3pid") {
+            header("Authorization", "Bearer $accessToken")
+        }
+        return response.threepids
+    }
 
     /**
      * Adds contact information to the user's account.
@@ -23,7 +37,13 @@ interface AccountApi {
      *
      * **Requires auth**: Yes.
      */
-    suspend fun add3PID(params: Add3PidRequest)
+    suspend fun add3PID(params: Add3PidRequest) {
+        return client.post("/_matrix/client/r0/account/3pid") {
+            header("Authorization", "Bearer $accessToken")
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+    }
 
     /**
      * Removes a third party identifier from the user's account.
@@ -33,7 +53,13 @@ interface AccountApi {
      *
      * **Requires auth**: Yes.
      */
-    suspend fun delete3pidFromAccount(params: Remove3PidRequest): Remove3PidResponse
+    suspend fun delete3pidFromAccount(params: Remove3PidRequest): Remove3PidResponse {
+        return client.post("/_matrix/client/r0/account/3pid/delete") {
+            header("Authorization", "Bearer $accessToken")
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+    }
 
     /**
      * Gets information about the owner of a given access token.
@@ -49,7 +75,12 @@ interface AccountApi {
      *
      * @return The user id that owns the access token.
      */
-    suspend fun getTokenOwner(): String
+    suspend fun getTokenOwner(): String {
+        val response = client.get<WhoAmIResponse>("/_matrix/client/r0/account/whoami") {
+            header("Authorization", "Bearer $accessToken")
+        }
+        return response.userId
+    }
 
     /**
      * Changes the password for an account on this homeserver.
@@ -68,7 +99,13 @@ interface AccountApi {
      *
      * **Requires auth**: Yes.
      */
-    suspend fun changePassword(params: ChangePasswordRequest)
+    suspend fun changePassword(params: ChangePasswordRequest) {
+        return client.post(path = "_matrix/client/r0/account/password") {
+            header("Authorization", "Bearer $accessToken")
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+    }
 
     /**
      * Deactivate the user's account, removing all ability for the user to login again.
@@ -83,7 +120,13 @@ interface AccountApi {
      *
      * **Requires auth**: Yes.
      */
-    suspend fun deactivateAccount(params: DeactivateRequest): DeactivateResponse
+    suspend fun deactivateAccount(params: DeactivateRequest): DeactivateResponse {
+        return client.post(path = "_matrix/client/r0/account/deactivate") {
+            header("Authorization", "Bearer $accessToken")
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+    }
 
     /**
      * The homeserver must check that the given email address *is associated* with an account on this homeserver.
@@ -103,7 +146,12 @@ interface AccountApi {
      *
      * **Requires auth**: No.
      */
-    suspend fun requestTokenToResetPasswordEmail(params: EmailValidationRequest): TokenValidationResponse
+    suspend fun requestTokenToResetPasswordEmail(params: EmailValidationRequest): TokenValidationResponse {
+        return client.post(path = "_matrix/client/r0/account/password/email/requestToken") {
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+    }
 
     /**
      * The homeserver must check that the given phone number is associated with an account on this homeserver.
@@ -123,7 +171,12 @@ interface AccountApi {
      *
      * **Requires auth**: No.
      */
-    suspend fun requestTokenToResetPasswordMSISDN(params: MSISDNValidationRequest): TokenValidationResponse
+    suspend fun requestTokenToResetPasswordMSISDN(params: MSISDNValidationRequest): TokenValidationResponse {
+        return client.post(path = "_matrix/client/r0/account/password/msisdn/requestToken") {
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+    }
 
     /**
      * The homeserver must check that the given email address is **not** already associated with an account on this homeserver.
@@ -137,7 +190,12 @@ interface AccountApi {
      *
      * **Requires auth**: No.
      */
-    suspend fun requestTokenTo3PIDEmail(params: EmailValidationRequest): TokenValidationResponse
+    suspend fun requestTokenTo3PIDEmail(params: EmailValidationRequest): TokenValidationResponse {
+        return client.post("/_matrix/client/r0/account/3pid/email/requestToken") {
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+    }
 
     /**
      * The homeserver must check that the given phone number is **not** already associated with an account on this homeserver.
@@ -151,5 +209,10 @@ interface AccountApi {
      *
      * **Requires auth**: No.
      */
-    suspend fun requestTokenTo3PIDMSISDN(params: MSISDNValidationRequest): TokenValidationResponse
+    suspend fun requestTokenTo3PIDMSISDN(params: MSISDNValidationRequest): TokenValidationResponse {
+        return client.post("/_matrix/client/r0/account/3pid/msisdn/requestToken") {
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+    }
 }

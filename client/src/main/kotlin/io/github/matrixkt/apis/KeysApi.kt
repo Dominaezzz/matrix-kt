@@ -1,8 +1,18 @@
 package io.github.matrixkt.apis
 
 import io.github.matrixkt.models.*
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import kotlin.reflect.KProperty0
 
-interface KeysApi {
+class KeysApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+    private inline val accessToken: String get() = accessTokenProp.get()
+
     /**
      * Upload end-to-end encryption keys.
      *
@@ -12,7 +22,13 @@ interface KeysApi {
      *
      * **Requires auth**: Yes.
      */
-    suspend fun uploadKeys(keys: UploadKeysRequest): UploadKeysResponse
+    suspend fun uploadKeys(keys: UploadKeysRequest): UploadKeysResponse {
+        return client.post(path = "_matrix/client/r0/keys/upload") {
+            header("Authorization", "Bearer $accessToken")
+            contentType(ContentType.Application.Json)
+            body = keys
+        }
+    }
 
     /**
      * Download device identity keys.
@@ -24,7 +40,13 @@ interface KeysApi {
      * **Requires auth**: Yes.
      *
      */
-    suspend fun queryKeys(query: QueryKeysRequest): QueryKeysResponse
+    suspend fun queryKeys(query: QueryKeysRequest): QueryKeysResponse {
+        return client.post(path = "_matrix/client/r0/keys/query") {
+            header("Authorization", "Bearer $accessToken")
+            contentType(ContentType.Application.Json)
+            body = query
+        }
+    }
 
     /**
      * Claim one-time encryption keys.
@@ -35,7 +57,13 @@ interface KeysApi {
      *
      * **Requires auth**: Yes.
      */
-    suspend fun claimKeys(query: ClaimKeysRequest): ClaimKeysResponse
+    suspend fun claimKeys(query: ClaimKeysRequest): ClaimKeysResponse {
+        return client.post(path = "_matrix/client/r0/keys/claim") {
+            header("Authorization", "Bearer $accessToken")
+            contentType(ContentType.Application.Json)
+            body = query
+        }
+    }
 
     /**
      * Query users with recent device key updates.
@@ -60,5 +88,14 @@ interface KeysApi {
      * Should be the ``next_batch`` field from a recent call to |/sync| - typically the most recent such call.
      * This may be used by the server as a hint to check its caches are up to date.
      */
-    suspend fun getKeysChanges(from: String, to: String): KeyChangesResponse
+    suspend fun getKeysChanges(from: String, to: String): KeyChangesResponse {
+        return client.get {
+            url {
+                encodedPath = "_matrix/client/r0/keys/changes"
+                parameter("from", from)
+                parameter("to", to)
+            }
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 }

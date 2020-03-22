@@ -3,8 +3,14 @@ package io.github.matrixkt.apis
 import io.github.matrixkt.models.wellknown.DiscoveryInformation
 import io.github.matrixkt.models.GetCapabilitiesResponse
 import io.github.matrixkt.models.Versions
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import kotlin.reflect.KProperty0
 
-interface MiscApi {
+class MiscApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+    private inline val accessToken: String get() = accessTokenProp.get()
+
     /**
      * Gets the versions of the specification supported by the server.
      *
@@ -27,7 +33,9 @@ interface MiscApi {
      *
      * **Requires auth**: No.
      */
-    suspend fun getVersions(): Versions
+    suspend fun getVersions(): Versions {
+        return client.get("/_matrix/client/versions")
+    }
 
     /**
      * Gets discovery information about the domain.
@@ -40,7 +48,9 @@ interface MiscApi {
      *
      * **Requires auth**: No.
      */
-    suspend fun getWellKnown(): DiscoveryInformation
+    suspend fun getWellKnown(): DiscoveryInformation {
+        return client.get("/.well-known/matrix/client")
+    }
 
     /**
      * Gets information about the server's supported feature set and other relevant capabilities.
@@ -49,5 +59,9 @@ interface MiscApi {
      *
      * **Requires auth**: Yes.
      */
-    suspend fun getCapabilities(): GetCapabilitiesResponse
+    suspend fun getCapabilities(): GetCapabilitiesResponse {
+        return client.get("/_matrix/client/r0/capabilities") {
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 }

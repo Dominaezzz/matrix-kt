@@ -2,8 +2,15 @@ package io.github.matrixkt.apis
 
 import io.github.matrixkt.models.*
 import io.github.matrixkt.models.push.PushRule
+import io.ktor.client.HttpClient
+import io.ktor.client.request.*
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import kotlin.reflect.KProperty0
 
-interface PushApi {
+class PushApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+    private inline val accessToken: String get() = accessTokenProp.get()
+
     /**
      * Gets the current pushers for the authenticated user.
      *
@@ -13,7 +20,12 @@ interface PushApi {
      *
      * **Requires auth**: Yes.
      */
-    suspend fun getPushers(): List<Pusher>
+    suspend fun getPushers(): List<Pusher> {
+        val response = client.get<Pushers>(path = "_matrix/client/r0/pushers") {
+            header("Authorization", "Bearer $accessToken")
+        }
+        return response.pushers
+    }
 
     /**
      * This endpoint allows the creation, modification and deletion of `pushers`_ for this user ID.
@@ -25,7 +37,14 @@ interface PushApi {
      *
      * @param[pusher] The pusher information.
      */
-    suspend fun postPusher(pusher: Pusher)
+    suspend fun postPusher(pusher: Pusher) {
+        return client.put(path = "_matrix/client/r0/pushers/set") {
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = pusher
+        }
+    }
 
     /**
      * Retrieve all push rulesets.
@@ -38,7 +57,11 @@ interface PushApi {
      *
      * **Requires auth**: Yes.
      */
-    suspend fun getPushRules(): GetPushRulesResponse
+    suspend fun getPushRules(): GetPushRulesResponse {
+        return client.get(path = "_matrix/client/r0/pushrules/") {
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 
     /**
      * Retrieve a push rule.
@@ -53,7 +76,14 @@ interface PushApi {
      * @param[kind] The kind of rule.
      * @param[ruleId] The identifier for the rule.
      */
-    suspend fun getPushRule(scope: String, kind: PushRuleKind, ruleId: String): PushRule
+    suspend fun getPushRule(scope: String, kind: PushRuleKind, ruleId: String): PushRule {
+        return client.get {
+            url {
+                path("_matrix", "client", "r0", "pushrules", scope, kind.name.toLowerCase(), ruleId)
+            }
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 
     /**
      * Delete a push rule.
@@ -68,7 +98,14 @@ interface PushApi {
      * @param[kind] The kind of rule.
      * @param[ruleId] The identifier for the rule.
      */
-    suspend fun deletePushRule(scope: String, kind: PushRuleKind, ruleId: String)
+    suspend fun deletePushRule(scope: String, kind: PushRuleKind, ruleId: String) {
+        return client.delete {
+            url {
+                path("_matrix", "client", "r0", "pushrules", scope, kind.name.toLowerCase(), ruleId)
+            }
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 
     /**
      * Add or change a push rule.
@@ -91,7 +128,18 @@ interface PushApi {
      * given user defined rule.
      * It is not possible to add a rule relative to a predefined server rule.
      */
-    suspend fun setPushRule(scope: String, kind: PushRuleKind, ruleId: String, before: String? = null, after: String? = null, pushRule: SetPushRuleRequest)
+    suspend fun setPushRule(scope: String, kind: PushRuleKind, ruleId: String, before: String? = null, after: String? = null, pushRule: SetPushRuleRequest) {
+        return client.put {
+            url {
+                path("_matrix", "client", "r0", "pushrules", scope, kind.name.toLowerCase(), ruleId)
+                if (before != null) parameter("before", before)
+                if (after != null) parameter("after", after)
+            }
+            header("Authorization", "Bearer $accessToken")
+            contentType(ContentType.Application.Json)
+            body = pushRule
+        }
+    }
 
     /**
      * Get whether a push rule is enabled.
@@ -108,7 +156,15 @@ interface PushApi {
      * @param[ruleId] The identifier for the rule.
      * @return Whether the push rule is enabled or not.
      */
-    suspend fun isPushRuleEnabled(scope: String, kind: PushRuleKind, ruleId: String): Boolean
+    suspend fun isPushRuleEnabled(scope: String, kind: PushRuleKind, ruleId: String): Boolean {
+        val response = client.get<PushRuleEnabled> {
+            url {
+                path("_matrix", "client", "r0", "pushrules", scope, kind.name.toLowerCase(), ruleId, "enabled")
+            }
+            header("Authorization", "Bearer $accessToken")
+        }
+        return response.enabled
+    }
 
     /**
      * Enable or disable a push rule.
@@ -124,7 +180,17 @@ interface PushApi {
      * @param[kind] The kind of rule.
      * @param[ruleId] The identifier for the rule.
      */
-    suspend fun setPushRuleEnabled(scope: String, kind: PushRuleKind, ruleId: String, enabled: Boolean)
+    suspend fun setPushRuleEnabled(scope: String, kind: PushRuleKind, ruleId: String, enabled: Boolean) {
+        return client.put {
+            url {
+                path("_matrix", "client", "r0", "pushrules", scope, kind.name.toLowerCase(), ruleId, "enabled")
+            }
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = PushRuleEnabled(enabled)
+        }
+    }
 
     /**
      * The actions for a push rule.
@@ -141,7 +207,15 @@ interface PushApi {
      * @param[ruleId] The identifier for the rule.
      * @return The action(s) to perform for this rule.
      */
-    suspend fun getPushRuleActions(scope: String, kind: PushRuleKind, ruleId: String): List<String>
+    suspend fun getPushRuleActions(scope: String, kind: PushRuleKind, ruleId: String): List<String> {
+        val response = client.get<PushRuleActions> {
+            url {
+                path("_matrix", "client", "r0", "pushrules", scope, kind.name.toLowerCase(), ruleId, "actions")
+            }
+            header("Authorization", "Bearer $accessToken")
+        }
+        return response.actions
+    }
 
     /**
      * Set the actions for a push rule.
@@ -159,5 +233,15 @@ interface PushApi {
      * @param[ruleId] The identifier for the rule.
      * @param[actions] The action(s) to perform for this rule.
      */
-    suspend fun setPushRuleActions(scope: String, kind: PushRuleKind, ruleId: String, actions: List<String>)
+    suspend fun setPushRuleActions(scope: String, kind: PushRuleKind, ruleId: String, actions: List<String>) {
+        return client.put {
+            url {
+                path("_matrix", "client", "r0", "pushrules", scope, kind.name.toLowerCase(), ruleId, "actions")
+            }
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = PushRuleActions(actions)
+        }
+    }
 }

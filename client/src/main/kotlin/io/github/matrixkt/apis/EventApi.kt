@@ -3,9 +3,17 @@ package io.github.matrixkt.apis
 import io.github.matrixkt.models.*
 import io.github.matrixkt.models.events.*
 import io.github.matrixkt.models.filter.Filter
+import io.github.matrixkt.utils.MatrixJson
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.request.parameter
 import kotlinx.serialization.json.JsonObject
+import kotlin.reflect.KProperty0
 
-interface EventApi {
+class EventApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+    private inline val accessToken: String get() = accessTokenProp.get()
+
     /**
      * Synchronise the client's state with the latest state on the server.
      *
@@ -58,9 +66,24 @@ interface EventApi {
      *
      * By default, this is 0, so the server will return immediately even if the response is empty.
      */
-    suspend fun sync(filter: String? = null, since: String? = null, fullState: Boolean? = null, setPresence: Presence? = null, timeout: Long? = null): SyncResponse
+    suspend fun sync(filter: String? = null, since: String? = null, fullState: Boolean? = null, setPresence: Presence? = null, timeout: Long? = null): SyncResponse {
+        return client.get("/_matrix/client/r0/sync") {
+            if (filter != null) parameter("filter", filter)
+            if (since != null) parameter("since", since)
+            if (fullState != null) parameter("full_state", fullState)
+            if (setPresence != null) parameter("set_presence", setPresence.name.toLowerCase())
+            if (timeout != null) parameter("timeout", timeout)
 
-    suspend fun sync(filter: Filter, since: String? = null, fullState: Boolean? = null, setPresence: Presence? = null, timeout: Long? = null): SyncResponse
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
+
+    suspend fun sync(filter: Filter, since: String? = null, fullState: Boolean? = null, setPresence: Presence? = null, timeout: Long? = null): SyncResponse {
+        return sync(
+            MatrixJson.stringify(Filter.serializer(), filter),
+            since, fullState, setPresence, timeout
+        )
+    }
 }
 
 // GET /_matrix/client/r0/events -> getEvents

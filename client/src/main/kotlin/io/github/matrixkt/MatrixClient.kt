@@ -1,7 +1,6 @@
 package io.github.matrixkt
 
 import io.github.matrixkt.apis.*
-import io.github.matrixkt.impls.*
 import io.github.matrixkt.models.*
 import io.github.matrixkt.utils.MatrixJson
 import io.github.matrixkt.utils.MatrixJsonConfig
@@ -52,18 +51,18 @@ class MatrixClient(engine: HttpClientEngine,
 
     var accessToken: String = ""
 
-    val roomApi: RoomApi = RoomApiImpl(client, ::accessToken)
-    val eventApi: EventApi = EventApiImpl(client, ::accessToken)
-    val userApi: UserApi = UserApiImpl(client, ::accessToken)
-    val contentApi: ContentApi = ContentApiImpl(client, ::accessToken)
-    val authApi: AuthApi = AuthApiImpl(client, ::accessToken)
-    val filterApi: FilterApi = FilterApiImpl(client, ::accessToken)
-    val deviceApi: DeviceApi = DeviceApiImpl(client, ::accessToken)
-    val voIPApi: VoIPApi = VoIPApiImpl(client, ::accessToken)
-    val accountApi: AccountApi = AccountApiImpl(client, ::accessToken)
-    val miscApi: MiscApi = MiscApiImpl(client, ::accessToken)
-    val pushApi: PushApi = PushApiImpl(client, ::accessToken)
-    val keysApi: KeysApi = KeysApiImpl(client, ::accessToken)
+    val roomApi: RoomApi = RoomApi(client, ::accessToken)
+    val eventApi: EventApi = EventApi(client, ::accessToken)
+    val userApi: UserApi = UserApi(client, ::accessToken)
+    val contentApi: ContentApi = ContentApi(client, ::accessToken)
+    val authApi: AuthApi = AuthApi(client, ::accessToken)
+    val filterApi: FilterApi = FilterApi(client, ::accessToken)
+    val deviceApi: DeviceApi = DeviceApi(client, ::accessToken)
+    val voIPApi: VoIPApi = VoIPApi(client, ::accessToken)
+    val accountApi: AccountApi = AccountApi(client, ::accessToken)
+    val miscApi: MiscApi = MiscApi(client, ::accessToken)
+    val pushApi: PushApi = PushApi(client, ::accessToken)
+    val keysApi: KeysApi = KeysApi(client, ::accessToken)
 
     override fun close() {
         client.close()

@@ -1,8 +1,20 @@
 package io.github.matrixkt.apis
 
 import io.github.matrixkt.models.*
+import io.ktor.client.HttpClient
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.boolean
+import kotlin.reflect.KProperty0
 
-interface AuthApi {
+class AuthApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+    private inline val accessToken: String get() = accessTokenProp.get()
+
     /**
      * Gets the homeserver's supported login types to authenticate users.
      * Clients should pick one of these and supply it as the type when logging in.
@@ -11,7 +23,9 @@ interface AuthApi {
      *
      * **Requires auth**: No.
      */
-    suspend fun getLoginFlows(): LoginFlowsResponse
+    suspend fun getLoginFlows(): LoginFlowsResponse {
+        return client.get(path = "_matrix/client/r0/login")
+    }
 
     /**
      * Authenticates the user, and issues an access token they can use to authorize themselves in subsequent requests.
@@ -26,7 +40,12 @@ interface AuthApi {
      *
      * **Requires auth**: No.
      */
-    suspend fun login(params: LoginRequest): LoginResponse
+    suspend fun login(params: LoginRequest): LoginResponse {
+        return client.post(path = "_matrix/client/r0/login") {
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+    }
 
     /**
      * Invalidates an existing access token, so that it can no longer be used for authorization.
@@ -37,7 +56,11 @@ interface AuthApi {
      *
      * **Requires auth**: Yes.
      */
-    suspend fun logout()
+    suspend fun logout() {
+        return client.post(path = "_matrix/client/r0/logout") {
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 
     /**
      * Invalidates all access tokens for a user, so that they can no longer be used for authorization.
@@ -54,7 +77,11 @@ interface AuthApi {
      *
      * **Requires auth**: Yes.
      */
-    suspend fun logoutAll()
+    suspend fun logoutAll() {
+        return client.post(path = "_matrix/client/r0/logout/all") {
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 
     /**
      * This API endpoint uses the
@@ -94,7 +121,13 @@ interface AuthApi {
      *
      * @param[kind] The kind of account to register. Defaults to user. One of: ["guest", "user"]
      */
-    suspend fun register(kind: RegistrationKind? = null, params: RegisterRequest): RegisterResponse
+    suspend fun register(kind: RegistrationKind? = null, params: RegisterRequest): RegisterResponse {
+        return client.post(path = "_matrix/client/r0/register") {
+            if (kind != null) parameter("kind", kind)
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+    }
 
     /**
      * Checks to see if a username is available, and valid, for the server.
@@ -111,7 +144,12 @@ interface AuthApi {
      *
      * **Requires auth**: No.
      */
-    suspend fun checkUsernameAvailability(username: String): Boolean
+    suspend fun checkUsernameAvailability(username: String): Boolean {
+        val response = client.get<JsonObject>(path = "_matrix/client/r0/register/available") {
+            parameter("username", username)
+        }
+        return response["available"]!!.boolean
+    }
 
     /**
      * The homeserver must check that the given email address is **not** already associated with an account on this homeserver.
@@ -124,7 +162,12 @@ interface AuthApi {
      *
      * **Requires auth**: No.
      */
-    suspend fun requestTokenToRegisterEmail(params: EmailValidationRequest): TokenValidationResponse
+    suspend fun requestTokenToRegisterEmail(params: EmailValidationRequest): TokenValidationResponse {
+        return client.post(path = "_matrix/client/r0/register/email/requestToken") {
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+    }
 
     /**
      * The homeserver must check that the given phone number is **not** already associated with an account on this homeserver.
@@ -137,5 +180,10 @@ interface AuthApi {
      *
      * **Requires auth**: No.
      */
-    suspend fun requestTokenToRegisterMSISDN(params: MSISDNValidationRequest): TokenValidationResponse
+    suspend fun requestTokenToRegisterMSISDN(params: MSISDNValidationRequest): TokenValidationResponse {
+        return client.post(path = "_matrix/client/r0/register/msisdn/requestToken") {
+            contentType(ContentType.Application.Json)
+            body = params
+        }
+    }
 }
