@@ -394,9 +394,9 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      */
     suspend fun getPublicRooms(limit: Int? = null, since: String? = null, server: String? = null): PublicRoomsResponse {
         return client.get("/_matrix/client/r0/publicRooms") {
-            if (limit != null) parameter("limit", limit)
-            if (since != null) parameter("since", since)
-            if (server != null) parameter("server", server)
+            parameter("limit", limit)
+            parameter("since", since)
+            parameter("server", server)
         }
     }
 
@@ -414,7 +414,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      */
     suspend fun queryPublicRooms(server: String? = null, params: SearchPublicRoomsRequest): PublicRoomsResponse {
         return client.post("/_matrix/client/r0/publicRooms") {
-            if (server != null) parameter("server", server)
+            parameter("server", server)
 
             header("Authorization", "Bearer $accessToken")
 
@@ -535,10 +535,13 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * Defaults to no filtering if unspecified. One of: ["join", "invite", "leave", "ban"]
      */
     suspend fun getMembersByRoom(roomId: String, at: String? = null, membership: Membership? = null, notMembership: Membership? = null): GetMembersResponse {
-        return client.get{
+        return client.get {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "members")
             }
+            parameter("at", at)
+            parameter("membership", membership?.name?.toLowerCase())
+            parameter("not_membership", notMembership?.name?.toLowerCase())
 
             header("Authorization", "Bearer $accessToken")
         }
@@ -597,13 +600,13 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
                 path("_matrix", "client", "r0", "rooms", roomId, "messages")
             }
             parameter("from", from)
-            if (to != null) parameter("to", to)
+            parameter("to", to)
             parameter("dir", when (dir) {
                 Direction.F -> 'f'
                 Direction.B -> 'b'
             })
-            if (limit != null) parameter("limit", limit)
-            if (filter != null) parameter("filter", filter)
+            parameter("limit", limit)
+            parameter("filter", filter)
 
             header("Authorization", "Bearer $accessToken")
         }

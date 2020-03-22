@@ -32,7 +32,7 @@ class ContentApi internal constructor(private val client: HttpClient, private va
      */
     suspend fun uploadContent(contentType: String?, filename: String?, content: ByteArray): String {
         val response = client.post<UploadResponse>("/_matrix/media/r0/upload") {
-            if (filename != null) parameter("filename", filename)
+            parameter("filename", filename)
             header("Authorization", "Bearer $accessToken")
 
             body = ByteArrayContent(content, contentType?.let(ContentType.Companion::parse))
@@ -59,7 +59,7 @@ class ContentApi internal constructor(private val client: HttpClient, private va
                 path("_matrix", "media", "r0", "download", serverName, mediaId)
             }
 
-            if (allowRemote != null) parameter("allow_remote", allowRemote)
+            parameter("allow_remote", allowRemote)
         }
 
         return statement.execute {
@@ -92,7 +92,7 @@ class ContentApi internal constructor(private val client: HttpClient, private va
                 path("_matrix", "media", "r0", "download", serverName, mediaId, fileName)
             }
 
-            if (allowRemote != null) parameter("allow_remote", allowRemote)
+            parameter("allow_remote", allowRemote)
         }
         return statement.execute {
             // The content type of the file that was previously uploaded.
@@ -130,8 +130,8 @@ class ContentApi internal constructor(private val client: HttpClient, private va
 
             parameter("width", width)
             parameter("height", height)
-            if (method != null) parameter("method", method)
-            if (allowRemote != null) parameter("allow_remote", allowRemote)
+            parameter("method", method)
+            parameter("allow_remote", allowRemote)
         }
         return statement.execute {
             // The content type of the file that was previously uploaded.
@@ -157,7 +157,7 @@ class ContentApi internal constructor(private val client: HttpClient, private va
     suspend fun getUrlPreview(url: String, ts: Long? = null): UrlPreviewResponse {
         return client.get(path = "_matrix/media/r0/preview_url") {
             parameter("url", url)
-            if (ts != null) parameter("ts", ts)
+            parameter("ts", ts)
         }
     }
 

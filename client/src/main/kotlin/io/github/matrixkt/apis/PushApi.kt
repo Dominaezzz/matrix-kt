@@ -132,8 +132,8 @@ class PushApi internal constructor(private val client: HttpClient, private val a
         return client.put {
             url {
                 path("_matrix", "client", "r0", "pushrules", scope, kind.name.toLowerCase(), ruleId)
-                if (before != null) parameter("before", before)
-                if (after != null) parameter("after", after)
+                parameter("before", before)
+                parameter("after", after)
             }
             header("Authorization", "Bearer $accessToken")
             contentType(ContentType.Application.Json)

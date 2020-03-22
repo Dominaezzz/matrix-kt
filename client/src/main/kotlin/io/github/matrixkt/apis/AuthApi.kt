@@ -123,7 +123,7 @@ class AuthApi internal constructor(private val client: HttpClient, private val a
      */
     suspend fun register(kind: RegistrationKind? = null, params: RegisterRequest): RegisterResponse {
         return client.post(path = "_matrix/client/r0/register") {
-            if (kind != null) parameter("kind", kind)
+            parameter("kind", kind)
             contentType(ContentType.Application.Json)
             body = params
         }
