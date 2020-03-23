@@ -1,14 +1,13 @@
 package io.github.matrixkt.apis
 
 import io.github.matrixkt.models.*
-import io.github.matrixkt.models.events.*
 import io.github.matrixkt.models.filter.Filter
+import io.github.matrixkt.models.sync.SyncResponse
 import io.github.matrixkt.utils.MatrixJson
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.client.request.parameter
-import kotlinx.serialization.json.JsonObject
 import kotlin.reflect.KProperty0
 
 class EventApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {

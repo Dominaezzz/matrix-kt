@@ -1,0 +1,21 @@
+package io.github.matrixkt.models.sync
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class Rooms(
+    /**
+     * The rooms that the user has joined.
+     */
+    val join: Map<String, JoinedRoom> = emptyMap(),
+
+    /**
+     * The rooms that the user has been invited to.
+     */
+    val invite: Map<String, InvitedRoom> = emptyMap(),
+
+    /**
+     * The rooms that the user has left or been banned from.
+     */
+    val leave: Map<String, LeftRoom> = emptyMap()
+)
