@@ -14,7 +14,7 @@ data class CallCandidatesContent(
     /**
      * Array of objects describing the candidates.
      */
-    val candidates: Candidates,
+    val candidates: List<Candidate>,
 
     /**
      * The version of the VoIP specification this messages adheres to.
@@ -23,7 +23,7 @@ data class CallCandidatesContent(
     val version: Long
 ) : Content() {
     @Serializable
-    data class Candidates(
+    data class Candidate(
         /**
          * The SDP media type this candidate is intended for.
          */
