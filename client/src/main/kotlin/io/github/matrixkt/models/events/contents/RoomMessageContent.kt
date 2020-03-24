@@ -6,9 +6,8 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 
-@Polymorphic
 @Serializable(RoomMessageContent.Serializer::class)
-sealed class RoomMessageContent : Content() {
+abstract class RoomMessageContent : Content() {
     /**
      * The textual representation of this message.
      */
@@ -246,13 +245,17 @@ sealed class RoomMessageContent : Content() {
         override val descriptor = SerialDescriptor("RoomMessageContent", PolymorphicKind.SEALED)
 
         override fun serialize(encoder: Encoder, value: RoomMessageContent) {
-            val serializer = encoder.context.getPolymorphic(RoomMessageContent::class, value)
-            requireNotNull(serializer) { "Could not find serializer for '${value::class.simpleName}'" }
+            if (value is Redacted) {
+                encoder.encodeStructure(descriptor) {}
+            } else {
+                val serializer = encoder.context.getPolymorphic(RoomMessageContent::class, value)
+                requireNotNull(serializer) { "Could not find serializer for '${value::class.simpleName}'" }
 
-            encoder.encodeStructure(descriptor) {
-                encodeStringElement(descriptor, 0, serializer.descriptor.serialName)
-                @Suppress("UNCHECKED_CAST")
-                encodeSerializableElement(descriptor, 1, serializer as KSerializer<Any>, value)
+                encoder.encodeStructure(descriptor) {
+                    encodeStringElement(descriptor, 0, serializer.descriptor.serialName)
+                    @Suppress("UNCHECKED_CAST")
+                    encodeSerializableElement(descriptor, 1, serializer as KSerializer<Any>, value)
+                }
             }
         }
 
