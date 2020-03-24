@@ -44,6 +44,8 @@ private val temp = mapOf(
     EventTypes.ROOM_AVATAR to RoomAvatarContent::class,
     EventTypes.ROOM_PINNED_EVENTS to RoomPinnedEventsContent::class,
     EventTypes.ROOM_GUEST_ACCESS to RoomGuestAccessContent::class,
+    EventTypes.ROOM_ENCRYPTION to RoomEncryptionContent::class,
+    EventTypes.ROOM_ENCRYPTED to RoomEncryptedContent::class,
     EventTypes.CALL_INVITE to CallInviteContent::class,
     EventTypes.CALL_CANDIDATES to CallCandidatesContent::class,
     EventTypes.CALL_ANSWER to CallAnswerContent::class,
@@ -51,5 +53,9 @@ private val temp = mapOf(
     EventTypes.TYPING to TypingContent::class,
     EventTypes.RECEIPT to ReceiptContent::class,
     EventTypes.FULLY_READ to FullyReadContent::class,
-    EventTypes.PRESENCE to PresenceContent::class
+    EventTypes.PRESENCE to PresenceContent::class,
+    EventTypes.ROOM_KEY to RoomKeyContent::class,
+    EventTypes.ROOM_KEY_REQUEST to RoomKeyRequestContent::class,
+    EventTypes.FORWARDED_ROOM_KEY to ForwardedRoomKeyContent::class,
+    EventTypes.DUMMY to DummyContent::class
 )

@@ -5,10 +5,10 @@ import kotlinx.serialization.json.JsonInput
 import kotlinx.serialization.json.content
 import kotlin.reflect.KClass
 
-internal abstract class JsonPolymorphicSerializer<T : Any>(
+class JsonPolymorphicSerializer<T : Any>(
    private val klass: KClass<T>,
    private val discriminator: String,
-   private val fallback: KSerializer<T>? = null
+   private val fallback: KSerializer<out T>? = null
 ) : KSerializer<T> {
    override val descriptor = SerialDescriptor(klass.simpleName!!, PolymorphicKind.SEALED)
 
@@ -22,7 +22,8 @@ internal abstract class JsonPolymorphicSerializer<T : Any>(
            }
        } else {
            if (fallback != null) {
-               encoder.encode(fallback, value)
+               @Suppress("UNCHECKED_CAST")
+               encoder.encode(fallback as KSerializer<T>, value)
            } else {
                throw SerializationException("No serializer for class ${value::class}")
            }

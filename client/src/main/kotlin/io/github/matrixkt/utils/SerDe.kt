@@ -56,6 +56,11 @@ val MatrixSerialModule = SerializersModule {
         subclass(RoomMessageContent.Location.serializer())
         subclass(RoomMessageContent.Video.serializer())
     }
+
+    polymorphic(RoomEncryptedContent.serializer()) {
+        subclass(RoomEncryptedContent.OlmV1.serializer())
+        subclass(RoomEncryptedContent.MegolmV1.serializer())
+    }
 }
 
 val MatrixJson = Json(

@@ -163,6 +163,18 @@ object EventTypes {
     const val ROOM_GUEST_ACCESS = "m.room.guest_access"
 
     /**
+     * Defines how messages sent in this room should be encrypted.
+     */
+    const val ROOM_ENCRYPTION = "m.room.encryption"
+
+    /**
+     * This event type is used when sending encrypted events.
+     * It can be used either within a room (in which case it will have all of the [Room Event fields](https://matrix.org/docs/spec/client_server/r0.6.0#room-event-fields)),
+     * or as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
+     */
+    const val ROOM_ENCRYPTED = "m.room.encrypted"
+
+    /**
      * This event is sent by the caller when they wish to establish a call.
      */
     const val CALL_INVITE = "m.call.invite"
@@ -204,4 +216,32 @@ object EventTypes {
      * Informs the client of a user's presence state change.
      */
     const val PRESENCE = "m.presence"
+
+    /**
+     * This event type is used to exchange keys for end-to-end encryption.
+     * Typically it is encrypted as an `m.room.encrypted` event, then sent as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
+     */
+    const val ROOM_KEY = "m.room_key"
+
+    /**
+     * This event type is used to request keys for end-to-end encryption.
+     * It is sent as an unencrypted [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
+     */
+    const val ROOM_KEY_REQUEST = "m.room_key_request"
+
+    /**
+     * This event type is used to forward keys for end-to-end encryption.
+     * Typically it is encrypted as an `m.room.encrypted` event, then sent as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
+     */
+    const val FORWARDED_ROOM_KEY = "m.forwarded_room_key"
+
+    /**
+     * This event type is used to indicate new Olm sessions for end-to-end encryption.
+     * Typically it is encrypted as an m.room.encrypted event, then sent as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
+     * The event does not have any content associated with it.
+     * The sending client is expected to send a key share request shortly after this message,
+     * causing the receiving client to process this `m.dummy` event as the most recent event and using the keyshare request to set up the session.
+     * The keyshare request and `m.dummy` combination should result in the original sending client receiving keys over the newly established session.
+     */
+    const val DUMMY = "m.dummy"
 }
