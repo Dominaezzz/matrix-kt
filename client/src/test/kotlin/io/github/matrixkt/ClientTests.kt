@@ -2,8 +2,8 @@ package io.github.matrixkt
 
 import io.github.matrixkt.models.*
 import io.github.matrixkt.models.events.Membership
-import io.github.matrixkt.models.events.contents.RoomMemberContent
-import io.github.matrixkt.models.events.contents.RoomMessageContent
+import io.github.matrixkt.models.events.contents.room.MemberContent
+import io.github.matrixkt.models.events.contents.room.MessageContent
 import io.github.matrixkt.models.filter.*
 import io.github.matrixkt.utils.MatrixJson
 import io.ktor.client.engine.mock.MockEngine
@@ -300,10 +300,10 @@ class ClientTests {
         assertEquals(1234, event.unsigned!!.age)
 
         // TODO: Make this less verbose.
-        val content = MatrixJson.fromJson(RoomMessageContent.serializer(), event.content)
+        val content = MatrixJson.fromJson(MessageContent.serializer(), event.content)
 
         assertEquals("This is an example text message", content.body)
-        assertTrue(content is RoomMessageContent.Text)
+        assertTrue(content is MessageContent.Text)
         assertEquals("org.matrix.custom.html", content.format)
         assertEquals("<b>This is an example text message</b>", content.formattedBody)
     }
@@ -2120,8 +2120,8 @@ class ClientTests {
 
         val client = MatrixClient(mockEngine)
         val request = MatrixJson.toJson(
-            RoomMemberContent.serializer(),
-            RoomMemberContent(
+            MemberContent.serializer(),
+            MemberContent(
                 membership = Membership.JOIN,
                 avatarUrl = "mxc://localhost/SEsfnsuifSDFSSEF",
                 displayName = "Alice Margatroid"

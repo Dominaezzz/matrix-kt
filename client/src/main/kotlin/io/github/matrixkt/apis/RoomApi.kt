@@ -3,7 +3,7 @@ package io.github.matrixkt.apis
 import io.github.matrixkt.models.*
 import io.github.matrixkt.models.events.MatrixEvent
 import io.github.matrixkt.models.events.Membership
-import io.github.matrixkt.models.events.contents.RoomRedactionContent
+import io.github.matrixkt.models.events.contents.room.RedactionContent
 import io.ktor.client.HttpClient
 import io.ktor.client.request.*
 import io.ktor.http.ContentType
@@ -732,7 +732,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
             header("Authorization", "Bearer $accessToken")
 
             contentType(ContentType.Application.Json)
-            body = RoomRedactionContent(reason)
+            body = RedactionContent(reason)
         }
         return response.eventId
     }

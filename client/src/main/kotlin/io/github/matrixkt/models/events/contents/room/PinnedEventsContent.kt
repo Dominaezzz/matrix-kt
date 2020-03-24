@@ -1,9 +1,10 @@
-package io.github.matrixkt.models.events.contents
+package io.github.matrixkt.models.events.contents.room
 
+import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RoomPinnedEventsContent(
+data class PinnedEventsContent(
     /**
      * An ordered list of event IDs to pin.
      */

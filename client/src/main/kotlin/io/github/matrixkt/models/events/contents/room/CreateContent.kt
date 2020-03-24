@@ -1,10 +1,11 @@
-package io.github.matrixkt.models.events.contents
+package io.github.matrixkt.models.events.contents.room
 
+import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RoomCreateContent(
+data class CreateContent(
     /**
      * The `user_id` of the room creator.
      * This is set by the homeserver.

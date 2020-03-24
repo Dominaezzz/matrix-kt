@@ -1,13 +1,11 @@
-package io.github.matrixkt.models.events.contents
+package io.github.matrixkt.models.events.contents.room
 
+import io.github.matrixkt.models.events.contents.Content
 import io.github.matrixkt.utils.JsonPolymorphicSerializer
 import kotlinx.serialization.*
-import kotlinx.serialization.builtins.MapSerializer
-import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.json.*
 
-@Serializable(RoomEncryptedContent.Serializer::class)
-abstract class RoomEncryptedContent : Content() {
+@Serializable(EncryptedContent.Serializer::class)
+abstract class EncryptedContent : Content() {
     // /**
     //  * The encryption algorithm used to encrypt this event.
     //  * The value of this field determines which other properties will be present.
@@ -37,7 +35,7 @@ abstract class RoomEncryptedContent : Content() {
 
         @SerialName("sender_key")
         override val senderKey: String
-    ) : RoomEncryptedContent()
+    ) : EncryptedContent()
 
     @SerialName("m.megolm.v1.aes-sha2")
     @Serializable
@@ -58,7 +56,7 @@ abstract class RoomEncryptedContent : Content() {
          */
         @SerialName("session_id")
         val sessionId: String
-    ) : RoomEncryptedContent()
+    ) : EncryptedContent()
 
     @Serializable
     data class Unknown(
@@ -72,9 +70,10 @@ abstract class RoomEncryptedContent : Content() {
 
         @SerialName("sender_key")
         override val senderKey: String
-    ) : RoomEncryptedContent()
+    ) : EncryptedContent()
 
-    object Serializer : KSerializer<RoomEncryptedContent> by JsonPolymorphicSerializer(RoomEncryptedContent::class, "algorithm", Unknown.serializer())
+    object Serializer : KSerializer<EncryptedContent> by JsonPolymorphicSerializer(
+        EncryptedContent::class, "algorithm", Unknown.serializer())
 
     @Serializable
     data class CiphertextInfo(

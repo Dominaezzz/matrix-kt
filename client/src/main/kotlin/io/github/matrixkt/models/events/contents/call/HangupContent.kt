@@ -1,10 +1,11 @@
-package io.github.matrixkt.models.events.contents
+package io.github.matrixkt.models.events.contents.call
 
+import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CallHangupContent(
+data class HangupContent(
     /**
      * The ID of the call this event relates to.
      */

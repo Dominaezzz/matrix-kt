@@ -1,13 +1,14 @@
-package io.github.matrixkt.models.events.contents
+package io.github.matrixkt.models.events.contents.room
 
 import io.github.matrixkt.models.EncryptedFile
+import io.github.matrixkt.models.events.contents.Content
 import io.github.matrixkt.models.events.contents.msginfo.*
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 
-@Serializable(RoomMessageContent.Serializer::class)
-abstract class RoomMessageContent : Content() {
+@Serializable(MessageContent.Serializer::class)
+abstract class MessageContent : Content() {
     /**
      * The textual representation of this message.
      */
@@ -42,7 +43,7 @@ abstract class RoomMessageContent : Content() {
          */
         @SerialName("formatted_body")
         val formattedBody: String? = null
-    ) : RoomMessageContent()
+    ) : MessageContent()
 
     /**
      * This message is similar to `m.text` except that the sender is 'performing' the action contained in the [body] key,
@@ -70,7 +71,7 @@ abstract class RoomMessageContent : Content() {
          */
         @SerialName("formatted_body")
         val formattedBody: String
-    ) : RoomMessageContent()
+    ) : MessageContent()
 
     /**
      * The `m.notice` type is primarily intended for responses from automated clients.
@@ -86,7 +87,7 @@ abstract class RoomMessageContent : Content() {
          * The notice text to send.
          */
         override val body: String
-    ) : RoomMessageContent()
+    ) : MessageContent()
 
     /**
      * This message represents a single image and an optional thumbnail.
@@ -117,7 +118,7 @@ abstract class RoomMessageContent : Content() {
          * Information on the encrypted file, as specified in [End-to-end encryption](https://matrix.org/docs/spec/client_server/r0.5.0#encrypted-files).
          */
         val file: EncryptedFile? = null
-    ) : RoomMessageContent()
+    ) : MessageContent()
 
     /**
      * This message represents a generic file.
@@ -152,7 +153,7 @@ abstract class RoomMessageContent : Content() {
          * Information on the encrypted file, as specified in [End-to-end encryption](https://matrix.org/docs/spec/client_server/r0.5.0#encrypted-files).
          */
         val file: EncryptedFile? = null
-    ) : RoomMessageContent()
+    ) : MessageContent()
 
     /**
      * This message represents a single audio clip.
@@ -182,7 +183,7 @@ abstract class RoomMessageContent : Content() {
          * Information on the encrypted file, as specified in [End-to-end encryption](https://matrix.org/docs/spec/client_server/r0.5.0#encrypted-files).
          */
         val file: EncryptedFile? = null
-    ) : RoomMessageContent()
+    ) : MessageContent()
 
     /**
      * This message represents a real-world location.
@@ -203,7 +204,7 @@ abstract class RoomMessageContent : Content() {
         val geoUri: String,
 
         val info: LocationInfo? = null
-    ) : RoomMessageContent()
+    ) : MessageContent()
 
     /**
      * This message represents a single video clip.
@@ -233,22 +234,22 @@ abstract class RoomMessageContent : Content() {
          * Information on the encrypted file, as specified in [End-to-end encryption](https://matrix.org/docs/spec/client_server/r0.5.0#encrypted-files).
          */
         val file: EncryptedFile? = null
-    ) : RoomMessageContent()
+    ) : MessageContent()
 
-    object Redacted : RoomMessageContent() {
+    object Redacted : MessageContent() {
         override val body: String get() = "(Redacted)"
 
         override fun toString() = "Redacted"
     }
 
-    object Serializer : KSerializer<RoomMessageContent> {
+    object Serializer : KSerializer<MessageContent> {
         override val descriptor = SerialDescriptor("RoomMessageContent", PolymorphicKind.SEALED)
 
-        override fun serialize(encoder: Encoder, value: RoomMessageContent) {
+        override fun serialize(encoder: Encoder, value: MessageContent) {
             if (value is Redacted) {
                 encoder.encodeStructure(descriptor) {}
             } else {
-                val serializer = encoder.context.getPolymorphic(RoomMessageContent::class, value)
+                val serializer = encoder.context.getPolymorphic(MessageContent::class, value)
                 requireNotNull(serializer) { "Could not find serializer for '${value::class.simpleName}'" }
 
                 encoder.encodeStructure(descriptor) {
@@ -259,7 +260,7 @@ abstract class RoomMessageContent : Content() {
             }
         }
 
-        override fun deserialize(decoder: Decoder): RoomMessageContent {
+        override fun deserialize(decoder: Decoder): MessageContent {
             require(decoder is JsonInput)
 
             val jsonObj = decoder.decodeJson().jsonObject
@@ -268,7 +269,7 @@ abstract class RoomMessageContent : Content() {
             }
 
             val klassName: String = jsonObj.getValue("msgtype").content
-            val serializer = decoder.context.getPolymorphic(RoomMessageContent::class, klassName)
+            val serializer = decoder.context.getPolymorphic(MessageContent::class, klassName)
             requireNotNull(serializer) { "Could not find serializer for `msgtype` = '$klassName'" }
             return decoder.json.fromJson(serializer, jsonObj)
         }

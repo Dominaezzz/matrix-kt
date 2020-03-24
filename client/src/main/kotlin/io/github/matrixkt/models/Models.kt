@@ -2,7 +2,7 @@ package io.github.matrixkt.models
 
 import io.github.matrixkt.models.events.MatrixEvent
 import io.github.matrixkt.models.events.UnsignedData
-import io.github.matrixkt.models.events.contents.RoomMemberContent
+import io.github.matrixkt.models.events.contents.room.MemberContent
 import io.github.matrixkt.models.push.PushCondition
 import io.github.matrixkt.models.push.RuleSet
 import io.github.matrixkt.models.wellknown.DiscoveryInformation
@@ -441,7 +441,7 @@ data class GetMembersResponse(
          * The fields in this object will vary depending on the type of event.
          * When interacting with the REST API, this is the HTTP body.
          */
-        val content: RoomMemberContent,
+        val content: MemberContent,
 
         /**
          * The type of event.
@@ -493,7 +493,7 @@ data class GetMembersResponse(
          * The previous content for this event. If there is no previous content, this key will be missing.
          */
         @SerialName("prev_content")
-        val prevContent: RoomMemberContent? = null
+        val prevContent: MemberContent? = null
     )
 }
 

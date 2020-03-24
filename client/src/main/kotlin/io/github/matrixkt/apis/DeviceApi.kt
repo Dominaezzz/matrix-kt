@@ -4,7 +4,6 @@ import io.github.matrixkt.models.AuthenticationData
 import io.github.matrixkt.models.Device
 import io.github.matrixkt.models.GetDevicesResponse
 import io.github.matrixkt.models.SendToDeviceRequest
-import io.github.matrixkt.models.events.contents.RoomMessageContent.Redacted.body
 import io.ktor.client.HttpClient
 import io.ktor.client.request.*
 import io.ktor.http.ContentType

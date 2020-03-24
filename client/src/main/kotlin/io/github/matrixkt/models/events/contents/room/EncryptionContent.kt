@@ -1,10 +1,11 @@
-package io.github.matrixkt.models.events.contents
+package io.github.matrixkt.models.events.contents.room
 
+import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RoomEncryptionContent(
+data class EncryptionContent(
     /**
      * The encryption algorithm to be used to encrypt messages sent in this room. Must be 'm.megolm.v1.aes-sha2'.
      */

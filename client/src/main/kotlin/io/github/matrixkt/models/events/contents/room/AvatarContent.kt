@@ -1,10 +1,11 @@
-package io.github.matrixkt.models.events.contents
+package io.github.matrixkt.models.events.contents.room
 
+import io.github.matrixkt.models.events.contents.Content
 import io.github.matrixkt.models.events.contents.msginfo.ImageInfo
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RoomAvatarContent(
+data class AvatarContent(
     /**
      * Metadata about the image referred to in [url].
      */

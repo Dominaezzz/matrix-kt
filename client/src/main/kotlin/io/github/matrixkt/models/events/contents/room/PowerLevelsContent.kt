@@ -1,10 +1,11 @@
-package io.github.matrixkt.models.events.contents
+package io.github.matrixkt.models.events.contents.room
 
+import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RoomPowerLevelsContent(
+data class PowerLevelsContent(
     /**
      * The level required to ban a user. Defaults to 50 if unspecified.
      */

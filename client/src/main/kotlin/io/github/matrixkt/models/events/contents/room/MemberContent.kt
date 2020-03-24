@@ -1,11 +1,13 @@
-package io.github.matrixkt.models.events.contents
+package io.github.matrixkt.models.events.contents.room
 
 import io.github.matrixkt.models.events.Membership
+import io.github.matrixkt.models.events.contents.Content
+import io.github.matrixkt.models.events.contents.StrippedState
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RoomMemberContent(
+data class MemberContent(
     /**
      * The avatar URL for this user, if any. This is added by the homeserver.
      */

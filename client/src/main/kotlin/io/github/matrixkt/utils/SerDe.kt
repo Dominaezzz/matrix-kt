@@ -1,6 +1,7 @@
 package io.github.matrixkt.utils
 
 import io.github.matrixkt.models.events.contents.*
+import io.github.matrixkt.models.events.contents.room.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import kotlinx.serialization.modules.SerializersModule
@@ -14,52 +15,52 @@ val MatrixJsonConfig = JsonConfiguration.Stable.copy(
 )
 
 val MatrixSerialModule = SerializersModule {
-    contextual(RoomAliasesContent.serializer())
-    contextual(RoomCanonicalAliasContent.serializer())
-    contextual(RoomCreateContent.serializer())
-    contextual(RoomJoinRulesContent.serializer())
-    contextual(RoomMemberContent.serializer())
-    contextual(RoomPowerLevelsContent.serializer())
-    contextual(RoomHistoryVisibilityContent.serializer())
-    contextual(RoomRedactionContent.serializer())
-    contextual(RoomMessageContent.serializer())
-    contextual(RoomNameContent.serializer())
-    contextual(RoomTopicContent.serializer())
-    contextual(RoomAvatarContent.serializer())
-    contextual(RoomPinnedEventsContent.serializer())
-    contextual(RoomGuestAccessContent.serializer())
+    contextual(AliasesContent.serializer())
+    contextual(CanonicalAliasContent.serializer())
+    contextual(CreateContent.serializer())
+    contextual(JoinRulesContent.serializer())
+    contextual(MemberContent.serializer())
+    contextual(PowerLevelsContent.serializer())
+    contextual(HistoryVisibilityContent.serializer())
+    contextual(RedactionContent.serializer())
+    contextual(MessageContent.serializer())
+    contextual(NameContent.serializer())
+    contextual(TopicContent.serializer())
+    contextual(AvatarContent.serializer())
+    contextual(PinnedEventsContent.serializer())
+    contextual(GuestAccessContent.serializer())
 
     polymorphic(Content::class) {
-        subclass(RoomAliasesContent.serializer())
-        subclass(RoomCanonicalAliasContent.serializer())
-        subclass(RoomCreateContent.serializer())
-        subclass(RoomJoinRulesContent.serializer())
-        subclass(RoomMemberContent.serializer())
-        subclass(RoomPowerLevelsContent.serializer())
-        subclass(RoomHistoryVisibilityContent.serializer())
-        subclass(RoomRedactionContent.serializer())
-        subclass(RoomMessageContent.serializer())
-        subclass(RoomNameContent.serializer())
-        subclass(RoomTopicContent.serializer())
-        subclass(RoomAvatarContent.serializer())
-        subclass(RoomPinnedEventsContent.serializer())
-        subclass(RoomGuestAccessContent.serializer())
+        subclass(AliasesContent.serializer())
+        subclass(CanonicalAliasContent.serializer())
+        subclass(CreateContent.serializer())
+        subclass(JoinRulesContent.serializer())
+        subclass(MemberContent.serializer())
+        subclass(PowerLevelsContent.serializer())
+        subclass(HistoryVisibilityContent.serializer())
+        subclass(RedactionContent.serializer())
+        subclass(MessageContent.serializer())
+        subclass(NameContent.serializer())
+        subclass(TopicContent.serializer())
+        subclass(AvatarContent.serializer())
+        subclass(PinnedEventsContent.serializer())
+        subclass(GuestAccessContent.serializer())
     }
 
-    polymorphic(RoomMessageContent.serializer()) {
-        subclass(RoomMessageContent.Text.serializer())
-        subclass(RoomMessageContent.Emote.serializer())
-        subclass(RoomMessageContent.Notice.serializer())
-        subclass(RoomMessageContent.Image.serializer())
-        subclass(RoomMessageContent.File.serializer())
-        subclass(RoomMessageContent.Audio.serializer())
-        subclass(RoomMessageContent.Location.serializer())
-        subclass(RoomMessageContent.Video.serializer())
+    polymorphic(MessageContent.serializer()) {
+        subclass(MessageContent.Text.serializer())
+        subclass(MessageContent.Emote.serializer())
+        subclass(MessageContent.Notice.serializer())
+        subclass(MessageContent.Image.serializer())
+        subclass(MessageContent.File.serializer())
+        subclass(MessageContent.Audio.serializer())
+        subclass(MessageContent.Location.serializer())
+        subclass(MessageContent.Video.serializer())
     }
 
-    polymorphic(RoomEncryptedContent.serializer()) {
-        subclass(RoomEncryptedContent.OlmV1.serializer())
-        subclass(RoomEncryptedContent.MegolmV1.serializer())
+    polymorphic(EncryptedContent.serializer()) {
+        subclass(EncryptedContent.OlmV1.serializer())
+        subclass(EncryptedContent.MegolmV1.serializer())
     }
 }
 
