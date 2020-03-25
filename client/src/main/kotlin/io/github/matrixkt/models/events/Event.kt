@@ -6,10 +6,15 @@ import io.github.matrixkt.models.events.contents.call.CandidatesContent
 import io.github.matrixkt.models.events.contents.call.HangupContent
 import io.github.matrixkt.models.events.contents.call.InviteContent
 import io.github.matrixkt.models.events.contents.room.*
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.PolymorphicSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonParametricSerializer
 
-@Serializable(PolymorphicSerializer::class)
+@Serializable(EventSerializer::class)
 sealed class Event {
     /**
      * The fields in this object will vary depending on the type of event.
@@ -24,15 +29,139 @@ sealed class Event {
     abstract val type: String
 }
 
-abstract class RoomEvent : Event()
+object EventSerializer : JsonParametricSerializer<Event>(Event::class) {
+    override fun selectSerializer(element: JsonElement): KSerializer<out Event> {
+        require(element is JsonObject)
+        return if ("sender" in element) {
+            if ("roomId" in element) {
+                RoomEvent.serializer()
+            } else {
+                EphemeralEvent.serializer()
+            }
+        } else {
+            AccountEvent.serializer()
+        }
+    }
+}
 
-abstract class MessageEvent : RoomEvent()
+@Serializable(RoomEventSerializer::class)
+sealed class RoomEvent : Event() {
+    /**
+     * The globally unique event identifier.
+     */
+    @SerialName("event_id")
+    abstract val eventId: String
 
-abstract class StateEvent : RoomEvent()
+    /**
+     * Contains the fully-qualified ID of the user who sent this event.
+     */
+    abstract val sender: String
 
-abstract class EphemeralEvent : Event()
+    /**
+     * Timestamp in milliseconds on originating homeserver when this event was sent.
+     */
+    @SerialName("origin_server_ts")
+    abstract val originServerTimestamp: Long
 
-abstract class AccountEvent : Event()
+    /**
+     * Contains optional extra information about the event.
+     */
+    abstract val unsigned: UnsignedData?
+
+    /**
+     * The ID of the room associated with this event.
+     * Will not be present on events that arrive through `/sync`,
+     * despite being required everywhere else.
+     */
+    @SerialName("room_id")
+    abstract val roomId: String
+}
+
+object RoomEventSerializer : JsonParametricSerializer<RoomEvent>(RoomEvent::class) {
+    override fun selectSerializer(element: JsonElement): KSerializer<out RoomEvent> {
+        require(element is JsonObject)
+        return if (element.containsKey("stateKey")) {
+            StateEvent.serializer()
+        } else {
+            MessageEvent.serializer()
+        }
+    }
+}
+
+@Serializable
+data class MessageEvent(
+    override val type: String,
+
+    override val content: JsonObject,
+
+    @SerialName("event_id")
+    override val eventId: String,
+
+    override val sender: String,
+
+    @SerialName("origin_server_ts")
+    override val originServerTimestamp: Long,
+
+    override val unsigned: UnsignedData? = null,
+
+    @SerialName("room_id")
+    override val roomId: String
+) : RoomEvent()
+
+@Serializable
+data class StateEvent(
+    override val type: String,
+
+    override val content: JsonObject,
+
+    @SerialName("event_id")
+    override val eventId: String,
+
+    override val sender: String,
+
+    @SerialName("origin_server_ts")
+    override val originServerTimestamp: Long,
+
+    override val unsigned: UnsignedData? = null,
+
+    @SerialName("room_id")
+    override val roomId: String,
+
+    /**
+     * A unique key which defines the overwriting semantics for this piece of room state.
+     * This value is often a zero-length string.
+     * The presence of this key makes this event a State Event.
+     * State keys starting with an @ are reserved for referencing user IDs, such as room members.
+     * With the exception of a few events, state events set with a given user's ID as the state key MUST only be set by that user.
+     */
+    @SerialName("state_key")
+    val stateKey: String,
+
+    /**
+     * The previous content for this event. If there is no previous content, this key will be missing.
+     */
+    @SerialName("prev_content")
+    val prevContent: JsonObject? = null
+) : RoomEvent()
+
+@Serializable
+data class EphemeralEvent(
+    override val type: String,
+
+    override val content: JsonObject,
+
+    /**
+     * Contains the fully-qualified ID of the user who sent this event.
+     */
+    val sender: String
+) : Event()
+
+@Serializable
+data class AccountEvent(
+    override val type: String,
+
+    override val content: JsonObject
+) : Event()
 
 private val temp = mapOf(
     EventTypes.ROOM_ALIASES to AliasesContent::class,
