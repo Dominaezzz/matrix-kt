@@ -244,4 +244,43 @@ object EventTypes {
      * The keyshare request and `m.dummy` combination should result in the original sending client receiving keys over the newly established session.
      */
     const val DUMMY = "m.dummy"
+
+    /**
+     * Requests a key verification with another user's devices.
+     * Typically sent as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
+     */
+    const val KEY_VERIFICATION_REQUEST = "m.key.verification.request"
+
+    /**
+     * Begins a key verification process.
+     * Typically sent as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
+     * The [method] field determines the type of verification.
+     * The fields in the event will differ depending on the [method].
+     * This definition includes fields that are in common among all variants.
+     */
+    const val KEY_VERIFICATION_START = "m.key.verification.start"
+
+    /**
+     * Cancels a key verification process/request.
+     * Typically sent as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
+     */
+    const val KEY_VERIFICATION_CANCEL = "m.key.verification.cancel"
+
+    /**
+     * Accepts a previously sent `m.key.verification.start` message.
+     * Typically sent as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
+     */
+    const val KEY_VERIFICATION_ACCEPT = "m.key.verification.accept"
+
+    /**
+     * Sends the ephemeral public key for a device to the partner device.
+     * Typically sent as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
+     */
+    const val KEY_VERIFICATION_KEY = "m.key.verification.key"
+
+    /**
+     * Sends the MAC of a device's key to the partner device.
+     * Typically sent as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
+     */
+    const val KEY_VERIFICATION_MAC = "m.key.verification.mac"
 }

@@ -1,6 +1,8 @@
 package io.github.matrixkt.utils
 
 import io.github.matrixkt.models.events.contents.*
+import io.github.matrixkt.models.events.contents.key.verification.AcceptContent
+import io.github.matrixkt.models.events.contents.key.verification.StartContent
 import io.github.matrixkt.models.events.contents.room.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
@@ -61,6 +63,14 @@ val MatrixSerialModule = SerializersModule {
     polymorphic(EncryptedContent.serializer()) {
         subclass(EncryptedContent.OlmV1.serializer())
         subclass(EncryptedContent.MegolmV1.serializer())
+    }
+
+    polymorphic(StartContent.serializer()) {
+        subclass(StartContent.SasV1.serializer())
+    }
+
+    polymorphic(AcceptContent.serializer()) {
+        subclass(AcceptContent.SasV1.serializer())
     }
 }
 

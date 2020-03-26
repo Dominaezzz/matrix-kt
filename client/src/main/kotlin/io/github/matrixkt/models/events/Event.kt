@@ -5,9 +5,9 @@ import io.github.matrixkt.models.events.contents.call.AnswerContent
 import io.github.matrixkt.models.events.contents.call.CandidatesContent
 import io.github.matrixkt.models.events.contents.call.HangupContent
 import io.github.matrixkt.models.events.contents.call.InviteContent
+import io.github.matrixkt.models.events.contents.key.verification.*
 import io.github.matrixkt.models.events.contents.room.*
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
@@ -191,5 +191,11 @@ private val temp = mapOf(
     EventTypes.ROOM_KEY to RoomKeyContent::class,
     EventTypes.ROOM_KEY_REQUEST to RoomKeyRequestContent::class,
     EventTypes.FORWARDED_ROOM_KEY to ForwardedRoomKeyContent::class,
-    EventTypes.DUMMY to DummyContent::class
+    EventTypes.DUMMY to DummyContent::class,
+    EventTypes.KEY_VERIFICATION_REQUEST to RequestContent::class,
+    EventTypes.KEY_VERIFICATION_START to StartContent::class,
+    EventTypes.KEY_VERIFICATION_CANCEL to CancelContent::class,
+    EventTypes.KEY_VERIFICATION_ACCEPT to AcceptContent::class,
+    EventTypes.KEY_VERIFICATION_KEY to KeyContent::class,
+    EventTypes.KEY_VERIFICATION_MAC to MacContent::class
 )
