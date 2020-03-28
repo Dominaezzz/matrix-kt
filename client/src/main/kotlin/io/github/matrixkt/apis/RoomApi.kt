@@ -10,6 +10,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.encodeURLQueryComponent
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.json
 import kotlin.reflect.KProperty0
 
 class RoomApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
@@ -167,6 +168,57 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
 
             contentType(ContentType.Application.Json)
             body = InviteRequest(userId)
+        }
+    }
+
+    /**
+     * Note that there are two forms of this API, which are documented separately.
+     * This version of the API does not require that the inviter know the Matrix identifier of the invitee, and instead relies on third party identifiers.
+     * The homeserver uses an identity server to perform the mapping from third party identifier to a Matrix identifier.
+     * The other is documented in the joining rooms section.
+     *
+     * This API invites a user to participate in a particular room. They do not start participating in the room until they actually join the room.
+     *
+     * Only users currently in a particular room can invite other users to join that room.
+     *
+     * If the identity server did know the Matrix user identifier for the third party identifier, the homeserver will append a `m.room.member` event to the room.
+     *
+     * If the identity server does not know a Matrix user identifier for the passed third party identifier, the homeserver will issue an invitation which can be accepted upon providing proof of ownership of the third party identifier. This is achieved by the identity server generating a token, which it gives to the inviting homeserver. The homeserver will add an m.room.third_party_invite event into the graph for the room, containing that token.
+     *
+     * When the invitee binds the invited third party identifier to a Matrix user ID, the identity server will give the user a list of pending invitations, each containing:
+     * - The room ID to which they were invited
+     * - The token given to the homeserver
+     * - A signature of the token, signed with the identity server's private key
+     * - The matrix user ID who invited them to the room
+     *
+     * If a token is requested from the identity server, the homeserver will append a m.room.third_party_invite event to the room.
+     *
+     * **Rate-limited**: Yes.
+     *
+     * **Requires auth**: Yes.
+     *
+     * Path Parameters
+     * @param[roomId] The room identifier (not alias) to which to invite the user.
+     * @param[idServer] The hostname+port of the identity server which should be used for third party identifier lookups.
+     * @param[idAccessToken] An access token previously registered with the identity server. Servers can treat this as optional to distinguish between r0.5-compatible clients and this specification version.
+     * @param[medium] The kind of address being passed in the address field, for example email.
+     * @param[address] The invitee's third party identifier.
+     */
+    suspend fun inviteBy3PID(roomId: String, idServer: String, idAccessToken: String, medium: String, address: String) {
+        return client.post {
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "invite")
+            }
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = json {
+                "id_server" to idServer
+                "id_access_token" to idAccessToken
+                "medium" to medium
+                "address" to address
+            }
         }
     }
 
@@ -738,6 +790,34 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
     }
 
     /**
+     * Reports an event as inappropriate to the server, which may then notify the appropriate people.
+     *
+     * **Rate-limited**: No.
+     *
+     * **Requires auth**: Yes.
+     *
+     * @param[roomId] The room in which the event being reported is located.
+     * @param[eventId] The event to report.
+     * @param[score] The score to rate this content as where -100 is most offensive and 0 is inoffensive.
+     * @param[reason] The reason the content is being reported. May be blank.
+     */
+    suspend fun reportContent(roomId: String, eventId: String, score: Int, reason: String) {
+        return client.post {
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "report", eventId)
+            }
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = json {
+                "score" to score
+                "reason" to reason
+            }
+        }
+    }
+
+    /**
      * Get a single event based on `roomId/eventId`.
      * You must have permission to retrieve this event e.g. by being a member in the room for this event.
      *
@@ -771,6 +851,37 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
         return client.get {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "state")
+            }
+
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
+
+    /**
+     * This API returns a number of events that happened just before and after the specified event.
+     * This allows clients to get the context surrounding an event.
+     *
+     * Note: This endpoint supports lazy-loading of room member events.
+     * See [Lazy-loading room members](https://matrix.org/docs/spec/client_server/r0.6.0#lazy-loading-room-members) for more information.
+     *
+     * **Rate-limited**: No.
+     *
+     * **Requires auth**: Yes.
+     *
+     * @param[roomId] The room to get events from.
+     * @param[eventId] The event to get context around.
+     * @param[limit] The maximum number of events to return. Default: 10.
+     * @param[filter] A JSON `RoomEventFilter` to filter the returned events with. The filter is only applied to `events_before`, `events_after`, and `state`.
+     * It is not applied to the `event` itself. The filter may be applied before or/and after the `limit` parameter - whichever the homeserver prefers.
+     *
+     * See [Filtering](https://matrix.org/docs/spec/client_server/r0.6.0#filtering) for more information.
+     */
+    suspend fun getEventContext(roomId: String, eventId: String, limit: Int? = null, filter: String? = null): EventContext {
+        return client.get {
+            url {
+                path("_matrix", "client", "r0", "rooms", roomId, "context", eventId)
+                parameter("limit", limit)
+                parameter("filter", filter)
             }
 
             header("Authorization", "Bearer $accessToken")
@@ -824,15 +935,9 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
     }
 }
 
-// GET /_matrix/client/r0/rooms/{roomId}/context/{eventId} -> getEventContext
-// POST /_matrix/client/r0/rooms/{roomId}/invite -> inviteBy3PID
-// POST /_matrix/client/r0/rooms/{roomId}/report/{eventId} -> reportContent
 // GET /_matrix/client/r0/rooms/{roomId}/initialSync -> roomInitialSync
 
-
 // PUT /_matrix/client/r0/directory/list/appservice/{networkId}/{roomId} -> updateAppserviceRoomDirectoryVsibility
-
-
 
 // GET /_matrix/client/r0/notifications -> getNotifications
 // GET /_matrix/client/r0/admin/whois/{userId} -> getWhoIs

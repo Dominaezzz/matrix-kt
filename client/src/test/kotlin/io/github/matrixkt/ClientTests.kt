@@ -4585,168 +4585,151 @@ class ClientTests {
 //            assertEquals("", response)
 //        }
 //    }
-//
-//
-//get-matrix-client-r0-rooms-roomid-context-eventid
-//    @Test
-//    fun testTODO() = runSuspendTest {
-//        val mockEngine = MockEngine.create {
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {
-//                      "end": "t29-57_2_0_2",
-//                      "events_after": [
-//                        {
-//                          "content": {
-//                            "body": "This is an example text message",
-//                            "msgtype": "m.text",
-//                            "format": "org.matrix.custom.html",
-//                            "formatted_body": "<b>This is an example text message</b>"
-//                          },
-//                          "type": "m.room.message",
-//                          "event_id": "$143273582443PhrSn:example.org",
-//                          "room_id": "!636q39766251:example.com",
-//                          "sender": "@example:example.org",
-//                          "origin_server_ts": 1432735824653,
-//                          "unsigned": {
-//                            "age": 1234
-//                          }
-//                        }
-//                      ],
-//                      "event": {
-//                        "content": {
-//                          "body": "filename.jpg",
-//                          "info": {
-//                            "h": 398,
-//                            "w": 394,
-//                            "mimetype": "image/jpeg",
-//                            "size": 31037
-//                          },
-//                          "url": "mxc://example.org/JWEIFJgwEIhweiWJE",
-//                          "msgtype": "m.image"
-//                        },
-//                        "type": "m.room.message",
-//                        "event_id": "$f3h4d129462ha:example.com",
-//                        "room_id": "!636q39766251:example.com",
-//                        "sender": "@example:example.org",
-//                        "origin_server_ts": 1432735824653,
-//                        "unsigned": {
-//                          "age": 1234
-//                        }
-//                      },
-//                      "events_before": [
-//                        {
-//                          "content": {
-//                            "body": "something-important.doc",
-//                            "filename": "something-important.doc",
-//                            "info": {
-//                              "mimetype": "application/msword",
-//                              "size": 46144
-//                            },
-//                            "msgtype": "m.file",
-//                            "url": "mxc://example.org/FHyPlCeYUSFFxlgbQYZmoEoe"
-//                          },
-//                          "type": "m.room.message",
-//                          "event_id": "$143273582443PhrSn:example.org",
-//                          "room_id": "!636q39766251:example.com",
-//                          "sender": "@example:example.org",
-//                          "origin_server_ts": 1432735824653,
-//                          "unsigned": {
-//                            "age": 1234
-//                          }
-//                        }
-//                      ],
-//                      "start": "t27-54_2_0_2",
-//                      "state": [
-//                        {
-//                          "content": {
-//                            "creator": "@example:example.org",
-//                            "room_version": "1",
-//                            "m.federate": true,
-//                            "predecessor": {
-//                              "event_id": "$something:example.org",
-//                              "room_id": "!oldroom:example.org"
-//                            }
-//                          },
-//                          "type": "m.room.create",
-//                          "event_id": "$143273582443PhrSn:example.org",
-//                          "room_id": "!636q39766251:example.com",
-//                          "sender": "@example:example.org",
-//                          "origin_server_ts": 1432735824653,
-//                          "unsigned": {
-//                            "age": 1234
-//                          },
-//                          "state_key": ""
-//                        },
-//                        {
-//                          "content": {
-//                            "membership": "join",
-//                            "avatar_url": "mxc://example.org/SEsfnsuifSDFSSEF",
-//                            "displayname": "Alice Margatroid"
-//                          },
-//                          "type": "m.room.member",
-//                          "event_id": "$143273582443PhrSn:example.org",
-//                          "room_id": "!636q39766251:example.com",
-//                          "sender": "@example:example.org",
-//                          "origin_server_ts": 1432735824653,
-//                          "unsigned": {
-//                            "age": 1234
-//                          },
-//                          "state_key": "@alice:example.org"
-//                        }
-//                      ]
-//                    }
-//                """)
-//            }
-//        }
-//
-//        val client = MatrixClient(mockEngine)
-//
-//        // GET /_matrix/client/r0/rooms/%21636q39766251%3Aexample.com/context/%24f3h4d129462ha%3Aexample.com?limit=3 HTTP/1.1
-//
-//        run {
-//            val response = TODO("get-matrix-client-r0-rooms-roomid-context-eventid")
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//        }
-//
-//    }
-//
-//post-matrix-client-r0-rooms-roomid-report-eventid
-//    @Test
-//    fun testTODO() = runSuspendTest {
-//        val mockEngine = MockEngine.create {
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {}
-//                """)
-//            }
-//        }
-//
-//        val client = MatrixClient(mockEngine)
-//
-//        // POST /_matrix/client/r0/rooms/%21637q39766251%3Aexample.com/report/%24something%3Aexample.org HTTP/1.1
-//        // Content-Type: application/json
-//        //
-//        // {
-//        //   "score": -100,
-//        //   "reason": "this makes me sad"
-//        // }
-//
-//        run {
-//            val response = TODO("post-matrix-client-r0-rooms-roomid-report-eventid")
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//        }
-//    }
-//
-//
+
+    @Test
+    fun testGetEventContext() = runSuspendTest {
+        val mockEngine = MockEngine.create {
+            addHandler {
+                // language=json
+                respondJson("""
+                    {
+                      "end": "t29-57_2_0_2",
+                      "events_after": [
+                        {
+                          "content": {
+                            "body": "This is an example text message",
+                            "msgtype": "m.text",
+                            "format": "org.matrix.custom.html",
+                            "formatted_body": "<b>This is an example text message</b>"
+                          },
+                          "type": "m.room.message",
+                          "event_id": "$143273582443PhrSn:example.org",
+                          "room_id": "!636q39766251:example.com",
+                          "sender": "@example:example.org",
+                          "origin_server_ts": 1432735824653,
+                          "unsigned": {
+                            "age": 1234
+                          }
+                        }
+                      ],
+                      "event": {
+                        "content": {
+                          "body": "filename.jpg",
+                          "info": {
+                            "h": 398,
+                            "w": 394,
+                            "mimetype": "image/jpeg",
+                            "size": 31037
+                          },
+                          "url": "mxc://example.org/JWEIFJgwEIhweiWJE",
+                          "msgtype": "m.image"
+                        },
+                        "type": "m.room.message",
+                        "event_id": "${'$'}f3h4d129462ha:example.com",
+                        "room_id": "!636q39766251:example.com",
+                        "sender": "@example:example.org",
+                        "origin_server_ts": 1432735824653,
+                        "unsigned": {
+                          "age": 1234
+                        }
+                      },
+                      "events_before": [
+                        {
+                          "content": {
+                            "body": "something-important.doc",
+                            "filename": "something-important.doc",
+                            "info": {
+                              "mimetype": "application/msword",
+                              "size": 46144
+                            },
+                            "msgtype": "m.file",
+                            "url": "mxc://example.org/FHyPlCeYUSFFxlgbQYZmoEoe"
+                          },
+                          "type": "m.room.message",
+                          "event_id": "$143273582443PhrSn:example.org",
+                          "room_id": "!636q39766251:example.com",
+                          "sender": "@example:example.org",
+                          "origin_server_ts": 1432735824653,
+                          "unsigned": {
+                            "age": 1234
+                          }
+                        }
+                      ],
+                      "start": "t27-54_2_0_2",
+                      "state": [
+                        {
+                          "content": {
+                            "creator": "@example:example.org",
+                            "room_version": "1",
+                            "m.federate": true,
+                            "predecessor": {
+                              "event_id": "${'$'}something:example.org",
+                              "room_id": "!oldroom:example.org"
+                            }
+                          },
+                          "type": "m.room.create",
+                          "event_id": "$143273582443PhrSn:example.org",
+                          "room_id": "!636q39766251:example.com",
+                          "sender": "@example:example.org",
+                          "origin_server_ts": 1432735824653,
+                          "unsigned": {
+                            "age": 1234
+                          },
+                          "state_key": ""
+                        },
+                        {
+                          "content": {
+                            "membership": "join",
+                            "avatar_url": "mxc://example.org/SEsfnsuifSDFSSEF",
+                            "displayname": "Alice Margatroid"
+                          },
+                          "type": "m.room.member",
+                          "event_id": "$143273582443PhrSn:example.org",
+                          "room_id": "!636q39766251:example.com",
+                          "sender": "@example:example.org",
+                          "origin_server_ts": 1432735824653,
+                          "unsigned": {
+                            "age": 1234
+                          },
+                          "state_key": "@alice:example.org"
+                        }
+                      ]
+                    }
+                """)
+            }
+        }
+
+        val client = MatrixClient(mockEngine)
+
+        run {
+            val response = client.roomApi.getEventContext("!636q39766251:example.com", "\$f3h4d129462ha:example.com", limit = 3)
+            assertEquals("t27-54_2_0_2", response.start)
+            assertEquals("t29-57_2_0_2", response.end)
+            assertEquals(2, response.state.size)
+            assertEquals(1, response.eventsBefore.size)
+            assertEquals(1, response.eventsAfter.size)
+            assertEquals("m.room.message", response.event?.type)
+        }
+    }
+
+    @Test
+    fun testReportContent() = runSuspendTest {
+        val mockEngine = MockEngine.create {
+            addHandler {
+                // language=json
+                respondJson("""
+                    {}
+                """)
+            }
+        }
+
+        val client = MatrixClient(mockEngine)
+
+        run {
+            client.roomApi.reportContent("!637q39766251:example.com", "\$something:example.org", -100, "this makes me sad")
+        }
+    }
+
 //get-matrix-client-r0-thirdparty-protocols
 //    @Test
 //    fun testTODO() = runSuspendTest {

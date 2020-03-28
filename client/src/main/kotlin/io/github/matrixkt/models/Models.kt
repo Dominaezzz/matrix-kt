@@ -1659,3 +1659,38 @@ data class KeyChangesResponse(
      */
     val left: List<String>
 )
+
+@Serializable
+data class EventContext(
+    /**
+     * A token that can be used to paginate backwards with.
+     */
+    val start: String? = null,
+
+    /**
+     * A token that can be used to paginate forwards with.
+     */
+    val end: String? = null,
+
+    /**
+     * A list of room events that happened just before the requested event, in reverse-chronological order.
+     */
+    @SerialName("events_before")
+    val eventsBefore: List<MatrixEvent> = emptyList(),
+
+    /**
+     * Details of the requested event.
+     */
+    val event: MatrixEvent? = null,
+
+    /**
+     * A list of room events that happened just after the requested event, in chronological order.
+     */
+    @SerialName("events_after")
+    val eventsAfter: List<MatrixEvent> = emptyList(),
+
+    /**
+     * The state of the room at the last event returned.
+     */
+    val state: List<MatrixEvent> = emptyList()
+)
