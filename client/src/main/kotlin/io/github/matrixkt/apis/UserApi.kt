@@ -8,6 +8,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import kotlinx.serialization.json.JsonElement
 import kotlin.reflect.KProperty0
 
 class UserApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
@@ -188,13 +189,97 @@ class UserApi internal constructor(private val client: HttpClient, private val a
             header("Authorization", "Bearer $accessToken")
         }
     }
+
+    /**
+     * Set some account_data for the client.
+     * This config is only visible to the user that set the account_data.
+     * The config will be synced to clients in the top-level account_data.
+     *
+     * **Rate-limited**: No.
+     *
+     * **Requires auth**: Yes.
+     *
+     * @param[userId] The ID of the user to set account_data for. The access token must be authorized to make requests for this user ID.
+     * @param[type]	The event type of the account_data to set. Custom types should be namespaced to avoid clashes.
+     */
+    suspend fun setAccountData(userId: String, type: String, content: JsonElement) {
+        return client.put {
+            url {
+                path("_matrix", "client", "r0", "user", userId, "account_data", type)
+            }
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = content
+        }
+    }
+
+    /**
+     * Get some account_data for the client. This config is only visible to the user that set the account_data.
+     *
+     * **Rate-limited**: No.
+     *
+     * **Requires auth**: Yes.
+     *
+     * @param[userId] The ID of the user to get account_data for. The access token must be authorized to make requests for this user ID.
+     * @param[type] The event type of the account_data to get. Custom types should be namespaced to avoid clashes.
+     */
+    suspend fun getAccountData(userId: String, type: String): JsonElement {
+        return client.get {
+            url {
+                path("_matrix", "client", "r0", "user", userId, "account_data", type)
+            }
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
+
+    /**
+     * Set some account_data for the client on a given room.
+     * This config is only visible to the user that set the account_data.
+     * The config will be synced to clients in the per-room account_data.
+     *
+     * **Rate-limited**: No.
+     *
+     * **Requires auth**: Yes.
+     *
+     * @param[userId] The ID of the user to set account_data for. The access token must be authorized to make requests for this user ID.
+     * @param[roomId] The ID of the room to set account_data on.
+     * @param[type] The event type of the account_data to set. Custom types should be namespaced to avoid clashes.
+     */
+    suspend fun setAccountDataPerRoom(userId: String, roomId: String, type: String, content: JsonElement) {
+        return client.put {
+            url {
+                path("_matrix", "client", "r0", "user", userId, "rooms", roomId, "account_data", type)
+            }
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = content
+        }
+    }
+
+    /**
+     * Get some account_data for the client on a given room. This config is only visible to the user that set the account_data.
+     *
+     * **Rate-limited**: No.
+     *
+     * **Requires auth**: Yes.
+     *
+     * @param[userId] The ID of the user to set account_data for. The access token must be authorized to make requests for this user ID.
+     * @param[roomId] The ID of the room to get account_data for.
+     * @param[type] The event type of the account_data to get. Custom types should be namespaced to avoid clashes.
+     */
+    suspend fun getAccountDataPerRoom(userId: String, roomId: String, type: String): JsonElement {
+        return client.get {
+            url {
+                path("_matrix", "client", "r0", "user", userId, "rooms", roomId, "account_data", type)
+            }
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 }
 
-// GET /_matrix/client/r0/user/{userId}/account_data/{type} -> getAccountData
-// PUT /_matrix/client/r0/user/{userId}/account_data/{type} -> setAccountData
 // POST /_matrix/client/r0/user/{userId}/openid/request_token -> requestOpenIdToken
-// GET /_matrix/client/r0/user/{userId}/rooms/{roomId}/account_data/{type} -> getAccountDataPerRoom
-// PUT /_matrix/client/r0/user/{userId}/rooms/{roomId}/account_data/{type} -> setAccountDataPerRoom
 // GET /_matrix/client/r0/user/{userId}/rooms/{roomId}/tags -> getRoomTags
 // PUT /_matrix/client/r0/user/{userId}/rooms/{roomId}/tags/{tag} -> setRoomTag
 // DELETE /_matrix/client/r0/user/{userId}/rooms/{roomId}/tags/{tag} -> deleteRoomTag

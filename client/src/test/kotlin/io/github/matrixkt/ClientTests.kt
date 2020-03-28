@@ -11,10 +11,7 @@ import io.ktor.client.engine.mock.toByteArray
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.util.KtorExperimentalAPI
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.json
+import kotlinx.serialization.json.*
 import testutils.runSuspendTest
 import utils.respondJson
 import kotlin.test.*
@@ -4480,65 +4477,51 @@ class ClientTests {
 //        }
 //
 //    }
-//
-//get-matrix-client-r0-user-userid-account-data-type
-//    @Test
-//    fun testTODO() = runSuspendTest {
-//        val mockEngine = MockEngine.create {
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {
-//                      "custom_account_data_key": "custom_config_value"
-//                    }
-//                """)
-//            }
-//        }
-//
-//        val client = MatrixClient(mockEngine)
-//
-//        // GET /_matrix/client/r0/user/%40alice%3Aexample.com/account_data/org.example.custom.config HTTP/1.1
-//
-//        run {
-//            val response = TODO("get-matrix-client-r0-user-userid-account-data-type")
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//        }
-//
-//    }
-//
-//
-//get-matrix-client-r0-user-userid-rooms-roomid-account-data-type
-//    @Test
-//    fun testTODO() = runSuspendTest {
-//        val mockEngine = MockEngine.create {
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {
-//                      "custom_account_data_key": "custom_config_value"
-//                    }
-//                """)
-//            }
-//        }
-//
-//        val client = MatrixClient(mockEngine)
-//
-//        // GET /_matrix/client/r0/user/%40alice%3Aexample.com/rooms/%21726s6s6q%3Aexample.com/account_data/org.example.custom.room.config HTTP/1.1
-//
-//        run {
-//            val response = TODO("get-matrix-client-r0-user-userid-rooms-roomid-account-data-type")
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//        }
-//
-//    }
-//
-//
+
+    @Test
+    fun testGetAccountData() = runSuspendTest {
+        val mockEngine = MockEngine.create {
+            addHandler {
+                // language=json
+                respondJson("""
+                    {
+                      "custom_account_data_key": "custom_config_value"
+                    }
+                """)
+            }
+        }
+
+        val client = MatrixClient(mockEngine)
+
+        run {
+            val response = client.userApi.getAccountData("@alice:example.com", "org.example.custom.config")
+            assertTrue(response is JsonObject)
+            assertEquals("custom_config_value", response.getPrimitive("custom_account_data_key").content)
+        }
+    }
+
+    @Test
+    fun testGetAccountDataPerRoom() = runSuspendTest {
+        val mockEngine = MockEngine.create {
+            addHandler {
+                // language=json
+                respondJson("""
+                    {
+                      "custom_account_data_key": "custom_config_value"
+                    }
+                """)
+            }
+        }
+
+        val client = MatrixClient(mockEngine)
+
+        run {
+            val response = client.userApi.getAccountDataPerRoom("@alice:example.com", "\$726s6s6q:example.com", "org.example.custom.room.config")
+            assertTrue(response is JsonObject)
+            assertEquals("custom_config_value", response.getPrimitive("custom_account_data_key").content)
+        }
+    }
+
 //get-matrix-client-r0-admin-whois-userid
 //    @Test
 //    fun testTODO() = runSuspendTest {
