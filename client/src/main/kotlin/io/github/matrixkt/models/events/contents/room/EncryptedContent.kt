@@ -58,22 +58,8 @@ abstract class EncryptedContent : Content() {
         val sessionId: String
     ) : EncryptedContent()
 
-    @Serializable
-    data class Unknown(
-        /**
-         * The encryption algorithm used to encrypt this event.
-         * The value of this field determines which other properties will be present.
-         */
-        val algorithm: String,
-
-        override val ciphertext: Map<String, CiphertextInfo>,
-
-        @SerialName("sender_key")
-        override val senderKey: String
-    ) : EncryptedContent()
-
     object Serializer : KSerializer<EncryptedContent> by JsonPolymorphicSerializer(
-        EncryptedContent::class, "algorithm", Unknown.serializer())
+        EncryptedContent::class, "algorithm")
 
     @Serializable
     data class CiphertextInfo(
