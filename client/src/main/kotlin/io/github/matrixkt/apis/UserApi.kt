@@ -1,14 +1,13 @@
 package io.github.matrixkt.apis
 
 import io.github.matrixkt.models.*
+import io.github.matrixkt.models.events.contents.TagContent
 import io.ktor.client.HttpClient
-import io.ktor.client.request.get
-import io.ktor.client.request.header
-import io.ktor.client.request.post
-import io.ktor.client.request.put
+import io.ktor.client.request.*
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.json
 import kotlin.reflect.KProperty0
 
 class UserApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
@@ -277,9 +276,73 @@ class UserApi internal constructor(private val client: HttpClient, private val a
             header("Authorization", "Bearer $accessToken")
         }
     }
+
+    /**
+     * List the tags set by a user on a room.
+     *
+     * **Rate-limited**: No.
+     *
+     * **Requires auth**: Yes.
+     *
+     * @param[userId] The id of the user to get tags for. The access token must be authorized to make requests for this user ID.
+     * @param[roomId] The ID of the room to get tags for.
+     */
+    suspend fun getRoomTags(userId: String, roomId: String): TagContent {
+        return client.get {
+            url {
+                path("_matrix", "client", "r0", "user", userId, "rooms", roomId, "tags")
+            }
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
+
+    /**
+     * Add a tag to the room.
+     *
+     * **Rate-limited**: No.
+     *
+     * **Requires auth**: Yes.
+     *
+     * @param[userId] The id of the user to add a tag for. The access token must be authorized to make requests for this user ID.
+     * @param[roomId] The ID of the room to add a tag to.
+     * @param[tag] The tag to add.
+     * @param[order] A number in a range [0,1] describing a relative position of the room under the given tag.
+     */
+    suspend fun setRoomTag(userId: String, roomId: String, tag: String, order: Double? = null) {
+        return client.put {
+            url {
+                path("_matrix", "client", "r0", "user", userId, "rooms", roomId, "tags", tag)
+            }
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            body = json {
+                if (order != null) {
+                    "order" to order
+                }
+            }
+        }
+    }
+
+    /**
+     * Remove a tag from the room.
+     *
+     * **Rate-limited**: No.
+     *
+     * **Requires auth**: Yes.
+     *
+     * @param[userId] The id of the user to remove a tag for. The access token must be authorized to make requests for this user ID.
+     * @param[roomId] The ID of the room to remove a tag from.
+     * @param[tag] The tag to remove.
+     */
+    suspend fun deleteRoomTag(userId: String, roomId: String, tag: String) {
+        return client.delete {
+            url {
+                path("_matrix", "client", "r0", "user", userId, "rooms", roomId, "tags", tag)
+            }
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
 }
 
 // POST /_matrix/client/r0/user/{userId}/openid/request_token -> requestOpenIdToken
-// GET /_matrix/client/r0/user/{userId}/rooms/{roomId}/tags -> getRoomTags
-// PUT /_matrix/client/r0/user/{userId}/rooms/{roomId}/tags/{tag} -> setRoomTag
-// DELETE /_matrix/client/r0/user/{userId}/rooms/{roomId}/tags/{tag} -> deleteRoomTag

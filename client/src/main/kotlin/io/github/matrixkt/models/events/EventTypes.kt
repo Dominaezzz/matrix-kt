@@ -246,6 +246,11 @@ object EventTypes {
     const val DUMMY = "m.dummy"
 
     /**
+     * Informs the client of tags on a room.
+     */
+    const val TAG = "m.tag"
+
+    /**
      * Requests a key verification with another user's devices.
      * Typically sent as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
      */

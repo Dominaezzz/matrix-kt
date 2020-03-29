@@ -2,6 +2,7 @@ package io.github.matrixkt
 
 import io.github.matrixkt.models.*
 import io.github.matrixkt.models.events.Membership
+import io.github.matrixkt.models.events.contents.TagContent
 import io.github.matrixkt.models.events.contents.room.MemberContent
 import io.github.matrixkt.models.events.contents.room.MessageContent
 import io.github.matrixkt.models.filter.*
@@ -4381,102 +4382,74 @@ class ClientTests {
 //        }
 //
 //    }
-//
-//
-//get-matrix-client-r0-user-userid-rooms-roomid-tags
-//    @Test
-//    fun testTODO() = runSuspendTest {
-//        val mockEngine = MockEngine.create {
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {
-//                      "tags": {
-//                        "m.favourite": {
-//                          "order": 0.1
-//                        },
-//                        "u.Work": {
-//                          "order": 0.7
-//                        },
-//                        "u.Customers": {}
-//                      }
-//                    }
-//                """)
-//            }
-//        }
-//
-//        val client = MatrixClient(mockEngine)
-//
-//        // GET /_matrix/client/r0/user/%40alice%3Aexample.com/rooms/%21726s6s6q%3Aexample.com/tags HTTP/1.1
-//
-//        run {
-//            val response = TODO("get-matrix-client-r0-user-userid-rooms-roomid-tags")
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//        }
-//
-//    }
-//
-//
-//put-matrix-client-r0-user-userid-rooms-roomid-tags-tag
-//    @Test
-//    fun testTODO() = runSuspendTest {
-//        val mockEngine = MockEngine.create {
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {}
-//                """)
-//            }
-//        }
-//
-//        val client = MatrixClient(mockEngine)
-//
-//        // PUT /_matrix/client/r0/user/%40alice%3Aexample.com/rooms/%21726s6s6q%3Aexample.com/tags/u.work HTTP/1.1
-//        // Content-Type: application/json
-//        //
-//        // {
-//        //   "order": 0.25
-//        // }
-//
-//        run {
-//            val response = TODO("put-matrix-client-r0-user-userid-rooms-roomid-tags-tag")
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//        }
-//
-//    }
-//
-//
-//delete-matrix-client-r0-user-userid-rooms-roomid-tags-tag
-//    @Test
-//    fun testTODO() = runSuspendTest {
-//        val mockEngine = MockEngine.create {
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {}
-//                """)
-//            }
-//        }
-//
-//        val client = MatrixClient(mockEngine)
-//
-//        // DELETE /_matrix/client/r0/user/%40alice%3Aexample.com/rooms/%21726s6s6q%3Aexample.com/tags/u.work HTTP/1.1
-//
-//        run {
-//            val response = TODO("delete-matrix-client-r0-user-userid-rooms-roomid-tags-tag")
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//        }
-//
-//    }
+
+    @Test
+    fun testGetRoomTags() = runSuspendTest {
+        val mockEngine = MockEngine.create {
+            addHandler {
+                // language=json
+                respondJson("""
+                    {
+                      "tags": {
+                        "m.favourite": {
+                          "order": 0.1
+                        },
+                        "u.Work": {
+                          "order": 0.7
+                        },
+                        "u.Customers": {}
+                      }
+                    }
+                """)
+            }
+        }
+
+        val client = MatrixClient(mockEngine)
+
+        run {
+            val response = client.userApi.getRoomTags("@alice:example.com", "\$726s6s6q:example.com")
+            assertEquals(3, response.tags.size)
+            assertEquals(TagContent.Tag(0.1), response.tags["m.favourite"])
+            assertEquals(TagContent.Tag(0.7), response.tags["u.Work"])
+            assertEquals(TagContent.Tag(), response.tags["u.Customers"])
+        }
+    }
+
+    @Test
+    fun testSetRoomTag() = runSuspendTest {
+        val mockEngine = MockEngine.create {
+            addHandler {
+                // language=json
+                respondJson("""
+                    {}
+                """)
+            }
+        }
+
+        val client = MatrixClient(mockEngine)
+
+        run {
+            client.userApi.setRoomTag("@alice:example.com", "\$726s6s6q:example.com", "u.work", 0.25)
+        }
+    }
+
+    @Test
+    fun testDeleteRoomTag() = runSuspendTest {
+        val mockEngine = MockEngine.create {
+            addHandler {
+                // language=json
+                respondJson("""
+                    {}
+                """)
+            }
+        }
+
+        val client = MatrixClient(mockEngine)
+
+        run {
+            client.userApi.deleteRoomTag("@alice:example.com", "\$726s6s6q:example.com", "u.work")
+        }
+    }
 
     @Test
     fun testGetAccountData() = runSuspendTest {
