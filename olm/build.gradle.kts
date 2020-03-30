@@ -2,17 +2,34 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.NativeBuildType
 import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeHostTest
 import org.jetbrains.kotlin.konan.target.HostManager
+import de.undercouch.gradle.tasks.download.Download
 
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
     `maven-publish`
+    id("de.undercouch.download")
 }
 
 val serialVersion: String by rootProject.extra
 val jnaVersion: String by rootProject.extra
+val olmVersion = "3.1.4"
 
 val useSingleTarget: Boolean by extra(System.getProperty("idea.active") == "true")
+
+val downloadsDir = buildDir.resolve("downloads")
+val olmZip = downloadsDir.resolve("olm-$olmVersion.zip")
+val olmDir = downloadsDir.resolve("olm-$olmVersion")
+
+val downloadOlm by tasks.registering(Download::class) {
+    src("https://gitlab.matrix.org/matrix-org/olm/-/archive/$olmVersion/olm-$olmVersion.zip")
+    dest(olmZip)
+    overwrite(false)
+}
+val extractOlm by tasks.registering(Copy::class) {
+    from(downloadOlm.map { zipTree(it.dest) })
+    into(downloadsDir)
+}
 
 kotlin {
     jvm()
@@ -60,9 +77,10 @@ kotlin {
             "main" {
                 cinterops {
                     create("libolm") {
-                        if (HostManager.hostIsLinux || HostManager.hostIsMac) {
-                            includeDirs("/usr/include", "/usr/local/include")
+                        tasks.named(interopProcessingTaskName) {
+                            dependsOn(extractOlm)
                         }
+                        includeDirs(olmDir.resolve("include"))
                     }
                 }
                 defaultSourceSet {
