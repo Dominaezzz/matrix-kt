@@ -4,7 +4,7 @@
 # Matrix in Kotlin
 
 Kotlin multiplatform libraries for [Matrix](https://matrix.org/).
-- [x] Http Client [WIP]
+- [x] Http Client
 - [x] olm
 - [ ] SDK
 
