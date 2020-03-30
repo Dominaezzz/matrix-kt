@@ -343,6 +343,25 @@ class UserApi internal constructor(private val client: HttpClient, private val a
             header("Authorization", "Bearer $accessToken")
         }
     }
-}
 
-// POST /_matrix/client/r0/user/{userId}/openid/request_token -> requestOpenIdToken
+    /**
+     * Gets an OpenID token object that the requester may supply to another service to verify their identity in Matrix.
+     * The generated token is only valid for exchanging for user information from the federation API for OpenID.
+     *
+     * The access token generated is only valid for the OpenID API. It cannot be used to request another OpenID access token or call /sync, for example.
+     *
+     * **Rate-limited**: Yes.
+     *
+     * **Requires auth**: Yes.
+     *
+     * @param[userId] The user to request and OpenID token for. Should be the user who is authenticated for the request.
+     */
+    suspend fun requestOpenIdToken(userId: String): GetOpenIdResponse {
+        return client.post {
+            url {
+                path("_matrix", "client", "r0", "user", userId, "openid", "request_token")
+            }
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
+}

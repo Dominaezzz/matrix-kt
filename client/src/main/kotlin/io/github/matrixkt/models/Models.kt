@@ -1694,3 +1694,31 @@ data class EventContext(
      */
     val state: List<MatrixEvent> = emptyList()
 )
+
+@Serializable
+data class GetOpenIdResponse(
+    /**
+     * An access token the consumer may use to verify the identity of the person who generated the token.
+     * This is given to the federation API GET /openid/userinfo to verify the user's identity.
+     */
+    @SerialName("access_token")
+    val accessToken: String,
+
+    /**
+     * The string Bearer.
+     */
+    @SerialName("token_type")
+    val tokenType: String,
+
+    /**
+     * The homeserver domain the consumer should use when attempting to verify the user's identity.
+     */
+    @SerialName("matrix_server_name")
+    val matrixServerName: String,
+
+    /**
+     * The number of seconds before this token expires and a new one must be generated.
+     */
+    @SerialName("expires_in")
+    val expiresIn: Long
+)

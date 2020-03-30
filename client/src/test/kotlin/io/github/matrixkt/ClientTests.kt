@@ -5045,58 +5045,50 @@ class ClientTests {
 //            assertEquals("TODO: Wasn't in spec for some reason.", error.error)
 //        }
 //    }
-//
-//
-//post-matrix-client-r0-user-userid-openid-request-token
-//    @Test
-//    fun testTODO() = runSuspendTest {
-//        val mockEngine = MockEngine.create {
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {
-//                      "access_token": "SomeT0kenHere",
-//                      "token_type": "Bearer",
-//                      "matrix_server_name": "example.com",
-//                      "expires_in": 3600
-//                    }
-//                """)
-//            }
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {
-//                      "errcode": "M_LIMIT_EXCEEDED",
-//                      "error": "Too many requests",
-//                      "retry_after_ms": 2000
-//                    }
-//                """, HttpStatusCode.TooManyRequests)
-//            }
-//        }
-//
-//        val client = MatrixClient(mockEngine)
-//
-//        // POST /_matrix/client/r0/user/%40alice%3Aexample.com/openid/request_token HTTP/1.1
-//        // Content-Type: application/json
-//        //
-//        // {}
-//
-//        run {
-//            val response = TODO("post-matrix-client-r0-user-userid-openid-request-token")
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//        }
-//        run {
-//            val error = assertFailsWith<MatrixError.LimitExceeded> {
-//                TODO("post-matrix-client-r0-user-userid-openid-request-token")
-//            }
-//            assertEquals("Too many requests", error.error)
-//            assertEquals(2000, error.retryAfterMs)
-//        }
-//
-//    }
+
+    @Test
+    fun testRequestOpenId() = runSuspendTest {
+        val mockEngine = MockEngine.create {
+            addHandler {
+                // language=json
+                respondJson("""
+                    {
+                      "access_token": "SomeT0kenHere",
+                      "token_type": "Bearer",
+                      "matrix_server_name": "example.com",
+                      "expires_in": 3600
+                    }
+                """)
+            }
+            addHandler {
+                // language=json
+                respondJson("""
+                    {
+                      "errcode": "M_LIMIT_EXCEEDED",
+                      "error": "Too many requests",
+                      "retry_after_ms": 2000
+                    }
+                """, HttpStatusCode.TooManyRequests)
+            }
+        }
+
+        val client = MatrixClient(mockEngine)
+
+        run {
+            val response = client.userApi.requestOpenIdToken("@alice:example.com")
+            assertEquals("SomeT0kenHere", response.accessToken)
+            assertEquals("Bearer", response.tokenType)
+            assertEquals("example.com", response.matrixServerName)
+            assertEquals(3600, response.expiresIn)
+        }
+        run {
+            val error = assertFailsWith<MatrixError.LimitExceeded> {
+                client.userApi.requestOpenIdToken("@alice:example.com")
+            }
+            assertEquals("Too many requests", error.error)
+            assertEquals(2000, error.retryAfterMillis)
+        }
+    }
 
     @Test
     fun testRoomUpgrade() = runSuspendTest {
