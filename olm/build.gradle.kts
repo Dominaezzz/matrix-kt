@@ -31,14 +31,23 @@ val extractOlm by tasks.registering(Copy::class) {
     into(downloadsDir)
 }
 
+val olmPath: String? = System.getenv("OLM_PATH")
+if (HostManager.hostIsMingw) {
+    if (olmPath == null) {
+        println("{OLM_PATH} was not specified.")
+    }
+}
+
 kotlin {
     jvm()
     if (useSingleTarget) {
         if (HostManager.hostIsLinux) linuxX64()
         if (HostManager.hostIsMac) macosX64()
+        if (HostManager.hostIsMingw) mingwX64()
     } else {
         linuxX64()
         macosX64()
+        mingwX64()
         iosArm32()
         iosArm64()
         iosX64()
@@ -96,6 +105,9 @@ kotlin {
                     if (HostManager.hostIsLinux || HostManager.hostIsMac) {
                         getTest(NativeBuildType.DEBUG).linkerOpts("-L/usr/lib", "-L/usr/local/lib", "-lolm")
                     }
+                    if (HostManager.hostIsMingw && olmPath != null) {
+                        getTest(NativeBuildType.DEBUG).linkerOpts("-L${olmPath}", "-lolm")
+                    }
                 }
                 defaultSourceSet {
                     kotlin.srcDir("src/nativeTest/kotlin")
@@ -118,8 +130,15 @@ tasks {
     // Setup search paths for libolm at runtime for tests
     named<Test>("jvmTest") {
         environment("LD_LIBRARY_PATH", "/usr/local/lib")
+        if (HostManager.hostIsMingw && olmPath != null) {
+            systemProperty("java.library.path", olmPath)
+            systemProperty("jna.library.path", olmPath)
+        }
     }
     withType<KotlinNativeHostTest> {
         environment("LD_LIBRARY_PATH", "/usr/local/lib")
+        if (HostManager.hostIsMingw && olmPath != null) {
+            environment("Path", olmPath)
+        }
     }
 }
