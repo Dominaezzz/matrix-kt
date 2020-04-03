@@ -4,6 +4,10 @@ import io.github.matrixkt.models.Presence
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Informs the client of a user's presence state change.
+ */
+@SerialName("m.presence")
 @Serializable
 data class PresenceContent(
     /**

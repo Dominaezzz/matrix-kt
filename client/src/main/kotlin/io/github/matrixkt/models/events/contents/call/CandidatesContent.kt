@@ -4,6 +4,11 @@ import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * This event is sent by callers after sending an invite and by the callee after answering.
+ * Its purpose is to give the other party additional ICE candidates to try using to communicate.
+ */
+@SerialName("m.call.candidates")
 @Serializable
 data class CandidatesContent(
     /**

@@ -4,6 +4,11 @@ import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Sends the MAC of a device's key to the partner device.
+ * Typically sent as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
+ */
+@SerialName("m.key.verification.mac")
 @Serializable
 data class MacContent(
     /**

@@ -6,7 +6,16 @@ import io.github.matrixkt.models.events.contents.msginfo.*
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
-
+/**
+ * This event is used when sending messages in a room.
+ * Messages are not limited to be text.
+ * The `msgtype` key outlines the type of message, e.g. text, audio, image, video, etc.
+ * The `body` key is text and MUST be used with every kind of `msgtype` as a fallback mechanism for when a client cannot render a message.
+ * This allows clients to display something even if it is just plain text.
+ * For more information on `msgtypes`,
+ * see [`m.room.message` msgtypes](https://matrix.org/docs/spec/client_server/r0.5.0#m-room-message-msgtypes).
+ */
+@SerialName("m.room.message")
 @Serializable(MessageContent.Serializer::class)
 abstract class MessageContent : Content() {
     /**

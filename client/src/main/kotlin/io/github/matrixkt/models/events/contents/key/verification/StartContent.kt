@@ -6,6 +6,14 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Begins a key verification process.
+ * Typically sent as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
+ * The [method] field determines the type of verification.
+ * The fields in the event will differ depending on the [method].
+ * This definition includes fields that are in common among all variants.
+ */
+@SerialName("m.key.verification.start")
 @Serializable(StartContent.Serializer::class)
 abstract class StartContent : Content() {
     /**

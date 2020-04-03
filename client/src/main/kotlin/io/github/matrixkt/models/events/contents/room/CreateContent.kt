@@ -4,6 +4,10 @@ import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * This is the first event in a room and cannot be changed. It acts as the root of all other events.
+ */
+@SerialName("m.room.create")
 @Serializable
 data class CreateContent(
     /**

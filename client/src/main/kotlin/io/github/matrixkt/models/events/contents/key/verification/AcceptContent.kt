@@ -6,6 +6,11 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Accepts a previously sent `m.key.verification.start` message.
+ * Typically sent as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
+ */
+@SerialName("m.key.verification.accept")
 @Serializable(AcceptContent.Serializer::class)
 abstract class AcceptContent : Content() {
     /**

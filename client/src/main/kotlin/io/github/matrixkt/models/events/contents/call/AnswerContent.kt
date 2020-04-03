@@ -4,6 +4,10 @@ import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * This event is sent by the callee when they wish to answer the call.
+ */
+@SerialName("m.call.answer")
 @Serializable
 data class AnswerContent(
     /**

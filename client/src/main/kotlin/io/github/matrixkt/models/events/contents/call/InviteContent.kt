@@ -4,6 +4,10 @@ import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * This event is sent by the caller when they wish to establish a call.
+ */
+@SerialName("m.call.invite")
 @Serializable
 data class InviteContent(
     /**

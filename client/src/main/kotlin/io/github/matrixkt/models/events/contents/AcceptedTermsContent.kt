@@ -1,7 +1,13 @@
 package io.github.matrixkt.models.events.contents
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * A list of terms URLs the user has previously accepted.
+ * Clients SHOULD use this to avoid presenting the user with terms they have already agreed to.
+ */
+@SerialName("m.accepted_terms")
 @Serializable
 data class AcceptedTermsContent(
     /**

@@ -1,8 +1,11 @@
 package io.github.matrixkt.utils
 
 import io.github.matrixkt.models.events.contents.*
-import io.github.matrixkt.models.events.contents.key.verification.AcceptContent
-import io.github.matrixkt.models.events.contents.key.verification.StartContent
+import io.github.matrixkt.models.events.contents.call.AnswerContent
+import io.github.matrixkt.models.events.contents.call.CandidatesContent
+import io.github.matrixkt.models.events.contents.call.HangupContent
+import io.github.matrixkt.models.events.contents.call.InviteContent
+import io.github.matrixkt.models.events.contents.key.verification.*
 import io.github.matrixkt.models.events.contents.room.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
@@ -47,6 +50,29 @@ val MatrixSerialModule = SerializersModule {
         subclass(AvatarContent.serializer())
         subclass(PinnedEventsContent.serializer())
         subclass(GuestAccessContent.serializer())
+        subclass(EncryptionContent.serializer())
+        subclass(EncryptedContent.serializer())
+        subclass(InviteContent.serializer())
+        subclass(CandidatesContent.serializer())
+        subclass(AnswerContent.serializer())
+        subclass(HangupContent.serializer())
+        subclass(TypingContent.serializer())
+        subclass(ReceiptContent.serializer())
+        subclass(FullyReadContent.serializer())
+        subclass(PresenceContent.serializer())
+        subclass(RoomKeyContent.serializer())
+        subclass(RoomKeyRequestContent.serializer())
+        subclass(ForwardedRoomKeyContent.serializer())
+        subclass(DummyContent.serializer())
+        subclass(TagContent.serializer())
+        subclass(DirectContent.serializer())
+        subclass(AcceptedTermsContent.serializer())
+        subclass(RequestContent.serializer())
+        subclass(StartContent.serializer())
+        subclass(CancelContent.serializer())
+        subclass(AcceptContent.serializer())
+        subclass(KeyContent.serializer())
+        subclass(MacContent.serializer())
     }
 
     polymorphic(MessageContent.serializer()) {

@@ -4,6 +4,11 @@ import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Sent by either party to signal their termination of the call.
+ * This can be sent either once the call has has been established or before to abort the call.
+ */
+@SerialName("m.call.hangup")
 @Serializable
 data class HangupContent(
     /**

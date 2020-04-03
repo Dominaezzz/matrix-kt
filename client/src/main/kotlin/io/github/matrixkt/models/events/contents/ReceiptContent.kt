@@ -5,6 +5,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.serializer
 
+/**
+ * Informs the client of new receipts.
+ */
+@SerialName("m.receipt")
 @Serializable(ReceiptContent.Serializer::class)
 data class ReceiptContent(
     /**

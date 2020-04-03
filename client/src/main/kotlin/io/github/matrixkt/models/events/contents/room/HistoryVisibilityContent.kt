@@ -5,6 +5,10 @@ import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * This event controls whether a user can see the events that happened in a room from before they joined.
+ */
+@SerialName("m.room.history_visibility")
 @Serializable
 data class HistoryVisibilityContent(
     /**

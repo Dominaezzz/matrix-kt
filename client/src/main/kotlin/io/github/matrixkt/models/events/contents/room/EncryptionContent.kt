@@ -4,6 +4,10 @@ import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Defines how messages sent in this room should be encrypted.
+ */
+@SerialName("m.room.encryption")
 @Serializable
 data class EncryptionContent(
     /**

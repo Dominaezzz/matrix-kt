@@ -4,6 +4,12 @@ import io.github.matrixkt.models.events.contents.Content
 import io.github.matrixkt.utils.JsonPolymorphicSerializer
 import kotlinx.serialization.*
 
+/**
+ * This event type is used when sending encrypted events.
+ * It can be used either within a room (in which case it will have all of the [Room Event fields](https://matrix.org/docs/spec/client_server/r0.6.0#room-event-fields)),
+ * or as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
+ */
+@SerialName("m.room.encrypted")
 @Serializable(EncryptedContent.Serializer::class)
 abstract class EncryptedContent : Content() {
     // /**

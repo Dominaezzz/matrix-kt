@@ -1,7 +1,12 @@
 package io.github.matrixkt.models.events.contents
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Informs the client of tags on a room.
+ */
+@SerialName("m.tag")
 @Serializable
 data class TagContent(
     /**

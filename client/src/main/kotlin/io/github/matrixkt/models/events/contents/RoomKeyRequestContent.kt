@@ -4,6 +4,11 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.JsonInput
 import kotlinx.serialization.json.content
 
+/**
+ * This event type is used to request keys for end-to-end encryption.
+ * It is sent as an unencrypted [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
+ */
+@SerialName("m.room_key_request")
 @Serializable(RoomKeyRequestContent.Serializer::class)
 sealed class RoomKeyRequestContent : Content() {
     // /**

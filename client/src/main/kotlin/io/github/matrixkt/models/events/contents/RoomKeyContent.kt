@@ -3,6 +3,11 @@ package io.github.matrixkt.models.events.contents
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * This event type is used to exchange keys for end-to-end encryption.
+ * Typically it is encrypted as an `m.room.encrypted` event, then sent as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
+ */
+@SerialName("m.room_key")
 @Serializable
 data class RoomKeyContent(
     /**
