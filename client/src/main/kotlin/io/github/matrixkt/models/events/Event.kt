@@ -200,6 +200,7 @@ private val temp = mapOf(
     EventTypes.FORWARDED_ROOM_KEY to ForwardedRoomKeyContent::class,
     EventTypes.DUMMY to DummyContent::class,
     EventTypes.TAG to TagContent::class,
+    EventTypes.ACCEPTED_TERMS to AcceptedTermsContent::class,
     EventTypes.KEY_VERIFICATION_REQUEST to RequestContent::class,
     EventTypes.KEY_VERIFICATION_START to StartContent::class,
     EventTypes.KEY_VERIFICATION_CANCEL to CancelContent::class,

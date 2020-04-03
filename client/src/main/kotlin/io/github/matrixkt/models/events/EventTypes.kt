@@ -251,6 +251,12 @@ object EventTypes {
     const val TAG = "m.tag"
 
     /**
+     * A list of terms URLs the user has previously accepted.
+     * Clients SHOULD use this to avoid presenting the user with terms they have already agreed to.
+     */
+    const val ACCEPTED_TERMS = "m.accepted_terms"
+
+    /**
      * Requests a key verification with another user's devices.
      * Typically sent as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
      */
