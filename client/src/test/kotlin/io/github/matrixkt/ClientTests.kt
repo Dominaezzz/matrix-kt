@@ -1,11 +1,13 @@
 package io.github.matrixkt
 
 import io.github.matrixkt.models.*
-import io.github.matrixkt.models.events.Membership
+import io.github.matrixkt.models.events.contents.room.Membership
 import io.github.matrixkt.models.events.contents.TagContent
 import io.github.matrixkt.models.events.contents.room.MemberContent
 import io.github.matrixkt.models.events.contents.room.MessageContent
 import io.github.matrixkt.models.filter.*
+import io.github.matrixkt.models.push.PushRuleAction
+import io.github.matrixkt.models.push.PushRuleKind
 import io.github.matrixkt.utils.MatrixJson
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.toByteArray

@@ -1,6 +1,6 @@
 package io.github.matrixkt.models.events.contents.room
 
-import io.github.matrixkt.models.events.Membership
+import io.github.matrixkt.models.events.contents.room.Membership
 import io.github.matrixkt.models.events.contents.Content
 import io.github.matrixkt.models.events.contents.StrippedState
 import kotlinx.serialization.SerialName
@@ -115,4 +115,22 @@ data class MemberContent(
          */
         val token: String
     )
+}
+
+@Serializable
+enum class Membership {
+    @SerialName("invite")
+	INVITE,
+
+    @SerialName("join")
+	JOIN,
+
+    @SerialName("knock")
+	KNOCK,
+
+    @SerialName("leave")
+	LEAVE,
+
+    @SerialName("ban")
+	BAN;
 }

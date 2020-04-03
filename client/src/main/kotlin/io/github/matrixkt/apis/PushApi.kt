@@ -2,6 +2,7 @@ package io.github.matrixkt.apis
 
 import io.github.matrixkt.models.*
 import io.github.matrixkt.models.push.PushRule
+import io.github.matrixkt.models.push.PushRuleKind
 import io.ktor.client.HttpClient
 import io.ktor.client.request.*
 import io.ktor.http.ContentType

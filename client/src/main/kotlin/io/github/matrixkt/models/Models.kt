@@ -4,6 +4,7 @@ import io.github.matrixkt.models.events.MatrixEvent
 import io.github.matrixkt.models.events.UnsignedData
 import io.github.matrixkt.models.events.contents.room.MemberContent
 import io.github.matrixkt.models.push.PushCondition
+import io.github.matrixkt.models.push.PushRuleAction
 import io.github.matrixkt.models.push.RuleSet
 import io.github.matrixkt.models.wellknown.DiscoveryInformation
 import kotlinx.serialization.*
@@ -1179,14 +1180,6 @@ data class Get3PidsResponse(
 )
 
 @Serializable
-enum class Medium {
-    @SerialName("email")
-    EMAIL,
-    @SerialName("msisdn")
-    MSISDN;
-}
-
-@Serializable
 data class Add3PidRequest(
     /**
      * The third party credentials to associate with the account.
@@ -1345,36 +1338,9 @@ enum class RoomVersionStability {
 }
 
 @Serializable
-enum class PushRuleKind {
-    @SerialName("override")
-    OVERRIDE,
-    @SerialName("underride")
-    UNDERRIDE,
-    @SerialName("sender")
-    SENDER,
-    @SerialName("room")
-    ROOM,
-    @SerialName("content")
-    CONTENT;
-}
-
-@Serializable
 data class GetPushRulesResponse(
     val global: RuleSet
 )
-
-@Serializable
-enum class PushRuleAction {
-    @SerialName("notify")
-    NOTIFY,
-    @SerialName("dont_notify")
-    DONT_NOTIFY,
-    @SerialName("coalesce")
-    COALESCE,
-    @SerialName("set_tweak")
-    SET_TWEAK;
-
-}
 
 @Serializable
 data class SetPushRuleRequest(

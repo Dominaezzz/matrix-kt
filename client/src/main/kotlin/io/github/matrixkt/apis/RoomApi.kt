@@ -2,7 +2,7 @@ package io.github.matrixkt.apis
 
 import io.github.matrixkt.models.*
 import io.github.matrixkt.models.events.MatrixEvent
-import io.github.matrixkt.models.events.Membership
+import io.github.matrixkt.models.events.contents.room.Membership
 import io.github.matrixkt.models.events.contents.room.RedactionContent
 import io.ktor.client.HttpClient
 import io.ktor.client.request.*

@@ -27,3 +27,11 @@ data class ThirdPartyIdentifier(
     @SerialName("added_at")
     val addedAt: Long
 )
+
+@Serializable
+enum class Medium {
+    @SerialName("email")
+    EMAIL,
+    @SerialName("msisdn")
+    MSISDN;
+}
