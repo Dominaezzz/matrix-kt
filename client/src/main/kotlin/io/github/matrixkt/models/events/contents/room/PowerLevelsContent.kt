@@ -45,7 +45,7 @@ data class PowerLevelsContent(
      * The level required to send specific event types.
      * This is a mapping from event type to power level required.
      */
-    val events: Map<String, Long>? = null,
+    val events: Map<String, Long> = emptyMap(),
 
     /**
      * The default level required to send message events.
@@ -82,7 +82,7 @@ data class PowerLevelsContent(
      * The power levels for specific users.
      * This is a mapping from `user_id` to power level for that user.
      */
-    val users: Map<String, Long>? = null,
+    val users: Map<String, Long> = emptyMap(),
 
     /**
      * The default power level for every user in the room, unless their user_id is mentioned in the users key.

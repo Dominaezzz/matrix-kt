@@ -103,7 +103,7 @@ data class MemberContent(
         /**
          * The invited matrix user ID. Must be equal to the user_id property of the event.
          */
-        val mixid: String,
+        val mxid: String,
 
 //        /**
 //         * A single signature from the verifying server, in the format specified by the Signing Events section of the server-server API.

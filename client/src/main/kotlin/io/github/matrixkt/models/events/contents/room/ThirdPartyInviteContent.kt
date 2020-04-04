@@ -37,7 +37,7 @@ data class ThirdPartyInviteContent(
      * Keys with which the token may be signed.
      */
     @SerialName("public_keys")
-    val publicKeys: Map<String, PublicKeys> = emptyMap()
+    val publicKeys: List<PublicKeys> = emptyList()
 ) : Content() {
     @Serializable
     data class PublicKeys(
