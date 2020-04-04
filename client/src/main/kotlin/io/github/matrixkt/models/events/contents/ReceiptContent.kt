@@ -1,15 +1,15 @@
 package io.github.matrixkt.models.events.contents
 
 import io.github.matrixkt.utils.InlineMapSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
+import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 
 /**
  * Informs the client of new receipts.
  */
 @SerialName("m.receipt")
-@Serializable(ReceiptContent.Serializer::class)
+@Serializable(ReceiptContent.TheSerializer::class)
 data class ReceiptContent(
     /**
      * The mapping of event ID to a collection of receipts for this event ID.
@@ -48,8 +48,16 @@ data class ReceiptContent(
         val timestamp: Long? = null
     )
 
-    object Serializer : InlineMapSerializer<String, Receipts, ReceiptContent>(
-        String.serializer(),
-        Receipts.serializer(),
-        ::ReceiptContent)
+    @Serializer(forClass = ReceiptContent::class)
+    object TheSerializer : KSerializer<ReceiptContent> {
+        private val delegate = MapSerializer(String.serializer(), Receipts.serializer())
+
+        override fun serialize(encoder: Encoder, value: ReceiptContent) {
+            encoder.encode(delegate, value)
+        }
+
+        override fun deserialize(decoder: Decoder): ReceiptContent {
+            return ReceiptContent(decoder.decode(delegate))
+        }
+    }
 }

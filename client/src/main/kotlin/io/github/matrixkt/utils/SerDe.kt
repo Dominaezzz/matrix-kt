@@ -52,6 +52,10 @@ val MatrixSerialModule = SerializersModule {
         subclass(GuestAccessContent.serializer())
         subclass(EncryptionContent.serializer())
         subclass(EncryptedContent.serializer())
+        subclass(ServerAclContent.serializer())
+        subclass(ThirdPartyInviteContent.serializer())
+        subclass(TombstoneContent.serializer())
+        subclass(StickerContent.serializer())
         subclass(InviteContent.serializer())
         subclass(CandidatesContent.serializer())
         subclass(AnswerContent.serializer())
@@ -73,6 +77,8 @@ val MatrixSerialModule = SerializersModule {
         subclass(AcceptContent.serializer())
         subclass(KeyContent.serializer())
         subclass(MacContent.serializer())
+        subclass(IdentityServerContent.serializer())
+        subclass(IgnoredUserListContent.serializer())
     }
 
     polymorphic(MessageContent.serializer()) {

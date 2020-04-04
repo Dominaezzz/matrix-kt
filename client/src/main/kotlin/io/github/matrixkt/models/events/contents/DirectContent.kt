@@ -1,10 +1,8 @@
 package io.github.matrixkt.models.events.contents
 
-import io.github.matrixkt.utils.InlineMapSerializer
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
 import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
 
 /**
@@ -14,9 +12,20 @@ import kotlinx.serialization.builtins.serializer
  * values are lists of room ID strings of the 'direct' rooms for that user ID.
  */
 @SerialName("m.direct")
-@Serializable(DirectContent.Serializer::class)
+@Serializable(DirectContent.TheSerializer::class)
 data class DirectContent(
     val content: Map<String, List<String>>
 ) : Content(), Map<String, List<String>> by content {
-    object Serializer : KSerializer<DirectContent> by InlineMapSerializer(String.serializer(), ListSerializer(String.serializer()), ::DirectContent)
+    @Serializer(forClass = DirectContent::class)
+    object TheSerializer : KSerializer<DirectContent> {
+        private val delegate = MapSerializer(String.serializer(), ListSerializer(String.serializer()))
+
+        override fun serialize(encoder: Encoder, value: DirectContent) {
+            encoder.encode(delegate, value)
+        }
+
+        override fun deserialize(decoder: Decoder): DirectContent {
+            return DirectContent(decoder.decode(delegate))
+        }
+    }
 }
