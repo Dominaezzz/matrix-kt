@@ -91,6 +91,7 @@ val MatrixSerialModule = SerializersModule {
         subclass(MessageContent.Audio.serializer())
         subclass(MessageContent.Location.serializer())
         subclass(MessageContent.Video.serializer())
+        subclass(MessageContent.ServerNotice.serializer())
     }
 
     polymorphic(EncryptedContent.serializer()) {

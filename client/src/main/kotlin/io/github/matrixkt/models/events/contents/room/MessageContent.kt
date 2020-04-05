@@ -99,6 +99,38 @@ abstract class MessageContent : Content() {
     ) : MessageContent()
 
     /**
+     * Represents a server notice for a user.
+     */
+    @Serializable
+    @SerialName("m.server_notice")
+    data class ServerNotice(
+        /**
+         * A human-readable description of the notice.
+         */
+        override val body: String,
+
+        /**
+         * The type of notice being represented.
+         */
+        @SerialName("server_notice_type")
+        val serverNoticeType: String,
+
+        /**
+         * A URI giving a contact method for the server administrator.
+         * Required if the notice type is "m.server_notice.usage_limit_reached".
+         */
+        @SerialName("admin_contact")
+        val adminContact: String? = null,
+
+        /**
+         * The kind of usage limit the server has exceeded.
+         * Required if the notice type is "m.server_notice.usage_limit_reached".
+         */
+        @SerialName("limit_type")
+        val limitType: String? = null
+    ) : MessageContent()
+
+    /**
      * This message represents a single image and an optional thumbnail.
      */
     @Serializable

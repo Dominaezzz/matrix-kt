@@ -1863,46 +1863,47 @@ class EventTypeTests {
         // Polymorphism issue
     }
 
-    // @Test
-    // fun testRoomMessageServerNoticeEvent() {
-    //     // language=json
-    //     val json = """
-    //             {
-    //                 "content": {
-    //                     "body": "Human-readable message to explain the notice",
-    //                     "msgtype": "m.server_notice",
-    //                     "server_notice_type": "m.server_notice.usage_limit_reached",
-    //                     "admin_contact": "mailto:server.admin@example.org",
-    //                     "limit_type": "monthly_active_user"
-    //                 },
-    //                 "type": "m.room.message",
-    //                 "event_id": "${'$'}143273582443PhrSn:example.org",
-    //                 "room_id": "!jEsUZKDJdhlrceRyVU:example.org",
-    //                 "sender": "@example:example.org",
-    //                 "origin_server_ts": 1432735824653,
-    //                 "unsigned": {
-    //                     "age": 1234
-    //                 }
-    //             }
-    //             """.trimIndent()
-    //
-    //     val serializer = MessageEvent.serializer(MessageContent.ServerNotice.serializer())
-    //     val event = MatrixJson.parse(serializer, json)
-    //
-    //     assertEquals("Human-readable message to explain the notice", event.content.body)
-    //     assertEquals("m.server_notice", event.content.msgtype)
-    //     assertEquals("m.server_notice.usage_limit_reached", event.content.serverNoticeType)
-    //     assertEquals("mailto:server.admin@example.org", event.content.adminContact)
-    //     assertEquals("monthly_active_user", event.content.limitType)
-    //     assertEquals("m.room.message", event.type)
-    //     assertEquals("$143273582443PhrSn:example.org", event.eventId)
-    //     assertEquals("!jEsUZKDJdhlrceRyVU:example.org", event.roomId)
-    //     assertEquals("@example:example.org", event.sender)
-    //     assertEquals(1432735824653, event.originServerTimestamp)
-    //     assertEquals(1234, event.unsigned?.age)
-    //
-    //     assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
-    // }
+    @Test
+    fun testRoomMessageServerNoticeEvent() {
+        // language=json
+        val json = """
+                {
+                    "content": {
+                        "body": "Human-readable message to explain the notice",
+                        "msgtype": "m.server_notice",
+                        "server_notice_type": "m.server_notice.usage_limit_reached",
+                        "admin_contact": "mailto:server.admin@example.org",
+                        "limit_type": "monthly_active_user"
+                    },
+                    "type": "m.room.message",
+                    "event_id": "${'$'}143273582443PhrSn:example.org",
+                    "room_id": "!jEsUZKDJdhlrceRyVU:example.org",
+                    "sender": "@example:example.org",
+                    "origin_server_ts": 1432735824653,
+                    "unsigned": {
+                        "age": 1234
+                    }
+                }
+                """.trimIndent()
+
+        val serializer = MessageEvent.serializer(MessageContent.ServerNotice.serializer())
+        val event = MatrixJson.parse(serializer, json)
+
+        assertEquals("Human-readable message to explain the notice", event.content.body)
+        // assertEquals("m.server_notice", event.content.msgtype)
+        assertEquals("m.server_notice.usage_limit_reached", event.content.serverNoticeType)
+        assertEquals("mailto:server.admin@example.org", event.content.adminContact)
+        assertEquals("monthly_active_user", event.content.limitType)
+        assertEquals("m.room.message", event.type)
+        assertEquals("$143273582443PhrSn:example.org", event.eventId)
+        assertEquals("!jEsUZKDJdhlrceRyVU:example.org", event.roomId)
+        assertEquals("@example:example.org", event.sender)
+        assertEquals(1432735824653, event.originServerTimestamp)
+        assertEquals(1234, event.unsigned?.age)
+
+        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        // Polymorphism issue
+    }
 
     @Test
     fun testRoomMessageTextEvent() {
