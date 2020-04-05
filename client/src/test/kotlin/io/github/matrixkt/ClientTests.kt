@@ -4079,10 +4079,10 @@ class ClientTests {
 
         run {
             val response = client.pushApi.getPushRules()
-            assertEquals(true, response.global.room?.isEmpty())
-            assertEquals(true, response.global.sender?.isEmpty())
-            assertEquals(1, response.global.content?.size)
-            assertEquals(".m.rule.contains_user_name", response.global.content!![0].ruleId)
+            assertEquals(true, response.global.room.isEmpty())
+            assertEquals(true, response.global.sender.isEmpty())
+            assertEquals(1, response.global.content.size)
+            assertEquals(".m.rule.contains_user_name", response.global.content[0].ruleId)
         }
     }
 
