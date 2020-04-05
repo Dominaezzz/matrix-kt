@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class RuleSet(
-    val content: List<PushRule>? = null,
-    val override: List<PushRule>? = null,
-    val room: List<PushRule>? = null,
-    val sender: List<PushRule>? = null,
-    val underride: List<PushRule>? = null
+    val content: List<PushRule> = emptyList(),
+    val override: List<PushRule> = emptyList(),
+    val room: List<PushRule> = emptyList(),
+    val sender: List<PushRule> = emptyList(),
+    val underride: List<PushRule> = emptyList()
 )

@@ -16,7 +16,7 @@ data class PushRule(
      * A rule with no conditions always matches.
      * Only applicable to ``underride`` and ``override`` rules.
      */
-    val conditions: List<PushCondition>? = null,
+    val conditions: List<PushCondition> = emptyList(),
 
     /**
      * Whether this is a default rule, or has been set explicitly.

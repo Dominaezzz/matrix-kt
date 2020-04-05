@@ -19,6 +19,8 @@ import io.github.matrixkt.models.events.contents.key.verification.RequestContent
 import io.github.matrixkt.models.events.contents.key.verification.StartContent
 import io.github.matrixkt.models.events.contents.room.*
 import io.github.matrixkt.utils.MatrixJson
+import kotlinx.serialization.json.boolean
+import kotlinx.serialization.json.content
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -744,326 +746,327 @@ class EventTypeTests {
         assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
     }
 
-    // @Test
-    // fun testPushRulesEvent() {
-    //     // language=json
-    //     val json = """
-    //             {
-    //                 "content": {
-    //                     "global": {
-    //                         "content": [
-    //                             {
-    //                                 "actions": [
-    //                                     "notify",
-    //                                     {
-    //                                         "set_tweak": "sound",
-    //                                         "value": "default"
-    //                                     },
-    //                                     {
-    //                                         "set_tweak": "highlight"
-    //                                     }
-    //                                 ],
-    //                                 "default": true,
-    //                                 "enabled": true,
-    //                                 "pattern": "alice",
-    //                                 "rule_id": ".m.rule.contains_user_name"
-    //                             }
-    //                         ],
-    //                         "override": [
-    //                             {
-    //                                 "actions": [
-    //                                     "dont_notify"
-    //                                 ],
-    //                                 "conditions": [
-    //                                 ],
-    //                                 "default": true,
-    //                                 "enabled": false,
-    //                                 "rule_id": ".m.rule.master"
-    //                             },
-    //                             {
-    //                                 "actions": [
-    //                                     "dont_notify"
-    //                                 ],
-    //                                 "conditions": [
-    //                                     {
-    //                                         "key": "content.msgtype",
-    //                                         "kind": "event_match",
-    //                                         "pattern": "m.notice"
-    //                                     }
-    //                                 ],
-    //                                 "default": true,
-    //                                 "enabled": true,
-    //                                 "rule_id": ".m.rule.suppress_notices"
-    //                             }
-    //                         ],
-    //                         "room": [
-    //                         ],
-    //                         "sender": [
-    //                         ],
-    //                         "underride": [
-    //                             {
-    //                                 "actions": [
-    //                                     "notify",
-    //                                     {
-    //                                         "set_tweak": "sound",
-    //                                         "value": "ring"
-    //                                     },
-    //                                     {
-    //                                         "set_tweak": "highlight",
-    //                                         "value": false
-    //                                     }
-    //                                 ],
-    //                                 "conditions": [
-    //                                     {
-    //                                         "key": "type",
-    //                                         "kind": "event_match",
-    //                                         "pattern": "m.call.invite"
-    //                                     }
-    //                                 ],
-    //                                 "default": true,
-    //                                 "enabled": true,
-    //                                 "rule_id": ".m.rule.call"
-    //                             },
-    //                             {
-    //                                 "actions": [
-    //                                     "notify",
-    //                                     {
-    //                                         "set_tweak": "sound",
-    //                                         "value": "default"
-    //                                     },
-    //                                     {
-    //                                         "set_tweak": "highlight"
-    //                                     }
-    //                                 ],
-    //                                 "conditions": [
-    //                                     {
-    //                                         "kind": "contains_display_name"
-    //                                     }
-    //                                 ],
-    //                                 "default": true,
-    //                                 "enabled": true,
-    //                                 "rule_id": ".m.rule.contains_display_name"
-    //                             },
-    //                             {
-    //                                 "actions": [
-    //                                     "notify",
-    //                                     {
-    //                                         "set_tweak": "sound",
-    //                                         "value": "default"
-    //                                     },
-    //                                     {
-    //                                         "set_tweak": "highlight",
-    //                                         "value": false
-    //                                     }
-    //                                 ],
-    //                                 "conditions": [
-    //                                     {
-    //                                         "kind": "room_member_count",
-    //                                         "is": "2"
-    //                                     },
-    //                                     {
-    //                                         "kind": "event_match",
-    //                                         "key": "type",
-    //                                         "pattern": "m.room.message"
-    //                                     }
-    //                                 ],
-    //                                 "default": true,
-    //                                 "enabled": true,
-    //                                 "rule_id": ".m.rule.room_one_to_one"
-    //                             },
-    //                             {
-    //                                 "actions": [
-    //                                     "notify",
-    //                                     {
-    //                                         "set_tweak": "sound",
-    //                                         "value": "default"
-    //                                     },
-    //                                     {
-    //                                         "set_tweak": "highlight",
-    //                                         "value": false
-    //                                     }
-    //                                 ],
-    //                                 "conditions": [
-    //                                     {
-    //                                         "key": "type",
-    //                                         "kind": "event_match",
-    //                                         "pattern": "m.room.member"
-    //                                     },
-    //                                     {
-    //                                         "key": "content.membership",
-    //                                         "kind": "event_match",
-    //                                         "pattern": "invite"
-    //                                     },
-    //                                     {
-    //                                         "key": "state_key",
-    //                                         "kind": "event_match",
-    //                                         "pattern": "@alice:example.com"
-    //                                     }
-    //                                 ],
-    //                                 "default": true,
-    //                                 "enabled": true,
-    //                                 "rule_id": ".m.rule.invite_for_me"
-    //                             },
-    //                             {
-    //                                 "actions": [
-    //                                     "notify",
-    //                                     {
-    //                                         "set_tweak": "highlight",
-    //                                         "value": false
-    //                                     }
-    //                                 ],
-    //                                 "conditions": [
-    //                                     {
-    //                                         "key": "type",
-    //                                         "kind": "event_match",
-    //                                         "pattern": "m.room.member"
-    //                                     }
-    //                                 ],
-    //                                 "default": true,
-    //                                 "enabled": true,
-    //                                 "rule_id": ".m.rule.member_event"
-    //                             },
-    //                             {
-    //                                 "actions": [
-    //                                     "notify",
-    //                                     {
-    //                                         "set_tweak": "highlight",
-    //                                         "value": false
-    //                                     }
-    //                                 ],
-    //                                 "conditions": [
-    //                                     {
-    //                                         "key": "type",
-    //                                         "kind": "event_match",
-    //                                         "pattern": "m.room.message"
-    //                                     }
-    //                                 ],
-    //                                 "default": true,
-    //                                 "enabled": true,
-    //                                 "rule_id": ".m.rule.message"
-    //                             }
-    //                         ]
-    //                     }
-    //                 },
-    //                 "type": "m.push_rules"
-    //             }
-    //             """.trimIndent()
-    //
-    //     val serializer = AccountEvent.serializer(PushRulesContent.serializer())
-    //     val event = MatrixJson.parse(serializer, json)
-    //
-    //     assertEquals(1, event.content.global.content.size)
-    //     assertEquals(3, event.content.global.content[0].actions.size)
-    //     assertEquals("notify", event.content.global.content[0].actions[0])
-    //     assertEquals("sound", event.content.global.content[0].actions[1].setTweak)
-    //     assertEquals("default", event.content.global.content[0].actions[1].value)
-    //     assertEquals("highlight", event.content.global.content[0].actions[2].setTweak)
-    //     assertEquals(true, event.content.global.content[0].default)
-    //     assertEquals(true, event.content.global.content[0].enabled)
-    //     assertEquals("alice", event.content.global.content[0].pattern)
-    //     assertEquals(".m.rule.contains_user_name", event.content.global.content[0].ruleId)
-    //     assertEquals(2, event.content.global.override.size)
-    //     assertEquals(1, event.content.global.override[0].actions.size)
-    //     assertEquals("dont_notify", event.content.global.override[0].actions[0])
-    //     assertEquals(0, event.content.global.override[0].conditions.size)
-    //     assertEquals(true, event.content.global.override[0].default)
-    //     assertEquals(false, event.content.global.override[0].enabled)
-    //     assertEquals(".m.rule.master", event.content.global.override[0].ruleId)
-    //     assertEquals(1, event.content.global.override[1].actions.size)
-    //     assertEquals("dont_notify", event.content.global.override[1].actions[0])
-    //     assertEquals(1, event.content.global.override[1].conditions.size)
-    //     assertEquals("content.msgtype", event.content.global.override[1].conditions[0].key)
-    //     assertEquals("event_match", event.content.global.override[1].conditions[0].kind)
-    //     assertEquals("m.notice", event.content.global.override[1].conditions[0].pattern)
-    //     assertEquals(true, event.content.global.override[1].default)
-    //     assertEquals(true, event.content.global.override[1].enabled)
-    //     assertEquals(".m.rule.suppress_notices", event.content.global.override[1].ruleId)
-    //     assertEquals(0, event.content.global.room.size)
-    //     assertEquals(0, event.content.global.sender.size)
-    //     assertEquals(6, event.content.global.underride.size)
-    //     assertEquals(3, event.content.global.underride[0].actions.size)
-    //     assertEquals("notify", event.content.global.underride[0].actions[0])
-    //     assertEquals("sound", event.content.global.underride[0].actions[1].setTweak)
-    //     assertEquals("ring", event.content.global.underride[0].actions[1].value)
-    //     assertEquals("highlight", event.content.global.underride[0].actions[2].setTweak)
-    //     assertEquals(false, event.content.global.underride[0].actions[2].value)
-    //     assertEquals(1, event.content.global.underride[0].conditions.size)
-    //     assertEquals("type", event.content.global.underride[0].conditions[0].key)
-    //     assertEquals("event_match", event.content.global.underride[0].conditions[0].kind)
-    //     assertEquals("m.call.invite", event.content.global.underride[0].conditions[0].pattern)
-    //     assertEquals(true, event.content.global.underride[0].default)
-    //     assertEquals(true, event.content.global.underride[0].enabled)
-    //     assertEquals(".m.rule.call", event.content.global.underride[0].ruleId)
-    //     assertEquals(3, event.content.global.underride[1].actions.size)
-    //     assertEquals("notify", event.content.global.underride[1].actions[0])
-    //     assertEquals("sound", event.content.global.underride[1].actions[1].setTweak)
-    //     assertEquals("default", event.content.global.underride[1].actions[1].value)
-    //     assertEquals("highlight", event.content.global.underride[1].actions[2].setTweak)
-    //     assertEquals(1, event.content.global.underride[1].conditions.size)
-    //     assertEquals("contains_display_name", event.content.global.underride[1].conditions[0].kind)
-    //     assertEquals(true, event.content.global.underride[1].default)
-    //     assertEquals(true, event.content.global.underride[1].enabled)
-    //     assertEquals(".m.rule.contains_display_name", event.content.global.underride[1].ruleId)
-    //     assertEquals(3, event.content.global.underride[2].actions.size)
-    //     assertEquals("notify", event.content.global.underride[2].actions[0])
-    //     assertEquals("sound", event.content.global.underride[2].actions[1].setTweak)
-    //     assertEquals("default", event.content.global.underride[2].actions[1].value)
-    //     assertEquals("highlight", event.content.global.underride[2].actions[2].setTweak)
-    //     assertEquals(false, event.content.global.underride[2].actions[2].value)
-    //     assertEquals(2, event.content.global.underride[2].conditions.size)
-    //     assertEquals("room_member_count", event.content.global.underride[2].conditions[0].kind)
-    //     assertEquals("2", event.content.global.underride[2].conditions[0]["is"]!!)
-    //     assertEquals("event_match", event.content.global.underride[2].conditions[1].kind)
-    //     assertEquals("type", event.content.global.underride[2].conditions[1].key)
-    //     assertEquals("m.room.message", event.content.global.underride[2].conditions[1].pattern)
-    //     assertEquals(true, event.content.global.underride[2].default)
-    //     assertEquals(true, event.content.global.underride[2].enabled)
-    //     assertEquals(".m.rule.room_one_to_one", event.content.global.underride[2].ruleId)
-    //     assertEquals(3, event.content.global.underride[3].actions.size)
-    //     assertEquals("notify", event.content.global.underride[3].actions[0])
-    //     assertEquals("sound", event.content.global.underride[3].actions[1].setTweak)
-    //     assertEquals("default", event.content.global.underride[3].actions[1].value)
-    //     assertEquals("highlight", event.content.global.underride[3].actions[2].setTweak)
-    //     assertEquals(false, event.content.global.underride[3].actions[2].value)
-    //     assertEquals(3, event.content.global.underride[3].conditions.size)
-    //     assertEquals("type", event.content.global.underride[3].conditions[0].key)
-    //     assertEquals("event_match", event.content.global.underride[3].conditions[0].kind)
-    //     assertEquals("m.room.member", event.content.global.underride[3].conditions[0].pattern)
-    //     assertEquals("content.membership", event.content.global.underride[3].conditions[1].key)
-    //     assertEquals("event_match", event.content.global.underride[3].conditions[1].kind)
-    //     assertEquals("invite", event.content.global.underride[3].conditions[1].pattern)
-    //     assertEquals("state_key", event.content.global.underride[3].conditions[2].key)
-    //     assertEquals("event_match", event.content.global.underride[3].conditions[2].kind)
-    //     assertEquals("@alice:example.com", event.content.global.underride[3].conditions[2].pattern)
-    //     assertEquals(true, event.content.global.underride[3].default)
-    //     assertEquals(true, event.content.global.underride[3].enabled)
-    //     assertEquals(".m.rule.invite_for_me", event.content.global.underride[3].ruleId)
-    //     assertEquals(2, event.content.global.underride[4].actions.size)
-    //     assertEquals("notify", event.content.global.underride[4].actions[0])
-    //     assertEquals("highlight", event.content.global.underride[4].actions[1].setTweak)
-    //     assertEquals(false, event.content.global.underride[4].actions[1].value)
-    //     assertEquals(1, event.content.global.underride[4].conditions.size)
-    //     assertEquals("type", event.content.global.underride[4].conditions[0].key)
-    //     assertEquals("event_match", event.content.global.underride[4].conditions[0].kind)
-    //     assertEquals("m.room.member", event.content.global.underride[4].conditions[0].pattern)
-    //     assertEquals(true, event.content.global.underride[4].default)
-    //     assertEquals(true, event.content.global.underride[4].enabled)
-    //     assertEquals(".m.rule.member_event", event.content.global.underride[4].ruleId)
-    //     assertEquals(2, event.content.global.underride[5].actions.size)
-    //     assertEquals("notify", event.content.global.underride[5].actions[0])
-    //     assertEquals("highlight", event.content.global.underride[5].actions[1].setTweak)
-    //     assertEquals(false, event.content.global.underride[5].actions[1].value)
-    //     assertEquals(1, event.content.global.underride[5].conditions.size)
-    //     assertEquals("type", event.content.global.underride[5].conditions[0].key)
-    //     assertEquals("event_match", event.content.global.underride[5].conditions[0].kind)
-    //     assertEquals("m.room.message", event.content.global.underride[5].conditions[0].pattern)
-    //     assertEquals(true, event.content.global.underride[5].default)
-    //     assertEquals(true, event.content.global.underride[5].enabled)
-    //     assertEquals(".m.rule.message", event.content.global.underride[5].ruleId)
-    //     assertEquals("m.push_rules", event.type)
-    //
-    //     assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
-    // }
+    @Test
+    fun testPushRulesEvent() {
+        // language=json
+        val json = """
+                {
+                    "content": {
+                        "global": {
+                            "content": [
+                                {
+                                    "actions": [
+                                        "notify",
+                                        {
+                                            "set_tweak": "sound",
+                                            "value": "default"
+                                        },
+                                        {
+                                            "set_tweak": "highlight"
+                                        }
+                                    ],
+                                    "default": true,
+                                    "enabled": true,
+                                    "pattern": "alice",
+                                    "rule_id": ".m.rule.contains_user_name"
+                                }
+                            ],
+                            "override": [
+                                {
+                                    "actions": [
+                                        "dont_notify"
+                                    ],
+                                    "conditions": [
+                                    ],
+                                    "default": true,
+                                    "enabled": false,
+                                    "rule_id": ".m.rule.master"
+                                },
+                                {
+                                    "actions": [
+                                        "dont_notify"
+                                    ],
+                                    "conditions": [
+                                        {
+                                            "key": "content.msgtype",
+                                            "kind": "event_match",
+                                            "pattern": "m.notice"
+                                        }
+                                    ],
+                                    "default": true,
+                                    "enabled": true,
+                                    "rule_id": ".m.rule.suppress_notices"
+                                }
+                            ],
+                            "room": [
+                            ],
+                            "sender": [
+                            ],
+                            "underride": [
+                                {
+                                    "actions": [
+                                        "notify",
+                                        {
+                                            "set_tweak": "sound",
+                                            "value": "ring"
+                                        },
+                                        {
+                                            "set_tweak": "highlight",
+                                            "value": false
+                                        }
+                                    ],
+                                    "conditions": [
+                                        {
+                                            "key": "type",
+                                            "kind": "event_match",
+                                            "pattern": "m.call.invite"
+                                        }
+                                    ],
+                                    "default": true,
+                                    "enabled": true,
+                                    "rule_id": ".m.rule.call"
+                                },
+                                {
+                                    "actions": [
+                                        "notify",
+                                        {
+                                            "set_tweak": "sound",
+                                            "value": "default"
+                                        },
+                                        {
+                                            "set_tweak": "highlight"
+                                        }
+                                    ],
+                                    "conditions": [
+                                        {
+                                            "kind": "contains_display_name"
+                                        }
+                                    ],
+                                    "default": true,
+                                    "enabled": true,
+                                    "rule_id": ".m.rule.contains_display_name"
+                                },
+                                {
+                                    "actions": [
+                                        "notify",
+                                        {
+                                            "set_tweak": "sound",
+                                            "value": "default"
+                                        },
+                                        {
+                                            "set_tweak": "highlight",
+                                            "value": false
+                                        }
+                                    ],
+                                    "conditions": [
+                                        {
+                                            "kind": "room_member_count",
+                                            "is": "2"
+                                        },
+                                        {
+                                            "kind": "event_match",
+                                            "key": "type",
+                                            "pattern": "m.room.message"
+                                        }
+                                    ],
+                                    "default": true,
+                                    "enabled": true,
+                                    "rule_id": ".m.rule.room_one_to_one"
+                                },
+                                {
+                                    "actions": [
+                                        "notify",
+                                        {
+                                            "set_tweak": "sound",
+                                            "value": "default"
+                                        },
+                                        {
+                                            "set_tweak": "highlight",
+                                            "value": false
+                                        }
+                                    ],
+                                    "conditions": [
+                                        {
+                                            "key": "type",
+                                            "kind": "event_match",
+                                            "pattern": "m.room.member"
+                                        },
+                                        {
+                                            "key": "content.membership",
+                                            "kind": "event_match",
+                                            "pattern": "invite"
+                                        },
+                                        {
+                                            "key": "state_key",
+                                            "kind": "event_match",
+                                            "pattern": "@alice:example.com"
+                                        }
+                                    ],
+                                    "default": true,
+                                    "enabled": true,
+                                    "rule_id": ".m.rule.invite_for_me"
+                                },
+                                {
+                                    "actions": [
+                                        "notify",
+                                        {
+                                            "set_tweak": "highlight",
+                                            "value": false
+                                        }
+                                    ],
+                                    "conditions": [
+                                        {
+                                            "key": "type",
+                                            "kind": "event_match",
+                                            "pattern": "m.room.member"
+                                        }
+                                    ],
+                                    "default": true,
+                                    "enabled": true,
+                                    "rule_id": ".m.rule.member_event"
+                                },
+                                {
+                                    "actions": [
+                                        "notify",
+                                        {
+                                            "set_tweak": "highlight",
+                                            "value": false
+                                        }
+                                    ],
+                                    "conditions": [
+                                        {
+                                            "key": "type",
+                                            "kind": "event_match",
+                                            "pattern": "m.room.message"
+                                        }
+                                    ],
+                                    "default": true,
+                                    "enabled": true,
+                                    "rule_id": ".m.rule.message"
+                                }
+                            ]
+                        }
+                    },
+                    "type": "m.push_rules"
+                }
+                """.trimIndent()
+
+        val serializer = AccountEvent.serializer(PushRulesContent.serializer())
+        val event = MatrixJson.parse(serializer, json)
+
+        assertEquals(1, event.content.global!!.content.size)
+        assertEquals(3, event.content.global!!.content[0].actions.size)
+        assertEquals("notify", event.content.global!!.content[0].actions[0].content)
+        assertEquals("sound", event.content.global!!.content[0].actions[1].jsonObject["set_tweak"]!!.content)
+        assertEquals("default", event.content.global!!.content[0].actions[1].jsonObject["value"]!!.content)
+        assertEquals("highlight", event.content.global!!.content[0].actions[2].jsonObject["set_tweak"]!!.content)
+        assertEquals(true, event.content.global!!.content[0].default)
+        assertEquals(true, event.content.global!!.content[0].enabled)
+        assertEquals("alice", event.content.global!!.content[0].pattern)
+        assertEquals(".m.rule.contains_user_name", event.content.global!!.content[0].ruleId)
+        assertEquals(2, event.content.global!!.override.size)
+        assertEquals(1, event.content.global!!.override[0].actions.size)
+        assertEquals("dont_notify", event.content.global!!.override[0].actions[0].content)
+        assertEquals(0, event.content.global!!.override[0].conditions.size)
+        assertEquals(true, event.content.global!!.override[0].default)
+        assertEquals(false, event.content.global!!.override[0].enabled)
+        assertEquals(".m.rule.master", event.content.global!!.override[0].ruleId)
+        assertEquals(1, event.content.global!!.override[1].actions.size)
+        assertEquals("dont_notify", event.content.global!!.override[1].actions[0].content)
+        assertEquals(1, event.content.global!!.override[1].conditions.size)
+        assertEquals("content.msgtype", event.content.global!!.override[1].conditions[0].key)
+        assertEquals("event_match", event.content.global!!.override[1].conditions[0].kind)
+        assertEquals("m.notice", event.content.global!!.override[1].conditions[0].pattern)
+        assertEquals(true, event.content.global!!.override[1].default)
+        assertEquals(true, event.content.global!!.override[1].enabled)
+        assertEquals(".m.rule.suppress_notices", event.content.global!!.override[1].ruleId)
+        assertEquals(0, event.content.global!!.room.size)
+        assertEquals(0, event.content.global!!.sender.size)
+        assertEquals(6, event.content.global!!.underride.size)
+        assertEquals(3, event.content.global!!.underride[0].actions.size)
+        assertEquals("notify", event.content.global!!.underride[0].actions[0].content)
+        assertEquals("sound", event.content.global!!.underride[0].actions[1].jsonObject["set_tweak"]!!.content)
+        assertEquals("ring", event.content.global!!.underride[0].actions[1].jsonObject["value"]!!.content)
+        assertEquals("highlight", event.content.global!!.underride[0].actions[2].jsonObject["set_tweak"]!!.content)
+        assertEquals(false, event.content.global!!.underride[0].actions[2].jsonObject["value"]!!.boolean)
+        assertEquals(1, event.content.global!!.underride[0].conditions.size)
+        assertEquals("type", event.content.global!!.underride[0].conditions[0].key)
+        assertEquals("event_match", event.content.global!!.underride[0].conditions[0].kind)
+        assertEquals("m.call.invite", event.content.global!!.underride[0].conditions[0].pattern)
+        assertEquals(true, event.content.global!!.underride[0].default)
+        assertEquals(true, event.content.global!!.underride[0].enabled)
+        assertEquals(".m.rule.call", event.content.global!!.underride[0].ruleId)
+        assertEquals(3, event.content.global!!.underride[1].actions.size)
+        assertEquals("notify", event.content.global!!.underride[1].actions[0].content)
+        assertEquals("sound", event.content.global!!.underride[1].actions[1].jsonObject["set_tweak"]!!.content)
+        assertEquals("default", event.content.global!!.underride[1].actions[1].jsonObject["value"]!!.content)
+        assertEquals("highlight", event.content.global!!.underride[1].actions[2].jsonObject["set_tweak"]!!.content)
+        assertEquals(1, event.content.global!!.underride[1].conditions.size)
+        assertEquals("contains_display_name", event.content.global!!.underride[1].conditions[0].kind)
+        assertEquals(true, event.content.global!!.underride[1].default)
+        assertEquals(true, event.content.global!!.underride[1].enabled)
+        assertEquals(".m.rule.contains_display_name", event.content.global!!.underride[1].ruleId)
+        assertEquals(3, event.content.global!!.underride[2].actions.size)
+        assertEquals("notify", event.content.global!!.underride[2].actions[0].content)
+        assertEquals("sound", event.content.global!!.underride[2].actions[1].jsonObject["set_tweak"]!!.content)
+        assertEquals("default", event.content.global!!.underride[2].actions[1].jsonObject["value"]!!.content)
+        assertEquals("highlight", event.content.global!!.underride[2].actions[2].jsonObject["set_tweak"]!!.content)
+        assertEquals(false, event.content.global!!.underride[2].actions[2].jsonObject["value"]!!.boolean)
+        assertEquals(2, event.content.global!!.underride[2].conditions.size)
+        assertEquals("room_member_count", event.content.global!!.underride[2].conditions[0].kind)
+        assertEquals("2", event.content.global!!.underride[2].conditions[0].`is`!!)
+        assertEquals("event_match", event.content.global!!.underride[2].conditions[1].kind)
+        assertEquals("type", event.content.global!!.underride[2].conditions[1].key)
+        assertEquals("m.room.message", event.content.global!!.underride[2].conditions[1].pattern)
+        assertEquals(true, event.content.global!!.underride[2].default)
+        assertEquals(true, event.content.global!!.underride[2].enabled)
+        assertEquals(".m.rule.room_one_to_one", event.content.global!!.underride[2].ruleId)
+        assertEquals(3, event.content.global!!.underride[3].actions.size)
+        assertEquals("notify", event.content.global!!.underride[3].actions[0].content)
+        assertEquals("sound", event.content.global!!.underride[3].actions[1].jsonObject["set_tweak"]!!.content)
+        assertEquals("default", event.content.global!!.underride[3].actions[1].jsonObject["value"]!!.content)
+        assertEquals("highlight", event.content.global!!.underride[3].actions[2].jsonObject["set_tweak"]!!.content)
+        assertEquals(false, event.content.global!!.underride[3].actions[2].jsonObject["value"]!!.boolean)
+        assertEquals(3, event.content.global!!.underride[3].conditions.size)
+        assertEquals("type", event.content.global!!.underride[3].conditions[0].key)
+        assertEquals("event_match", event.content.global!!.underride[3].conditions[0].kind)
+        assertEquals("m.room.member", event.content.global!!.underride[3].conditions[0].pattern)
+        assertEquals("content.membership", event.content.global!!.underride[3].conditions[1].key)
+        assertEquals("event_match", event.content.global!!.underride[3].conditions[1].kind)
+        assertEquals("invite", event.content.global!!.underride[3].conditions[1].pattern)
+        assertEquals("state_key", event.content.global!!.underride[3].conditions[2].key)
+        assertEquals("event_match", event.content.global!!.underride[3].conditions[2].kind)
+        assertEquals("@alice:example.com", event.content.global!!.underride[3].conditions[2].pattern)
+        assertEquals(true, event.content.global!!.underride[3].default)
+        assertEquals(true, event.content.global!!.underride[3].enabled)
+        assertEquals(".m.rule.invite_for_me", event.content.global!!.underride[3].ruleId)
+        assertEquals(2, event.content.global!!.underride[4].actions.size)
+        assertEquals("notify", event.content.global!!.underride[4].actions[0].content)
+        assertEquals("highlight", event.content.global!!.underride[4].actions[1].jsonObject["set_tweak"]!!.content)
+        assertEquals(false, event.content.global!!.underride[4].actions[1].jsonObject["value"]!!.boolean)
+        assertEquals(1, event.content.global!!.underride[4].conditions.size)
+        assertEquals("type", event.content.global!!.underride[4].conditions[0].key)
+        assertEquals("event_match", event.content.global!!.underride[4].conditions[0].kind)
+        assertEquals("m.room.member", event.content.global!!.underride[4].conditions[0].pattern)
+        assertEquals(true, event.content.global!!.underride[4].default)
+        assertEquals(true, event.content.global!!.underride[4].enabled)
+        assertEquals(".m.rule.member_event", event.content.global!!.underride[4].ruleId)
+        assertEquals(2, event.content.global!!.underride[5].actions.size)
+        assertEquals("notify", event.content.global!!.underride[5].actions[0].content)
+        assertEquals("highlight", event.content.global!!.underride[5].actions[1].jsonObject["set_tweak"]!!.content)
+        assertEquals(false, event.content.global!!.underride[5].actions[1].jsonObject["value"]!!.boolean)
+        assertEquals(1, event.content.global!!.underride[5].conditions.size)
+        assertEquals("type", event.content.global!!.underride[5].conditions[0].key)
+        assertEquals("event_match", event.content.global!!.underride[5].conditions[0].kind)
+        assertEquals("m.room.message", event.content.global!!.underride[5].conditions[0].pattern)
+        assertEquals(true, event.content.global!!.underride[5].default)
+        assertEquals(true, event.content.global!!.underride[5].enabled)
+        assertEquals(".m.rule.message", event.content.global!!.underride[5].ruleId)
+        assertEquals("m.push_rules", event.type)
+
+        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        // The defaults are specified in the raw json.
+    }
 
     @Test
     fun testReceiptEvent() {

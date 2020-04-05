@@ -79,6 +79,7 @@ val MatrixSerialModule = SerializersModule {
         subclass(MacContent.serializer())
         subclass(IdentityServerContent.serializer())
         subclass(IgnoredUserListContent.serializer())
+        subclass(PushRulesContent.serializer())
     }
 
     polymorphic(MessageContent.serializer()) {
