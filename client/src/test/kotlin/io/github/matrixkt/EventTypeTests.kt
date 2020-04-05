@@ -1850,8 +1850,8 @@ class EventTypeTests {
 
         assertEquals("This is an example notice", event.content.body)
         // assertEquals("m.notice", event.content.msgtype)
-        // FIXME assertEquals("org.matrix.custom.html", event.content.format)
-        // FIXME assertEquals("This is an <strong>example</strong> notice", event.content.formattedBody)
+        assertEquals("org.matrix.custom.html", event.content.format)
+        assertEquals("This is an <strong>example</strong> notice", event.content.formattedBody)
         assertEquals("m.room.message", event.type)
         assertEquals("$143273582443PhrSn:example.org", event.eventId)
         assertEquals("!jEsUZKDJdhlrceRyVU:example.org", event.roomId)

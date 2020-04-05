@@ -95,7 +95,20 @@ abstract class MessageContent : Content() {
         /**
          * The notice text to send.
          */
-        override val body: String
+        override val body: String,
+
+        /**
+         * The format used in the [formattedBody].
+         * Currently only `org.matrix.custom.html` is supported.
+         */
+        val format: String? = null,
+
+        /**
+         * The formatted version of the [body].
+         * This is required if [format] is specified.
+         */
+        @SerialName("formatted_body")
+        val formattedBody: String? = null
     ) : MessageContent()
 
     /**
