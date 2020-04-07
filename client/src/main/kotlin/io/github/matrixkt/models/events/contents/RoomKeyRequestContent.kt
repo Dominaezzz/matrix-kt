@@ -30,18 +30,14 @@ sealed class RoomKeyRequestContent : Content() {
     abstract val requestId: String
 
     @Serializer(forClass = RoomKeyRequestContent::class)
-    internal object DefaultSerializer
-
     object TheSerializer : KSerializer<RoomKeyRequestContent> {
         @OptIn(InternalSerializationApi::class)
         private val firstDelegate = SealedClassSerializer(
-            descriptor.serialName, RoomKeyRequestContent::class,
+            "N/A", RoomKeyRequestContent::class,
             arrayOf(Request::class, Cancellation::class),
             arrayOf(Request.serializer(), Cancellation.serializer())
         )
         private val secondDelegate = DiscriminatorChanger(firstDelegate, "action")
-
-        override val descriptor: SerialDescriptor get() = DefaultSerializer.descriptor
 
         override fun deserialize(decoder: Decoder): RoomKeyRequestContent {
             return decoder.decode(secondDelegate)
