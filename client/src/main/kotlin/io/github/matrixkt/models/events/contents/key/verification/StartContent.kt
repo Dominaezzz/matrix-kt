@@ -1,10 +1,8 @@
 package io.github.matrixkt.models.events.contents.key.verification
 
 import io.github.matrixkt.models.events.contents.Content
-import io.github.matrixkt.utils.JsonPolymorphicSerializer
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import io.github.matrixkt.utils.DiscriminatorChanger
+import kotlinx.serialization.*
 
 /**
  * Begins a key verification process.
@@ -14,7 +12,7 @@ import kotlinx.serialization.Serializable
  * This definition includes fields that are in common among all variants.
  */
 @SerialName("m.key.verification.start")
-@Serializable(StartContent.Serializer::class)
+@Serializable(StartContent.TheSerializer::class)
 abstract class StartContent : Content() {
     /**
      * The device ID which is initiating the process.
@@ -77,6 +75,17 @@ abstract class StartContent : Content() {
         val shortAuthenticationString: List<String>
     ) : StartContent()
 
-    object Serializer : KSerializer<StartContent> by JsonPolymorphicSerializer(
-        StartContent::class, "method")
+    @Serializer(forClass = StartContent::class)
+    object TheSerializer : KSerializer<StartContent> {
+        private val firstDelegate = PolymorphicSerializer(StartContent::class)
+        private val secondDelegate = DiscriminatorChanger(firstDelegate, "method")
+
+        override fun deserialize(decoder: Decoder): StartContent {
+            return decoder.decode(secondDelegate)
+        }
+
+        override fun serialize(encoder: Encoder, value: StartContent) {
+            encoder.encode(secondDelegate, value)
+        }
+    }
 }

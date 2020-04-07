@@ -1,7 +1,7 @@
 package io.github.matrixkt.models.events.contents.room
 
 import io.github.matrixkt.models.events.contents.Content
-import io.github.matrixkt.utils.JsonPolymorphicSerializer
+import io.github.matrixkt.utils.DiscriminatorChanger
 import kotlinx.serialization.*
 
 /**
@@ -10,7 +10,7 @@ import kotlinx.serialization.*
  * or as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
  */
 @SerialName("m.room.encrypted")
-@Serializable(EncryptedContent.Serializer::class)
+@Serializable(EncryptedContent.TheSerializer::class)
 abstract class EncryptedContent : Content() {
     // /**
     //  * The encryption algorithm used to encrypt this event.
@@ -64,8 +64,19 @@ abstract class EncryptedContent : Content() {
         val sessionId: String
     ) : EncryptedContent()
 
-    object Serializer : KSerializer<EncryptedContent> by JsonPolymorphicSerializer(
-        EncryptedContent::class, "algorithm")
+    @Serializer(forClass = EncryptedContent::class)
+    object TheSerializer : KSerializer<EncryptedContent> {
+        private val firstDelegate = PolymorphicSerializer(EncryptedContent::class)
+        private val secondDelegate = DiscriminatorChanger(firstDelegate, "algorithm")
+
+        override fun deserialize(decoder: Decoder): EncryptedContent {
+            return decoder.decode(secondDelegate)
+        }
+
+        override fun serialize(encoder: Encoder, value: EncryptedContent) {
+            encoder.encode(secondDelegate, value)
+        }
+    }
 
     @Serializable
     data class CiphertextInfo(

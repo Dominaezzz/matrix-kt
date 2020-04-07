@@ -1,17 +1,15 @@
 package io.github.matrixkt.models.events.contents.key.verification
 
 import io.github.matrixkt.models.events.contents.Content
-import io.github.matrixkt.utils.JsonPolymorphicSerializer
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import io.github.matrixkt.utils.DiscriminatorChanger
+import kotlinx.serialization.*
 
 /**
  * Accepts a previously sent `m.key.verification.start` message.
  * Typically sent as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
  */
 @SerialName("m.key.verification.accept")
-@Serializable(AcceptContent.Serializer::class)
+@Serializable(AcceptContent.TheSerializer::class)
 abstract class AcceptContent : Content() {
     /**
      * An opaque identifier for the verification process. Must be the same as the one used for the m.key.verification.start message.
@@ -62,6 +60,17 @@ abstract class AcceptContent : Content() {
         val commitment: String
     ) : AcceptContent()
 
-    object Serializer : KSerializer<AcceptContent> by JsonPolymorphicSerializer(
-        AcceptContent::class, "method")
+    @Serializer(forClass = AcceptContent::class)
+    object TheSerializer : KSerializer<AcceptContent> {
+        private val firstDelegate = PolymorphicSerializer(AcceptContent::class)
+        private val secondDelegate = DiscriminatorChanger(firstDelegate, "method")
+
+        override fun deserialize(decoder: Decoder): AcceptContent {
+            return decoder.decode(secondDelegate)
+        }
+
+        override fun serialize(encoder: Encoder, value: AcceptContent) {
+            encoder.encode(secondDelegate, value)
+        }
+    }
 }

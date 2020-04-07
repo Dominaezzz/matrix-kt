@@ -1,15 +1,14 @@
 package io.github.matrixkt.models.events.contents
 
+import io.github.matrixkt.utils.DiscriminatorChanger
 import kotlinx.serialization.*
-import kotlinx.serialization.json.JsonInput
-import kotlinx.serialization.json.content
 
 /**
  * This event type is used to request keys for end-to-end encryption.
  * It is sent as an unencrypted [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
  */
 @SerialName("m.room_key_request")
-@Serializable(RoomKeyRequestContent.Serializer::class)
+@Serializable(RoomKeyRequestContent.TheSerializer::class)
 sealed class RoomKeyRequestContent : Content() {
     // /**
     //  * One of: ["request", "request_cancellation"]
@@ -30,36 +29,30 @@ sealed class RoomKeyRequestContent : Content() {
     @SerialName("request_id")
     abstract val requestId: String
 
-    object Serializer : KSerializer<RoomKeyRequestContent> {
-        override val descriptor = SerialDescriptor("RoomKeyRequestContent", PolymorphicKind.SEALED)
+    @Serializer(forClass = RoomKeyRequestContent::class)
+    internal object DefaultSerializer
+
+    object TheSerializer : KSerializer<RoomKeyRequestContent> {
+        @OptIn(InternalSerializationApi::class)
+        private val firstDelegate = SealedClassSerializer(
+            descriptor.serialName, RoomKeyRequestContent::class,
+            arrayOf(Request::class, Cancellation::class),
+            arrayOf(Request.serializer(), Cancellation.serializer())
+        )
+        private val secondDelegate = DiscriminatorChanger(firstDelegate, "action")
+
+        override val descriptor: SerialDescriptor get() = DefaultSerializer.descriptor
 
         override fun deserialize(decoder: Decoder): RoomKeyRequestContent {
-            require(decoder is JsonInput)
-            val jsonObj = decoder.decodeJson().jsonObject
-
-            val action = jsonObj.getValue("action").content
-            val serializer = when (action) {
-                "request" -> Request.serializer()
-                "request_cancellation" -> Cancellation.serializer()
-                else -> throw SerializationException("No serializer for 'action' = '$action'")
-            }
-
-            return decoder.json.fromJson(serializer, jsonObj)
+            return decoder.decode(secondDelegate)
         }
 
         override fun serialize(encoder: Encoder, value: RoomKeyRequestContent) {
-            val (action, serializer) = when (value) {
-                is Request -> "request" to Request.serializer()
-                is Cancellation -> "request_cancellation" to Cancellation.serializer()
-            }
-            encoder.encodeStructure(descriptor) {
-                encodeStringElement(descriptor, 0, action)
-                @Suppress("UNCHECKED_CAST")
-                encodeSerializableElement(descriptor, 1, serializer as KSerializer<RoomKeyRequestContent>, value)
-            }
+            encoder.encode(secondDelegate, value)
         }
     }
 
+    @SerialName("request")
     @Serializable
     data class Request(
         /**
@@ -74,6 +67,7 @@ sealed class RoomKeyRequestContent : Content() {
         override val requestId: String
     ) : RoomKeyRequestContent()
 
+    @SerialName("request_cancellation")
     @Serializable
     data class Cancellation(
         @SerialName("requesting_device_id")

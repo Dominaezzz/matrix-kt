@@ -17,7 +17,7 @@ import kotlinx.serialization.json.*
  * see [`m.room.message` msgtypes](https://matrix.org/docs/spec/client_server/r0.5.0#m-room-message-msgtypes).
  */
 @SerialName("m.room.message")
-@Serializable(MessageContent.Serializer::class)
+@Serializable(MessageContent.TheSerializer::class)
 abstract class MessageContent : Content() {
     /**
      * The textual representation of this message.
@@ -297,11 +297,10 @@ abstract class MessageContent : Content() {
         override fun toString() = "Redacted"
     }
 
-    object Serializer : KSerializer<MessageContent> {
+    @Serializer(forClass = MessageContent::class)
+    object TheSerializer : KSerializer<MessageContent> {
         private val firstDelegate = PolymorphicSerializer(MessageContent::class)
         private val secondDelegate = DiscriminatorChanger(firstDelegate, "msgtype")
-
-        override val descriptor = SerialDescriptor("RoomMessageContent", PolymorphicKind.OPEN)
 
         override fun serialize(encoder: Encoder, value: MessageContent) {
             if (value is Redacted) {
