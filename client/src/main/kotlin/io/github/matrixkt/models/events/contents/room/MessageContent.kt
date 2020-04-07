@@ -3,6 +3,7 @@ package io.github.matrixkt.models.events.contents.room
 import io.github.matrixkt.models.EncryptedFile
 import io.github.matrixkt.models.events.contents.Content
 import io.github.matrixkt.models.events.contents.msginfo.*
+import io.github.matrixkt.utils.DiscriminatorChanger
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
@@ -297,20 +298,16 @@ abstract class MessageContent : Content() {
     }
 
     object Serializer : KSerializer<MessageContent> {
-        override val descriptor = SerialDescriptor("RoomMessageContent", PolymorphicKind.SEALED)
+        private val firstDelegate = PolymorphicSerializer(MessageContent::class)
+        private val secondDelegate = DiscriminatorChanger(firstDelegate, "msgtype")
+
+        override val descriptor = SerialDescriptor("RoomMessageContent", PolymorphicKind.OPEN)
 
         override fun serialize(encoder: Encoder, value: MessageContent) {
             if (value is Redacted) {
                 encoder.encodeStructure(descriptor) {}
             } else {
-                val serializer = encoder.context.getPolymorphic(MessageContent::class, value)
-                requireNotNull(serializer) { "Could not find serializer for '${value::class.simpleName}'" }
-
-                encoder.encodeStructure(descriptor) {
-                    encodeStringElement(descriptor, 0, serializer.descriptor.serialName)
-                    @Suppress("UNCHECKED_CAST")
-                    encodeSerializableElement(descriptor, 1, serializer as KSerializer<Any>, value)
-                }
+                encoder.encode(secondDelegate, value)
             }
         }
 
@@ -318,14 +315,11 @@ abstract class MessageContent : Content() {
             require(decoder is JsonInput)
 
             val jsonObj = decoder.decodeJson().jsonObject
-            if (jsonObj.isEmpty()) {
-                return Redacted
+            return if (jsonObj.isEmpty()) {
+                Redacted
+            } else {
+                decoder.json.fromJson(secondDelegate, jsonObj)
             }
-
-            val klassName: String = jsonObj.getValue("msgtype").content
-            val serializer = decoder.context.getPolymorphic(MessageContent::class, klassName)
-            requireNotNull(serializer) { "Could not find serializer for `msgtype` = '$klassName'" }
-            return decoder.json.fromJson(serializer, jsonObj)
         }
     }
 }

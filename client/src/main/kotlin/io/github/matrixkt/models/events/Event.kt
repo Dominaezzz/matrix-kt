@@ -3,12 +3,6 @@
 package io.github.matrixkt.models.events
 
 import io.github.matrixkt.models.events.contents.*
-import io.github.matrixkt.models.events.contents.call.AnswerContent
-import io.github.matrixkt.models.events.contents.call.CandidatesContent
-import io.github.matrixkt.models.events.contents.call.HangupContent
-import io.github.matrixkt.models.events.contents.call.InviteContent
-import io.github.matrixkt.models.events.contents.key.verification.*
-import io.github.matrixkt.models.events.contents.room.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -18,7 +12,7 @@ import kotlinx.serialization.json.JsonParametricSerializer
 import kotlin.reflect.KClass
 
 @Serializable(EventSerializer::class)
-sealed class Event<T : Content> {
+sealed class Event<out T : Content> {
     /**
      * The fields in this object will vary depending on the type of event.
      * When interacting with the REST API, this is the HTTP body.
@@ -50,7 +44,7 @@ class EventSerializer<T : Content>(
 }
 
 @Serializable(RoomEventSerializer::class)
-sealed class RoomEvent<T : Content> : Event<T>() {
+sealed class RoomEvent<out T : Content> : Event<T>() {
     /**
      * The globally unique event identifier.
      */
@@ -96,7 +90,7 @@ class RoomEventSerializer<T : Content>(
 }
 
 @Serializable
-data class MessageEvent<T : Content>(
+data class MessageEvent<out T : Content>(
     override val type: String,
 
     override val content: T,
@@ -116,7 +110,7 @@ data class MessageEvent<T : Content>(
 ) : RoomEvent<T>()
 
 @Serializable
-data class StateEvent<T : Content>(
+data class StateEvent<out T : Content>(
     override val type: String,
 
     override val content: T,
@@ -152,7 +146,7 @@ data class StateEvent<T : Content>(
 ) : RoomEvent<T>()
 
 @Serializable
-data class EphemeralEvent<T : Content>(
+data class EphemeralEvent<out T : Content>(
     override val type: String,
 
     override val content: T,
@@ -164,7 +158,7 @@ data class EphemeralEvent<T : Content>(
 ) : Event<T>()
 
 @Serializable
-data class AccountEvent<T : Content>(
+data class AccountEvent<out T : Content>(
     override val type: String,
 
     override val content: T

@@ -1,10 +1,7 @@
 package io.github.matrixkt
 
 import io.github.matrixkt.models.Presence
-import io.github.matrixkt.models.events.AccountEvent
-import io.github.matrixkt.models.events.EphemeralEvent
-import io.github.matrixkt.models.events.MessageEvent
-import io.github.matrixkt.models.events.StateEvent
+import io.github.matrixkt.models.events.*
 import io.github.matrixkt.models.events.contents.*
 import io.github.matrixkt.models.events.contents.RoomKeyRequestContent
 import io.github.matrixkt.models.events.contents.call.AnswerContent
@@ -23,7 +20,6 @@ import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.content
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class EventTypeTests {
     @Test
@@ -1633,8 +1629,8 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
-        // Polymorphism issue
+        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
     }
 
     @Test
@@ -1673,8 +1669,8 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
-        // Polymorphism issue
+        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
     }
 
     @Test
@@ -1719,8 +1715,8 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
-        // Polymorphism issue
+        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
     }
 
     @Test
@@ -1767,8 +1763,8 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
-        // Polymorphism issue
+        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
     }
 
     @Test
@@ -1819,8 +1815,8 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
-        // Polymorphism issue
+        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
     }
 
     @Test
@@ -1859,8 +1855,8 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
-        // Polymorphism issue
+        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
     }
 
     @Test
@@ -1901,8 +1897,8 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
-        // Polymorphism issue
+        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
     }
 
     @Test
@@ -1941,8 +1937,8 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
-        // Polymorphism issue
+        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
     }
 
     @Test
@@ -2003,8 +1999,8 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
-        // Polymorphism issue
+        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
     }
 
     // @Test
