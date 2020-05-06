@@ -8,7 +8,6 @@ import com.sun.jna.NativeLibrary
 import com.sun.jna.Pointer
 import com.sun.jna.ptr.IntByReference
 import java.nio.ByteBuffer
-import java.nio.IntBuffer
 
 object OlmLibrary : Library {
     const val JNA_LIBRARY_NAME = "olm"
@@ -44,19 +43,7 @@ object OlmLibrary : Library {
 
     external fun olm_init_inbound_group_session(
         session: OlmInboundGroupSession?,
-        session_key: ByteArray?,
-        session_key_length: NativeSize
-    ): NativeSize
-
-    external fun olm_init_inbound_group_session(
-        session: OlmInboundGroupSession?,
         session_key: Pointer?,
-        session_key_length: NativeSize
-    ): NativeSize
-
-    external fun olm_import_inbound_group_session(
-        session: OlmInboundGroupSession?,
-        session_key: ByteArray?,
         session_key_length: NativeSize
     ): NativeSize
 
@@ -64,27 +51,12 @@ object OlmLibrary : Library {
         session: OlmInboundGroupSession?,
         session_key: Pointer?,
         session_key_length: NativeSize
-    ): NativeSize
-
-    external fun olm_group_decrypt_max_plaintext_length(
-        session: OlmInboundGroupSession?,
-        message: ByteBuffer?,
-        message_length: NativeSize
     ): NativeSize
 
     external fun olm_group_decrypt_max_plaintext_length(
         session: OlmInboundGroupSession?,
         message: Pointer?,
         message_length: NativeSize
-    ): NativeSize
-
-    external fun olm_group_decrypt(
-        session: OlmInboundGroupSession?,
-        message: ByteBuffer?,
-        message_length: NativeSize,
-        plaintext: ByteBuffer?,
-        max_plaintext_length: NativeSize,
-        message_index: IntBuffer?
     ): NativeSize
 
     external fun olm_group_decrypt(
@@ -100,12 +72,6 @@ object OlmLibrary : Library {
 
     external fun olm_inbound_group_session_id(
         session: OlmInboundGroupSession?,
-        id: ByteBuffer?,
-        id_length: NativeSize
-    ): NativeSize
-
-    external fun olm_inbound_group_session_id(
-        session: OlmInboundGroupSession?,
         id: Pointer?,
         id_length: NativeSize
     ): NativeSize
@@ -115,13 +81,6 @@ object OlmLibrary : Library {
     external fun olm_inbound_group_session_is_verified(session: OlmInboundGroupSession?): Int
 
     external fun olm_export_inbound_group_session_length(session: OlmInboundGroupSession?): NativeSize
-
-    external fun olm_export_inbound_group_session(
-        session: OlmInboundGroupSession?,
-        key: ByteBuffer?,
-        key_length: NativeSize,
-        message_index: Int
-    ): NativeSize
 
     external fun olm_export_inbound_group_session(
         session: OlmInboundGroupSession?,
@@ -160,12 +119,6 @@ object OlmLibrary : Library {
 
     external fun olm_init_outbound_group_session(
         session: OlmOutboundGroupSession?,
-        random: ByteBuffer?,
-        random_length: NativeSize
-    ): NativeSize
-
-    external fun olm_init_outbound_group_session(
-        session: OlmOutboundGroupSession?,
         random: Pointer?,
         random_length: NativeSize
     ): NativeSize
@@ -173,14 +126,6 @@ object OlmLibrary : Library {
     external fun olm_group_encrypt_message_length(
         session: OlmOutboundGroupSession?,
         plaintext_length: NativeSize
-    ): NativeSize
-
-    external fun olm_group_encrypt(
-        session: OlmOutboundGroupSession?,
-        plaintext: ByteArray?,
-        plaintext_length: NativeSize,
-        message: ByteBuffer?,
-        message_length: NativeSize
     ): NativeSize
 
     external fun olm_group_encrypt(
@@ -195,12 +140,6 @@ object OlmLibrary : Library {
 
     external fun olm_outbound_group_session_id(
         session: OlmOutboundGroupSession?,
-        id: ByteBuffer?,
-        id_length: NativeSize
-    ): NativeSize
-
-    external fun olm_outbound_group_session_id(
-        session: OlmOutboundGroupSession?,
         id: Pointer?,
         id_length: NativeSize
     ): NativeSize
@@ -208,12 +147,6 @@ object OlmLibrary : Library {
     external fun olm_outbound_group_session_message_index(session: OlmOutboundGroupSession?): Int
 
     external fun olm_outbound_group_session_key_length(session: OlmOutboundGroupSession?): NativeSize
-
-    external fun olm_outbound_group_session_key(
-        session: OlmOutboundGroupSession?,
-        key: ByteBuffer?,
-        key_length: NativeSize
-    ): NativeSize
 
     external fun olm_outbound_group_session_key(
         session: OlmOutboundGroupSession?,
@@ -377,12 +310,6 @@ object OlmLibrary : Library {
     ): NativeSize
 
     external fun olm_session_has_received_message(session: OlmSession?): Int
-
-    external fun olm_session_describe(
-        session: OlmSession?,
-        buf: ByteBuffer?,
-        buflen: NativeSize
-    )
 
     external fun olm_session_describe(
         session: OlmSession?,
@@ -646,14 +573,6 @@ object OlmLibrary : Library {
     external fun olm_pk_signing_public_key_length(): NativeSize
 
     external fun olm_pk_signature_length(): NativeSize
-
-    external fun olm_pk_sign(
-        sign: OlmPkSigning?,
-        message: ByteArray?,
-        message_length: NativeSize,
-        signature: ByteBuffer?,
-        signature_length: NativeSize
-    ): NativeSize
 
     external fun olm_pk_sign(
         sign: OlmPkSigning?,
