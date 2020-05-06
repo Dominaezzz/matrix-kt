@@ -1,6 +1,6 @@
 plugins {
-    kotlin("multiplatform") version "1.3.71" apply false
-    kotlin("plugin.serialization") version "1.3.71" apply false
+    kotlin("multiplatform") version "1.3.72" apply false
+    kotlin("plugin.serialization") version "1.3.72" apply false
     id("de.undercouch.download") version "4.0.4" apply false
 }
 
