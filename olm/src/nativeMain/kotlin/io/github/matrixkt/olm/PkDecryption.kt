@@ -4,15 +4,13 @@ import colm.internal.*
 import kotlinx.cinterop.*
 import platform.posix.size_t
 
-class PkDecryption private constructor() {
-    private val ptr = genericInit(::olm_pk_decryption, ::olm_pk_decryption_size)
-
-    fun clear() {
+actual class PkDecryption private constructor(private val ptr: CPointer<OlmPkDecryption>, actual val publicKey: String) {
+    actual fun clear() {
         olm_clear_pk_decryption(ptr)
         nativeHeap.free(ptr)
     }
 
-    val privateKey: ByteArray
+    actual val privateKey: ByteArray
         get() {
             val privateKeyLength = olm_pk_private_key_length()
             val privateKey = ByteArray(privateKeyLength.convert())
@@ -22,7 +20,7 @@ class PkDecryption private constructor() {
             return privateKey
         }
 
-    fun decrypt(message: PkMessage): String {
+    actual fun decrypt(message: PkMessage): String {
         return message.mac.withNativeRead { macPtr, macLen ->
             message.ephemeralKey.withNativeRead { ephemeralKeyPtr, ephemeralKeyLen ->
                 message.cipherText.withNativeRead { cipherTextPtr, cipherTextLen ->
@@ -43,7 +41,7 @@ class PkDecryption private constructor() {
         }
     }
 
-    fun pickle(key: ByteArray): String {
+    actual fun pickle(key: ByteArray): String {
         return genericPickle(ptr, key, ::olm_pickle_pk_decryption_length, ::olm_pickle_pk_decryption, ::checkError)
     }
 
@@ -51,38 +49,44 @@ class PkDecryption private constructor() {
         genericCheckError(ptr, result, ::olm_pk_decryption_last_error)
     }
 
-    companion object {
-        val publicKeyLength: Long get() = olm_pk_key_length().convert()
-        val privateKeyLength: Long get() = olm_pk_private_key_length().convert()
+    actual companion object {
+        actual val publicKeyLength: Long get() = olm_pk_key_length().convert()
+        actual val privateKeyLength: Long get() = olm_pk_private_key_length().convert()
 
-        private inline fun create(block: PkDecryption.(CValuesRef<*>, size_t) -> Unit): Pair<PkDecryption, String> {
+        private inline fun create(block: (CPointer<OlmPkDecryption>, CValuesRef<*>, size_t) -> Unit): PkDecryption {
             val publicKeyLength = olm_pk_key_length()
             val publicKey = ByteArray(publicKeyLength.convert())
 
-            val obj = PkDecryption()
+            val obj = genericInit(::olm_pk_decryption, ::olm_pk_decryption_size)
             try {
-                obj.block(publicKey.refTo(0), publicKeyLength)
+                block(obj, publicKey.refTo(0), publicKeyLength)
             } catch (e: Exception) {
-                obj.clear() // Prevent leak
+                // Prevent leak
+                olm_clear_pk_decryption(obj)
+                nativeHeap.free(obj)
                 throw e
             }
-            return obj to publicKey.decodeToString()
+            return PkDecryption(obj, publicKey.decodeToString())
         }
 
-        fun fromPrivate(privateKey: ByteArray): Pair<PkDecryption, String> {
-            return create { publicKey, publicKeyLength ->
+        private fun checkError(ptr: CPointer<OlmPkDecryption>, result: size_t) {
+            genericCheckError(ptr, result, ::olm_pk_decryption_last_error)
+        }
+
+        actual fun fromPrivate(privateKey: ByteArray): PkDecryption {
+            return create { ptr, publicKey, publicKeyLength ->
                 val result = olm_pk_key_from_private(ptr,
                     publicKey, publicKeyLength,
                     privateKey.refTo(0), privateKey.size.convert())
-                checkError(result)
+                checkError(ptr, result)
             }
         }
 
-        fun unpickle(key: ByteArray, pickle: String): Pair<PkDecryption, String> {
-            return create { publicKey, publicKeyLength ->
+        actual fun unpickle(key: ByteArray, pickle: String): PkDecryption {
+            return create { ptr, publicKey, publicKeyLength ->
                 genericUnpickle(ptr, key, pickle, { ptr, key, keyLen, pickle, pickleLen ->
                     olm_unpickle_pk_decryption(ptr, key, keyLen, pickle, pickleLen, publicKey, publicKeyLength)
-                }, ::checkError)
+                }, { checkError(ptr, it) })
             }
         }
     }

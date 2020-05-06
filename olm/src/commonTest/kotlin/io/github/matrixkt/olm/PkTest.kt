@@ -12,11 +12,11 @@ class PkTest {
         val privateKey = Random.nextBytes(PkDecryption.privateKeyLength.toInt())
 
         val encryption = PkEncryption()
-        val (decryption, key) = PkDecryption.fromPrivate(privateKey)
+        val decryption = PkDecryption.fromPrivate(privateKey)
 
-        println("Ephemeral Key: $key")
+        println("Ephemeral Key: ${decryption.publicKey}")
 
-        encryption.setRecipientKey(key)
+        encryption.setRecipientKey(decryption.publicKey)
         val clearMessage = "Public key test"
         val message = encryption.encrypt(clearMessage)
 
@@ -43,7 +43,7 @@ class PkTest {
         )
         assertEquals(PkDecryption.privateKeyLength, privateKey.size.toLong())
 
-        val (decryption, _) = PkDecryption.fromPrivate(privateKey)
+        val decryption = PkDecryption.fromPrivate(privateKey)
 
         val privateKeyCopy = decryption.privateKey
         assertTrue(privateKey contentEquals privateKeyCopy)
