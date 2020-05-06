@@ -1,6 +1,7 @@
 package io.github.matrixkt.olm
 
 import colm.internal.NativeSize
+import colm.internal.OlmLibrary
 import colm.internal.OlmLibrary.olm_clear_sas
 import colm.internal.OlmLibrary.olm_create_sas
 import colm.internal.OlmLibrary.olm_create_sas_random_length
@@ -22,11 +23,16 @@ actual class SAS actual constructor(random: Random) {
     private val ptr = genericInit(::olm_sas, ::olm_sas_size)
 
     init {
-        val randomSize = olm_create_sas_random_length(ptr)
-        val result = withRandomBuffer(randomSize, random) { randomBuf ->
-            olm_create_sas(ptr, randomBuf, randomSize)
+        try {
+            val randomSize = olm_create_sas_random_length(ptr)
+            val result = withRandomBuffer(randomSize, random) { randomBuf ->
+                olm_create_sas(ptr, randomBuf, randomSize)
+            }
+            checkError(result)
+        } catch (e: Exception) {
+            clear()
+            throw e
         }
-        checkError(result)
     }
 
     actual fun clear() {
