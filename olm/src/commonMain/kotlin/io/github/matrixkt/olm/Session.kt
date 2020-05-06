@@ -29,6 +29,10 @@ expect class Session {
      */
     val sessionId: String
 
+    val hasReceivedMessage: Boolean
+
+    fun describe(): String
+
     /**
      * Checks if the PRE_KEY([Message.MESSAGE_TYPE_PRE_KEY]) message is for this in-bound session.
      *

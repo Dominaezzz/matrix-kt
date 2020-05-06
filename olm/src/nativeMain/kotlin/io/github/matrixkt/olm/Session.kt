@@ -43,6 +43,17 @@ actual class Session private constructor() {
             return id.decodeToString()
         }
 
+    actual val hasReceivedMessage: Boolean
+        get() = olm_session_has_received_message(ptr) != 0
+
+    actual fun describe(): String {
+        // Magic number pulled from here https://gitlab.matrix.org/matrix-org/olm/-/blob/b482321213e6e896d0981c266bed12f4e1f67441/javascript/olm_post.js#L465
+        val bufferSize = 256
+        val desc = ByteArray(bufferSize)
+        olm_session_describe(ptr, desc.refTo(0), bufferSize.convert())
+        return desc.decodeToString()
+    }
+
     /**
      * Checks if the PRE_KEY([Message.MESSAGE_TYPE_PRE_KEY]) message is for this in-bound session.<br>
      * This API may be used to process a "m.room.encrypted" event when type = 1 (PRE_KEY).

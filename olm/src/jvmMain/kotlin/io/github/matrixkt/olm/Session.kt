@@ -17,6 +17,8 @@ import colm.internal.OlmLibrary.olm_matches_inbound_session_from
 import colm.internal.OlmLibrary.olm_pickle_session
 import colm.internal.OlmLibrary.olm_pickle_session_length
 import colm.internal.OlmLibrary.olm_session
+import colm.internal.OlmLibrary.olm_session_describe
+import colm.internal.OlmLibrary.olm_session_has_received_message
 import colm.internal.OlmLibrary.olm_session_id
 import colm.internal.OlmLibrary.olm_session_id_length
 import colm.internal.OlmLibrary.olm_session_last_error
@@ -63,6 +65,18 @@ actual class Session private constructor() {
                 it.toKString(sessionIdLength.toInt())
             }
         }
+
+    actual val hasReceivedMessage: Boolean
+        get() = olm_session_has_received_message(ptr) != 0
+
+    actual fun describe(): String {
+        // Magic number pulled from here https://gitlab.matrix.org/matrix-org/olm/-/blob/b482321213e6e896d0981c266bed12f4e1f67441/javascript/olm_post.js#L465
+        val bufferSize = 256
+        return withAllocation(bufferSize.toLong()) { desc ->
+            olm_session_describe(ptr, desc, NativeSize(bufferSize))
+            desc.toKString(bufferSize)
+        }
+    }
 
     /**
      * Checks if the PRE_KEY([Message.MESSAGE_TYPE_PRE_KEY]) message is for this in-bound session.
