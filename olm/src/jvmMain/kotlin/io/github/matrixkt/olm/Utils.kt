@@ -5,7 +5,6 @@ import colm.internal.OlmLibrary.olm_error
 import com.sun.jna.Native
 import com.sun.jna.Pointer
 import com.sun.jna.PointerType
-import com.sun.jna.ptr.PointerByReference
 import kotlin.random.Random
 
 internal inline fun <T> withAllocation(size: Long, block: (Pointer) -> T): T {
@@ -34,7 +33,6 @@ internal inline fun <T> withRandomBuffer(size: NativeSize, random: Random, block
         withSecureAllocation(size.toLong()) { buffer ->
             val steps = size.toLong() / 4
 
-            // FIXME: Use SecureRandom
             for (offset in 0L until steps) {
                 buffer.setInt(offset * 4, random.nextInt())
             }
