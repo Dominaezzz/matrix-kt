@@ -14,7 +14,11 @@ import io.github.matrixkt.models.events.contents.key.verification.KeyContent
 import io.github.matrixkt.models.events.contents.key.verification.MacContent
 import io.github.matrixkt.models.events.contents.key.verification.RequestContent
 import io.github.matrixkt.models.events.contents.key.verification.StartContent
+import io.github.matrixkt.models.events.contents.policy.rule.RoomContent
+import io.github.matrixkt.models.events.contents.policy.rule.ServerContent
+import io.github.matrixkt.models.events.contents.policy.rule.UserContent
 import io.github.matrixkt.models.events.contents.room.*
+import io.github.matrixkt.models.events.contents.room.message.FeedbackContent
 import io.github.matrixkt.utils.MatrixJson
 import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.content
@@ -517,33 +521,6 @@ class EventTypeTests {
         assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
     }
 
-    // @Test
-    // fun testKeyVerificationStartEvent() {
-    //     // language=json
-    //     val json = """
-    //             {
-    //                 "type": "m.key.verification.start",
-    //                 "content": {
-    //                     "from_device": "BobDevice1",
-    //                     "transaction_id": "S0meUniqueAndOpaqueString",
-    //                     "method": "m.sas.v1"
-    //                 }
-    //             }
-    //             """.trimIndent()
-    //
-    //     val serializer = AccountEvent.serializer(StartContent.serializer())
-    //     val event = MatrixJson.parse(serializer, json)
-    //
-    //     assertEquals("m.key.verification.start", event.type)
-    //     assertEquals("BobDevice1", event.content.fromDevice)
-    //     assertEquals("S0meUniqueAndOpaqueString", event.content.transactionId)
-    //
-    //     // assertEquals("m.sas.v1", event.content.method)
-    //     assertTrue(event.content is StartContent.SasV1)
-    //
-    //     assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
-    // }
-
     @Test
     fun testKeyVerificationStartSasV1Event() {
         // language=json
@@ -592,122 +569,122 @@ class EventTypeTests {
         assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
     }
 
-    // @Test
-    // fun testPolicyRuleRoomEvent() {
-    //     // language=json
-    //     val json = """
-    //             {
-    //                 "content": {
-    //                     "entity": "#*:example.org",
-    //                     "recommendation": "m.ban",
-    //                     "reason": "undesirable content"
-    //                 },
-    //                 "type": "m.policy.rule.room",
-    //                 "event_id": "${'$'}143273582443PhrSn:example.org",
-    //                 "room_id": "!jEsUZKDJdhlrceRyVU:example.org",
-    //                 "sender": "@example:example.org",
-    //                 "origin_server_ts": 1432735824653,
-    //                 "unsigned": {
-    //                     "age": 1234
-    //                 },
-    //                 "state_key": "rule:#*:example.org"
-    //             }
-    //             """.trimIndent()
-    //
-    //     val serializer = StateEvent.serializer(RoomContent.serializer())
-    //     val event = MatrixJson.parse(serializer, json)
-    //
-    //     assertEquals("#*:example.org", event.content.entity)
-    //     assertEquals("m.ban", event.content.recommendation)
-    //     assertEquals("undesirable content", event.content.reason)
-    //     assertEquals("m.policy.rule.room", event.type)
-    //     assertEquals("$143273582443PhrSn:example.org", event.eventId)
-    //     assertEquals("!jEsUZKDJdhlrceRyVU:example.org", event.roomId)
-    //     assertEquals("@example:example.org", event.sender)
-    //     assertEquals(1432735824653, event.originServerTimestamp)
-    //     assertEquals(1234, event.unsigned?.age)
-    //     assertEquals("rule:#*:example.org", event.stateKey)
-    //
-    //     assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
-    // }
-    //
-    // @Test
-    // fun testPolicyRuleServerEvent() {
-    //     // language=json
-    //     val json = """
-    //             {
-    //                 "content": {
-    //                     "entity": "*.example.org",
-    //                     "recommendation": "m.ban",
-    //                     "reason": "undesirable engagement"
-    //                 },
-    //                 "type": "m.policy.rule.server",
-    //                 "event_id": "${'$'}143273582443PhrSn:example.org",
-    //                 "room_id": "!jEsUZKDJdhlrceRyVU:example.org",
-    //                 "sender": "@example:example.org",
-    //                 "origin_server_ts": 1432735824653,
-    //                 "unsigned": {
-    //                     "age": 1234
-    //                 },
-    //                 "state_key": "rule:*.example.org"
-    //             }
-    //             """.trimIndent()
-    //
-    //     val serializer = StateEvent.serializer(ServerContent.serializer())
-    //     val event = MatrixJson.parse(serializer, json)
-    //
-    //     assertEquals("*.example.org", event.content.entity)
-    //     assertEquals("m.ban", event.content.recommendation)
-    //     assertEquals("undesirable engagement", event.content.reason)
-    //     assertEquals("m.policy.rule.server", event.type)
-    //     assertEquals("$143273582443PhrSn:example.org", event.eventId)
-    //     assertEquals("!jEsUZKDJdhlrceRyVU:example.org", event.roomId)
-    //     assertEquals("@example:example.org", event.sender)
-    //     assertEquals(1432735824653, event.originServerTimestamp)
-    //     assertEquals(1234, event.unsigned?.age)
-    //     assertEquals("rule:*.example.org", event.stateKey)
-    //
-    //     assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
-    // }
-    //
-    // @Test
-    // fun testPolicyRuleUserEvent() {
-    //     // language=json
-    //     val json = """
-    //             {
-    //                 "content": {
-    //                     "entity": "@alice*:example.org",
-    //                     "recommendation": "m.ban",
-    //                     "reason": "undesirable behaviour"
-    //                 },
-    //                 "type": "m.policy.rule.user",
-    //                 "event_id": "${'$'}143273582443PhrSn:example.org",
-    //                 "room_id": "!jEsUZKDJdhlrceRyVU:example.org",
-    //                 "sender": "@example:example.org",
-    //                 "origin_server_ts": 1432735824653,
-    //                 "unsigned": {
-    //                     "age": 1234
-    //                 },
-    //                 "state_key": "rule:@alice*:example.org"
-    //             }
-    //             """.trimIndent()
-    //
-    //     val serializer = StateEvent.serializer(UserContent.serializer())
-    //     val event = MatrixJson.parse(serializer, json)
-    //
-    //     assertEquals("@alice*:example.org", event.content.entity)
-    //     assertEquals("m.ban", event.content.recommendation)
-    //     assertEquals("undesirable behaviour", event.content.reason)
-    //     assertEquals("m.policy.rule.user", event.type)
-    //     assertEquals("$143273582443PhrSn:example.org", event.eventId)
-    //     assertEquals("!jEsUZKDJdhlrceRyVU:example.org", event.roomId)
-    //     assertEquals("@example:example.org", event.sender)
-    //     assertEquals(1432735824653, event.originServerTimestamp)
-    //     assertEquals(1234, event.unsigned?.age)
-    //     assertEquals("rule:@alice*:example.org", event.stateKey)
-    //
-    //     assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
-    // }
+    @Test
+    fun testPolicyRuleRoomEvent() {
+        // language=json
+        val json = """
+                {
+                    "content": {
+                        "entity": "#*:example.org",
+                        "recommendation": "m.ban",
+                        "reason": "undesirable content"
+                    },
+                    "type": "m.policy.rule.room",
+                    "event_id": "${'$'}143273582443PhrSn:example.org",
+                    "room_id": "!jEsUZKDJdhlrceRyVU:example.org",
+                    "sender": "@example:example.org",
+                    "origin_server_ts": 1432735824653,
+                    "unsigned": {
+                        "age": 1234
+                    },
+                    "state_key": "rule:#*:example.org"
+                }
+                """.trimIndent()
+
+        val serializer = StateEvent.serializer(RoomContent.serializer())
+        val event = MatrixJson.parse(serializer, json)
+
+        assertEquals("#*:example.org", event.content.entity)
+        assertEquals("m.ban", event.content.recommendation)
+        assertEquals("undesirable content", event.content.reason)
+        assertEquals("m.policy.rule.room", event.type)
+        assertEquals("$143273582443PhrSn:example.org", event.eventId)
+        assertEquals("!jEsUZKDJdhlrceRyVU:example.org", event.roomId)
+        assertEquals("@example:example.org", event.sender)
+        assertEquals(1432735824653, event.originServerTimestamp)
+        assertEquals(1234, event.unsigned?.age)
+        assertEquals("rule:#*:example.org", event.stateKey)
+
+        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+    }
+
+    @Test
+    fun testPolicyRuleServerEvent() {
+        // language=json
+        val json = """
+                {
+                    "content": {
+                        "entity": "*.example.org",
+                        "recommendation": "m.ban",
+                        "reason": "undesirable engagement"
+                    },
+                    "type": "m.policy.rule.server",
+                    "event_id": "${'$'}143273582443PhrSn:example.org",
+                    "room_id": "!jEsUZKDJdhlrceRyVU:example.org",
+                    "sender": "@example:example.org",
+                    "origin_server_ts": 1432735824653,
+                    "unsigned": {
+                        "age": 1234
+                    },
+                    "state_key": "rule:*.example.org"
+                }
+                """.trimIndent()
+
+        val serializer = StateEvent.serializer(ServerContent.serializer())
+        val event = MatrixJson.parse(serializer, json)
+
+        assertEquals("*.example.org", event.content.entity)
+        assertEquals("m.ban", event.content.recommendation)
+        assertEquals("undesirable engagement", event.content.reason)
+        assertEquals("m.policy.rule.server", event.type)
+        assertEquals("$143273582443PhrSn:example.org", event.eventId)
+        assertEquals("!jEsUZKDJdhlrceRyVU:example.org", event.roomId)
+        assertEquals("@example:example.org", event.sender)
+        assertEquals(1432735824653, event.originServerTimestamp)
+        assertEquals(1234, event.unsigned?.age)
+        assertEquals("rule:*.example.org", event.stateKey)
+
+        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+    }
+
+    @Test
+    fun testPolicyRuleUserEvent() {
+        // language=json
+        val json = """
+                {
+                    "content": {
+                        "entity": "@alice*:example.org",
+                        "recommendation": "m.ban",
+                        "reason": "undesirable behaviour"
+                    },
+                    "type": "m.policy.rule.user",
+                    "event_id": "${'$'}143273582443PhrSn:example.org",
+                    "room_id": "!jEsUZKDJdhlrceRyVU:example.org",
+                    "sender": "@example:example.org",
+                    "origin_server_ts": 1432735824653,
+                    "unsigned": {
+                        "age": 1234
+                    },
+                    "state_key": "rule:@alice*:example.org"
+                }
+                """.trimIndent()
+
+        val serializer = StateEvent.serializer(UserContent.serializer())
+        val event = MatrixJson.parse(serializer, json)
+
+        assertEquals("@alice*:example.org", event.content.entity)
+        assertEquals("m.ban", event.content.recommendation)
+        assertEquals("undesirable behaviour", event.content.reason)
+        assertEquals("m.policy.rule.user", event.type)
+        assertEquals("$143273582443PhrSn:example.org", event.eventId)
+        assertEquals("!jEsUZKDJdhlrceRyVU:example.org", event.roomId)
+        assertEquals("@example:example.org", event.sender)
+        assertEquals(1432735824653, event.originServerTimestamp)
+        assertEquals(1234, event.unsigned?.age)
+        assertEquals("rule:@alice*:example.org", event.stateKey)
+
+        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+    }
 
     @Test
     fun testPresenceEvent() {
@@ -2001,40 +1978,40 @@ class EventTypeTests {
         assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
     }
 
-    // @Test
-    // fun testRoomMessageFeedbackEvent() {
-    //     // language=json
-    //     val json = """
-    //             {
-    //                 "content": {
-    //                     "type": "delivered",
-    //                     "target_event_id": "${'$'}WEIGFHFW:localhost"
-    //                 },
-    //                 "type": "m.room.message.feedback",
-    //                 "event_id": "${'$'}143273582443PhrSn:example.org",
-    //                 "room_id": "!jEsUZKDJdhlrceRyVU:example.org",
-    //                 "sender": "@example:example.org",
-    //                 "origin_server_ts": 1432735824653,
-    //                 "unsigned": {
-    //                     "age": 1234
-    //                 }
-    //             }
-    //             """.trimIndent()
-    //
-    //     val serializer = MessageEvent.serializer(FeedbackContent.serializer())
-    //     val event = MatrixJson.parse(serializer, json)
-    //
-    //     assertEquals("delivered", event.content.type)
-    //     assertEquals("\$WEIGFHFW:localhost", event.content.targetEventId)
-    //     assertEquals("m.room.message.feedback", event.type)
-    //     assertEquals("$143273582443PhrSn:example.org", event.eventId)
-    //     assertEquals("!jEsUZKDJdhlrceRyVU:example.org", event.roomId)
-    //     assertEquals("@example:example.org", event.sender)
-    //     assertEquals(1432735824653, event.originServerTimestamp)
-    //     assertEquals(1234, event.unsigned?.age)
-    //
-    //     assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
-    // }
+    @Test
+    fun testRoomMessageFeedbackEvent() {
+        // language=json
+        val json = """
+                {
+                    "content": {
+                        "type": "delivered",
+                        "target_event_id": "${'$'}WEIGFHFW:localhost"
+                    },
+                    "type": "m.room.message.feedback",
+                    "event_id": "${'$'}143273582443PhrSn:example.org",
+                    "room_id": "!jEsUZKDJdhlrceRyVU:example.org",
+                    "sender": "@example:example.org",
+                    "origin_server_ts": 1432735824653,
+                    "unsigned": {
+                        "age": 1234
+                    }
+                }
+                """.trimIndent()
+
+        val serializer = MessageEvent.serializer(FeedbackContent.serializer())
+        val event = MatrixJson.parse(serializer, json)
+
+        assertEquals("delivered", event.content.type)
+        assertEquals("\$WEIGFHFW:localhost", event.content.targetEventId)
+        assertEquals("m.room.message.feedback", event.type)
+        assertEquals("$143273582443PhrSn:example.org", event.eventId)
+        assertEquals("!jEsUZKDJdhlrceRyVU:example.org", event.roomId)
+        assertEquals("@example:example.org", event.sender)
+        assertEquals(1432735824653, event.originServerTimestamp)
+        assertEquals(1234, event.unsigned?.age)
+
+        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+    }
 
     @Test
     fun testRoomNameEvent() {

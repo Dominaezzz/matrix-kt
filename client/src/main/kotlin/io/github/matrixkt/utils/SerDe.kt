@@ -6,7 +6,11 @@ import io.github.matrixkt.models.events.contents.call.CandidatesContent
 import io.github.matrixkt.models.events.contents.call.HangupContent
 import io.github.matrixkt.models.events.contents.call.InviteContent
 import io.github.matrixkt.models.events.contents.key.verification.*
+import io.github.matrixkt.models.events.contents.policy.rule.RoomContent
+import io.github.matrixkt.models.events.contents.policy.rule.ServerContent
+import io.github.matrixkt.models.events.contents.policy.rule.UserContent
 import io.github.matrixkt.models.events.contents.room.*
+import io.github.matrixkt.models.events.contents.room.message.FeedbackContent
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration
 import kotlinx.serialization.modules.SerializersModule
@@ -80,6 +84,10 @@ val MatrixSerialModule = SerializersModule {
         subclass(IdentityServerContent.serializer())
         subclass(IgnoredUserListContent.serializer())
         subclass(PushRulesContent.serializer())
+        subclass(RoomContent.serializer())
+        subclass(ServerContent.serializer())
+        subclass(UserContent.serializer())
+        // subclass(FeedbackContent.serializer())
     }
 
     polymorphic(MessageContent.serializer()) {
