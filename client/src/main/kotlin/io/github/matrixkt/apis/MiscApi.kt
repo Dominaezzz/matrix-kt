@@ -3,9 +3,16 @@ package io.github.matrixkt.apis
 import io.github.matrixkt.models.wellknown.DiscoveryInformation
 import io.github.matrixkt.models.GetCapabilitiesResponse
 import io.github.matrixkt.models.Versions
+import io.github.matrixkt.models.notifications.NotificationsResponse
+import io.github.matrixkt.models.search.Results
+import io.github.matrixkt.models.search.SearchRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.client.request.parameter
+import io.ktor.client.request.post
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import kotlin.reflect.KProperty0
 
 class MiscApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
@@ -61,6 +68,47 @@ class MiscApi internal constructor(private val client: HttpClient, private val a
      */
     suspend fun getCapabilities(): GetCapabilitiesResponse {
         return client.get("/_matrix/client/r0/capabilities") {
+            header("Authorization", "Bearer $accessToken")
+        }
+    }
+
+    /**
+     * Performs a full text search across different categories.
+     *
+     * **Rate-limited**: Yes.
+     *
+     * **Requires auth**: Yes.
+     *
+     * @param[nextBatch] The point to return events from.If given, this should be a next_batch result from a previous call to this endpoint.
+     */
+    suspend fun search(nextBatch: String? = null, body: SearchRequest): Results {
+        return client.post("/_matrix/client/r0/search") {
+            parameter("next_batch", nextBatch)
+
+            header("Authorization", "Bearer $accessToken")
+
+            contentType(ContentType.Application.Json)
+            this.body = body
+        }
+    }
+
+    /**
+     * This API is used to paginate through the list of events that the user has been, or would have been notified about.
+     *
+     * **Rate-limited**: No.
+     *
+     * **Requires auth**: Yes.
+     *
+     * @param[from] Pagination token given to retrieve the next set of events.
+     * @param[limit] Limit on the number of events to return in this request.
+     * @param[only] Allows basic filtering of events returned. Supply `highlight` to return only events where the notification had the highlight tweak set.
+     */
+    suspend fun getNotifications(from: String? = null, limit: Int? = null, only: String? = null): NotificationsResponse {
+        return client.get("/_matrix/client/r0/notifications") {
+            parameter("from", from)
+            parameter("limit", limit)
+            parameter("only", only)
+
             header("Authorization", "Bearer $accessToken")
         }
     }

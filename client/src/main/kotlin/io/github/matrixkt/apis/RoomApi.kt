@@ -938,8 +938,3 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
 // GET /_matrix/client/r0/rooms/{roomId}/initialSync -> roomInitialSync
 
 // PUT /_matrix/client/r0/directory/list/appservice/{networkId}/{roomId} -> updateAppserviceRoomDirectoryVsibility
-
-// GET /_matrix/client/r0/notifications -> getNotifications
-// GET /_matrix/client/r0/admin/whois/{userId} -> getWhoIs
-
-// POST /_matrix/client/r0/search -> search

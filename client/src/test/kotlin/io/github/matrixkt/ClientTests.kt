@@ -8,6 +8,7 @@ import io.github.matrixkt.models.events.contents.room.MessageContent
 import io.github.matrixkt.models.filter.*
 import io.github.matrixkt.models.push.PushRuleAction
 import io.github.matrixkt.models.push.PushRuleKind
+import io.github.matrixkt.models.search.*
 import io.github.matrixkt.utils.MatrixJson
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.toByteArray
@@ -3821,61 +3822,61 @@ class ClientTests {
         }
     }
 
-//get-matrix-client-r0-notifications
-//    @Test
-//    fun testTODO() = runSuspendTest {
-//        val mockEngine = MockEngine.create {
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {
-//                      "next_token": "abcdef",
-//                      "notifications": [
-//                        {
-//                          "actions": [
-//                            "notify"
-//                          ],
-//                          "profile_tag": "hcbvkzxhcvb",
-//                          "read": true,
-//                          "room_id": "!abcdefg:example.com",
-//                          "ts": 1475508881945,
-//                          "event": {
-//                            "content": {
-//                              "body": "This is an example text message",
-//                              "msgtype": "m.text",
-//                              "format": "org.matrix.custom.html",
-//                              "formatted_body": "<b>This is an example text message</b>"
-//                            },
-//                            "type": "m.room.message",
-//                            "event_id": "$143273582443PhrSn:example.org",
-//                            "room_id": "!jEsUZKDJdhlrceRyVU:example.org",
-//                            "sender": "@example:example.org",
-//                            "origin_server_ts": 1432735824653,
-//                            "unsigned": {
-//                              "age": 1234
-//                            }
-//                          }
-//                        }
-//                      ]
-//                    }
-//                """)
-//            }
-//        }
-//
-//        val client = MatrixClient(mockEngine)
-//
-//        // GET /_matrix/client/r0/notifications?from=xxxxx&limit=20&only=highlight HTTP/1.1
-//
-//        run {
-//            val response = TODO("get-matrix-client-r0-notifications")
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//        }
-//
-//    }
-//
+    @Test
+    fun testGetNotifications() = runSuspendTest {
+        val mockEngine = MockEngine.create {
+            addHandler {
+                // language=json
+                respondJson("""
+                    {
+                      "next_token": "abcdef",
+                      "notifications": [
+                        {
+                          "actions": [
+                            "notify"
+                          ],
+                          "profile_tag": "hcbvkzxhcvb",
+                          "read": true,
+                          "room_id": "!abcdefg:example.com",
+                          "ts": 1475508881945,
+                          "event": {
+                            "content": {
+                              "body": "This is an example text message",
+                              "msgtype": "m.text",
+                              "format": "org.matrix.custom.html",
+                              "formatted_body": "<b>This is an example text message</b>"
+                            },
+                            "type": "m.room.message",
+                            "event_id": "$143273582443PhrSn:example.org",
+                            "room_id": "!jEsUZKDJdhlrceRyVU:example.org",
+                            "sender": "@example:example.org",
+                            "origin_server_ts": 1432735824653,
+                            "unsigned": {
+                              "age": 1234
+                            }
+                          }
+                        }
+                      ]
+                    }
+                """)
+            }
+        }
+
+        val client = MatrixClient(mockEngine)
+
+        run {
+            val response = client.miscApi.getNotifications(from = "xxxxx", limit = 20, only = "highlight")
+            assertEquals("abcdef", response.nextToken)
+            assertEquals(1, response.notifications.size)
+            assertEquals(1, response.notifications[0].actions.size)
+            assertEquals("notify", response.notifications[0].actions[0].content)
+            assertEquals("hcbvkzxhcvb", response.notifications[0].profileTag)
+            assertEquals(true, response.notifications[0].read)
+            assertEquals("!abcdefg:example.com", response.notifications[0].roomId)
+            assertEquals(1475508881945, response.notifications[0].ts)
+            assertEquals("m.room.message", response.notifications[0].event.type)
+        }
+    }
 
     @Test
     fun testGetPushRules() = runSuspendTest {
@@ -4278,112 +4279,102 @@ class ClientTests {
         }
     }
 
-//
-//post-matrix-client-r0-search
-//    @Test
-//    fun testTODO() = runSuspendTest {
-//        val mockEngine = MockEngine.create {
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {
-//                      "search_categories": {
-//                        "room_events": {
-//                          "groups": {
-//                            "room_id": {
-//                              "!qPewotXpIctQySfjSy:localhost": {
-//                                "order": 1,
-//                                "next_batch": "BdgFsdfHSf-dsFD",
-//                                "results": [
-//                                  "$144429830826TWwbB:localhost"
-//                                ]
-//                              }
-//                            }
-//                          },
-//                          "highlights": [
-//                            "martians",
-//                            "men"
-//                          ],
-//                          "next_batch": "5FdgFsd234dfgsdfFD",
-//                          "count": 1224,
-//                          "results": [
-//                            {
-//                              "rank": 0.00424866,
-//                              "result": {
-//                                "content": {
-//                                  "body": "This is an example text message",
-//                                  "msgtype": "m.text",
-//                                  "format": "org.matrix.custom.html",
-//                                  "formatted_body": "<b>This is an example text message</b>"
-//                                },
-//                                "type": "m.room.message",
-//                                "event_id": "$144429830826TWwbB:localhost",
-//                                "room_id": "!qPewotXpIctQySfjSy:localhost",
-//                                "sender": "@example:example.org",
-//                                "origin_server_ts": 1432735824653,
-//                                "unsigned": {
-//                                  "age": 1234
-//                                }
-//                              }
-//                            }
-//                          ]
-//                        }
-//                      }
-//                    }
-//                """)
-//            }
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {
-//                      "errcode": "M_LIMIT_EXCEEDED",
-//                      "error": "Too many requests",
-//                      "retry_after_ms": 2000
-//                    }
-//                """, HttpStatusCode.TooManyRequests)
-//            }
-//        }
-//
-//        val client = MatrixClient(mockEngine)
-//
-//        // POST /_matrix/client/r0/search?next_batch=YWxsCgpOb25lLDM1ODcwOA HTTP/1.1
-//        // Content-Type: application/json
-//        //
-//        // {
-//        //   "search_categories": {
-//        //     "room_events": {
-//        //       "keys": [
-//        //         "content.body"
-//        //       ],
-//        //       "search_term": "martians and men",
-//        //       "order_by": "recent",
-//        //       "groupings": {
-//        //         "group_by": [
-//        //           {
-//        //             "key": "room_id"
-//        //           }
-//        //         ]
-//        //       }
-//        //     }
-//        //   }
-//        // }
-//
-//        run {
-//            val response = TODO("post-matrix-client-r0-search")
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//        }
-//        run {
-//            val error = assertFailsWith<MatrixError.LimitExceeded> {
-//                TODO("post-matrix-client-r0-search")
-//            }
-//            assertEquals("Too many requests", error.error)
-//            assertEquals(2000, error.retryAfterMs)
-//        }
-//
-//    }
+    @Test
+    fun testSearch() = runSuspendTest {
+        val mockEngine = MockEngine.create {
+            addHandler {
+                // language=json
+                respondJson("""
+                    {
+                      "search_categories": {
+                        "room_events": {
+                          "groups": {
+                            "room_id": {
+                              "!qPewotXpIctQySfjSy:localhost": {
+                                "order": 1,
+                                "next_batch": "BdgFsdfHSf-dsFD",
+                                "results": [
+                                  "$144429830826TWwbB:localhost"
+                                ]
+                              }
+                            }
+                          },
+                          "highlights": [
+                            "martians",
+                            "men"
+                          ],
+                          "next_batch": "5FdgFsd234dfgsdfFD",
+                          "count": 1224,
+                          "results": [
+                            {
+                              "rank": 0.00424866,
+                              "result": {
+                                "content": {
+                                  "body": "This is an example text message",
+                                  "msgtype": "m.text",
+                                  "format": "org.matrix.custom.html",
+                                  "formatted_body": "<b>This is an example text message</b>"
+                                },
+                                "type": "m.room.message",
+                                "event_id": "$144429830826TWwbB:localhost",
+                                "room_id": "!qPewotXpIctQySfjSy:localhost",
+                                "sender": "@example:example.org",
+                                "origin_server_ts": 1432735824653,
+                                "unsigned": {
+                                  "age": 1234
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                """)
+            }
+            addHandler {
+                // language=json
+                respondJson("""
+                    {
+                      "errcode": "M_LIMIT_EXCEEDED",
+                      "error": "Too many requests",
+                      "retry_after_ms": 2000
+                    }
+                """, HttpStatusCode.TooManyRequests)
+            }
+        }
+
+        val client = MatrixClient(mockEngine)
+
+        val request = SearchRequest(
+            searchCategories = Categories(
+                roomEvents = RoomEventsCriteria(
+                    keys = listOf("content.body"),
+                    searchTerm = "martians and men",
+                    orderBy = Ordering.RECENT,
+                    groupings = Groupings(
+                        groupBy = listOf(
+                            Group(key = GroupKey.ROOM_ID)
+                        )
+                    )
+                )
+            )
+        )
+
+        run {
+            val response = client.miscApi.search(nextBatch = "YWxsCgpOb25lLDM1ODcwOA", body = request)
+            assertEquals(2, response.searchCategories.roomEvents!!.highlights.size)
+            assertEquals("5FdgFsd234dfgsdfFD", response.searchCategories.roomEvents!!.nextBatch)
+            assertEquals(1224, response.searchCategories.roomEvents!!.count)
+            assertEquals(1, response.searchCategories.roomEvents!!.results.size)
+        }
+        run {
+            val error = assertFailsWith<MatrixError.LimitExceeded> {
+                client.miscApi.search(nextBatch = "YWxsCgpOb25lLDM1ODcwOA", body = request)
+            }
+            assertEquals("Too many requests", error.error)
+            assertEquals(2000, error.retryAfterMillis)
+        }
+    }
 
     @Test
     fun testGetRoomTags() = runSuspendTest {
@@ -4497,52 +4488,57 @@ class ClientTests {
         }
     }
 
-//get-matrix-client-r0-admin-whois-userid
-//    @Test
-//    fun testTODO() = runSuspendTest {
-//        val mockEngine = MockEngine.create {
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {
-//                      "user_id": "@peter:rabbit.rocks",
-//                      "devices": {
-//                        "teapot": {
-//                          "sessions": [
-//                            {
-//                              "connections": [
-//                                {
-//                                  "ip": "127.0.0.1",
-//                                  "last_seen": 1411996332123,
-//                                  "user_agent": "curl/7.31.0-DEV"
-//                                },
-//                                {
-//                                  "ip": "10.0.0.2",
-//                                  "last_seen": 1411996332123,
-//                                  "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36"
-//                                }
-//                              ]
-//                            }
-//                          ]
-//                        }
-//                      }
-//                    }
-//                """)
-//            }
-//        }
-//
-//        val client = MatrixClient(mockEngine)
-//
-//        // GET /_matrix/client/r0/admin/whois/%40peter%3Arabbit.rocks HTTP/1.1
-//
-//        run {
-//            val response = TODO("get-matrix-client-r0-admin-whois-userid")
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//        }
-//    }
+    @Test
+    fun testGetWhoIs() = runSuspendTest {
+        val mockEngine = MockEngine.create {
+            addHandler {
+                // language=json
+                respondJson("""
+                    {
+                      "user_id": "@peter:rabbit.rocks",
+                      "devices": {
+                        "teapot": {
+                          "sessions": [
+                            {
+                              "connections": [
+                                {
+                                  "ip": "127.0.0.1",
+                                  "last_seen": 1411996332123,
+                                  "user_agent": "curl/7.31.0-DEV"
+                                },
+                                {
+                                  "ip": "10.0.0.2",
+                                  "last_seen": 1411996332123,
+                                  "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      }
+                    }
+                """)
+            }
+        }
+
+        val client = MatrixClient(mockEngine)
+
+        run {
+            val response = client.adminApi.getWhoIs("@peter:rabbit.rocks")
+            assertEquals("@peter:rabbit.rocks", response.userId)
+            assertEquals(1, response.devices.size)
+            assertEquals(1, response.devices.getValue("teapot").sessions.size)
+            assertEquals(2, response.devices.getValue("teapot").sessions[0].connections.size)
+            assertEquals("127.0.0.1", response.devices.getValue("teapot").sessions[0].connections[0].ip)
+            assertEquals(1411996332123, response.devices.getValue("teapot").sessions[0].connections[0].lastSeen)
+            assertEquals("curl/7.31.0-DEV", response.devices.getValue("teapot").sessions[0].connections[0].userAgent)
+            assertEquals("10.0.0.2", response.devices.getValue("teapot").sessions[0].connections[1].ip)
+            assertEquals(1411996332123, response.devices.getValue("teapot").sessions[0].connections[1].lastSeen)
+            assertEquals("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.120 Safari/537.36", response.devices.getValue(
+                "teapot"
+            ).sessions[0].connections[1].userAgent)
+        }
+    }
 
     @Test
     fun testGetEventContext() = runSuspendTest {
@@ -4688,365 +4684,341 @@ class ClientTests {
         }
     }
 
-//get-matrix-client-r0-thirdparty-protocols
-//    @Test
-//    fun testTODO() = runSuspendTest {
-//        val mockEngine = MockEngine.create {
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {
-//                      "irc": {
-//                        "user_fields": [
-//                          "network",
-//                          "nickname"
-//                        ],
-//                        "location_fields": [
-//                          "network",
-//                          "channel"
-//                        ],
-//                        "icon": "mxc://example.org/aBcDeFgH",
-//                        "field_types": {
-//                          "network": {
-//                            "regexp": "([a-z0-9]+\\.)*[a-z0-9]+",
-//                            "placeholder": "irc.example.org"
-//                          },
-//                          "nickname": {
-//                            "regexp": "[^\\s]+",
-//                            "placeholder": "username"
-//                          },
-//                          "channel": {
-//                            "regexp": "#[^\\s]+",
-//                            "placeholder": "#foobar"
-//                          }
-//                        },
-//                        "instances": [
-//                          {
-//                            "network_id": "freenode",
-//                            "desc": "Freenode",
-//                            "icon": "mxc://example.org/JkLmNoPq",
-//                            "fields": {
-//                              "network": "freenode.net"
-//                            }
-//                          }
-//                        ]
-//                      },
-//                      "gitter": {
-//                        "user_fields": [
-//                          "username"
-//                        ],
-//                        "location_fields": [
-//                          "room"
-//                        ],
-//                        "field_types": {
-//                          "username": {
-//                            "regexp": "@[^\\s]+",
-//                            "placeholder": "@username"
-//                          },
-//                          "room": {
-//                            "regexp": "[^\\s]+\\/[^\\s]+",
-//                            "placeholder": "matrix-org/matrix-doc"
-//                          }
-//                        },
-//                        "instances": [
-//                          {
-//                            "network_id": "gitter",
-//                            "desc": "Gitter",
-//                            "icon": "mxc://example.org/zXyWvUt",
-//                            "fields": {}
-//                          }
-//                        ]
-//                      }
-//                    }
-//                """)
-//            }
-//        }
-//
-//        val client = MatrixClient(mockEngine)
-//
-//        // GET /_matrix/client/r0/thirdparty/protocols HTTP/1.1
-//
-//        run {
-//            val response = TODO("get-matrix-client-r0-thirdparty-protocols")
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//        }
-//
-//    }
-//
-//
-//get-matrix-client-r0-thirdparty-protocol-protocol
-//    @Test
-//    fun testTODO() = runSuspendTest {
-//        val mockEngine = MockEngine.create {
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {
-//                      "user_fields": [
-//                        "network",
-//                        "nickname"
-//                      ],
-//                      "location_fields": [
-//                        "network",
-//                        "channel"
-//                      ],
-//                      "icon": "mxc://example.org/aBcDeFgH",
-//                      "field_types": {
-//                        "network": {
-//                          "regexp": "([a-z0-9]+\\.)*[a-z0-9]+",
-//                          "placeholder": "irc.example.org"
-//                        },
-//                        "nickname": {
-//                          "regexp": "[^\\s#]+",
-//                          "placeholder": "username"
-//                        },
-//                        "channel": {
-//                          "regexp": "#[^\\s]+",
-//                          "placeholder": "#foobar"
-//                        }
-//                      },
-//                      "instances": [
-//                        {
-//                          "desc": "Freenode",
-//                          "icon": "mxc://example.org/JkLmNoPq",
-//                          "fields": {
-//                            "network": "freenode"
-//                          },
-//                          "network_id": "freenode"
-//                        }
-//                      ]
-//                    }
-//                """)
-//            }
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {
-//                      "errcode": "M_NOT_FOUND"
-//                    }
-//                """, HttpStatusCode.NotFound)
-//            }
-//        }
-//
-//        val client = MatrixClient(mockEngine)
-//
-//        // GET /_matrix/client/r0/thirdparty/protocol/irc HTTP/1.1
-//
-//        run {
-//            val response = TODO("get-matrix-client-r0-thirdparty-protocol-protocol")
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//        }
-//        run {
-//            val error = assertFailsWith<MatrixError.NotFound> {
-//                TODO("get-matrix-client-r0-thirdparty-protocol-protocol")
-//            }
-//            assertEquals("TODO: Wasn't in spec for some reason.", error.error)
-//        }
-//
-//    }
-//
-//
-//get-matrix-client-r0-thirdparty-location-protocol
-//    @Test
-//    fun testTODO() = runSuspendTest {
-//        val mockEngine = MockEngine.create {
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    [
-//                      {
-//                        "alias": "#freenode_#matrix:matrix.org",
-//                        "protocol": "irc",
-//                        "fields": {
-//                          "network": "freenode",
-//                          "channel": "#matrix"
-//                        }
-//                      }
-//                    ]
-//                """)
-//            }
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {
-//                      "errcode": "M_NOT_FOUND"
-//                    }
-//                """, HttpStatusCode.NotFound)
-//            }
-//        }
-//
-//        val client = MatrixClient(mockEngine)
-//
-//        // GET /_matrix/client/r0/thirdparty/location/irc HTTP/1.1
-//
-//        run {
-//            val response = TODO("get-matrix-client-r0-thirdparty-location-protocol")
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//        }
-//        run {
-//            val error = assertFailsWith<MatrixError.NotFound> {
-//                TODO("get-matrix-client-r0-thirdparty-location-protocol")
-//            }
-//            assertEquals("TODO: Wasn't in spec for some reason.", error.error)
-//        }
-//
-//    }
-//
-//
-//get-matrix-client-r0-thirdparty-user-protocol
-//    @Test
-//    fun testTODO() = runSuspendTest {
-//        val mockEngine = MockEngine.create {
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    [
-//                      {
-//                        "userid": "@_gitter_jim:matrix.org",
-//                        "protocol": "gitter",
-//                        "fields": {
-//                          "user": "jim"
-//                        }
-//                      }
-//                    ]
-//                """)
-//            }
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {
-//                      "errcode": "M_NOT_FOUND"
-//                    }
-//                """, HttpStatusCode.NotFound)
-//            }
-//        }
-//
-//        val client = MatrixClient(mockEngine)
-//
-//        // GET /_matrix/client/r0/thirdparty/user/irc HTTP/1.1
-//
-//        run {
-//            val response = TODO("get-matrix-client-r0-thirdparty-user-protocol")
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//        }
-//        run {
-//            val error = assertFailsWith<MatrixError.NotFound> {
-//                TODO("get-matrix-client-r0-thirdparty-user-protocol")
-//            }
-//            assertEquals("TODO: Wasn't in spec for some reason.", error.error)
-//        }
-//
-//    }
-//
-//
-//get-matrix-client-r0-thirdparty-location
-//    @Test
-//    fun testTODO() = runSuspendTest {
-//        val mockEngine = MockEngine.create {
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    [
-//                      {
-//                        "alias": "#freenode_#matrix:matrix.org",
-//                        "protocol": "irc",
-//                        "fields": {
-//                          "network": "freenode",
-//                          "channel": "#matrix"
-//                        }
-//                      }
-//                    ]
-//                """)
-//            }
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {
-//                      "errcode": "M_NOT_FOUND"
-//                    }
-//                """, HttpStatusCode.NotFound)
-//            }
-//        }
-//
-//        val client = MatrixClient(mockEngine)
-//
-//        // GET /_matrix/client/r0/thirdparty/location?alias=%23matrix%3Amatrix.org HTTP/1.1
-//
-//        run {
-//            val response = TODO("get-matrix-client-r0-thirdparty-location")
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//        }
-//        run {
-//            val error = assertFailsWith<MatrixError.NotFound> {
-//                TODO("get-matrix-client-r0-thirdparty-location")
-//            }
-//            assertEquals("TODO: Wasn't in spec for some reason.", error.error)
-//        }
-//
-//    }
-//
-//
-//get-matrix-client-r0-thirdparty-user
-//    @Test
-//    fun testTODO() = runSuspendTest {
-//        val mockEngine = MockEngine.create {
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    [
-//                      {
-//                        "userid": "@_gitter_jim:matrix.org",
-//                        "protocol": "gitter",
-//                        "fields": {
-//                          "user": "jim"
-//                        }
-//                      }
-//                    ]
-//                """)
-//            }
-//            addHandler {
-//                // language=json
-//                respondJson("""
-//                    {
-//                      "errcode": "M_NOT_FOUND"
-//                    }
-//                """, HttpStatusCode.NotFound)
-//            }
-//        }
-//
-//        val client = MatrixClient(mockEngine)
-//
-//        // GET /_matrix/client/r0/thirdparty/user?userid=%40bob%3Amatrix.org HTTP/1.1
-//
-//        run {
-//            val response = TODO("get-matrix-client-r0-thirdparty-user")
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//            assertEquals("", response)
-//        }
-//        run {
-//            val error = assertFailsWith<MatrixError.NotFound> {
-//                TODO("get-matrix-client-r0-thirdparty-user")
-//            }
-//            assertEquals("TODO: Wasn't in spec for some reason.", error.error)
-//        }
-//    }
+    @Test
+    fun testGetProtocols() = runSuspendTest {
+        val mockEngine = MockEngine.create {
+            addHandler {
+                // language=json
+                respondJson("""
+                    {
+                      "irc": {
+                        "user_fields": [
+                          "network",
+                          "nickname"
+                        ],
+                        "location_fields": [
+                          "network",
+                          "channel"
+                        ],
+                        "icon": "mxc://example.org/aBcDeFgH",
+                        "field_types": {
+                          "network": {
+                            "regexp": "([a-z0-9]+\\.)*[a-z0-9]+",
+                            "placeholder": "irc.example.org"
+                          },
+                          "nickname": {
+                            "regexp": "[^\\s]+",
+                            "placeholder": "username"
+                          },
+                          "channel": {
+                            "regexp": "#[^\\s]+",
+                            "placeholder": "#foobar"
+                          }
+                        },
+                        "instances": [
+                          {
+                            "network_id": "freenode",
+                            "desc": "Freenode",
+                            "icon": "mxc://example.org/JkLmNoPq",
+                            "fields": {
+                              "network": "freenode.net"
+                            }
+                          }
+                        ]
+                      },
+                      "gitter": {
+                        "user_fields": [
+                          "username"
+                        ],
+                        "location_fields": [
+                          "room"
+                        ],
+                        "field_types": {
+                          "username": {
+                            "regexp": "@[^\\s]+",
+                            "placeholder": "@username"
+                          },
+                          "room": {
+                            "regexp": "[^\\s]+\\/[^\\s]+",
+                            "placeholder": "matrix-org/matrix-doc"
+                          }
+                        },
+                        "instances": [
+                          {
+                            "network_id": "gitter",
+                            "desc": "Gitter",
+                            "icon": "mxc://example.org/zXyWvUt",
+                            "fields": {}
+                          }
+                        ]
+                      }
+                    }
+                """)
+            }
+        }
+
+        val client = MatrixClient(mockEngine)
+
+        run {
+            val response = client.thirdPartyApi.getProtocols()
+            assertEquals(2, response.size)
+            assertEquals("network", response["irc"]!!.userFields[0])
+            assertEquals("nickname", response["irc"]!!.userFields[1])
+            assertEquals("mxc://example.org/aBcDeFgH", response["irc"]!!.icon)
+        }
+    }
+
+    @Test
+    fun testGetProtocolMetadata() = runSuspendTest {
+        val mockEngine = MockEngine.create {
+            addHandler {
+                // language=json
+                respondJson("""
+                    {
+                      "user_fields": [
+                        "network",
+                        "nickname"
+                      ],
+                      "location_fields": [
+                        "network",
+                        "channel"
+                      ],
+                      "icon": "mxc://example.org/aBcDeFgH",
+                      "field_types": {
+                        "network": {
+                          "regexp": "([a-z0-9]+\\.)*[a-z0-9]+",
+                          "placeholder": "irc.example.org"
+                        },
+                        "nickname": {
+                          "regexp": "[^\\s#]+",
+                          "placeholder": "username"
+                        },
+                        "channel": {
+                          "regexp": "#[^\\s]+",
+                          "placeholder": "#foobar"
+                        }
+                      },
+                      "instances": [
+                        {
+                          "desc": "Freenode",
+                          "icon": "mxc://example.org/JkLmNoPq",
+                          "fields": {
+                            "network": "freenode"
+                          },
+                          "network_id": "freenode"
+                        }
+                      ]
+                    }
+                """)
+            }
+            addHandler {
+                // language=json
+                respondJson("""
+                    {
+                      "errcode": "M_NOT_FOUND"
+                    }
+                """, HttpStatusCode.NotFound)
+            }
+        }
+
+        val client = MatrixClient(mockEngine)
+
+        run {
+            val response = client.thirdPartyApi.getProtocolMetadata("irc")
+            assertEquals(2, response.userFields.size)
+            assertEquals(2, response.locationFields.size)
+            assertEquals(3, response.fieldTypes.size)
+            assertEquals(1, response.instances.size)
+        }
+        // run {
+        //     val error = assertFailsWith<MatrixError.NotFound> {
+        //         client.thirdPartyApi.getProtocolMetadata("irc")
+        //     }
+        //     assertEquals("TODO: Wasn't in spec for some reason.", error.error)
+        // }
+    }
+
+    @Test
+    fun testQueryLocationByProtocol() = runSuspendTest {
+        val mockEngine = MockEngine.create {
+            addHandler {
+                // language=json
+                respondJson("""
+                    [
+                      {
+                        "alias": "#freenode_#matrix:matrix.org",
+                        "protocol": "irc",
+                        "fields": {
+                          "network": "freenode",
+                          "channel": "#matrix"
+                        }
+                      }
+                    ]
+                """)
+            }
+            addHandler {
+                // language=json
+                respondJson("""
+                    {
+                      "errcode": "M_NOT_FOUND"
+                    }
+                """, HttpStatusCode.NotFound)
+            }
+        }
+
+        val client = MatrixClient(mockEngine)
+
+        run {
+            val response = client.thirdPartyApi.queryLocationByProtocol("irc")
+            assertEquals(1, response.size)
+            assertEquals("#freenode_#matrix:matrix.org", response[0].alias)
+            assertEquals("irc", response[0].protocol)
+            assertEquals(2, response[0].fields.size)
+            assertEquals("freenode", response[0].fields["network"]!!.content)
+            assertEquals("#matrix", response[0].fields["channel"]!!.content)
+        }
+        // run {
+        //     val error = assertFailsWith<MatrixError.NotFound> {
+        //         client.thirdPartyApi.queryLocationByProtocol("irc")
+        //     }
+        //     assertEquals("TODO: Wasn't in spec for some reason.", error.error)
+        // }
+    }
+
+    @Test
+    fun testQueryUserByProtocol() = runSuspendTest {
+        val mockEngine = MockEngine.create {
+            addHandler {
+                // language=json
+                respondJson("""
+                    [
+                      {
+                        "userid": "@_gitter_jim:matrix.org",
+                        "protocol": "gitter",
+                        "fields": {
+                          "user": "jim"
+                        }
+                      }
+                    ]
+                """)
+            }
+            addHandler {
+                // language=json
+                respondJson("""
+                    {
+                      "errcode": "M_NOT_FOUND"
+                    }
+                """, HttpStatusCode.NotFound)
+            }
+        }
+
+        val client = MatrixClient(mockEngine)
+
+        // GET /_matrix/client/r0/thirdparty/user/irc HTTP/1.1
+
+        run {
+            val response = client.thirdPartyApi.queryUserByProtocol("irc")
+            assertEquals(1, response.size)
+            assertEquals("@_gitter_jim:matrix.org", response[0].userId)
+            assertEquals("gitter", response[0].protocol)
+            assertEquals(1, response[0].fields.size)
+        }
+        // run {
+        //     val error = assertFailsWith<MatrixError.NotFound> {
+        //         client.thirdPartyApi.queryUserByProtocol("irc")
+        //     }
+        //     assertEquals("TODO: Wasn't in spec for some reason.", error.error)
+        // }
+    }
+
+    @Test
+    fun testQueryLocationByAlias() = runSuspendTest {
+        val mockEngine = MockEngine.create {
+            addHandler {
+                // language=json
+                respondJson("""
+                    [
+                      {
+                        "alias": "#freenode_#matrix:matrix.org",
+                        "protocol": "irc",
+                        "fields": {
+                          "network": "freenode",
+                          "channel": "#matrix"
+                        }
+                      }
+                    ]
+                """)
+            }
+            addHandler {
+                // language=json
+                respondJson("""
+                    {
+                      "errcode": "M_NOT_FOUND"
+                    }
+                """, HttpStatusCode.NotFound)
+            }
+        }
+
+        val client = MatrixClient(mockEngine)
+
+        run {
+            val response = client.thirdPartyApi.queryLocationByAlias(alias = "#matrix:matrix.org")
+            assertEquals(1, response.size)
+            assertEquals("#freenode_#matrix:matrix.org", response[0].alias)
+            assertEquals("irc", response[0].protocol)
+            assertEquals(2, response[0].fields.size)
+        }
+        // run {
+        //     val error = assertFailsWith<MatrixError.NotFound> {
+        //         client.thirdPartyApi.queryLocationByAlias(alias = "#matrix:matrix.org")
+        //     }
+        //     assertEquals("TODO: Wasn't in spec for some reason.", error.error)
+        // }
+    }
+
+    @Test
+    fun testQueryUserByID() = runSuspendTest {
+        val mockEngine = MockEngine.create {
+            addHandler {
+                // language=json
+                respondJson("""
+                    [
+                      {
+                        "userid": "@_gitter_jim:matrix.org",
+                        "protocol": "gitter",
+                        "fields": {
+                          "user": "jim"
+                        }
+                      }
+                    ]
+                """)
+            }
+            addHandler {
+                // language=json
+                respondJson("""
+                    {
+                      "errcode": "M_NOT_FOUND"
+                    }
+                """, HttpStatusCode.NotFound)
+            }
+        }
+
+        val client = MatrixClient(mockEngine)
+
+        run {
+            val response = client.thirdPartyApi.queryUserByID(userId = "@bob:matrix.org")
+            assertEquals(1, response.size)
+            assertEquals("@_gitter_jim:matrix.org", response[0].userId)
+            assertEquals("gitter", response[0].protocol)
+            assertEquals(1, response[0].fields.size)
+        }
+        // run {
+        //     val error = assertFailsWith<MatrixError.NotFound> {
+        //         client.thirdPartyApi.queryUserByID(userId = "@bob:matrix.org")
+        //     }
+        //     assertEquals("TODO: Wasn't in spec for some reason.", error.error)
+        // }
+    }
 
     @Test
     fun testRequestOpenId() = runSuspendTest {

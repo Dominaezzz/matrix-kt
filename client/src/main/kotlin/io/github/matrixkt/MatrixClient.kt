@@ -63,6 +63,8 @@ class MatrixClient(engine: HttpClientEngine,
     val miscApi: MiscApi = MiscApi(client, ::accessToken)
     val pushApi: PushApi = PushApi(client, ::accessToken)
     val keysApi: KeysApi = KeysApi(client, ::accessToken)
+    val adminApi: AdminApi = AdminApi(client, ::accessToken)
+    val thirdPartyApi: ThirdPartyApi = ThirdPartyApi(client, ::accessToken)
 
     override fun close() {
         client.close()
