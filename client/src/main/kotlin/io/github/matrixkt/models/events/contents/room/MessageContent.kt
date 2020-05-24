@@ -73,14 +73,14 @@ abstract class MessageContent : Content() {
          * The format used in the [formattedBody].
          * Currently only `org.matrix.custom.html` is supported.
          */
-        val format: String,
+        val format: String? = null,
 
         /**
          * The formatted version of the [body].
          * This is required if [format] is specified.
          */
         @SerialName("formatted_body")
-        val formattedBody: String
+        val formattedBody: String? = null
     ) : MessageContent()
 
     /**
