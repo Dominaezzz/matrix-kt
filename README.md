@@ -1,3 +1,4 @@
+[![Download](https://api.bintray.com/packages/dominaezzz/kotlin-native/matrix-kt/images/download.svg)](https://bintray.com/dominaezzz/kotlin-native/matrix-kt/_latestVersion)
 [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 [![](https://github.com/Dominaezzz/matrix-kt/workflows/Build/badge.svg)](https://github.com/Dominaezzz/matrix-kt/actions)
 
@@ -18,6 +19,19 @@ Kotlin multiplatform libraries for [Matrix](https://matrix.org/).
 - IosArm32
 - IosArm64
 - IosX64
+
+
+## Usage
+```kotlin
+repositories {
+    maven("https://dl.bintray.com/dominaezzz/kotlin-native")
+    jcenter()
+}
+dependencies {
+    implementation("io.github.matrixkt:client:$version")
+    implementation("io.github.matrixkt:olm:$version")
+}
+```
 
 ## Sample
 ### Client

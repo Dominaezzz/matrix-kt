@@ -51,3 +51,12 @@ jobs:
           arguments: 'build --stacktrace'
         env:
           OLM_PATH: ${{ format('{0}\olm-3.1.4\build\Debug', github.workspace) }}
+
+      - name: 'Publish to BinTray'
+        uses: eskatos/gradle-command-action@v1
+        with:
+          arguments: 'smartPublish --stacktrace'
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          BINTRAY_API_KEY: ${{ secrets.bintray_api_key }}
+          BINTRAY_USER: ${{ secrets.bintray_user }}
