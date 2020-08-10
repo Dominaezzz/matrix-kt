@@ -24,8 +24,6 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(kotlin("stdlib-common"))
-
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
             }
         }
@@ -37,7 +35,6 @@ kotlin {
         }
         named("jvmMain") {
             dependencies {
-                implementation(kotlin("stdlib-jdk8"))
             }
         }
         named("jvmTest") {
@@ -48,8 +45,6 @@ kotlin {
         }
         named("jsMain") {
             dependencies {
-                implementation(kotlin("stdlib-js"))
-
                 api("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$coroutineVersion")
             }
         }

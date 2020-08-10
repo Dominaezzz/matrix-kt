@@ -56,7 +56,6 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(kotlin("stdlib-common"))
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serialVersion")
             }
         }
@@ -68,7 +67,6 @@ kotlin {
         }
         named("jvmMain") {
             dependencies {
-                implementation(kotlin("stdlib-jdk8"))
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialVersion")
                 implementation("net.java.dev.jna:jna:$jnaVersion")
             }

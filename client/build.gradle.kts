@@ -28,8 +28,6 @@ kotlin {
             resources.srcDir("src/main/resources")
 
             dependencies {
-                implementation(kotlin("stdlib-common"))
-
                 api("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serialVersion")
                 api("io.ktor:ktor-client-core:$ktorVersion")
 
@@ -51,8 +49,6 @@ kotlin {
         }
         named("jvmMain") {
             dependencies {
-                implementation(kotlin("stdlib-jdk8"))
-
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialVersion")
 
                 implementation("io.ktor:ktor-client-serialization-jvm:$ktorVersion")
@@ -68,8 +64,6 @@ kotlin {
         }
         named("jsMain") {
             dependencies {
-                implementation(kotlin("stdlib-js"))
-
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-js:$serialVersion")
                 implementation("io.ktor:ktor-client-serialization-js:$ktorVersion")
 
