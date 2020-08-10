@@ -2,14 +2,14 @@ import org.jetbrains.kotlin.konan.target.HostManager
 import java.io.ByteArrayOutputStream
 
 plugins {
-    kotlin("multiplatform") version "1.3.72" apply false
-    kotlin("plugin.serialization") version "1.3.72" apply false
+    kotlin("multiplatform") version "1.4.0-rc" apply false
+    kotlin("plugin.serialization") version "1.4.0-rc" apply false
     id("de.undercouch.download") version "4.0.4" apply false
 }
 
-val ktorVersion: String by extra("1.3.2")
-val serialVersion: String by extra("0.20.0")
-val coroutineVersion: String by extra("1.3.5")
+val ktorVersion: String by extra("1.3.2-1.4.0-rc")
+val serialVersion: String by extra("1.0.0-RC-1.4.0-rc-284")
+val coroutineVersion: String by extra("1.3.8-1.4.0-rc")
 val jnaVersion: String by extra("5.5.0")
 
 val stdout = ByteArrayOutputStream()
