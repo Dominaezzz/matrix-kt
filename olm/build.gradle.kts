@@ -56,7 +56,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serialVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialVersion")
             }
         }
         commonTest {
@@ -67,7 +67,6 @@ kotlin {
         }
         named("jvmMain") {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialVersion")
                 implementation("net.java.dev.jna:jna:$jnaVersion")
             }
         }
@@ -95,7 +94,6 @@ kotlin {
                     resources.srcDir("src/nativeMain/resources")
                 }
                 dependencies {
-                    implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:$serialVersion")
                 }
             }
             "test" {

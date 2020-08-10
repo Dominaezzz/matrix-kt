@@ -45,7 +45,6 @@ kotlin {
         }
         named("jsMain") {
             dependencies {
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core-js:$coroutineVersion")
             }
         }
         named("jsTest") {
@@ -55,7 +54,6 @@ kotlin {
         }
         val nativeMain by creating {
             dependencies {
-                api("org.jetbrains.kotlinx:kotlinx-coroutines-core-native:$coroutineVersion")
             }
         }
         val nativeTest by creating

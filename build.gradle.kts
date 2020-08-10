@@ -8,7 +8,7 @@ plugins {
 }
 
 val ktorVersion: String by extra("1.3.2-1.4.0-rc")
-val serialVersion: String by extra("1.0.0-RC-1.4.0-rc-284")
+val serialVersion: String by extra("1.0-M1-1.4.0-rc")
 val coroutineVersion: String by extra("1.3.8-1.4.0-rc")
 val jnaVersion: String by extra("5.5.0")
 
