@@ -4,6 +4,8 @@ import io.github.matrixkt.utils.InlineMapSerializer
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 /**
  * Informs the client of new receipts.
@@ -53,11 +55,11 @@ data class ReceiptContent(
         private val delegate = MapSerializer(String.serializer(), Receipts.serializer())
 
         override fun serialize(encoder: Encoder, value: ReceiptContent) {
-            encoder.encode(delegate, value)
+            encoder.encodeSerializableValue(delegate, value)
         }
 
         override fun deserialize(decoder: Decoder): ReceiptContent {
-            return ReceiptContent(decoder.decode(delegate))
+            return ReceiptContent(decoder.decodeSerializableValue(delegate))
         }
     }
 }

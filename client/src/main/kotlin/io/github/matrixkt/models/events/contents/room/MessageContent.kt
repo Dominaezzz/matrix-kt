@@ -5,6 +5,9 @@ import io.github.matrixkt.models.events.contents.Content
 import io.github.matrixkt.models.events.contents.msginfo.*
 import io.github.matrixkt.utils.DiscriminatorChanger
 import kotlinx.serialization.*
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.encoding.encodeStructure
 import kotlinx.serialization.json.*
 
 /**
@@ -306,18 +309,18 @@ abstract class MessageContent : Content() {
             if (value is Redacted) {
                 encoder.encodeStructure(descriptor) {}
             } else {
-                encoder.encode(secondDelegate, value)
+                encoder.encodeSerializableValue(secondDelegate, value)
             }
         }
 
         override fun deserialize(decoder: Decoder): MessageContent {
-            require(decoder is JsonInput)
+            require(decoder is JsonDecoder)
 
-            val jsonObj = decoder.decodeJson().jsonObject
+            val jsonObj = decoder.decodeJsonElement().jsonObject
             return if (jsonObj.isEmpty()) {
                 Redacted
             } else {
-                decoder.json.fromJson(secondDelegate, jsonObj)
+                decoder.json.decodeFromJsonElement(secondDelegate, jsonObj)
             }
         }
     }

@@ -9,6 +9,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.content
+import kotlinx.serialization.json.jsonPrimitive
 import kotlin.reflect.KProperty0
 
 class FilterApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
@@ -37,7 +38,7 @@ class FilterApi internal constructor(private val client: HttpClient, private val
             contentType(ContentType.Application.Json)
             body = filter
         }
-        return response["filter_id"]!!.content
+        return response["filter_id"]!!.jsonPrimitive.content
     }
 
     /**

@@ -84,10 +84,10 @@ class AccountTest {
             oneTimeKeysReference = accountRef.oneTimeKeys
 
             // serialize account
-            jsonStr = OlmJson.stringify(AccountSerializer, accountRef)
+            jsonStr = OlmJson.encodeToString(AccountSerializer, accountRef)
         }
 
-        val account = OlmJson.parse(AccountSerializer, jsonStr)
+        val account = OlmJson.decodeFromString(AccountSerializer, jsonStr)
         val idKeysDeserialized: Map<String, String>
         val oneTimeKeysDeserialized: Map<String, Map<String, String>>
         try {

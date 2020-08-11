@@ -242,10 +242,10 @@ class SessionTest {
         val encryptedMsg3 = bobSession.encrypt(clearMsg3)
 
         // serialize alice session
-        val aliceSessionJson = OlmJson.stringify(SessionSerializer, aliceSession)
+        val aliceSessionJson = OlmJson.encodeToString(SessionSerializer, aliceSession)
 
         // deserialize alice session
-        val aliceSessionDeserial = OlmJson.parse(SessionSerializer, aliceSessionJson)
+        val aliceSessionDeserial = OlmJson.decodeFromString(SessionSerializer, aliceSessionJson)
 
         // de-serialized alice session decrypts bob's messages
         val decryptedMsg1 = aliceSessionDeserial.decrypt(encryptedMsg1)

@@ -3,6 +3,8 @@ package io.github.matrixkt.models.events.contents.key.verification
 import io.github.matrixkt.models.events.contents.Content
 import io.github.matrixkt.utils.DiscriminatorChanger
 import kotlinx.serialization.*
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 /**
  * Accepts a previously sent `m.key.verification.start` message.
@@ -66,11 +68,11 @@ abstract class AcceptContent : Content() {
         private val secondDelegate = DiscriminatorChanger(firstDelegate, "method")
 
         override fun deserialize(decoder: Decoder): AcceptContent {
-            return decoder.decode(secondDelegate)
+            return decoder.decodeSerializableValue(secondDelegate)
         }
 
         override fun serialize(encoder: Encoder, value: AcceptContent) {
-            encoder.encode(secondDelegate, value)
+            encoder.encodeSerializableValue(secondDelegate, value)
         }
     }
 }

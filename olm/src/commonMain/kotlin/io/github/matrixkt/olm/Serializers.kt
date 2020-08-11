@@ -3,12 +3,13 @@ package io.github.matrixkt.olm
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
 import kotlin.experimental.and
 import kotlin.random.Random
 
-internal val OlmJson = Json(JsonConfiguration.Stable)
+internal val OlmJson = Json { allowStructuredMapKeys = true }
 internal val StringMapSerializer = MapSerializer(String.serializer(), String.serializer())
 internal val StringMapMapSerializer = MapSerializer(String.serializer(), StringMapSerializer)
 
@@ -29,17 +30,17 @@ private fun generateRandomKey(): ByteArray {
 internal class Pickle(val key: ByteArray, val data: String)
 
 private class PickleSerializer<T>(val pickle: T.(ByteArray) -> String, val unpickle: (ByteArray, String) -> T) : KSerializer<T> {
-    override val descriptor: SerialDescriptor = Pickle.serializer().descriptor
+    override val descriptor = Pickle.serializer().descriptor
 
     override fun serialize(encoder: Encoder, value: T) {
         val key = generateRandomKey()
         val data = value.pickle(key)
         val pickle = Pickle(key, data)
-        encoder.encode(Pickle.serializer(), pickle)
+        encoder.encodeSerializableValue(Pickle.serializer(), pickle)
     }
 
     override fun deserialize(decoder: Decoder): T {
-        val pickle = decoder.decode(Pickle.serializer())
+        val pickle = decoder.decodeSerializableValue(Pickle.serializer())
         return unpickle(pickle.key, pickle.data)
     }
 }

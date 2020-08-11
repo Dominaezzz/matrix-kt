@@ -51,7 +51,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
             checkError(keysResult)
 
             val identityKeysStr = identityKeysBytes.decodeToString()
-            return OlmJson.parse(StringMapSerializer, identityKeysStr)
+            return OlmJson.decodeFromString(StringMapSerializer, identityKeysStr)
         }
 
     /**
@@ -102,7 +102,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
             checkError(keysResult)
 
             val keysStr = keysBytes.decodeToString()
-            return OlmJson.parse(StringMapMapSerializer, keysStr)
+            return OlmJson.decodeFromString(StringMapMapSerializer, keysStr)
         }
 
     /**

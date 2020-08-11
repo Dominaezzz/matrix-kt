@@ -2164,8 +2164,8 @@ class ClientTests {
         //     body = "hello"
         // )
         val request = json {
-            "msgtype" to "m.text"
-            "body" to "hello"
+            this@JsonObjectBuilder.put("msgtype", "m.text")
+            this@JsonObjectBuilder.put("body", "hello")
         }
 
         run {
@@ -3329,7 +3329,7 @@ class ClientTests {
         val messages = mapOf(
             "@alice:example.com" to mapOf(
                 "TLLBEANAAG" to json {
-                    "example_content_key" to "value"
+                    this@JsonObjectBuilder.put("example_content_key", "value")
                 }
             )
         )

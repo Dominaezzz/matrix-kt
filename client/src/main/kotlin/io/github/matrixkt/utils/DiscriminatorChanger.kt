@@ -8,11 +8,11 @@ import kotlinx.serialization.json.JsonTransformingSerializer
 class DiscriminatorChanger<T : Any>(
     delegateSerializer: KSerializer<T>,
     private val classDiscriminator: String
-) : JsonTransformingSerializer<T>(delegateSerializer, "classDiscriminator") {
+) : JsonTransformingSerializer<T>(delegateSerializer) {
     private val actualDiscriminator = "type"
 
     @ExperimentalStdlibApi
-    override fun readTransform(element: JsonElement): JsonElement {
+    override fun transformDeserialize(element: JsonElement): JsonElement {
         require(element is JsonObject)
 
         return JsonObject(buildMap<String, JsonElement> {
@@ -24,7 +24,7 @@ class DiscriminatorChanger<T : Any>(
     }
 
     @ExperimentalStdlibApi
-    override fun writeTransform(element: JsonElement): JsonElement {
+    override fun transformSerialize(element: JsonElement): JsonElement {
         require(element is JsonObject)
 
         return JsonObject(buildMap<String, JsonElement> {

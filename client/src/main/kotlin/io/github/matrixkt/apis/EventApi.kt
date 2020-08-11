@@ -79,7 +79,7 @@ class EventApi internal constructor(private val client: HttpClient, private val 
 
     suspend fun sync(filter: Filter, since: String? = null, fullState: Boolean? = null, setPresence: Presence? = null, timeout: Long? = null): SyncResponse {
         return sync(
-            MatrixJson.stringify(Filter.serializer(), filter),
+            MatrixJson.encodeToString(Filter.serializer(), filter),
             since, fullState, setPresence, timeout
         )
     }

@@ -4,12 +4,12 @@ import io.github.matrixkt.models.AuthenticationData
 import io.github.matrixkt.models.Device
 import io.github.matrixkt.models.GetDevicesResponse
 import io.github.matrixkt.models.SendToDeviceRequest
+import io.github.matrixkt.utils.MatrixJson
 import io.ktor.client.HttpClient
 import io.ktor.client.request.*
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import kotlinx.serialization.json.json
-import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.*
 import kotlin.reflect.KProperty0
 
 class DeviceApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>){
@@ -69,8 +69,8 @@ class DeviceApi internal constructor(private val client: HttpClient, private val
             header("Authorization", "Bearer $accessToken")
 
             contentType(ContentType.Application.Json)
-            body = json {
-                "display_name" to displayName
+            body = buildJsonObject {
+                put("display_name", displayName)
             }
         }
     }
@@ -96,8 +96,10 @@ class DeviceApi internal constructor(private val client: HttpClient, private val
             header("Authorization", "Bearer $accessToken")
 
             contentType(ContentType.Application.Json)
-            body = json {
-                "auth" to auth
+            body = buildJsonObject {
+                if (auth != null) {
+                    put("auth", MatrixJson.encodeToJsonElement(auth))
+                }
             }
         }
     }
@@ -118,14 +120,16 @@ class DeviceApi internal constructor(private val client: HttpClient, private val
         return client.post("_matrix/client/r0/delete_devices") {
             header("Authorization", "Bearer $accessToken")
             contentType(ContentType.Application.Json)
-            body = json {
-                "devices" to jsonArray {
+            body = buildJsonObject {
+                putJsonArray("devices") {
                     for (device in devices) {
-                        +device
+                        add(device)
                     }
                 }
 
-                if (auth != null) "auth" to auth
+                if (auth != null) {
+                    put("auth", MatrixJson.encodeToJsonElement(auth))
+                }
             }
         }
     }

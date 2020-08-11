@@ -3,12 +3,13 @@
 package io.github.matrixkt.models.events
 
 import io.github.matrixkt.models.events.contents.*
+import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonParametricSerializer
 import kotlin.reflect.KClass
 
 @Serializable(EventSerializer::class)
@@ -28,11 +29,11 @@ sealed class Event<out T : Content> {
 
 class EventSerializer<T : Content>(
     private val contentSerializer: KSerializer<T>
-) : JsonParametricSerializer<Event<T>>(Event::class as KClass<Event<T>>) {
-    override fun selectSerializer(element: JsonElement): KSerializer<out Event<T>> {
-        require(element is JsonObject)
-        return if ("sender" in element) {
-            if ("roomId" in element) {
+) : JsonContentPolymorphicSerializer<Event<T>>(Event::class as KClass<Event<T>>) {
+    override fun selectDeserializer(content: JsonElement): DeserializationStrategy<out Event<T>> {
+        require(content is JsonObject)
+        return if ("sender" in content) {
+            if ("roomId" in content) {
                 RoomEvent.serializer(contentSerializer)
             } else {
                 EphemeralEvent.serializer(contentSerializer)
@@ -78,10 +79,10 @@ sealed class RoomEvent<out T : Content> : Event<T>() {
 
 class RoomEventSerializer<T : Content>(
     private val contentSerializer: KSerializer<T>
-) : JsonParametricSerializer<RoomEvent<T>>(RoomEvent::class as KClass<RoomEvent<T>>) {
-    override fun selectSerializer(element: JsonElement): KSerializer<out RoomEvent<T>> {
-        require(element is JsonObject)
-        return if (element.containsKey("stateKey")) {
+) : JsonContentPolymorphicSerializer<RoomEvent<T>>(RoomEvent::class as KClass<RoomEvent<T>>) {
+    override fun selectDeserializer(content: JsonElement): DeserializationStrategy<out RoomEvent<T>> {
+        require(content is JsonObject)
+        return if (content.containsKey("stateKey")) {
             StateEvent.serializer(contentSerializer)
         } else {
             MessageEvent.serializer(contentSerializer)

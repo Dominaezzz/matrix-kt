@@ -71,7 +71,7 @@ actual class Account private constructor(internal val ptr: OlmAccount) {
                 it.toKString(identityKeysLength.toInt())
             }
 
-            return OlmJson.parse(StringMapSerializer, identityKeysStr)
+            return OlmJson.decodeFromString(StringMapSerializer, identityKeysStr)
         }
 
     /**
@@ -122,7 +122,7 @@ actual class Account private constructor(internal val ptr: OlmAccount) {
                 it.toKString(keysLength.toInt())
             }
 
-            return OlmJson.parse(StringMapMapSerializer, keysStr)
+            return OlmJson.decodeFromString(StringMapMapSerializer, keysStr)
         }
 
     /**

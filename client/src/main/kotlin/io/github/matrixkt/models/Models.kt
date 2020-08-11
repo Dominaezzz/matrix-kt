@@ -8,9 +8,10 @@ import io.github.matrixkt.models.push.PushRuleAction
 import io.github.matrixkt.models.push.RuleSet
 import io.github.matrixkt.models.wellknown.DiscoveryInformation
 import kotlinx.serialization.*
-import kotlinx.serialization.json.JsonInput
-import kotlinx.serialization.json.JsonLiteral
-import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.descriptors.buildClassSerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.*
 
 @Serializable
 data class Invite3pid(
@@ -1077,7 +1078,7 @@ data class JWK(
 
 @Serializable
 data class SendToDeviceRequest(
-    val messages: Map<String, Map<String, @ContextualSerialization Any>>? = null
+    val messages: Map<String, Map<String, @Contextual Any>>? = null
 )
 
 @Serializable
@@ -1484,15 +1485,15 @@ data class KeyObject(
 )
 
 object OneTimeKeySerializer : KSerializer<Any> {
-    override val descriptor = SerialDescriptor("OneTimeKey")
+    override val descriptor = buildClassSerialDescriptor("OneTimeKey")
 
     override fun deserialize(decoder: Decoder): Any {
-        if (decoder !is JsonInput) throw SerializationException("This class can be loaded only by Json")
+        if (decoder !is JsonDecoder) throw SerializationException("This class can be loaded only by Json")
 
-        val tree = decoder.decodeJson()
+        val tree = decoder.decodeJsonElement()
         return if (tree is JsonObject) {
-            decoder.json.fromJson(KeyObject.serializer(), tree)
-        } else if (tree is JsonLiteral && tree.isString) {
+            decoder.json.decodeFromJsonElement(KeyObject.serializer(), tree)
+        } else if (tree is JsonPrimitive && tree.isString) {
             tree.content
         } else {
             throw SerializationException("Expected JsonObject or JsonLiteral")
@@ -1501,7 +1502,7 @@ object OneTimeKeySerializer : KSerializer<Any> {
 
     override fun serialize(encoder: Encoder, value: Any) {
         return when (value) {
-            is KeyObject -> encoder.encode(KeyObject.serializer(), value)
+            is KeyObject -> encoder.encodeSerializableValue(KeyObject.serializer(), value)
             is String -> encoder.encodeString(value)
             else -> TODO("Only KeyObject and String supported")
         }

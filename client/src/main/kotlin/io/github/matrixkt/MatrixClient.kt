@@ -3,7 +3,6 @@ package io.github.matrixkt
 import io.github.matrixkt.apis.*
 import io.github.matrixkt.models.*
 import io.github.matrixkt.utils.MatrixJson
-import io.github.matrixkt.utils.MatrixJsonConfig
 import io.github.matrixkt.utils.MatrixSerialModule
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
@@ -34,14 +33,14 @@ class MatrixClient(engine: HttpClientEngine,
         }
 
         HttpResponseValidator {
-            val json = Json(
-                MatrixJsonConfig.copy(classDiscriminator = "errcode"),
-                MatrixSerialModule
-            )
+            val json = Json(MatrixJson) {
+                serializersModule = MatrixSerialModule
+                classDiscriminator = "errcode"
+            }
             validateResponse {
                 if (it.status != HttpStatusCode.OK) {
                     val errorJson = String(it.readBytes())
-                    throw json.parse(MatrixError.serializer(), errorJson) // it.receive<MatrixError>()
+                    throw json.decodeFromString(MatrixError.serializer(), errorJson) // it.receive<MatrixError>()
                 }
             }
         }

@@ -2,6 +2,8 @@ package io.github.matrixkt.utils
 
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 open class InlineMapSerializer<Key, Value, T : Map<Key, Value>>(
     keySerializer: KSerializer<Key>,
@@ -13,10 +15,10 @@ open class InlineMapSerializer<Key, Value, T : Map<Key, Value>>(
     override val descriptor get() = delegate.descriptor
 
     override fun deserialize(decoder: Decoder): T {
-        return ctor(decoder.decode(delegate))
+        return ctor(decoder.decodeSerializableValue(delegate))
     }
 
     override fun serialize(encoder: Encoder, value: T) {
-        encoder.encode(delegate, value)
+        encoder.encodeSerializableValue(delegate, value)
     }
 }

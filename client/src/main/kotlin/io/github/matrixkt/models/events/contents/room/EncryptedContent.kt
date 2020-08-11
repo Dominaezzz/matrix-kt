@@ -3,6 +3,8 @@ package io.github.matrixkt.models.events.contents.room
 import io.github.matrixkt.models.events.contents.Content
 import io.github.matrixkt.utils.DiscriminatorChanger
 import kotlinx.serialization.*
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 /**
  * This event type is used when sending encrypted events.
@@ -70,11 +72,11 @@ abstract class EncryptedContent : Content() {
         private val secondDelegate = DiscriminatorChanger(firstDelegate, "algorithm")
 
         override fun deserialize(decoder: Decoder): EncryptedContent {
-            return decoder.decode(secondDelegate)
+            return decoder.decodeSerializableValue(secondDelegate)
         }
 
         override fun serialize(encoder: Encoder, value: EncryptedContent) {
-            encoder.encode(secondDelegate, value)
+            encoder.encodeSerializableValue(secondDelegate, value)
         }
     }
 

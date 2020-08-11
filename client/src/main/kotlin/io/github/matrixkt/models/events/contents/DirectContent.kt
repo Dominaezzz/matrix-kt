@@ -4,6 +4,8 @@ import kotlinx.serialization.*
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
 /**
  * A map of which rooms are considered 'direct' rooms for specific users is kept in
@@ -21,11 +23,11 @@ data class DirectContent(
         private val delegate = MapSerializer(String.serializer(), ListSerializer(String.serializer()))
 
         override fun serialize(encoder: Encoder, value: DirectContent) {
-            encoder.encode(delegate, value)
+            encoder.encodeSerializableValue(delegate, value)
         }
 
         override fun deserialize(decoder: Decoder): DirectContent {
-            return DirectContent(decoder.decode(delegate))
+            return DirectContent(decoder.decodeSerializableValue(delegate))
         }
     }
 }

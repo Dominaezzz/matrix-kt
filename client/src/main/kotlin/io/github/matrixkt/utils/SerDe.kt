@@ -12,16 +12,10 @@ import io.github.matrixkt.models.events.contents.policy.rule.UserContent
 import io.github.matrixkt.models.events.contents.room.*
 import io.github.matrixkt.models.events.contents.room.message.FeedbackContent
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
-
-val MatrixJsonConfig = JsonConfiguration.Stable.copy(
-    encodeDefaults = false,
-    isLenient = true,
-    ignoreUnknownKeys = true,
-    classDiscriminator = "type"
-)
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
 
 val MatrixSerialModule = SerializersModule {
     contextual(AliasesContent.serializer())
@@ -39,7 +33,7 @@ val MatrixSerialModule = SerializersModule {
     contextual(PinnedEventsContent.serializer())
     contextual(GuestAccessContent.serializer())
 
-    polymorphic(Content::class) {
+    polymorphic(Content::class, null) {
         subclass(AliasesContent.serializer())
         subclass(CanonicalAliasContent.serializer())
         subclass(CreateContent.serializer())
@@ -90,7 +84,7 @@ val MatrixSerialModule = SerializersModule {
         // subclass(FeedbackContent.serializer())
     }
 
-    polymorphic(MessageContent.serializer()) {
+    polymorphic(MessageContent::class, MessageContent.serializer()) {
         subclass(MessageContent.Text.serializer())
         subclass(MessageContent.Emote.serializer())
         subclass(MessageContent.Notice.serializer())
@@ -102,21 +96,26 @@ val MatrixSerialModule = SerializersModule {
         subclass(MessageContent.ServerNotice.serializer())
     }
 
-    polymorphic(EncryptedContent.serializer()) {
+    polymorphic(EncryptedContent::class, EncryptedContent.serializer()) {
         subclass(EncryptedContent.OlmV1.serializer())
         subclass(EncryptedContent.MegolmV1.serializer())
     }
 
-    polymorphic(StartContent.serializer()) {
+    polymorphic(StartContent::class, StartContent.serializer()) {
         subclass(StartContent.SasV1.serializer())
     }
 
-    polymorphic(AcceptContent.serializer()) {
+    polymorphic(AcceptContent::class, AcceptContent.serializer()) {
         subclass(AcceptContent.SasV1.serializer())
     }
 }
 
-val MatrixJson = Json(
-    MatrixJsonConfig,
-    MatrixSerialModule
-)
+val MatrixJson = Json {
+    serializersModule = MatrixSerialModule
+    allowStructuredMapKeys = true
+
+    encodeDefaults = false
+    isLenient = true
+    ignoreUnknownKeys = true
+    classDiscriminator = "type"
+}

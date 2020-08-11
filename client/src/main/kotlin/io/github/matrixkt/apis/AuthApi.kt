@@ -10,6 +10,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.boolean
+import kotlinx.serialization.json.jsonPrimitive
 import kotlin.reflect.KProperty0
 
 class AuthApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
@@ -148,7 +149,7 @@ class AuthApi internal constructor(private val client: HttpClient, private val a
         val response = client.get<JsonObject>(path = "_matrix/client/r0/register/available") {
             parameter("username", username)
         }
-        return response["available"]!!.boolean
+        return response["available"]!!.jsonPrimitive.boolean
     }
 
     /**

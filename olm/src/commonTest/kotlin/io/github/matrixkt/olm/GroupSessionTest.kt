@@ -56,10 +56,10 @@ class GroupSessionTest {
         val outboundGroupSessionRef = OutboundGroupSession()
 
         // serialize alice session
-        val sessionJson = OlmJson.stringify(OutboundGroupSessionSerializer, outboundGroupSessionRef)
+        val sessionJson = OlmJson.encodeToString(OutboundGroupSessionSerializer, outboundGroupSessionRef)
 
         // deserialize session
-        val outboundGroupSessionSerial = OlmJson.parse(OutboundGroupSessionSerializer, sessionJson)
+        val outboundGroupSessionSerial = OlmJson.decodeFromString(OutboundGroupSessionSerializer, sessionJson)
         // get sessions keys
 
         // get sessions keys
@@ -96,10 +96,10 @@ class GroupSessionTest {
         val bobInboundGroupSessionRef = InboundGroupSession(sessionKeyRef)
 
         // serialize alice session
-        val sessionJson = OlmJson.stringify(InboundGroupSessionSerializer, bobInboundGroupSessionRef)
+        val sessionJson = OlmJson.encodeToString(InboundGroupSessionSerializer, bobInboundGroupSessionRef)
 
         // deserialize session
-        val bobInboundGroupSessionSerial = OlmJson.parse(InboundGroupSessionSerializer, sessionJson)
+        val bobInboundGroupSessionSerial = OlmJson.decodeFromString(InboundGroupSessionSerializer, sessionJson)
 
         // get sessions IDs
         val aliceSessionId = aliceOutboundGroupSession.sessionId

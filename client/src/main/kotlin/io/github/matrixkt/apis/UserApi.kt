@@ -7,7 +7,8 @@ import io.ktor.client.request.*
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.json
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import kotlin.reflect.KProperty0
 
 class UserApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
@@ -316,9 +317,9 @@ class UserApi internal constructor(private val client: HttpClient, private val a
             header("Authorization", "Bearer $accessToken")
 
             contentType(ContentType.Application.Json)
-            body = json {
+            body = buildJsonObject {
                 if (order != null) {
-                    "order" to order
+                    put("order", order)
                 }
             }
         }

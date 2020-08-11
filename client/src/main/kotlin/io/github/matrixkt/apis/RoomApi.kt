@@ -10,7 +10,9 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.encodeURLQueryComponent
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.json
+import kotlinx.serialization.json.put
 import kotlin.reflect.KProperty0
 
 class RoomApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
@@ -213,11 +215,11 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
             header("Authorization", "Bearer $accessToken")
 
             contentType(ContentType.Application.Json)
-            body = json {
-                "id_server" to idServer
-                "id_access_token" to idAccessToken
-                "medium" to medium
-                "address" to address
+            body = buildJsonObject {
+                put("id_server", idServer)
+                put("id_access_token", idAccessToken)
+                put("medium", medium)
+                put("address", address)
             }
         }
     }
@@ -810,9 +812,9 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
             header("Authorization", "Bearer $accessToken")
 
             contentType(ContentType.Application.Json)
-            body = json {
-                "score" to score
-                "reason" to reason
+            body = buildJsonObject {
+                put("score", score)
+                put("reason", reason)
             }
         }
     }
