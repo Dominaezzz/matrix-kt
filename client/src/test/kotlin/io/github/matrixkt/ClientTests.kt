@@ -301,7 +301,7 @@ class ClientTests {
         assertEquals(1234, event.unsigned!!.age)
 
         // TODO: Make this less verbose.
-        val content = MatrixJson.fromJson(MessageContent.serializer(), event.content)
+        val content = MatrixJson.decodeFromJsonElement(MessageContent.serializer(), event.content)
 
         assertEquals("This is an example text message", content.body)
         assertTrue(content is MessageContent.Text)
@@ -1978,7 +1978,7 @@ class ClientTests {
         run {
             val response = client.roomApi.getRoomStateWithKey(
                 "!21636q39766251@example.com", "m.room.name", "")
-            assertEquals("Example room name", response["name"]?.contentOrNull)
+            assertEquals("Example room name", response["name"]?.let { it.jsonPrimitive.contentOrNull })
         }
     }
 
@@ -2120,7 +2120,7 @@ class ClientTests {
         }
 
         val client = MatrixClient(mockEngine)
-        val request = MatrixJson.toJson(
+        val request = MatrixJson.encodeToJsonElement(
             MemberContent.serializer(),
             MemberContent(
                 membership = Membership.JOIN,
@@ -2163,9 +2163,9 @@ class ClientTests {
         // val request = RoomMessageContent.Text(
         //     body = "hello"
         // )
-        val request = json {
-            this@JsonObjectBuilder.put("msgtype", "m.text")
-            this@JsonObjectBuilder.put("body", "hello")
+        val request = buildJsonObject {
+            put("msgtype", "m.text")
+            put("body", "hello")
         }
 
         run {
@@ -3328,8 +3328,8 @@ class ClientTests {
 
         val messages = mapOf(
             "@alice:example.com" to mapOf(
-                "TLLBEANAAG" to json {
-                    this@JsonObjectBuilder.put("example_content_key", "value")
+                "TLLBEANAAG" to buildJsonObject {
+                    put("example_content_key", "value")
                 }
             )
         )
@@ -3869,7 +3869,7 @@ class ClientTests {
             assertEquals("abcdef", response.nextToken)
             assertEquals(1, response.notifications.size)
             assertEquals(1, response.notifications[0].actions.size)
-            assertEquals("notify", response.notifications[0].actions[0].content)
+            assertEquals("notify", response.notifications[0].actions[0].jsonPrimitive.content)
             assertEquals("hcbvkzxhcvb", response.notifications[0].profileTag)
             assertEquals(true, response.notifications[0].read)
             assertEquals("!abcdefg:example.com", response.notifications[0].roomId)
@@ -4462,7 +4462,7 @@ class ClientTests {
         run {
             val response = client.userApi.getAccountData("@alice:example.com", "org.example.custom.config")
             assertTrue(response is JsonObject)
-            assertEquals("custom_config_value", response.getPrimitive("custom_account_data_key").content)
+            assertEquals("custom_config_value", response.getValue("custom_account_data_key").jsonPrimitive.content)
         }
     }
 
@@ -4484,7 +4484,7 @@ class ClientTests {
         run {
             val response = client.userApi.getAccountDataPerRoom("@alice:example.com", "\$726s6s6q:example.com", "org.example.custom.room.config")
             assertTrue(response is JsonObject)
-            assertEquals("custom_config_value", response.getPrimitive("custom_account_data_key").content)
+            assertEquals("custom_config_value", response.getValue("custom_account_data_key").jsonPrimitive.content)
         }
     }
 
@@ -4874,8 +4874,8 @@ class ClientTests {
             assertEquals("#freenode_#matrix:matrix.org", response[0].alias)
             assertEquals("irc", response[0].protocol)
             assertEquals(2, response[0].fields.size)
-            assertEquals("freenode", response[0].fields["network"]!!.content)
-            assertEquals("#matrix", response[0].fields["channel"]!!.content)
+            assertEquals("freenode", response[0].fields["network"]!!.jsonPrimitive.content)
+            assertEquals("#matrix", response[0].fields["channel"]!!.jsonPrimitive.content)
         }
         // run {
         //     val error = assertFailsWith<MatrixError.NotFound> {

@@ -20,8 +20,10 @@ import io.github.matrixkt.models.events.contents.policy.rule.UserContent
 import io.github.matrixkt.models.events.contents.room.*
 import io.github.matrixkt.models.events.contents.room.message.FeedbackContent
 import io.github.matrixkt.utils.MatrixJson
-import kotlinx.serialization.json.boolean
-import kotlinx.serialization.json.content
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializer
+import kotlinx.serialization.json.*
+import kotlinx.serialization.parse
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -42,14 +44,14 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(AcceptedTermsContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(2, event.content.accepted.size)
         assertEquals("https://example.org/somewhere/terms-1.2-en.html", event.content.accepted[0])
         assertEquals("https://example.org/somewhere/privacy-1.2-en.html", event.content.accepted[1])
         assertEquals("m.accepted_terms", event.type)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -78,7 +80,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(AnswerContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(0, event.content.version)
         assertEquals("12345", event.content.callId)
@@ -93,7 +95,7 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        // FIXME assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
         // This fails because of `lifetime` field.
     }
 
@@ -125,7 +127,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(CandidatesContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(0, event.content.version)
         assertEquals("12345", event.content.callId)
@@ -141,7 +143,7 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -165,7 +167,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(HangupContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(0, event.content.version)
         assertEquals("12345", event.content.callId)
@@ -176,7 +178,7 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -205,7 +207,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(InviteContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(0, event.content.version)
         assertEquals("12345", event.content.callId)
@@ -220,7 +222,7 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -239,14 +241,14 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(DirectContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(2, event.content["@bob:example.com"]!!.size)
         assertEquals("!abcdefgh:example.com", event.content["@bob:example.com"]!![0])
         assertEquals("!hgfedcba:example.com", event.content["@bob:example.com"]!![1])
         assertEquals("m.direct", event.type)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -261,11 +263,11 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(DummyContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.dummy", event.type)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -289,7 +291,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(ForwardedRoomKeyContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.megolm.v1.aes-sha2", event.content.algorithm)
         assertEquals("!Cuyf34gef24t:localhost", event.content.roomId)
@@ -303,7 +305,7 @@ class EventTypeTests {
             event.content.forwardingCurve25519KeyChain[0])
         assertEquals("m.forwarded_room_key", event.type)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -320,13 +322,13 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(FullyReadContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("\$someplace:example.org", event.content.eventId)
         assertEquals("m.fully_read", event.type)
         // FIXME assertEquals("!somewhere:example.org", event.roomId)
         //
-        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        // FIXME assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
         // Needs AccountEvent class to have optional room_id
     }
 
@@ -343,12 +345,12 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(IdentityServerContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("https://example.org", event.content.baseUrl)
         assertEquals("m.identity_server", event.type)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -367,11 +369,11 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(IgnoredUserListContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.ignored_user_list", event.type)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -396,7 +398,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(AcceptContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.key.verification.accept", event.type)
         assertEquals("S0meUniqueAndOpaqueString", event.content.transactionId)
@@ -410,7 +412,7 @@ class EventTypeTests {
         assertEquals("fQpGIW1Snz+pwLZu6sTy2aHy/DYWWTspTJRPyNp0PKkymfIsNffysMl6ObMMFdIJhk6g6pwlIqZ54rxo8SLmAg",
             eventContent.commitment)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -428,14 +430,14 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(CancelContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.key.verification.cancel", event.type)
         assertEquals("S0meUniqueAndOpaqueString", event.content.transactionId)
         assertEquals("m.user", event.content.code)
         assertEquals("User rejected the key verification request", event.content.reason)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -452,14 +454,14 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(KeyContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.key.verification.key", event.type)
         assertEquals("S0meUniqueAndOpaqueString", event.content.transactionId)
         assertEquals("fQpGIW1Snz+pwLZu6sTy2aHy/DYWWTspTJRPyNp0PKkymfIsNffysMl6ObMMFdIJhk6g6pwlIqZ54rxo8SLmAg",
             event.content.key)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -479,7 +481,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(MacContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.key.verification.mac", event.type)
         assertEquals("S0meUniqueAndOpaqueString", event.content.transactionId)
@@ -488,7 +490,7 @@ class EventTypeTests {
         assertEquals("fQpGIW1Snz+pwLZu6sTy2aHy/DYWWTspTJRPyNp0PKkymfIsNffysMl6ObMMFdIJhk6g6pwlIqZ54rxo8SLmAg",
             event.content.mac["ed25519:ABCDEF"]!!)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -509,7 +511,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(RequestContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.key.verification.request", event.type)
         assertEquals("AliceDevice2", event.content.fromDevice)
@@ -518,7 +520,7 @@ class EventTypeTests {
         assertEquals("m.sas.v1", event.content.methods[0])
         assertEquals(1559598944869, event.content.timestamp)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -549,7 +551,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(StartContent.SasV1.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.key.verification.start", event.type)
         assertEquals("BobDevice1", event.content.fromDevice)
@@ -566,7 +568,7 @@ class EventTypeTests {
         assertEquals("emoji", event.content.shortAuthenticationString[1])
 
         val workaround = AccountEvent.serializer(StartContent.serializer())
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
     @Test
@@ -592,7 +594,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(RoomContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("#*:example.org", event.content.entity)
         assertEquals("m.ban", event.content.recommendation)
@@ -605,7 +607,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("rule:#*:example.org", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -631,7 +633,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(ServerContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("*.example.org", event.content.entity)
         assertEquals("m.ban", event.content.recommendation)
@@ -644,7 +646,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("rule:*.example.org", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -670,7 +672,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(UserContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("@alice*:example.org", event.content.entity)
         assertEquals("m.ban", event.content.recommendation)
@@ -683,7 +685,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("rule:@alice*:example.org", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -704,7 +706,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = EphemeralEvent.serializer(PresenceContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("mxc://localhost:wefuiwegh8742w", event.content.avatarUrl)
         assertEquals(2478593, event.content.lastActiveAgo)
@@ -714,7 +716,7 @@ class EventTypeTests {
         assertEquals("m.presence", event.type)
         assertEquals("@example:localhost", event.sender)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -923,27 +925,27 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(PushRulesContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(1, event.content.global!!.content.size)
         assertEquals(3, event.content.global!!.content[0].actions.size)
-        assertEquals("notify", event.content.global!!.content[0].actions[0].content)
-        assertEquals("sound", event.content.global!!.content[0].actions[1].jsonObject["set_tweak"]!!.content)
-        assertEquals("default", event.content.global!!.content[0].actions[1].jsonObject["value"]!!.content)
-        assertEquals("highlight", event.content.global!!.content[0].actions[2].jsonObject["set_tweak"]!!.content)
+        assertEquals("notify", event.content.global!!.content[0].actions[0].jsonPrimitive.content)
+        assertEquals("sound", event.content.global!!.content[0].actions[1].jsonObject["set_tweak"]!!.jsonPrimitive.content)
+        assertEquals("default", event.content.global!!.content[0].actions[1].jsonObject["value"]!!.jsonPrimitive.content)
+        assertEquals("highlight", event.content.global!!.content[0].actions[2].jsonObject["set_tweak"]!!.jsonPrimitive.content)
         assertEquals(true, event.content.global!!.content[0].default)
         assertEquals(true, event.content.global!!.content[0].enabled)
         assertEquals("alice", event.content.global!!.content[0].pattern)
         assertEquals(".m.rule.contains_user_name", event.content.global!!.content[0].ruleId)
         assertEquals(2, event.content.global!!.override.size)
         assertEquals(1, event.content.global!!.override[0].actions.size)
-        assertEquals("dont_notify", event.content.global!!.override[0].actions[0].content)
+        assertEquals("dont_notify", event.content.global!!.override[0].actions[0].jsonPrimitive.content)
         assertEquals(0, event.content.global!!.override[0].conditions.size)
         assertEquals(true, event.content.global!!.override[0].default)
         assertEquals(false, event.content.global!!.override[0].enabled)
         assertEquals(".m.rule.master", event.content.global!!.override[0].ruleId)
         assertEquals(1, event.content.global!!.override[1].actions.size)
-        assertEquals("dont_notify", event.content.global!!.override[1].actions[0].content)
+        assertEquals("dont_notify", event.content.global!!.override[1].actions[0].jsonPrimitive.content)
         assertEquals(1, event.content.global!!.override[1].conditions.size)
         assertEquals("content.msgtype", event.content.global!!.override[1].conditions[0].key)
         assertEquals("event_match", event.content.global!!.override[1].conditions[0].kind)
@@ -955,11 +957,11 @@ class EventTypeTests {
         assertEquals(0, event.content.global!!.sender.size)
         assertEquals(6, event.content.global!!.underride.size)
         assertEquals(3, event.content.global!!.underride[0].actions.size)
-        assertEquals("notify", event.content.global!!.underride[0].actions[0].content)
-        assertEquals("sound", event.content.global!!.underride[0].actions[1].jsonObject["set_tweak"]!!.content)
-        assertEquals("ring", event.content.global!!.underride[0].actions[1].jsonObject["value"]!!.content)
-        assertEquals("highlight", event.content.global!!.underride[0].actions[2].jsonObject["set_tweak"]!!.content)
-        assertEquals(false, event.content.global!!.underride[0].actions[2].jsonObject["value"]!!.boolean)
+        assertEquals("notify", event.content.global!!.underride[0].actions[0].jsonPrimitive.content)
+        assertEquals("sound", event.content.global!!.underride[0].actions[1].jsonObject["set_tweak"]!!.jsonPrimitive.content)
+        assertEquals("ring", event.content.global!!.underride[0].actions[1].jsonObject["value"]!!.jsonPrimitive.content)
+        assertEquals("highlight", event.content.global!!.underride[0].actions[2].jsonObject["set_tweak"]!!.jsonPrimitive.content)
+        assertEquals(false, event.content.global!!.underride[0].actions[2].jsonObject["value"]!!.jsonPrimitive.boolean)
         assertEquals(1, event.content.global!!.underride[0].conditions.size)
         assertEquals("type", event.content.global!!.underride[0].conditions[0].key)
         assertEquals("event_match", event.content.global!!.underride[0].conditions[0].kind)
@@ -968,21 +970,21 @@ class EventTypeTests {
         assertEquals(true, event.content.global!!.underride[0].enabled)
         assertEquals(".m.rule.call", event.content.global!!.underride[0].ruleId)
         assertEquals(3, event.content.global!!.underride[1].actions.size)
-        assertEquals("notify", event.content.global!!.underride[1].actions[0].content)
-        assertEquals("sound", event.content.global!!.underride[1].actions[1].jsonObject["set_tweak"]!!.content)
-        assertEquals("default", event.content.global!!.underride[1].actions[1].jsonObject["value"]!!.content)
-        assertEquals("highlight", event.content.global!!.underride[1].actions[2].jsonObject["set_tweak"]!!.content)
+        assertEquals("notify", event.content.global!!.underride[1].actions[0].jsonPrimitive.jsonPrimitive.content)
+        assertEquals("sound", event.content.global!!.underride[1].actions[1].jsonObject["set_tweak"]!!.jsonPrimitive.content)
+        assertEquals("default", event.content.global!!.underride[1].actions[1].jsonObject["value"]!!.jsonPrimitive.content)
+        assertEquals("highlight", event.content.global!!.underride[1].actions[2].jsonObject["set_tweak"]!!.jsonPrimitive.content)
         assertEquals(1, event.content.global!!.underride[1].conditions.size)
         assertEquals("contains_display_name", event.content.global!!.underride[1].conditions[0].kind)
         assertEquals(true, event.content.global!!.underride[1].default)
         assertEquals(true, event.content.global!!.underride[1].enabled)
         assertEquals(".m.rule.contains_display_name", event.content.global!!.underride[1].ruleId)
         assertEquals(3, event.content.global!!.underride[2].actions.size)
-        assertEquals("notify", event.content.global!!.underride[2].actions[0].content)
-        assertEquals("sound", event.content.global!!.underride[2].actions[1].jsonObject["set_tweak"]!!.content)
-        assertEquals("default", event.content.global!!.underride[2].actions[1].jsonObject["value"]!!.content)
-        assertEquals("highlight", event.content.global!!.underride[2].actions[2].jsonObject["set_tweak"]!!.content)
-        assertEquals(false, event.content.global!!.underride[2].actions[2].jsonObject["value"]!!.boolean)
+        assertEquals("notify", event.content.global!!.underride[2].actions[0].jsonPrimitive.content)
+        assertEquals("sound", event.content.global!!.underride[2].actions[1].jsonObject["set_tweak"]!!.jsonPrimitive.content)
+        assertEquals("default", event.content.global!!.underride[2].actions[1].jsonObject["value"]!!.jsonPrimitive.content)
+        assertEquals("highlight", event.content.global!!.underride[2].actions[2].jsonObject["set_tweak"]!!.jsonPrimitive.content)
+        assertEquals(false, event.content.global!!.underride[2].actions[2].jsonObject["value"]!!.jsonPrimitive.boolean)
         assertEquals(2, event.content.global!!.underride[2].conditions.size)
         assertEquals("room_member_count", event.content.global!!.underride[2].conditions[0].kind)
         assertEquals("2", event.content.global!!.underride[2].conditions[0].`is`!!)
@@ -993,11 +995,11 @@ class EventTypeTests {
         assertEquals(true, event.content.global!!.underride[2].enabled)
         assertEquals(".m.rule.room_one_to_one", event.content.global!!.underride[2].ruleId)
         assertEquals(3, event.content.global!!.underride[3].actions.size)
-        assertEquals("notify", event.content.global!!.underride[3].actions[0].content)
-        assertEquals("sound", event.content.global!!.underride[3].actions[1].jsonObject["set_tweak"]!!.content)
-        assertEquals("default", event.content.global!!.underride[3].actions[1].jsonObject["value"]!!.content)
-        assertEquals("highlight", event.content.global!!.underride[3].actions[2].jsonObject["set_tweak"]!!.content)
-        assertEquals(false, event.content.global!!.underride[3].actions[2].jsonObject["value"]!!.boolean)
+        assertEquals("notify", event.content.global!!.underride[3].actions[0].jsonPrimitive.content)
+        assertEquals("sound", event.content.global!!.underride[3].actions[1].jsonObject["set_tweak"]!!.jsonPrimitive.content)
+        assertEquals("default", event.content.global!!.underride[3].actions[1].jsonObject["value"]!!.jsonPrimitive.content)
+        assertEquals("highlight", event.content.global!!.underride[3].actions[2].jsonObject["set_tweak"]!!.jsonPrimitive.content)
+        assertEquals(false, event.content.global!!.underride[3].actions[2].jsonObject["value"]!!.jsonPrimitive.boolean)
         assertEquals(3, event.content.global!!.underride[3].conditions.size)
         assertEquals("type", event.content.global!!.underride[3].conditions[0].key)
         assertEquals("event_match", event.content.global!!.underride[3].conditions[0].kind)
@@ -1012,9 +1014,9 @@ class EventTypeTests {
         assertEquals(true, event.content.global!!.underride[3].enabled)
         assertEquals(".m.rule.invite_for_me", event.content.global!!.underride[3].ruleId)
         assertEquals(2, event.content.global!!.underride[4].actions.size)
-        assertEquals("notify", event.content.global!!.underride[4].actions[0].content)
-        assertEquals("highlight", event.content.global!!.underride[4].actions[1].jsonObject["set_tweak"]!!.content)
-        assertEquals(false, event.content.global!!.underride[4].actions[1].jsonObject["value"]!!.boolean)
+        assertEquals("notify", event.content.global!!.underride[4].actions[0].jsonPrimitive.content)
+        assertEquals("highlight", event.content.global!!.underride[4].actions[1].jsonObject["set_tweak"]!!.jsonPrimitive.content)
+        assertEquals(false, event.content.global!!.underride[4].actions[1].jsonObject["value"]!!.jsonPrimitive.boolean)
         assertEquals(1, event.content.global!!.underride[4].conditions.size)
         assertEquals("type", event.content.global!!.underride[4].conditions[0].key)
         assertEquals("event_match", event.content.global!!.underride[4].conditions[0].kind)
@@ -1023,9 +1025,9 @@ class EventTypeTests {
         assertEquals(true, event.content.global!!.underride[4].enabled)
         assertEquals(".m.rule.member_event", event.content.global!!.underride[4].ruleId)
         assertEquals(2, event.content.global!!.underride[5].actions.size)
-        assertEquals("notify", event.content.global!!.underride[5].actions[0].content)
-        assertEquals("highlight", event.content.global!!.underride[5].actions[1].jsonObject["set_tweak"]!!.content)
-        assertEquals(false, event.content.global!!.underride[5].actions[1].jsonObject["value"]!!.boolean)
+        assertEquals("notify", event.content.global!!.underride[5].actions[0].jsonPrimitive.content)
+        assertEquals("highlight", event.content.global!!.underride[5].actions[1].jsonObject["set_tweak"]!!.jsonPrimitive.content)
+        assertEquals(false, event.content.global!!.underride[5].actions[1].jsonObject["value"]!!.jsonPrimitive.boolean)
         assertEquals(1, event.content.global!!.underride[5].conditions.size)
         assertEquals("type", event.content.global!!.underride[5].conditions[0].key)
         assertEquals("event_match", event.content.global!!.underride[5].conditions[0].kind)
@@ -1035,7 +1037,7 @@ class EventTypeTests {
         assertEquals(".m.rule.message", event.content.global!!.underride[5].ruleId)
         assertEquals("m.push_rules", event.type)
 
-        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        // FIXME assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
         // The defaults are specified in the raw json.
     }
 
@@ -1059,14 +1061,14 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(ReceiptContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(1436451550453,
             event.content["$1435641916114394fHBLK:matrix.org"]!!.read!!["@rikj:jki.re"]!!.timestamp)
         assertEquals("m.receipt", event.type)
         // FIXME assertEquals("!jEsUZKDJdhlrceRyVU:example.org", event.roomId)
         //
-        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        // FIXME assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
         // Needs EDU class
     }
 
@@ -1094,7 +1096,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(AliasesContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(2, event.content.aliases.size)
         assertEquals("#somewhere:example.org", event.content.aliases[0])
@@ -1107,7 +1109,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("example.org", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -1137,7 +1139,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(AvatarContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(398, event.content.info?.height)
         assertEquals(394, event.content.info?.width)
@@ -1152,7 +1154,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -1176,7 +1178,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(CanonicalAliasContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("#somewhere:localhost", event.content.alias)
         assertEquals("m.room.canonical_alias", event.type)
@@ -1187,7 +1189,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -1217,7 +1219,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(CreateContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("@example:example.org", event.content.creator)
         assertEquals("1", event.content.roomVersion)
@@ -1232,7 +1234,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -1259,7 +1261,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(EncryptedContent.MegolmV1.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         // assertEquals("m.megolm.v1.aes-sha2", event.content.algorithm)
         assertEquals("AwgAEnACgAkLmt6qF84IK++J7UDH2Za1YVchHyprqTqsg...", event.content.ciphertext)
@@ -1274,7 +1276,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
 
         val workaround = MessageEvent.serializer(EncryptedContent.serializer())
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
     @Test
@@ -1304,7 +1306,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(EncryptedContent.OlmV1.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         // assertEquals("m.olm.v1.curve25519-aes-sha2", event.content.algorithm)
         assertEquals("Szl29ksW/L8yZGWAX+8dY1XyFi+i5wm+DRhTGkbMiwU", event.content.senderKey)
@@ -1319,7 +1321,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
 
         val workaround = MessageEvent.serializer(EncryptedContent.serializer())
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
     @Test
@@ -1345,7 +1347,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(EncryptionContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.megolm.v1.aes-sha2", event.content.algorithm)
         assertEquals(604800000, event.content.rotationPeriodMs)
@@ -1358,7 +1360,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -1382,7 +1384,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(GuestAccessContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(GuestAccess.CAN_JOIN, event.content.guestAccess)
         assertEquals("m.room.guest_access", event.type)
@@ -1393,7 +1395,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -1417,7 +1419,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(HistoryVisibilityContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(HistoryVisibility.SHARED, event.content.historyVisibility)
         assertEquals("m.room.history_visibility", event.type)
@@ -1428,7 +1430,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -1452,7 +1454,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(JoinRulesContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(JoinRule.PUBLIC, event.content.joinRule)
         assertEquals("m.room.join_rules", event.type)
@@ -1463,7 +1465,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -1489,7 +1491,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(MemberContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(Membership.JOIN, event.content.membership)
         assertEquals("mxc://example.org/SEsfnsuifSDFSSEF", event.content.avatarUrl)
@@ -1502,7 +1504,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("@alice:example.org", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -1540,7 +1542,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(MemberContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(Membership.INVITE, event.content.membership)
         assertEquals("mxc://example.org/SEsfnsuifSDFSSEF", event.content.avatarUrl)
@@ -1558,7 +1560,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("@alice:example.org", event.stateKey)
 
-        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        // FIXME assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
         // signatures
     }
 
@@ -1589,7 +1591,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(MessageContent.Audio.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("Bee Gees - Stayin' Alive", event.content.body)
         assertEquals("mxc://example.org/ffed755USFFxlgbQYZGtryd", event.content.url)
@@ -1605,7 +1607,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
 
         val workaround = MessageEvent.serializer(MessageContent.serializer())
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
     @Test
@@ -1631,7 +1633,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(MessageContent.Emote.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("thinks this is an example emote", event.content.body)
         // assertEquals("m.emote", event.content.msgtype)
@@ -1645,7 +1647,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
 
         val workaround = MessageEvent.serializer(MessageContent.serializer())
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
     @Test
@@ -1675,7 +1677,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(MessageContent.File.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("something-important.doc", event.content.body)
         assertEquals("something-important.doc", event.content.filename)
@@ -1691,7 +1693,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
 
         val workaround = MessageEvent.serializer(MessageContent.serializer())
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
     @Test
@@ -1722,7 +1724,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(MessageContent.Image.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("filename.jpg", event.content.body)
         assertEquals(398, event.content.info?.height)
@@ -1739,7 +1741,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
 
         val workaround = MessageEvent.serializer(MessageContent.serializer())
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
     @Test
@@ -1773,7 +1775,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(MessageContent.Location.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("Big Ben, London, UK", event.content.body)
         assertEquals("geo:51.5008,0.1247", event.content.geoUri)
@@ -1791,7 +1793,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
 
         val workaround = MessageEvent.serializer(MessageContent.serializer())
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
     @Test
@@ -1817,7 +1819,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(MessageContent.Notice.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("This is an example notice", event.content.body)
         // assertEquals("m.notice", event.content.msgtype)
@@ -1831,7 +1833,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
 
         val workaround = MessageEvent.serializer(MessageContent.serializer())
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
     @Test
@@ -1858,7 +1860,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(MessageContent.ServerNotice.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("Human-readable message to explain the notice", event.content.body)
         // assertEquals("m.server_notice", event.content.msgtype)
@@ -1873,7 +1875,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
 
         val workaround = MessageEvent.serializer(MessageContent.serializer())
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
     @Test
@@ -1899,7 +1901,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(MessageContent.Text.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("This is an example text message", event.content.body)
         // assertEquals("m.text", event.content.msgtype)
@@ -1913,7 +1915,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
 
         val workaround = MessageEvent.serializer(MessageContent.serializer())
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
     @Test
@@ -1952,7 +1954,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(MessageContent.Video.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("Gangnam Style", event.content.body)
         assertEquals("mxc://example.org/a526eYUSFFxlgbQYZmo442", event.content.url)
@@ -1975,7 +1977,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
 
         val workaround = MessageEvent.serializer(MessageContent.serializer())
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
     @Test
@@ -1999,7 +2001,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(FeedbackContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("delivered", event.content.type)
         assertEquals("\$WEIGFHFW:localhost", event.content.targetEventId)
@@ -2010,7 +2012,7 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -2034,7 +2036,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(NameContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("The room name", event.content.name)
         assertEquals("m.room.name", event.type)
@@ -2045,7 +2047,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -2071,7 +2073,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(PinnedEventsContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(1, event.content.pinned.size)
         assertEquals("\$someevent:example.org", event.content.pinned[0])
@@ -2083,7 +2085,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -2123,7 +2125,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(PowerLevelsContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(50, event.content.ban)
         assertEquals(2, event.content.events.size)
@@ -2145,7 +2147,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -2169,7 +2171,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(RedactionContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("Spamming", event.content.reason)
         assertEquals("m.room.redaction", event.type)
@@ -2180,7 +2182,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         // assertEquals("\$fukweghifu23:localhost", event.redacts) WHY is this field here?!?!?!
 
-        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        // FIXME assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
         // The spec is quite annoying here.
     }
 
@@ -2210,7 +2212,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(ServerAclContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         // assertEquals(242352, event.age)
         assertEquals(false, event.content.allowIpLiterals)
@@ -2226,7 +2228,7 @@ class EventTypeTests {
         assertEquals("!Cuyf34gef24t:localhost", event.roomId)
         assertEquals("@example:localhost", event.sender)
 
-        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        // FIXME assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
         // age
     }
 
@@ -2259,7 +2261,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(ThirdPartyInviteContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("Alice Margatroid", event.content.displayName)
         assertEquals("https://magic.forest/verifykey", event.content.keyValidityUrl)
@@ -2275,7 +2277,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("pc98", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -2300,7 +2302,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(TombstoneContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("This room has been replaced", event.content.body)
         assertEquals("!newroom:example.org", event.content.replacementRoom)
@@ -2312,7 +2314,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -2336,7 +2338,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = StateEvent.serializer(TopicContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("A room topic", event.content.topic)
         assertEquals("m.room.topic", event.type)
@@ -2347,7 +2349,7 @@ class EventTypeTests {
         assertEquals(1234, event.unsigned?.age)
         assertEquals("", event.stateKey)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -2366,7 +2368,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(RoomKeyContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.megolm.v1.aes-sha2", event.content.algorithm)
         assertEquals("!Cuyf34gef24t:localhost", event.content.roomId)
@@ -2375,7 +2377,7 @@ class EventTypeTests {
             event.content.sessionKey)
         assertEquals("m.room_key", event.type)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -2393,7 +2395,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(RoomKeyRequestContent.Cancellation.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         // assertEquals("request_cancellation", event.content.action)
         assertEquals("RJYKSTBOIE", event.content.requestingDeviceId)
@@ -2401,7 +2403,7 @@ class EventTypeTests {
         assertEquals("m.room_key_request", event.type)
 
         val workaround = AccountEvent.serializer(RoomKeyRequestContent.serializer())
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
     @Test
@@ -2425,7 +2427,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(RoomKeyRequestContent.Request.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.megolm.v1.aes-sha2", event.content.body.algorithm)
         assertEquals("!Cuyf34gef24t:localhost", event.content.body.roomId)
@@ -2437,7 +2439,7 @@ class EventTypeTests {
         assertEquals("m.room_key_request", event.type)
 
         val workaround = AccountEvent.serializer(RoomKeyRequestContent.serializer())
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(workaround, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
     @Test
@@ -2474,7 +2476,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = MessageEvent.serializer(StickerContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("Landing", event.content.body)
         assertEquals("image/png", event.content.info.mimeType)
@@ -2494,7 +2496,7 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -2514,12 +2516,12 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(TagContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(0.9, event.content.tags["u.work"]?.order)
         assertEquals("m.tag", event.type)
 
-        assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
     }
 
     @Test
@@ -2539,7 +2541,7 @@ class EventTypeTests {
                 """.trimIndent()
 
         val serializer = AccountEvent.serializer(TypingContent.serializer())
-        val event = MatrixJson.parse(serializer, json)
+        val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(2, event.content.userIds.size)
         assertEquals("@alice:matrix.org", event.content.userIds[0])
@@ -2547,7 +2549,7 @@ class EventTypeTests {
         assertEquals("m.typing", event.type)
         // FIXME assertEquals("!jEsUZKDJdhlrceRyVU:example.org", event.roomId)
         //
-        // FIXME assertEquals(MatrixJson.parseJson(json), MatrixJson.toJson(serializer, event))
+        // FIXME assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(serializer, event))
         // Needs EDU class
     }
 }
