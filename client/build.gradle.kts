@@ -57,9 +57,6 @@ kotlin {
         }
         named("jsMain") {
             dependencies {
-                implementation(npm("text-encoding", "0.7.0")) {
-                    because("https://github.com/ktorio/ktor/issues/961")
-                }
             }
         }
         named("jsTest") {
