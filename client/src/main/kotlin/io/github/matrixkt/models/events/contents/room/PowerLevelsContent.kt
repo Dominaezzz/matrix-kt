@@ -37,9 +37,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PowerLevelsContent(
     /**
-     * The level required to ban a user. Defaults to 50 if unspecified.
+     * The level required to ban a user.
      */
-    val ban: Long? = null,
+    val ban: Long = 50,
 
     /**
      * The level required to send specific event types.
@@ -50,33 +50,31 @@ data class PowerLevelsContent(
     /**
      * The default level required to send message events.
      * Can be overridden by the events key.
-     * Defaults to 0 if unspecified.
      */
     @SerialName("events_default")
-    val eventsDefault: Long? = null,
+    val eventsDefault: Long = 0,
 
     /**
-     * The level required to invite a user. Defaults to 50 if unspecified.
+     * The level required to invite a user.
      */
-    val invite: Long? = null,
+    val invite: Long = 50,
 
     /**
-     * The level required to kick a user. Defaults to 50 if unspecified.
+     * The level required to kick a user.
      */
-    val kick: Long? = null,
+    val kick: Long = 50,
 
     /**
-     * The level required to redact an event. Defaults to 50 if unspecified.
+     * The level required to redact an event.
      */
-    val redact: Long? = null,
+    val redact: Long = 50,
 
     /**
      * The default level required to send state events.
      * Can be overridden by the events key.
-     * Defaults to 50 if unspecified.
      */
     @SerialName("state_default")
-    val stateDefault: Long? = null,
+    val stateDefault: Long = 50,
 
     /**
      * The power levels for specific users.
@@ -89,7 +87,7 @@ data class PowerLevelsContent(
      * Defaults to 0 if unspecified.
      */
     @SerialName("users_default")
-    val usersDefault: Long? = null,
+    val usersDefault: Long = 0,
 
     /**
      * The power level requirements for specific notification types.

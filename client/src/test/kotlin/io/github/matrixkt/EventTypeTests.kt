@@ -1163,7 +1163,11 @@ class EventTypeTests {
         val json = """
                 {
                     "content": {
-                        "alias": "#somewhere:localhost"
+                        "alias": "#somewhere:localhost",
+                        "alt_aliases": [
+                            "#somewhere:example.org",
+                            "#myroom:example.com"
+                        ]
                     },
                     "type": "m.room.canonical_alias",
                     "event_id": "${'$'}143273582443PhrSn:example.org",
@@ -1181,6 +1185,9 @@ class EventTypeTests {
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("#somewhere:localhost", event.content.alias)
+        assertEquals(2, event.content.altAliases.size)
+        assertEquals("#somewhere:example.org", event.content.altAliases[0])
+        assertEquals("#myroom:example.com", event.content.altAliases[1])
         assertEquals("m.room.canonical_alias", event.type)
         assertEquals("$143273582443PhrSn:example.org", event.eventId)
         assertEquals("!jEsUZKDJdhlrceRyVU:example.org", event.roomId)

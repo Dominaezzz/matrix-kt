@@ -1,6 +1,5 @@
 package io.github.matrixkt.models.events.contents.room
 
-import io.github.matrixkt.models.events.contents.room.Membership
 import io.github.matrixkt.models.events.contents.Content
 import io.github.matrixkt.models.events.contents.StrippedState
 import kotlinx.serialization.SerialName
@@ -105,10 +104,10 @@ data class MemberContent(
          */
         val mxid: String,
 
-//        /**
-//         * A single signature from the verifying server, in the format specified by the Signing Events section of the server-server API.
-//         */
-//        val signatures: Signatures,
+        /**
+         * A single signature from the verifying server, in the format specified by the Signing Events section of the server-server API.
+         */
+        val signatures: Map<String, Map<String, String>> /* Signatures */,
 
         /**
          * The token property of the containing third_party_invite object.
