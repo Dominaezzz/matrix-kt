@@ -62,6 +62,7 @@ abstract class AcceptContent : Content() {
         val commitment: String
     ) : AcceptContent()
 
+    @OptIn(ExperimentalSerializationApi::class)
     @Serializer(forClass = AcceptContent::class)
     object TheSerializer : KSerializer<AcceptContent> {
         private val firstDelegate = PolymorphicSerializer(AcceptContent::class)

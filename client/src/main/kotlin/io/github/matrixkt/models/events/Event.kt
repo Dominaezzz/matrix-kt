@@ -30,10 +30,10 @@ sealed class Event<out T : Content> {
 class EventSerializer<T : Content>(
     private val contentSerializer: KSerializer<T>
 ) : JsonContentPolymorphicSerializer<Event<T>>(Event::class as KClass<Event<T>>) {
-    override fun selectDeserializer(content: JsonElement): DeserializationStrategy<out Event<T>> {
-        require(content is JsonObject)
-        return if ("sender" in content) {
-            if ("roomId" in content) {
+    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out Event<T>> {
+        require(element is JsonObject)
+        return if ("sender" in element) {
+            if ("roomId" in element) {
                 RoomEvent.serializer(contentSerializer)
             } else {
                 EphemeralEvent.serializer(contentSerializer)
@@ -80,9 +80,9 @@ sealed class RoomEvent<out T : Content> : Event<T>() {
 class RoomEventSerializer<T : Content>(
     private val contentSerializer: KSerializer<T>
 ) : JsonContentPolymorphicSerializer<RoomEvent<T>>(RoomEvent::class as KClass<RoomEvent<T>>) {
-    override fun selectDeserializer(content: JsonElement): DeserializationStrategy<out RoomEvent<T>> {
-        require(content is JsonObject)
-        return if (content.containsKey("stateKey")) {
+    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out RoomEvent<T>> {
+        require(element is JsonObject)
+        return if (element.containsKey("stateKey")) {
             StateEvent.serializer(contentSerializer)
         } else {
             MessageEvent.serializer(contentSerializer)

@@ -29,6 +29,7 @@ sealed class RoomKeyRequestContent : Content() {
     @SerialName("request_id")
     abstract val requestId: String
 
+    @OptIn(ExperimentalSerializationApi::class)
     @Serializer(forClass = RoomKeyRequestContent::class)
     internal object DefaultSerializer
 

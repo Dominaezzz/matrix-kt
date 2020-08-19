@@ -77,6 +77,7 @@ abstract class StartContent : Content() {
         val shortAuthenticationString: List<String>
     ) : StartContent()
 
+    @OptIn(ExperimentalSerializationApi::class)
     @Serializer(forClass = StartContent::class)
     object TheSerializer : KSerializer<StartContent> {
         private val firstDelegate = PolymorphicSerializer(StartContent::class)

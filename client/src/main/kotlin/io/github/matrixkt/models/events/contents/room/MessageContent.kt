@@ -300,6 +300,7 @@ abstract class MessageContent : Content() {
         override fun toString() = "Redacted"
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     @Serializer(forClass = MessageContent::class)
     object TheSerializer : KSerializer<MessageContent> {
         private val firstDelegate = PolymorphicSerializer(MessageContent::class)

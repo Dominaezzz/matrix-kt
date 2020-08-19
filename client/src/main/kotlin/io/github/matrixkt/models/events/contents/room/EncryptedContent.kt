@@ -66,6 +66,7 @@ abstract class EncryptedContent : Content() {
         val sessionId: String
     ) : EncryptedContent()
 
+    @OptIn(ExperimentalSerializationApi::class)
     @Serializer(forClass = EncryptedContent::class)
     object TheSerializer : KSerializer<EncryptedContent> {
         private val firstDelegate = PolymorphicSerializer(EncryptedContent::class)

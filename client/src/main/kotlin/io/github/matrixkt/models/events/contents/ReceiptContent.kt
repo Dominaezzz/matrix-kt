@@ -50,6 +50,7 @@ data class ReceiptContent(
         val timestamp: Long? = null
     )
 
+    @OptIn(ExperimentalSerializationApi::class)
     @Serializer(forClass = ReceiptContent::class)
     object TheSerializer : KSerializer<ReceiptContent> {
         private val delegate = MapSerializer(String.serializer(), Receipts.serializer())
