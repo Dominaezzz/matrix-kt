@@ -56,7 +56,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$serialVersion")
             }
         }
         commonTest {

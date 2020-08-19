@@ -26,7 +26,7 @@ kotlin {
             resources.srcDir("src/main/resources")
 
             dependencies {
-                api("org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialVersion")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-core:$serialVersion")
                 api("io.ktor:ktor-client-core:$ktorVersion")
 
                 implementation("io.ktor:ktor-client-json:$ktorVersion")
