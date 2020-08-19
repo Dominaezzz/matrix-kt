@@ -56,7 +56,7 @@ class ServerAclContent(
      * legitimate homeservers to be backed by a valid registered domain name.
      */
     @SerialName("allow_ip_literals")
-    val allowIpLiterals: Boolean? = null,
+    val allowIpLiterals: Boolean = true,
 
     /**
      * The server names to allow in the room, excluding any port information.
