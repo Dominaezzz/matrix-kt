@@ -6,6 +6,7 @@ plugins {
 
 val ktorVersion: String by rootProject.extra
 val serialVersion: String by rootProject.extra
+val coroutineVersion: String by rootProject.extra
 
 kotlin {
     jvm()
@@ -29,6 +30,7 @@ kotlin {
                 api("org.jetbrains.kotlinx:kotlinx-serialization-core:$serialVersion")
                 api("io.ktor:ktor-client-core:$ktorVersion")
 
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
                 implementation("io.ktor:ktor-client-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-serialization:$ktorVersion")
             }

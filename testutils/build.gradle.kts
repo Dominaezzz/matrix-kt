@@ -53,10 +53,13 @@ kotlin {
             }
         }
         val nativeMain by creating {
+            dependsOn(commonMain.get())
             dependencies {
             }
         }
-        val nativeTest by creating
+        val nativeTest by creating {
+            dependsOn(commonTest.get())
+        }
 
         for (target in targets.withType<KotlinNativeTarget>()) {
             val main = getByName("${target.name}Main")
