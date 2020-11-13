@@ -31,9 +31,9 @@ sealed class RoomKeyRequestContent : Content() {
 
     @OptIn(ExperimentalSerializationApi::class)
     @Serializer(forClass = RoomKeyRequestContent::class)
-    internal object DefaultSerializer
-
-    object TheSerializer : KSerializer<RoomKeyRequestContent> by DiscriminatorChanger(DefaultSerializer, "action")
+    object TheSerializer : KSerializer<RoomKeyRequestContent> by DiscriminatorChanger(
+        PolymorphicSerializer(RoomKeyRequestContent::class), "action"
+    )
 
     @SerialName("request")
     @Serializable

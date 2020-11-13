@@ -63,7 +63,7 @@ val MatrixSerialModule = SerializersModule {
         subclass(FullyReadContent.serializer())
         subclass(PresenceContent.serializer())
         subclass(RoomKeyContent.serializer())
-        subclass(RoomKeyRequestContent.serializer())
+        // subclass(RoomKeyRequestContent.serializer())
         subclass(ForwardedRoomKeyContent.serializer())
         subclass(DummyContent.serializer())
         subclass(TagContent.serializer())
@@ -107,6 +107,11 @@ val MatrixSerialModule = SerializersModule {
 
     polymorphic(AcceptContent::class, AcceptContent.serializer()) {
         subclass(AcceptContent.SasV1.serializer())
+    }
+
+    polymorphic(RoomKeyRequestContent::class) {
+        subclass(RoomKeyRequestContent.Request.serializer())
+        subclass(RoomKeyRequestContent.Cancellation.serializer())
     }
 }
 
