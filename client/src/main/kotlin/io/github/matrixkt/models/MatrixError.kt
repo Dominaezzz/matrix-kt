@@ -6,7 +6,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 sealed class MatrixError : Exception() {
-    override val message: String? get() = error
+    override var message: String?
+        get() = error
+        set(value) {}
 
     abstract val error: String?
 
