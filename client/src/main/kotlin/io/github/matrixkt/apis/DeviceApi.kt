@@ -98,7 +98,7 @@ class DeviceApi internal constructor(private val client: HttpClient, private val
             contentType(ContentType.Application.Json)
             body = buildJsonObject {
                 if (auth != null) {
-                    put("auth", MatrixJson.encodeToJsonElement(auth))
+                    put("auth", MatrixJson.encodeToJsonElement(AuthenticationData.serializer(), auth))
                 }
             }
         }
@@ -128,7 +128,7 @@ class DeviceApi internal constructor(private val client: HttpClient, private val
                 }
 
                 if (auth != null) {
-                    put("auth", MatrixJson.encodeToJsonElement(auth))
+                    put("auth", MatrixJson.encodeToJsonElement(AuthenticationData.serializer(), auth))
                 }
             }
         }
