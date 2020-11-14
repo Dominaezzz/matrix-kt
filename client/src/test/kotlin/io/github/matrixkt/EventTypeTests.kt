@@ -20,10 +20,7 @@ import io.github.matrixkt.models.events.contents.policy.rule.UserContent
 import io.github.matrixkt.models.events.contents.room.*
 import io.github.matrixkt.models.events.contents.room.message.FeedbackContent
 import io.github.matrixkt.utils.MatrixJson
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
 import kotlinx.serialization.json.*
-import kotlinx.serialization.parse
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
