@@ -5114,21 +5114,4 @@ class ClientTests {
             assertEquals("You cannot upgrade this room", error.error)
         }
     }
-
-    // This is here to fix Kotlin/JS tests.
-    private inline fun <reified T : Throwable> assertFailsWith(block: () -> Unit): T {
-        val result = runCatching(block)
-        result.fold(
-            {
-                throw Exception("Expected exception of type ${T::class} but got none")
-            },
-            {
-                if (it is T) {
-                    return it
-                } else {
-                    throw Exception("Expected exception of type ${T::class} but got ${it::class}")
-                }
-            }
-        )
-    }
 }
