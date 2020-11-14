@@ -1078,7 +1078,7 @@ data class JWK(
 
 @Serializable
 data class SendToDeviceRequest(
-    val messages: Map<String, Map<String, @Contextual Any>>? = null
+    val messages: Map<String, Map<String, JsonElement>>? = null
 )
 
 @Serializable

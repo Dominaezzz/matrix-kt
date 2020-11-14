@@ -149,7 +149,7 @@ class DeviceApi internal constructor(private val client: HttpClient, private val
      * A map from user ID, to a map from device ID to message body.
      * The device ID may also be *, meaning all known devices for the user.
      */
-    suspend fun sendToDevice(eventType: String, txnId: String, messages: Map<String, Map<String, Any>>? = null) {
+    suspend fun sendToDevice(eventType: String, txnId: String, messages: Map<String, Map<String, JsonElement>>? = null) {
         return client.put {
             url {
                 path("_matrix", "client", "r0", "sendToDevice", eventType, txnId)
