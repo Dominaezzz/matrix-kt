@@ -16,10 +16,10 @@ class AccountTest {
         println("Identity keys: $identityKeys")
 
         // is JSON_KEY_FINGER_PRINT_KEY present?
-        assertFalse(identityKeys[JsonKeys.FINGER_PRINT_KEY].isNullOrBlank())
+        assertFalse(identityKeys.ed25519.isBlank())
 
         // is JSON_KEY_IDENTITY_KEY present?
-        assertFalse(identityKeys[JsonKeys.IDENTITY_KEY].isNullOrBlank())
+        assertFalse(identityKeys.curve25519.isBlank())
     }
 
     //****************************************************
@@ -41,7 +41,7 @@ class AccountTest {
 
             // Test the generated amount of one time keys = GENERATION_ONE_TIME_KEYS_NUMBER.
             val oneTimeKeys = it.oneTimeKeys
-            val map = oneTimeKeys[JsonKeys.ONE_TIME_KEY]
+            val map = oneTimeKeys.curve25519
             assertNotNull(map)
 
             assertEquals(GENERATION_ONE_TIME_KEYS_NUMBER, map.size.toLong())
@@ -74,8 +74,8 @@ class AccountTest {
     @Test
     fun testSerialization() {
         val jsonStr: String
-        val idKeysReference: Map<String, String>
-        val oneTimeKeysReference: Map<String, Map<String, String>>
+        val idKeysReference: IdentityKeys
+        val oneTimeKeysReference: OneTimeKeys
 
         withAccount { accountRef ->
             accountRef.generateOneTimeKeys(GENERATION_ONE_TIME_KEYS_NUMBER)
@@ -88,8 +88,8 @@ class AccountTest {
         }
 
         val account = OlmJson.decodeFromString(AccountSerializer, jsonStr)
-        val idKeysDeserialized: Map<String, String>
-        val oneTimeKeysDeserialized: Map<String, Map<String, String>>
+        val idKeysDeserialized: IdentityKeys
+        val oneTimeKeysDeserialized: OneTimeKeys
         try {
             // get de-serialized keys
             idKeysDeserialized = account.identityKeys
@@ -142,16 +142,16 @@ class AccountTest {
         val identityKey10 = withAccount { it.identityKeys }
 
         val allKeys = listOf(
-            identityKey1.getValue(JsonKeys.IDENTITY_KEY),
-            identityKey2.getValue(JsonKeys.IDENTITY_KEY),
-            identityKey3.getValue(JsonKeys.IDENTITY_KEY),
-            identityKey4.getValue(JsonKeys.IDENTITY_KEY),
-            identityKey5.getValue(JsonKeys.IDENTITY_KEY),
-            identityKey6.getValue(JsonKeys.IDENTITY_KEY),
-            identityKey7.getValue(JsonKeys.IDENTITY_KEY),
-            identityKey8.getValue(JsonKeys.IDENTITY_KEY),
-            identityKey9.getValue(JsonKeys.IDENTITY_KEY),
-            identityKey10.getValue(JsonKeys.IDENTITY_KEY)
+            identityKey1.curve25519,
+            identityKey2.curve25519,
+            identityKey3.curve25519,
+            identityKey4.curve25519,
+            identityKey5.curve25519,
+            identityKey6.curve25519,
+            identityKey7.curve25519,
+            identityKey8.curve25519,
+            identityKey9.curve25519,
+            identityKey10.curve25519
         )
 
         val keyCounts = allKeys.groupingBy { it }.eachCount()

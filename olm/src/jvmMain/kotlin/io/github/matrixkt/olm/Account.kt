@@ -61,7 +61,7 @@ actual class Account private constructor(internal val ptr: OlmAccount) {
      * }
      * @return identity keys dictionary if operation succeeds, null otherwise
      */
-    actual val identityKeys: Map<String, String>
+    actual val identityKeys: IdentityKeys
         get() {
             val identityKeysLength = olm_account_identity_keys_length(ptr)
 
@@ -71,7 +71,7 @@ actual class Account private constructor(internal val ptr: OlmAccount) {
                 it.toKString(identityKeysLength.toInt())
             }
 
-            return OlmJson.decodeFromString(StringMapSerializer, identityKeysStr)
+            return OlmJson.decodeFromString(IdentityKeys.serializer(), identityKeysStr)
         }
 
     /**
@@ -112,7 +112,7 @@ actual class Account private constructor(internal val ptr: OlmAccount) {
      * Note: these keys are to be published on the server.
      * @return one time keys in string dictionary.
      */
-    actual val oneTimeKeys: Map<String, Map<String, String>>
+    actual val oneTimeKeys: OneTimeKeys
         get() {
             val keysLength = olm_account_one_time_keys_length(ptr)
 
@@ -122,7 +122,7 @@ actual class Account private constructor(internal val ptr: OlmAccount) {
                 it.toKString(keysLength.toInt())
             }
 
-            return OlmJson.decodeFromString(StringMapMapSerializer, keysStr)
+            return OlmJson.decodeFromString(OneTimeKeys.serializer(), keysStr)
         }
 
     /**

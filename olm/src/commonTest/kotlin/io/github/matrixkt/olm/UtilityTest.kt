@@ -22,7 +22,7 @@ class UtilityTest {
         // get identities key (finger print key)
         val identityKeys = account.identityKeys
 
-        val fingerPrintKey = identityKeys.getValue(JsonKeys.FINGER_PRINT_KEY)
+        val fingerPrintKey = identityKeys.ed25519
 
         // instantiate utility object
         val utility = Utility()

@@ -23,13 +23,13 @@ class SessionTest {
 
         // get bob identity key
         val bobIdentityKeys = bobAccount.identityKeys
-        val bobIdentityKey = bobIdentityKeys.getValue(JsonKeys.IDENTITY_KEY)
+        val bobIdentityKey = bobIdentityKeys.curve25519
 
         // get bob one time keys
         bobAccount.generateOneTimeKeys(ONE_TIME_KEYS_NUMBER)
 
         val bobOneTimeKeys = bobAccount.oneTimeKeys
-        val bobOneTimeKey = bobOneTimeKeys.getValue(JsonKeys.ONE_TIME_KEY).values.first()
+        val bobOneTimeKey = bobOneTimeKeys.curve25519.values.first()
 
         // CREATE ALICE OUTBOUND SESSION and encrypt message to bob
         val aliceSession = Session.createOutboundSession(aliceAccount, bobIdentityKey, bobOneTimeKey)
@@ -80,13 +80,13 @@ class SessionTest {
 
         // get bob identity key
         val bobIdentityKeys = bobAccount.identityKeys
-        val bobIdentityKey = bobIdentityKeys.getValue(JsonKeys.IDENTITY_KEY)
+        val bobIdentityKey = bobIdentityKeys.curve25519
 
         // get bob one time keys
         bobAccount.generateOneTimeKeys(ONE_TIME_KEYS_NUMBER)
 
         val bobOneTimeKeys = bobAccount.oneTimeKeys
-        val bobOneTimeKey = bobOneTimeKeys.getValue(JsonKeys.ONE_TIME_KEY).values.first()
+        val bobOneTimeKey = bobOneTimeKeys.curve25519.values.first()
 
         // CREATE ALICE OUTBOUND SESSION and encrypt message to bob
         val aliceSession = Session.createOutboundSession(aliceAccount, bobIdentityKey, bobOneTimeKey)
@@ -152,8 +152,8 @@ class SessionTest {
         val bobIdentityKeys = bobAccount.identityKeys
         val aliceIdentityKeys = aliceAccount.identityKeys
 
-        val bobIdentityKey = bobIdentityKeys.getValue(JsonKeys.IDENTITY_KEY)
-        val aliceIdentityKey = aliceIdentityKeys.getValue(JsonKeys.IDENTITY_KEY)
+        val bobIdentityKey = bobIdentityKeys.curve25519
+        val aliceIdentityKey = aliceIdentityKeys.curve25519
 
         // get bob/luke one time keys
         bobAccount.generateOneTimeKeys(ONE_TIME_KEYS_NUMBER)
@@ -161,7 +161,7 @@ class SessionTest {
 
         val bobOneTimeKeys = bobAccount.oneTimeKeys
 
-        val bobOneTimeKey1 = bobOneTimeKeys.getValue(JsonKeys.ONE_TIME_KEY).values.first()
+        val bobOneTimeKey1 = bobOneTimeKeys.curve25519.values.first()
 
         // create alice inbound session for bob
         val aliceSession = Session.createOutboundSession(aliceAccount, bobIdentityKey, bobOneTimeKey1)
@@ -206,13 +206,13 @@ class SessionTest {
 
         // get bob identity key
         val bobIdentityKeys = bobAccount.identityKeys
-        val bobIdentityKey = bobIdentityKeys.getValue(JsonKeys.IDENTITY_KEY)
+        val bobIdentityKey = bobIdentityKeys.curve25519
 
         // get bob one time keys
         bobAccount.generateOneTimeKeys(ONE_TIME_KEYS_NUMBER)
 
         val bobOneTimeKeys = bobAccount.oneTimeKeys
-        val bobOneTimeKey = bobOneTimeKeys.getValue(JsonKeys.ONE_TIME_KEY).values.first()
+        val bobOneTimeKey = bobOneTimeKeys.curve25519.values.first()
 
         // CREATE ALICE OUTBOUND SESSION and encrypt message to bob
         val aliceSession = Session.createOutboundSession(aliceAccount, bobIdentityKey, bobOneTimeKey)
@@ -282,13 +282,13 @@ class SessionTest {
 
         // get bob identity key
         val bobIdentityKeys = bobAccount.identityKeys
-        val bobIdentityKey = bobIdentityKeys.getValue(JsonKeys.IDENTITY_KEY)
+        val bobIdentityKey = bobIdentityKeys.curve25519
 
         // get bob one time keys
         bobAccount.generateOneTimeKeys(ONE_TIME_KEYS_NUMBER)
 
         val bobOneTimeKeys = bobAccount.oneTimeKeys
-        val bobOneTimeKey = bobOneTimeKeys.getValue(JsonKeys.ONE_TIME_KEY).values.first()
+        val bobOneTimeKey = bobOneTimeKeys.curve25519.values.first()
 
         // CREATE ALICE SESSION
         val aliceSession = Session.createOutboundSession(aliceAccount, bobIdentityKey, bobOneTimeKey)

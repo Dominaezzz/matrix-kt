@@ -10,8 +10,6 @@ import kotlin.experimental.and
 import kotlin.random.Random
 
 internal val OlmJson = Json { allowStructuredMapKeys = true }
-internal val StringMapSerializer = MapSerializer(String.serializer(), String.serializer())
-internal val StringMapMapSerializer = MapSerializer(String.serializer(), StringMapSerializer)
 
 private const val RANDOM_KEY_SIZE = 32
 

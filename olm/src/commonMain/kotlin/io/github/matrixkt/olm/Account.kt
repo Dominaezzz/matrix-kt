@@ -22,7 +22,7 @@ expect class Account(random: Random = Random.Default) {
      * }
      * @return identity keys dictionary if operation succeeds, null otherwise
      */
-    val identityKeys: Map<String, String>
+    val identityKeys: IdentityKeys
 
     /**
      * Return the largest number of "one time keys" this account can store.
@@ -53,7 +53,7 @@ expect class Account(random: Random = Random.Default) {
      * Note: these keys are to be published on the server.
      * @return one time keys in string dictionary.
      */
-    val oneTimeKeys: Map<String, Map<String, String>>
+    val oneTimeKeys: OneTimeKeys
 
     /**
      * Remove the "one time keys" that the session used from the account.
