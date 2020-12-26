@@ -1,6 +1,8 @@
 package io.github.matrixkt.olm
 
-expect class PkDecryption {
+import kotlin.random.Random
+
+expect class PkDecryption(random: Random = Random.Default) {
     val publicKey: String
 
     fun clear()
@@ -12,11 +14,6 @@ expect class PkDecryption {
     fun pickle(key: ByteArray): String
 
     companion object {
-        val publicKeyLength: Long
-        val privateKeyLength: Long
-
-        fun fromPrivate(privateKey: ByteArray): PkDecryption
-
         fun unpickle(key: ByteArray, pickle: String): PkDecryption
     }
 }

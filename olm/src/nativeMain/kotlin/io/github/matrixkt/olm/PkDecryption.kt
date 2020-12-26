@@ -3,8 +3,37 @@ package io.github.matrixkt.olm
 import colm.internal.*
 import kotlinx.cinterop.*
 import platform.posix.size_t
+import kotlin.random.Random
 
-actual class PkDecryption private constructor(private val ptr: CPointer<OlmPkDecryption>, actual val publicKey: String) {
+actual class PkDecryption {
+    private val ptr: CPointer<OlmPkDecryption>
+    actual val publicKey: String
+
+    private constructor(ptr: CPointer<OlmPkDecryption>, publicKey: String) {
+        this.ptr = ptr
+        this.publicKey = publicKey
+    }
+
+    actual constructor(random: Random) {
+        val publicKeyLength = olm_pk_key_length()
+        val privateKeyLength = olm_pk_private_key_length()
+        val publicKey = ByteArray(publicKeyLength.convert())
+
+        ptr = genericInit(::olm_pk_decryption, ::olm_pk_decryption_size)
+        try {
+            withRandomBuffer(privateKeyLength, random) { privateKey ->
+                val result = olm_pk_key_from_private(ptr,
+                    publicKey.refTo(0), publicKeyLength,
+                    privateKey, privateKeyLength)
+                checkError(ptr, result)
+            }
+        } catch (e: Exception) {
+            clear()
+            throw e
+        }
+        this.publicKey = publicKey.decodeToString()
+    }
+
     actual fun clear() {
         olm_clear_pk_decryption(ptr)
         nativeHeap.free(ptr)
@@ -50,9 +79,6 @@ actual class PkDecryption private constructor(private val ptr: CPointer<OlmPkDec
     }
 
     actual companion object {
-        actual val publicKeyLength: Long get() = olm_pk_key_length().convert()
-        actual val privateKeyLength: Long get() = olm_pk_private_key_length().convert()
-
         private inline fun create(block: (CPointer<OlmPkDecryption>, CValuesRef<*>, size_t) -> Unit): PkDecryption {
             val publicKeyLength = olm_pk_key_length()
             val publicKey = ByteArray(publicKeyLength.convert())
@@ -71,15 +97,6 @@ actual class PkDecryption private constructor(private val ptr: CPointer<OlmPkDec
 
         private fun checkError(ptr: CPointer<OlmPkDecryption>, result: size_t) {
             genericCheckError(ptr, result, ::olm_pk_decryption_last_error)
-        }
-
-        actual fun fromPrivate(privateKey: ByteArray): PkDecryption {
-            return create { ptr, publicKey, publicKeyLength ->
-                val result = olm_pk_key_from_private(ptr,
-                    publicKey, publicKeyLength,
-                    privateKey.refTo(0), privateKey.size.convert())
-                checkError(ptr, result)
-            }
         }
 
         actual fun unpickle(key: ByteArray, pickle: String): PkDecryption {
