@@ -5,19 +5,24 @@ import kotlinx.cinterop.*
 import platform.posix.size_t
 import kotlin.random.Random
 
-actual class PkEncryption {
+actual class PkEncryption actual constructor(recipientKey: String) {
     private val ptr = genericInit(::olm_pk_encryption, ::olm_pk_encryption_size)
+
+    init {
+        try {
+            recipientKey.withNativeRead { keyPtr, keyLen ->
+                val result = olm_pk_encryption_set_recipient_key(ptr, keyPtr, keyLen)
+                checkError(result)
+            }
+        } catch (e: Exception) {
+            clear()
+            throw e
+        }
+    }
 
     actual fun clear() {
         olm_clear_pk_encryption(ptr)
         nativeHeap.free(ptr)
-    }
-
-    actual fun setRecipientKey(key: String) {
-        key.withNativeRead { keyPtr, keyLen ->
-            val result = olm_pk_encryption_set_recipient_key(ptr, keyPtr, keyLen)
-            checkError(result)
-        }
     }
 
     actual fun encrypt(plaintext: String, random: Random): PkMessage {

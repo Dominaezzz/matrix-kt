@@ -9,12 +9,11 @@ import kotlin.test.assertTrue
 class PkTest {
     @Test
     fun test01EncryptAndDecrypt() {
-        val encryption = PkEncryption()
         val decryption = PkDecryption()
+        val encryption = PkEncryption(decryption.publicKey)
 
         println("Ephemeral Key: ${decryption.publicKey}")
 
-        encryption.setRecipientKey(decryption.publicKey)
         val clearMessage = "Public key test"
         val message = encryption.encrypt(clearMessage)
 
