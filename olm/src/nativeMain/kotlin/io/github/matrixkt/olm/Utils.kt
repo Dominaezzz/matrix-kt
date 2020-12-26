@@ -24,7 +24,6 @@ internal inline fun <T> withRandomBuffer(size: size_t, random: Random, block: (C
     }
 }
 
-@OptIn(ExperimentalStdlibApi::class)
 internal inline fun <T> String.withNativeRead(block: (CPointer<ByteVar>?, size_t) -> T): T {
     return if (isEmpty()) {
         block(null, 0.convert())

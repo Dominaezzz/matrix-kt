@@ -65,7 +65,6 @@ internal inline fun <T> ByteArray.withNativeWrite(block: (Pointer?) -> T): T {
     }
 }
 
-@OptIn(ExperimentalStdlibApi::class)
 internal inline fun <T> String.withNativeRead(block: (Pointer?, NativeSize) -> T): T {
     val bytes = encodeToByteArray()
     return bytes.withNativeRead {
@@ -73,7 +72,6 @@ internal inline fun <T> String.withNativeRead(block: (Pointer?, NativeSize) -> T
     }
 }
 
-@OptIn(ExperimentalStdlibApi::class)
 internal inline fun Pointer.toKString(length: Int): String {
     return getByteArray(0, length).decodeToString()
 }
@@ -118,7 +116,6 @@ internal inline fun <T : PointerType> genericPickle(
         }
     }
     checkError(result)
-    @OptIn(ExperimentalStdlibApi::class)
     return pickled.decodeToString()
 }
 

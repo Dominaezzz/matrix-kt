@@ -5,7 +5,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class SASTest {
-    @ExperimentalStdlibApi
     @Test
     fun testSASCode() {
         val aliceSas = SAS()
