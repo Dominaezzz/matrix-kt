@@ -38,7 +38,7 @@ data class MatrixEvent(
     /**
      * Contains optional extra information about the event.
      */
-    val unsigned: UnsignedData? = null,
+    val unsigned: JsonObject? = null,
 
     /**
      * The ID of the room associated with this event.

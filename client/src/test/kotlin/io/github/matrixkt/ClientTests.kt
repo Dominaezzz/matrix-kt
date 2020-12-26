@@ -1,6 +1,7 @@
 package io.github.matrixkt
 
 import io.github.matrixkt.models.*
+import io.github.matrixkt.models.events.UnsignedData
 import io.github.matrixkt.models.events.contents.room.Membership
 import io.github.matrixkt.models.events.contents.TagContent
 import io.github.matrixkt.models.events.contents.room.MemberContent
@@ -298,7 +299,10 @@ class ClientTests {
         assertEquals("\$143273582443PhrSn:example.org", event.eventId)
         assertEquals("!636q39766251:matrix.org", event.roomId)
         assertEquals("m.room.message", event.type)
-        assertEquals(1234, event.unsigned!!.age)
+
+        val unsigned = MatrixJson.decodeFromJsonElement(UnsignedData.serializer(), event.unsigned!!)
+
+        assertEquals(1234, unsigned.age)
 
         // TODO: Make this less verbose.
         val content = MatrixJson.decodeFromJsonElement(MessageContent.serializer(), event.content)
