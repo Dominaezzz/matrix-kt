@@ -4,15 +4,12 @@ import colm.internal.*
 import kotlinx.cinterop.*
 import platform.posix.size_t
 
-actual class PkSigning {
+actual class PkSigning actual constructor(seed: ByteArray) {
     private val ptr = genericInit(::olm_pk_signing, ::olm_pk_signing_size)
 
-    actual fun clear() {
-        olm_clear_pk_signing(ptr)
-        nativeHeap.free(ptr)
-    }
+    actual val publicKey: String
 
-    actual fun fromSeed(seed: ByteArray): String {
+    init {
         val publicKeyLength = olm_pk_signing_public_key_length()
         val publicKey = ByteArray(publicKeyLength.convert())
 
@@ -20,7 +17,13 @@ actual class PkSigning {
             publicKey.refTo(0), publicKeyLength,
             seed.refTo(0), seed.size.convert())
         checkError(result)
-        return publicKey.decodeToString()
+
+        this.publicKey = publicKey.decodeToString()
+    }
+
+    actual fun clear() {
+        olm_clear_pk_signing(ptr)
+        nativeHeap.free(ptr)
     }
 
     actual fun sign(message: String): String {

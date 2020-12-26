@@ -1,10 +1,10 @@
 package io.github.matrixkt.olm
 
 
-expect class PkSigning() {
-    fun clear()
+expect class PkSigning(seed: ByteArray) {
+    val publicKey: String
 
-    fun fromSeed(seed: ByteArray): String
+    fun clear()
 
     fun sign(message: String): String
 
