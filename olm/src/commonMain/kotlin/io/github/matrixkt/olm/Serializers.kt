@@ -55,3 +55,7 @@ object InboundGroupSessionSerializer : KSerializer<InboundGroupSession> by Pickl
 object OutboundGroupSessionSerializer : KSerializer<OutboundGroupSession> by PickleSerializer(
     OutboundGroupSession::pickle, OutboundGroupSession.Companion::unpickle
 )
+
+object PkDecryptionSerializer : KSerializer<PkDecryption> by PickleSerializer(
+    PkDecryption::pickle, PkDecryption.Companion::unpickle
+)
