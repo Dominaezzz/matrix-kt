@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class AuthenticationData {
+abstract class AuthenticationData {
     // /**
     //  * The login type that the client is attempting to complete.
     //  */

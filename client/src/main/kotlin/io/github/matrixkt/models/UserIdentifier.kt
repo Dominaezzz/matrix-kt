@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class UserIdentifier {
+abstract class UserIdentifier {
 //    /**
 //     * The type of identification.
 //     * See [Identifier types](https://matrix.org/docs/spec/client_server/r0.5.0#identifier-types)

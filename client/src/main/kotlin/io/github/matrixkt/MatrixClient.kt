@@ -33,14 +33,10 @@ class MatrixClient(engine: HttpClientEngine,
         }
 
         HttpResponseValidator {
-            val json = Json(MatrixJson) {
-                serializersModule = MatrixSerialModule
-                classDiscriminator = "errcode"
-            }
             validateResponse {
                 if (it.status != HttpStatusCode.OK) {
                     val errorJson = String(it.readBytes())
-                    throw json.decodeFromString(MatrixError.serializer(), errorJson) // it.receive<MatrixError>()
+                    throw MatrixJson.decodeFromString(MatrixError.serializer(), errorJson) // it.receive<MatrixError>()
                 }
             }
         }
