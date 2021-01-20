@@ -136,10 +136,10 @@ data class CreateRoomRequest(
         val type: String,
 
         /**
-         * The state_key of the state event. Defaults to an empty string.
+         * The state_key of the state event.
          */
         @SerialName("state_key")
-        val stateKey: String? = null,
+        val stateKey: String = "",
 
         /**
          * The content of the event.
@@ -297,7 +297,7 @@ data class PublicRoomsChunk(
     /**
      * Aliases of the room. May be empty.
      */
-    val aliases: List<String>? = null,
+    val aliases: List<String> = emptyList(),
 
     /**
      * The canonical alias of the room, if any.
@@ -395,10 +395,9 @@ data class SearchPublicRoomsRequest(
 
     /**
      * Whether or not to include all known networks/protocols from application services on the homeserver.
-     * Defaults to false.
      */
     @SerialName("include_all_networks")
-    val includeAllNetworks: Boolean? = null,
+    val includeAllNetworks: Boolean = false,
 
     /**
      * 	The specific third party network/protocol to request from the homeserver.
@@ -550,7 +549,7 @@ data class MessagesResponse(
      * For `dir=b` events will be in reverse-chronological order, for `dir=f` in chronological order,
      * so that events start at the `from` point.
      */
-    val chunk: List<MatrixEvent>? = null,
+    val chunk: List<MatrixEvent> = emptyList(),
 
     /**
      * A list of state events relevant to showing the `chunk`.
@@ -561,7 +560,7 @@ data class MessagesResponse(
      * the server may remove membership events which would have already been sent to the client in prior calls to this endpoint,
      * assuming the membership of those members has not changed.
      */
-    val state: List<MatrixEvent>? = null
+    val state: List<MatrixEvent> = emptyList()
 )
 
 @Serializable
@@ -591,9 +590,9 @@ data class SearchUsersRequest(
     val searchTerm: String,
 
     /**
-     * The maximum number of results to return. Defaults to 10.
+     * The maximum number of results to return.
      */
-    val limit: Long? = null
+    val limit: Long = 10
 )
 
 @Serializable
@@ -912,10 +911,9 @@ data class RegisterRequest(
     /**
      * If true, an `access_token` and `device_id` should not be returned from this call,
      * therefore preventing an automatic login.
-     * Defaults to false.
      */
     @SerialName("inhibit_login")
-    val inhibitLogin: Boolean? = null
+    val inhibitLogin: Boolean = false
 )
 
 @Serializable
@@ -1078,7 +1076,7 @@ data class JWK(
 
 @Serializable
 data class SendToDeviceRequest(
-    val messages: Map<String, Map<String, JsonElement>>? = null
+    val messages: Map<String, Map<String, JsonElement>> = emptyMap()
 )
 
 @Serializable
@@ -1190,9 +1188,8 @@ data class Add3PidRequest(
 
     /**
      * Whether the homeserver should also bind this third party identifier to the account's Matrix ID with the passed identity server.
-     * Default: false.
      */
-    val bind: Boolean? = null
+    val bind: Boolean = false
 )
 
 @Serializable
@@ -1280,7 +1277,7 @@ data class Versions(
      * indicate that a feature is not supported.
      */
     @SerialName("unstable_features")
-    val unstableFeatures: Map<String, Boolean>? = null
+    val unstableFeatures: Map<String, Boolean> = emptyMap()
 )
 
 @Serializable

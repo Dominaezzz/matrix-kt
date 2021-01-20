@@ -43,19 +43,17 @@ data class RoomEventFilter(
     /**
      * If true, enables lazy-loading of membership events.
      * See [Lazy-loading room members](https://matrix.org/docs/spec/client_server/r0.5.0#lazy-loading-room-members) for more information.
-     * Defaults to false.
      */
     @SerialName("lazy_load_members")
-    val lazyLoadMembers: Boolean? = null,
+    val lazyLoadMembers: Boolean = false,
 
     /**
      * If true, sends all membership events for all events, even if they have already been sent to the client.
      * Does not apply unless [lazyLoadMembers] is true.
      * See [Lazy-loading room members](https://matrix.org/docs/spec/client_server/r0.5.0#lazy-loading-room-members) for more information.
-     * Defaults to false.
      */
     @SerialName("include_redundant_members")
-    val includeRedundantMembers: Boolean? = null,
+    val includeRedundantMembers: Boolean = false,
 
     /**
      * A list of room IDs to exclude.

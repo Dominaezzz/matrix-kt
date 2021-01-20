@@ -1,7 +1,7 @@
 package io.github.matrixkt.models.events.contents.room
 
 import io.github.matrixkt.models.events.contents.Content
-import io.github.matrixkt.models.events.contents.StrippedState
+import io.github.matrixkt.models.events.StrippedState
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

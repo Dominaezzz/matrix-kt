@@ -7,22 +7,19 @@ import kotlinx.serialization.Serializable
 class IncludeEventContext(
     /**
      * How many events before the result are returned.
-     * By default, this is 5.
      */
     @SerialName("before_limit")
-    val beforeLimit: Int? = null,
+    val beforeLimit: Int = 5,
 
     /**
      * How many events after the result are returned.
-     * By default, this is 5.
      */
     @SerialName("after_limit")
-    val afterLimit: Int? = null,
+    val afterLimit: Int = 5,
 
     /**
      * Requests that the server returns the historic profile information for the users that sent the events that were returned.
-     * By default, this is false.
      */
     @SerialName("include_profile")
-    val includeProfile: Boolean? = null
+    val includeProfile: Boolean = false
 )
