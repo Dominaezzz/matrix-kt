@@ -24,7 +24,7 @@ class AdminApi internal constructor(private val client: HttpClient, private val 
     suspend fun getWhoIs(userId: String): WhoIsResponse {
         return client.get {
             url {
-                path("/_matrix", "client", "r0", "admin", "whois", userId)
+                path("_matrix", "client", "r0", "admin", "whois", userId)
             }
 
             header("Authorization", "Bearer $accessToken")

@@ -66,7 +66,7 @@ class EventApi internal constructor(private val client: HttpClient, private val 
      * By default, this is 0, so the server will return immediately even if the response is empty.
      */
     suspend fun sync(filter: String? = null, since: String? = null, fullState: Boolean? = null, setPresence: Presence? = null, timeout: Long? = null): SyncResponse {
-        return client.get("/_matrix/client/r0/sync") {
+        return client.get("_matrix/client/r0/sync") {
             parameter("filter", filter)
             parameter("since", since)
             if (fullState != null) parameter("full_state", fullState)

@@ -23,7 +23,7 @@ class ThirdPartyApi internal constructor(private val client: HttpClient, private
      * @return The protocols supported by the homeserver.
      */
     suspend fun getProtocols(): Map<String, Protocol> {
-        return client.get("/_matrix/client/r0/thirdparty/protocols") {
+        return client.get("_matrix/client/r0/thirdparty/protocols") {
             header("Authorization", "Bearer $accessToken")
         }
     }
@@ -110,7 +110,7 @@ class ThirdPartyApi internal constructor(private val client: HttpClient, private
      * @return List of matched third party locations.
      */
     suspend fun queryLocationByAlias(alias: String): List<Location> {
-        return client.get("/_matrix/client/r0/thirdparty/location") {
+        return client.get("_matrix/client/r0/thirdparty/location") {
             parameter("alias", alias)
 
             header("Authorization", "Bearer $accessToken")
@@ -128,7 +128,7 @@ class ThirdPartyApi internal constructor(private val client: HttpClient, private
      * @return List of matched third party users.
      */
     suspend fun queryUserByID(userId: String): List<User> {
-        return client.get("/_matrix/client/r0/thirdparty/user") {
+        return client.get("_matrix/client/r0/thirdparty/user") {
             parameter("userid", userId)
 
             header("Authorization", "Bearer $accessToken")

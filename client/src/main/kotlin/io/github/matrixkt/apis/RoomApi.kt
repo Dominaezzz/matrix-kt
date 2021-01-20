@@ -47,7 +47,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @return The created room's ID.
      */
     suspend fun createRoom(params: CreateRoomRequest): String {
-        val response = client.post<CreateRoomResponse>(path = "/_matrix/client/r0/createRoom") {
+        val response = client.post<CreateRoomResponse>(path = "_matrix/client/r0/createRoom") {
             header("Authorization", "Bearer $accessToken")
 
             contentType(ContentType.Application.Json)
@@ -69,7 +69,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
     suspend fun setRoomAlias(roomAlias: String, roomId: String) {
         return client.put {
             url {
-                encodedPath = "/_matrix/client/r0/directory/room/${roomAlias.encodeURLQueryComponent(encodeFull = true)}"
+                encodedPath = "_matrix/client/r0/directory/room/${roomAlias.encodeURLQueryComponent(encodeFull = true)}"
                 // path("_matrix", "client", "r0", "directory", "room", roomAlias)
             }
 
@@ -94,7 +94,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      */
     suspend fun getRoomIdByAlias(roomAlias: String): ResolveRoomAliasResponse {
         return client.get {
-            url("/_matrix/client/r0/directory/room/${roomAlias.encodeURLQueryComponent(encodeFull = true)}")
+            url("_matrix/client/r0/directory/room/${roomAlias.encodeURLQueryComponent(encodeFull = true)}")
             // path("_matrix", "client", "r0", "directory", "room", roomAlias)
 
             header("Authorization", "Bearer $accessToken")
@@ -116,7 +116,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
     suspend fun deleteRoomAlias(roomAlias: String) {
         return client.delete {
             url {
-                encodedPath = "/_matrix/client/r0/directory/room/${roomAlias.encodeURLQueryComponent(encodeFull = true)}"
+                encodedPath = "_matrix/client/r0/directory/room/${roomAlias.encodeURLQueryComponent(encodeFull = true)}"
                 // path("_matrix", "client", "r0", "directory", "room", roomAlias)
             }
 
@@ -134,7 +134,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @return The ID of each room in which the user has joined membership.
      */
     suspend fun getJoinedRooms(): List<String> {
-        val response = client.get<GetJoinedRoomsResponse>("/_matrix/client/r0/joined_rooms") {
+        val response = client.get<GetJoinedRoomsResponse>("_matrix/client/r0/joined_rooms") {
             header("Authorization", "Bearer $accessToken")
         }
         return response.joinedRooms
@@ -446,7 +446,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[server] The server to fetch the public room lists from. Defaults to the local server.
      */
     suspend fun getPublicRooms(limit: Int? = null, since: String? = null, server: String? = null): PublicRoomsResponse {
-        return client.get("/_matrix/client/r0/publicRooms") {
+        return client.get("_matrix/client/r0/publicRooms") {
             parameter("limit", limit)
             parameter("since", since)
             parameter("server", server)
@@ -466,7 +466,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[server] The server to fetch the public room lists from. Defaults to the local server.
      */
     suspend fun queryPublicRooms(server: String? = null, params: SearchPublicRoomsRequest): PublicRoomsResponse {
-        return client.post("/_matrix/client/r0/publicRooms") {
+        return client.post("_matrix/client/r0/publicRooms") {
             parameter("server", server)
 
             header("Authorization", "Bearer $accessToken")

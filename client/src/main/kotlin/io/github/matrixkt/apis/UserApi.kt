@@ -32,7 +32,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
      * @param[limit] The maximum number of results to return. Defaults to 10.
      */
     suspend fun searchUserDirectory(searchTerm: String, limit: Long? = null): SearchUsersResponse {
-        return client.post("/_matrix/client/r0/user_directory/search") {
+        return client.post("_matrix/client/r0/user_directory/search") {
             header("Authorization", "Bearer $accessToken")
             contentType(ContentType.Application.Json)
             body = SearchUsersRequest(searchTerm, limit)

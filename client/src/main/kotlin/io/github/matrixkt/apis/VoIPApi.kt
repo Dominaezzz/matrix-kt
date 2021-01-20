@@ -17,7 +17,7 @@ class VoIPApi internal constructor(private val client: HttpClient, private val a
      * **Requires auth**: Yes.
      */
     suspend fun getTurnServer(): TurnServerResponse {
-        return client.post("/_matrix/client/r0/voip/turnServer") {
+        return client.post("_matrix/client/r0/voip/turnServer") {
             header("Authorization", "Bearer $accessToken")
         }
     }

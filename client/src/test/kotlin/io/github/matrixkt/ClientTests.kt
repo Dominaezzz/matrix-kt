@@ -13,8 +13,7 @@ import io.github.matrixkt.models.search.*
 import io.github.matrixkt.utils.MatrixJson
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.toByteArray
-import io.ktor.http.ContentType
-import io.ktor.http.HttpStatusCode
+import io.ktor.http.*
 import io.ktor.util.KtorExperimentalAPI
 import kotlinx.serialization.json.*
 import testutils.runSuspendTest
@@ -22,9 +21,13 @@ import utils.respondJson
 import kotlin.test.*
 
 class ClientTests {
+    private val baseUrl = Url("https://matrix-client.popular.org/more/stuff/here/")
+
     @Test
     fun testCreateRoom() = runSuspendTest {
         val mockEngine = MockEngine {
+            assertEquals("${baseUrl}_matrix/client/r0/createRoom", it.url.toString())
+
             // language=json
             respondJson("""
                 {
@@ -34,7 +37,7 @@ class ClientTests {
             )
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val roomApi = client.roomApi
 
@@ -56,6 +59,7 @@ class ClientTests {
     fun testResolveRoom() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -65,6 +69,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -75,7 +80,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val roomApi = client.roomApi
 
         run {
@@ -94,6 +99,7 @@ class ClientTests {
     @Test
     fun testJoinedRooms() = runSuspendTest {
         val mockEngine = MockEngine {
+        	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
             // language=json
             respondJson("""
                 {
@@ -104,7 +110,7 @@ class ClientTests {
                 """
             )
         }
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val result = client.roomApi.getJoinedRooms()
         assertEquals(listOf("!foo:example.com"), result)
@@ -114,12 +120,14 @@ class ClientTests {
     fun testInvite() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -129,6 +137,7 @@ class ClientTests {
                 """, HttpStatusCode.NotFound)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -138,6 +147,7 @@ class ClientTests {
                 """, HttpStatusCode.Forbidden)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -149,7 +159,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val roomApi = client.roomApi
 
         roomApi.inviteUser("!LALALA:matrix.org", "@me:matrix.org")
@@ -181,6 +191,7 @@ class ClientTests {
     fun testVisibility() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -189,6 +200,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -197,6 +209,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -206,7 +219,7 @@ class ClientTests {
                 """, HttpStatusCode.NotFound)
             }
         }
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val roomApi = client.roomApi
 
         run {
@@ -230,6 +243,7 @@ class ClientTests {
     @Test
     fun testGetPublicRooms() = runSuspendTest {
         val mockEngine = MockEngine {
+        	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
             // language=json
             respondJson("""
                 {
@@ -254,7 +268,7 @@ class ClientTests {
                 """
             )
         }
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val roomApi = client.roomApi
 
         val response = roomApi.getPublicRooms(limit = 15)
@@ -268,6 +282,7 @@ class ClientTests {
     @Test
     fun testGetEvent() = runSuspendTest {
         val mockEngine = MockEngine {
+        	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
             // language=json
             respondJson("""
                 {
@@ -289,7 +304,7 @@ class ClientTests {
                 """)
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val event = client.roomApi.getOneRoomEvent(
             "!636q39766251:matrix.org",
@@ -316,6 +331,7 @@ class ClientTests {
     @Test
     fun testGetStateEvents() = runSuspendTest {
         val mockEngine = MockEngine {
+        	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
             // language=json
             respondJson("""
                 [
@@ -403,7 +419,7 @@ class ClientTests {
                 """)
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val events = client.roomApi.getRoomState("!QNblkMeHRKNQGSYGQO:matrix.org")
 
@@ -417,6 +433,7 @@ class ClientTests {
     @Test
     fun testGetMembers() = runSuspendTest {
         val mockEngine = MockEngine {
+        	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
             // language=json
             respondJson("""
                 {
@@ -442,7 +459,7 @@ class ClientTests {
                 """)
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val response = client.roomApi.getMembersByRoom("!QNblkMeHRKNQGSYGQO:matrix.org")
 
@@ -455,6 +472,7 @@ class ClientTests {
     fun testGetVersions() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -469,7 +487,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.miscApi.getVersions()
@@ -484,6 +502,7 @@ class ClientTests {
     fun testWellKnown() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -501,7 +520,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.miscApi.getWellKnown()
@@ -514,6 +533,7 @@ class ClientTests {
     fun testRegister() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -524,6 +544,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -533,6 +554,7 @@ class ClientTests {
                 """, HttpStatusCode.BadRequest)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -556,6 +578,7 @@ class ClientTests {
                 """, HttpStatusCode.Unauthorized)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -565,6 +588,7 @@ class ClientTests {
                 """, HttpStatusCode.Forbidden)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -576,7 +600,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val request = RegisterRequest(
             auth = AuthenticationData.Dummy(
                 session = "xxxxx"
@@ -631,6 +655,7 @@ class ClientTests {
     fun testGetLogin() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -643,6 +668,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -654,7 +680,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.authApi.getLoginFlows()
@@ -675,6 +701,7 @@ class ClientTests {
     fun testPostLogin() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -693,6 +720,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -702,6 +730,7 @@ class ClientTests {
                 """, HttpStatusCode.BadRequest)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -711,6 +740,7 @@ class ClientTests {
                 """, HttpStatusCode.Forbidden)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -722,7 +752,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val request = LoginRequest(
             type = "m.login.password",
             identifier = UserIdentifier.Matrix(
@@ -935,6 +965,7 @@ class ClientTests {
         // }
 
         val mockEngine = MockEngine {
+        	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
             // language=json
             respondJson("""
                 {
@@ -1043,7 +1074,7 @@ class ClientTests {
                 """.trimIndent())
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val response = client.eventApi.sync(
             "66696p746572",
@@ -1060,6 +1091,7 @@ class ClientTests {
     fun testLogout() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
@@ -1067,7 +1099,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.authApi.logout()
@@ -1078,6 +1110,7 @@ class ClientTests {
     fun testLogoutAll() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
@@ -1085,7 +1118,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         client.authApi.logoutAll()
     }
@@ -1094,6 +1127,7 @@ class ClientTests {
     fun testRegisterEmailRequestToken() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1103,6 +1137,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1113,7 +1148,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val request = EmailValidationRequest(
             clientSecret = "monkeys_are_GREAT",
             email = "foo@example.com",
@@ -1139,6 +1174,7 @@ class ClientTests {
     fun testRegisterMsisdnRequestToken() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1148,6 +1184,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1158,7 +1195,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val request = MSISDNValidationRequest(
             clientSecret = "monkeys_are_GREAT",
@@ -1185,12 +1222,14 @@ class ClientTests {
     fun testChangePassword() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1214,6 +1253,7 @@ class ClientTests {
                 """, HttpStatusCode.Unauthorized)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1225,7 +1265,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val request = ChangePasswordRequest(
             newPassword = "ihatebananas",
             auth = AuthenticationData.Dummy(
@@ -1254,6 +1294,7 @@ class ClientTests {
     fun testAccountPasswordEmailRequestToken() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1263,6 +1304,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1272,6 +1314,7 @@ class ClientTests {
                 """, HttpStatusCode.BadRequest)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1282,7 +1325,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val request = EmailValidationRequest(
             clientSecret = "monkeys_are_GREAT",
             email = "foo@example.com",
@@ -1313,6 +1356,7 @@ class ClientTests {
     fun testAccountPasswordMsisdnRequestToken() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1322,6 +1366,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1331,6 +1376,7 @@ class ClientTests {
                 """, HttpStatusCode.BadRequest)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1341,7 +1387,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val request = MSISDNValidationRequest(
             clientSecret = "monkeys_are_GREAT",
             country = "GB",
@@ -1373,6 +1419,7 @@ class ClientTests {
     fun testAccountDeactivate() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1381,6 +1428,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1404,6 +1452,7 @@ class ClientTests {
                 """, HttpStatusCode.Unauthorized)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1415,7 +1464,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val request = DeactivateRequest(
             auth = AuthenticationData.Dummy(
                 session = "xxxxx"
@@ -1446,6 +1495,7 @@ class ClientTests {
     fun testRegisterAvailable() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1454,6 +1504,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1465,7 +1516,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.authApi.checkUsernameAvailability("my_cool_localpart")
@@ -1484,6 +1535,7 @@ class ClientTests {
     fun testAccount3pid() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1500,7 +1552,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.accountApi.getAccount3PIDs()
@@ -1516,6 +1568,7 @@ class ClientTests {
     fun testPostAccount3Pid() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1524,6 +1577,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1534,7 +1588,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val request = Add3PidRequest(
             threePidCredentials = ThreePidCredentials(
                 idServer = "matrix.org",
@@ -1561,6 +1615,7 @@ class ClientTests {
     fun testAccount3PidDelete() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1569,6 +1624,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1578,7 +1634,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val request = Remove3PidRequest(
             idServer = "example.org",
@@ -1601,6 +1657,7 @@ class ClientTests {
     fun testAccount3PIdEmailRequestToken() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1610,6 +1667,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1619,6 +1677,7 @@ class ClientTests {
                 """, HttpStatusCode.BadRequest)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1629,7 +1688,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val request = EmailValidationRequest(
             clientSecret = "monkeys_are_GREAT",
             email = "foo@example.com",
@@ -1660,6 +1719,7 @@ class ClientTests {
     fun testAccount3PIdMsisdnRequestToken() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1669,6 +1729,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1678,6 +1739,7 @@ class ClientTests {
                 """, HttpStatusCode.BadRequest)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1688,7 +1750,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val request = MSISDNValidationRequest(
             clientSecret = "monkeys_are_GREAT",
             country = "GB",
@@ -1721,6 +1783,7 @@ class ClientTests {
     fun testWhoAmI() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1729,6 +1792,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1738,6 +1802,7 @@ class ClientTests {
                 """, HttpStatusCode.Unauthorized)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1747,6 +1812,7 @@ class ClientTests {
                 """, HttpStatusCode.Forbidden)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1758,7 +1824,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.accountApi.getTokenOwner()
@@ -1789,6 +1855,7 @@ class ClientTests {
     fun testCapabilities() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1813,6 +1880,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1824,7 +1892,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.miscApi.getCapabilities()
@@ -1848,6 +1916,7 @@ class ClientTests {
     fun testUploadFilter() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1857,7 +1926,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val filter = Filter(
             room = RoomFilter(
                 state = StateFilter(
@@ -1901,6 +1970,7 @@ class ClientTests {
     fun testDownloadFilter() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1957,7 +2027,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.filterApi.getFilter("@alice:example.com", "66696p746572")
@@ -1968,6 +2038,7 @@ class ClientTests {
     fun testGetEventContent() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -1977,7 +2048,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.roomApi.getRoomStateWithKey(
@@ -1990,6 +2061,7 @@ class ClientTests {
     fun testGetJoinedMembers() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2004,7 +2076,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.roomApi.getJoinedMembersByRoom("!21636q39766251@example.com")
@@ -2020,6 +2092,7 @@ class ClientTests {
     fun testGetRoomMessages() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2091,7 +2164,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.roomApi.getRoomEvents(
@@ -2105,6 +2178,7 @@ class ClientTests {
     fun testUpdateRoomState() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2113,6 +2187,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2123,7 +2198,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val request = MatrixJson.encodeToJsonElement(
             MemberContent.serializer(),
             MemberContent(
@@ -2153,6 +2228,7 @@ class ClientTests {
     fun testSendEventType() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2162,7 +2238,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         // val request = RoomMessageContent.Text(
         //     body = "hello"
@@ -2183,6 +2259,7 @@ class ClientTests {
     fun testRedact() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2192,7 +2269,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.roomApi.redactEvent(
@@ -2205,12 +2282,14 @@ class ClientTests {
     fun testCreateRoomAlias() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2221,7 +2300,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.roomApi.setRoomAlias("!monkeys@matrix.org", "!abnjk1jdasj98:capuchins.com")
@@ -2238,12 +2317,14 @@ class ClientTests {
     fun testDeleteRoomAlias() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2254,7 +2335,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.roomApi.deleteRoomAlias("%23monkeys%3Amatrix.org")
@@ -2271,6 +2352,7 @@ class ClientTests {
     fun testJoinRoom() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2282,7 +2364,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val request = JoinRoomRequest(
             thirdPartySigned = ThirdPartySigned(
@@ -2311,6 +2393,7 @@ class ClientTests {
     fun testJoinRoomRoomIdOrAlias() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2322,7 +2405,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val request = JoinRoomRequest(
             thirdPartySigned = ThirdPartySigned(
@@ -2352,12 +2435,14 @@ class ClientTests {
     fun testLeave() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2369,7 +2454,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         // POST /_matrix/client/r0/rooms//leave HTTP/1.1
 
@@ -2389,12 +2474,14 @@ class ClientTests {
     fun testForget() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2404,6 +2491,7 @@ class ClientTests {
                 """, HttpStatusCode.BadRequest)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2415,7 +2503,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.roomApi.forgetRoom("%21au1ba7o%3Amatrix.org")
@@ -2440,6 +2528,7 @@ class ClientTests {
     fun testKick() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
@@ -2447,7 +2536,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val request = KickRequest(
             reason = "Telling unfunny jokes",
             userId = "@cheeky_monkey:matrix.org"
@@ -2462,6 +2551,7 @@ class ClientTests {
     fun testBan() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
@@ -2469,7 +2559,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val request = BanRequest(
             reason = "Telling unfunny jokes",
             userId = "@cheeky_monkey:matrix.org"
@@ -2484,6 +2574,7 @@ class ClientTests {
     fun testUnban() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
@@ -2491,7 +2582,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.roomApi.unban("!e42d8c@matrix.org", "@cheeky_monkey:matrix.org")
@@ -2502,12 +2593,14 @@ class ClientTests {
     fun testSetVisibility() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2518,7 +2611,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.roomApi.setVisibility("%21curbf%3Amatrix.org", RoomVisibility.PUBLIC)
@@ -2535,6 +2628,7 @@ class ClientTests {
     fun testSearchPublicRooms() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2560,7 +2654,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val request = SearchPublicRoomsRequest(
             limit = 10,
@@ -2583,6 +2677,7 @@ class ClientTests {
     fun testUserDirectorySearch() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2598,6 +2693,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2609,7 +2705,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.userApi.searchUserDirectory("foo", 10)
@@ -2632,12 +2728,14 @@ class ClientTests {
     fun testUserDisplayName() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2649,7 +2747,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.userApi.setDisplayName("%40alice@example.com", "Alice Margatroid")
@@ -2667,6 +2765,7 @@ class ClientTests {
     fun testGetUserDisplayName() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2676,7 +2775,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.userApi.getDisplayName("@alice:example.com")
@@ -2688,12 +2787,14 @@ class ClientTests {
     fun testSetUserAvatar() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2705,7 +2806,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.userApi.setAvatarUrl("%40alice%3Aexample.com", "mxc://matrix.org/wefh34uihSDRGhw34")
@@ -2723,6 +2824,7 @@ class ClientTests {
     fun testGetAvatarUrl() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2732,7 +2834,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.userApi.getAvatarUrl("%40alice%3Aexample.com")
@@ -2744,6 +2846,7 @@ class ClientTests {
     fun testGetUserProfile() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2754,7 +2857,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.userApi.getUserProfile("%40alice%3Aexample.com")
@@ -2767,6 +2870,7 @@ class ClientTests {
     fun testGetTurnServer() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2782,6 +2886,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2793,7 +2898,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.voIPApi.getTurnServer()
@@ -2818,12 +2923,14 @@ class ClientTests {
     fun testTyping() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2835,7 +2942,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val request = TypingRequest(
             typing = true,
             timeout = 30000
@@ -2857,12 +2964,14 @@ class ClientTests {
     fun testRoomUpdateReceipt() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2874,7 +2983,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.roomApi.postReceipt("!wefuh21ffskfuh345@example.com", "m.read", "%241924376522eioj%3Aexample.com")
@@ -2892,12 +3001,14 @@ class ClientTests {
     fun testReadMarkers() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2909,7 +3020,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val request = ReadMarkersRequest(
             fullyRead = "\$somewhere:example.org",
             read = "\$elsewhere:example.org"
@@ -2931,12 +3042,14 @@ class ClientTests {
     fun testSetPresenceAndStatus() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2948,7 +3061,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.userApi.setPresence("@alice:example.com", Presence.ONLINE, "I am here.")
@@ -2966,6 +3079,7 @@ class ClientTests {
     fun testGetUserPresence() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2975,6 +3089,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2984,6 +3099,7 @@ class ClientTests {
                 """, HttpStatusCode.Forbidden)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -2994,7 +3110,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.userApi.getPresence("@alice:example.com")
@@ -3020,6 +3136,7 @@ class ClientTests {
     fun testUpload() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 assertEquals(ContentType.Application.Pdf, it.body.contentType)
                 assertTrue(byteArrayOf(123, 21, 0).contentEquals(it.body.toByteArray()))
 
@@ -3031,6 +3148,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3040,6 +3158,7 @@ class ClientTests {
                 """, HttpStatusCode.PayloadTooLarge)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3051,7 +3170,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val blob = byteArrayOf(123, 21, 0)
 
@@ -3078,6 +3197,7 @@ class ClientTests {
     fun testDownload() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3088,6 +3208,7 @@ class ClientTests {
                 """, HttpStatusCode.TooManyRequests)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3098,7 +3219,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val error = assertFailsWith<MatrixError.LimitExceeded> {
@@ -3119,6 +3240,7 @@ class ClientTests {
     fun testDownloadServerName() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3129,6 +3251,7 @@ class ClientTests {
                 """, HttpStatusCode.TooManyRequests)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3139,7 +3262,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val error = assertFailsWith<MatrixError.LimitExceeded> {
@@ -3160,6 +3283,7 @@ class ClientTests {
     fun testGetThumbnail() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3169,6 +3293,7 @@ class ClientTests {
                 """, HttpStatusCode.BadRequest)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3178,6 +3303,7 @@ class ClientTests {
                 """, HttpStatusCode.PayloadTooLarge)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3188,6 +3314,7 @@ class ClientTests {
                 """, HttpStatusCode.TooManyRequests)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3198,7 +3325,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val error = assertFailsWith<MatrixError.Unknown> {
@@ -3235,6 +3362,7 @@ class ClientTests {
     fun testGetPreviewUrl() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3249,6 +3377,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3260,7 +3389,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.contentApi.getUrlPreview("https://matrix.org", 1510610716656)
@@ -3285,6 +3414,7 @@ class ClientTests {
     fun testGetMediaConfig() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3293,6 +3423,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3303,7 +3434,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.contentApi.getConfig()
@@ -3321,6 +3452,7 @@ class ClientTests {
     fun testSendToDevice() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
@@ -3328,7 +3460,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val messages = mapOf(
             "@alice:example.com" to mapOf(
@@ -3347,6 +3479,7 @@ class ClientTests {
     fun testGetDevices() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3363,7 +3496,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.deviceApi.getDevices()
@@ -3379,6 +3512,7 @@ class ClientTests {
     fun testGetDevice() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3391,7 +3525,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.deviceApi.getDevice("The id of device")
@@ -3406,6 +3540,7 @@ class ClientTests {
     fun testSetDeviceDisplayName() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
@@ -3413,7 +3548,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.deviceApi.updateDevice("QBUAZIFURK", "My other phone")
@@ -3424,12 +3559,14 @@ class ClientTests {
     fun testDeleteDevice() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3454,7 +3591,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
         val request = AuthenticationData.Dummy(
             session = "xxxxx"
             // "example_credential": "verypoorsharedsecret"
@@ -3474,12 +3611,14 @@ class ClientTests {
     fun testDeleteDevices() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3504,7 +3643,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val devices = listOf(
             "QBUAZIFURK",
@@ -3529,6 +3668,7 @@ class ClientTests {
     fun testKeyUpload() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3541,7 +3681,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val keys = UploadKeysRequest(
             deviceKeys = DeviceKeys(
@@ -3596,6 +3736,7 @@ class ClientTests {
     fun testKeysQuery() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3629,7 +3770,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val query = QueryKeysRequest(
             timeout = 10000,
@@ -3651,6 +3792,7 @@ class ClientTests {
     fun testKeysClaim() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3674,7 +3816,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val query = ClaimKeysRequest(
             timeout = 10000,
@@ -3697,6 +3839,7 @@ class ClientTests {
     fun testKeyChanges() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3713,7 +3856,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.keysApi.getKeysChanges(from = "s72594_4483_1934", to = "s75689_5632_2435")
@@ -3728,6 +3871,7 @@ class ClientTests {
     fun testGetPushers() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3750,7 +3894,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.pushApi.getPushers()
@@ -3765,12 +3909,14 @@ class ClientTests {
     fun testSetPushers() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3780,6 +3926,7 @@ class ClientTests {
                 """, HttpStatusCode.BadRequest)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3791,7 +3938,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val pusher = Pusher(
             lang = "en",
@@ -3830,6 +3977,7 @@ class ClientTests {
     fun testGetNotifications() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -3866,7 +4014,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.miscApi.getNotifications(from = "xxxxx", limit = 20, only = "highlight")
@@ -3886,6 +4034,7 @@ class ClientTests {
     fun testGetPushRules() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4080,7 +4229,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.pushApi.getPushRules()
@@ -4095,6 +4244,7 @@ class ClientTests {
     fun testGetPushRule() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4110,7 +4260,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.pushApi.getPushRule("global", PushRuleKind.CONTENT,"nocake")
@@ -4126,6 +4276,7 @@ class ClientTests {
     fun testDeletePushRule() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
@@ -4133,7 +4284,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.pushApi.deletePushRule("global", PushRuleKind.CONTENT,"nocake")
@@ -4144,12 +4295,14 @@ class ClientTests {
     fun testSetPushRule() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4159,6 +4312,7 @@ class ClientTests {
                 """, HttpStatusCode.BadRequest)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4170,7 +4324,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val pushRule = SetPushRuleRequest(
             pattern = "cake*lie",
@@ -4207,6 +4361,7 @@ class ClientTests {
     fun testIsPushRuleEnabled() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4216,7 +4371,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.pushApi.isPushRuleEnabled("global", PushRuleKind.CONTENT,"nocake")
@@ -4228,6 +4383,7 @@ class ClientTests {
     fun testSetPushRuleEnabled() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
@@ -4235,7 +4391,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.pushApi.setPushRuleEnabled("global", PushRuleKind.CONTENT, "nocake", true)
@@ -4246,6 +4402,7 @@ class ClientTests {
     fun testGetPushRuleActions() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4257,7 +4414,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.pushApi.getPushRuleActions("global", PushRuleKind.CONTENT,"nocake")
@@ -4269,6 +4426,7 @@ class ClientTests {
     fun testSetPushRuleActions() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
@@ -4276,7 +4434,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.pushApi.setPushRuleActions("global", PushRuleKind.ROOM, "!spam:example.com", listOf("notify"))
@@ -4287,6 +4445,7 @@ class ClientTests {
     fun testSearch() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4336,6 +4495,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4347,7 +4507,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         val request = SearchRequest(
             searchCategories = Categories(
@@ -4384,6 +4544,7 @@ class ClientTests {
     fun testGetRoomTags() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4401,7 +4562,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.userApi.getRoomTags("@alice:example.com", "\$726s6s6q:example.com")
@@ -4416,6 +4577,7 @@ class ClientTests {
     fun testSetRoomTag() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
@@ -4423,7 +4585,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.userApi.setRoomTag("@alice:example.com", "\$726s6s6q:example.com", "u.work", 0.25)
@@ -4434,6 +4596,7 @@ class ClientTests {
     fun testDeleteRoomTag() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
@@ -4441,7 +4604,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.userApi.deleteRoomTag("@alice:example.com", "\$726s6s6q:example.com", "u.work")
@@ -4452,6 +4615,7 @@ class ClientTests {
     fun testGetAccountData() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4461,7 +4625,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.userApi.getAccountData("@alice:example.com", "org.example.custom.config")
@@ -4474,6 +4638,7 @@ class ClientTests {
     fun testGetAccountDataPerRoom() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4483,7 +4648,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.userApi.getAccountDataPerRoom("@alice:example.com", "\$726s6s6q:example.com", "org.example.custom.room.config")
@@ -4496,6 +4661,7 @@ class ClientTests {
     fun testGetWhoIs() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4525,7 +4691,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.adminApi.getWhoIs("@peter:rabbit.rocks")
@@ -4548,6 +4714,7 @@ class ClientTests {
     fun testGetEventContext() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4657,7 +4824,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.roomApi.getEventContext("!636q39766251:example.com", "\$f3h4d129462ha:example.com", limit = 3)
@@ -4674,6 +4841,7 @@ class ClientTests {
     fun testReportContent() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {}
@@ -4681,7 +4849,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             client.roomApi.reportContent("!637q39766251:example.com", "\$something:example.org", -100, "this makes me sad")
@@ -4692,6 +4860,7 @@ class ClientTests {
     fun testGetProtocols() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4761,7 +4930,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.thirdPartyApi.getProtocols()
@@ -4776,6 +4945,7 @@ class ClientTests {
     fun testGetProtocolMetadata() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4816,6 +4986,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4825,7 +4996,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.thirdPartyApi.getProtocolMetadata("irc")
@@ -4846,6 +5017,7 @@ class ClientTests {
     fun testQueryLocationByProtocol() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     [
@@ -4861,6 +5033,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4870,7 +5043,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.thirdPartyApi.queryLocationByProtocol("irc")
@@ -4893,6 +5066,7 @@ class ClientTests {
     fun testQueryUserByProtocol() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     [
@@ -4907,6 +5081,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4916,7 +5091,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         // GET /_matrix/client/r0/thirdparty/user/irc HTTP/1.1
 
@@ -4939,6 +5114,7 @@ class ClientTests {
     fun testQueryLocationByAlias() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     [
@@ -4954,6 +5130,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -4963,7 +5140,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.thirdPartyApi.queryLocationByAlias(alias = "#matrix:matrix.org")
@@ -4984,6 +5161,7 @@ class ClientTests {
     fun testQueryUserByID() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     [
@@ -4998,6 +5176,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -5007,7 +5186,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.thirdPartyApi.queryUserByID(userId = "@bob:matrix.org")
@@ -5028,6 +5207,7 @@ class ClientTests {
     fun testRequestOpenId() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -5039,6 +5219,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -5050,7 +5231,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.userApi.requestOpenIdToken("@alice:example.com")
@@ -5072,6 +5253,7 @@ class ClientTests {
     fun testRoomUpgrade() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -5080,6 +5262,7 @@ class ClientTests {
                 """)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -5089,6 +5272,7 @@ class ClientTests {
                 """, HttpStatusCode.BadRequest)
             }
             addHandler {
+            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -5099,7 +5283,7 @@ class ClientTests {
             }
         }
 
-        val client = MatrixClient(mockEngine)
+        val client = MatrixClient(mockEngine, baseUrl)
 
         run {
             val response = client.roomApi.upgradeRoom("!oldroom:example.org", "2")

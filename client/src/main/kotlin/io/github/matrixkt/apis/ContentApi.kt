@@ -31,7 +31,7 @@ class ContentApi internal constructor(private val client: HttpClient, private va
      * @return The [MXC URI](https://matrix.org/docs/spec/client_server/r0.5.0#mxc-uri) to the uploaded content.
      */
     suspend fun uploadContent(contentType: String?, filename: String?, content: ByteArray): String {
-        val response = client.post<UploadResponse>("/_matrix/media/r0/upload") {
+        val response = client.post<UploadResponse>("_matrix/media/r0/upload") {
             parameter("filename", filename)
             header("Authorization", "Bearer $accessToken")
 

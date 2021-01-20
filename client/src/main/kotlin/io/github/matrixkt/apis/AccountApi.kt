@@ -24,7 +24,7 @@ class AccountApi internal constructor(private val client: HttpClient, private va
      * **Requires auth**: Yes.
      */
     suspend fun getAccount3PIDs(): List<ThirdPartyIdentifier> {
-        val response = client.get<Get3PidsResponse>("/_matrix/client/r0/account/3pid") {
+        val response = client.get<Get3PidsResponse>("_matrix/client/r0/account/3pid") {
             header("Authorization", "Bearer $accessToken")
         }
         return response.threepids
@@ -38,7 +38,7 @@ class AccountApi internal constructor(private val client: HttpClient, private va
      * **Requires auth**: Yes.
      */
     suspend fun add3PID(params: Add3PidRequest) {
-        return client.post("/_matrix/client/r0/account/3pid") {
+        return client.post("_matrix/client/r0/account/3pid") {
             header("Authorization", "Bearer $accessToken")
             contentType(ContentType.Application.Json)
             body = params
@@ -54,7 +54,7 @@ class AccountApi internal constructor(private val client: HttpClient, private va
      * **Requires auth**: Yes.
      */
     suspend fun delete3pidFromAccount(params: Remove3PidRequest): Remove3PidResponse {
-        return client.post("/_matrix/client/r0/account/3pid/delete") {
+        return client.post("_matrix/client/r0/account/3pid/delete") {
             header("Authorization", "Bearer $accessToken")
             contentType(ContentType.Application.Json)
             body = params
@@ -76,7 +76,7 @@ class AccountApi internal constructor(private val client: HttpClient, private va
      * @return The user id that owns the access token.
      */
     suspend fun getTokenOwner(): String {
-        val response = client.get<WhoAmIResponse>("/_matrix/client/r0/account/whoami") {
+        val response = client.get<WhoAmIResponse>("_matrix/client/r0/account/whoami") {
             header("Authorization", "Bearer $accessToken")
         }
         return response.userId
@@ -191,7 +191,7 @@ class AccountApi internal constructor(private val client: HttpClient, private va
      * **Requires auth**: No.
      */
     suspend fun requestTokenTo3PIDEmail(params: EmailValidationRequest): TokenValidationResponse {
-        return client.post("/_matrix/client/r0/account/3pid/email/requestToken") {
+        return client.post("_matrix/client/r0/account/3pid/email/requestToken") {
             contentType(ContentType.Application.Json)
             body = params
         }
@@ -210,7 +210,7 @@ class AccountApi internal constructor(private val client: HttpClient, private va
      * **Requires auth**: No.
      */
     suspend fun requestTokenTo3PIDMSISDN(params: MSISDNValidationRequest): TokenValidationResponse {
-        return client.post("/_matrix/client/r0/account/3pid/msisdn/requestToken") {
+        return client.post("_matrix/client/r0/account/3pid/msisdn/requestToken") {
             contentType(ContentType.Application.Json)
             body = params
         }
