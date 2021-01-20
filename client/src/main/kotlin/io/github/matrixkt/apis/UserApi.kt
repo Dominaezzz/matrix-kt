@@ -317,11 +317,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
             header("Authorization", "Bearer $accessToken")
 
             contentType(ContentType.Application.Json)
-            body = buildJsonObject {
-                if (order != null) {
-                    put("order", order)
-                }
-            }
+            body = TagContent.Tag(order)
         }
     }
 
