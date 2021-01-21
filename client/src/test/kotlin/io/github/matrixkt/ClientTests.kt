@@ -753,8 +753,7 @@ class ClientTests {
         }
 
         val client = MatrixClient(mockEngine, baseUrl)
-        val request = LoginRequest(
-            type = "m.login.password",
+        val request = LoginRequest.Password(
             identifier = UserIdentifier.Matrix(
                 "Dominaezzz"
             ),

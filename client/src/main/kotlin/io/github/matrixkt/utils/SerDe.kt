@@ -1,6 +1,7 @@
 package io.github.matrixkt.utils
 
 import io.github.matrixkt.models.AuthenticationData
+import io.github.matrixkt.models.LoginRequest
 import io.github.matrixkt.models.MatrixError
 import io.github.matrixkt.models.UserIdentifier
 import io.github.matrixkt.models.events.contents.*
@@ -166,6 +167,11 @@ val MatrixSerialModule = SerializersModule {
         subclass(MatrixError.InvalidParam.serializer())
         subclass(MatrixError.ResourceLimitExceeded.serializer())
         subclass(MatrixError.CannotLeaveServerNoticeRoom.serializer())
+    }
+
+    polymorphic(LoginRequest::class) {
+        subclass(LoginRequest.Password.serializer())
+        subclass(LoginRequest.Token.serializer())
     }
 }
 

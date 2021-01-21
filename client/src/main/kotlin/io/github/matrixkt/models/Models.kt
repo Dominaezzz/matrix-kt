@@ -755,61 +755,76 @@ data class LoginFlowsResponse(
 )
 
 @Serializable
-data class LoginRequest(
-    /**
-     * The login type being used.
-     * One of: ["m.login.password", "m.login.token"]
-     */
-    val type: String,
+abstract class LoginRequest {
+    // /**
+    //  * The login type being used.
+    //  * One of: ["m.login.password", "m.login.token"]
+    //  */
+    // val type: String
 
     /**
      * Identification information for the user.
      */
-    val identifier: UserIdentifier? = null,
-
-    /**
-     * The fully qualified user ID or just local part of the user ID, to log in.
-     * Deprecated in favour of [identifier].
-     */
-    @Deprecated(message = "Deprecated in favour of `identifier`")
-    val user: String? = null,
-
-    /**
-     * When logging in using a third party identifier, the medium of the identifier.
-     * Must be 'email'.
-     * Deprecated in favour of [identifier].
-     */
-    @Deprecated(message = "Deprecated in favour of `identifier`")
-    val medium: String? = null,
-
-    /**
-     * Third party identifier for the user.
-     * Deprecated in favour of [identifier].
-     */
-    @Deprecated(message = "Deprecated in favour of `identifier`")
-    val address: String? = null,
-
-    /**
-     * Required when [type] is `m.login.password`.
-     * The user's password.
-     */
-    val password: String? = null,
-
-    /**
-     * Required when [type] is `m.login.token`.
-     * Part of [Token-based](https://matrix.org/docs/spec/client_server/r0.5.0#token-based) login.
-     */
-    val token: String? = null,
+    abstract val identifier: UserIdentifier?
 
     @SerialName("device_id")
-    val deviceId: String? = null,
+    abstract val deviceId: String?
 
     /**
      * A display name to assign to the newly-created device.
      * Ignored if [deviceId] corresponds to a known device.
      */
-    val initialDeviceDisplayName: String? = null
-)
+    @SerialName("initial_device_display_name")
+    abstract val initialDeviceDisplayName: String?
+
+    @SerialName("m.login.password")
+    @Serializable
+    data class Password(
+        /**
+         * Identification information for the user.
+         */
+        override val identifier: UserIdentifier? = null,
+
+        /**
+         * The user's password.
+         */
+        val password: String,
+
+        @SerialName("device_id")
+        override val deviceId: String? = null,
+
+        /**
+         * A display name to assign to the newly-created device.
+         * Ignored if [deviceId] corresponds to a known device.
+         */
+        @SerialName("initial_device_display_name")
+        override val initialDeviceDisplayName: String? = null
+    ) : LoginRequest()
+
+    @SerialName("m.login.token")
+    @Serializable
+    data class Token(
+        /**
+         * Identification information for the user.
+         */
+        override val identifier: UserIdentifier? = null,
+
+        /**
+         * Part of [Token-based](https://matrix.org/docs/spec/client_server/r0.5.0#token-based) login.
+         */
+        val token: String,
+
+        @SerialName("device_id")
+        override val deviceId: String? = null,
+
+        /**
+         * A display name to assign to the newly-created device.
+         * Ignored if [deviceId] corresponds to a known device.
+         */
+        @SerialName("initial_device_display_name")
+        override val initialDeviceDisplayName: String? = null
+    ) : LoginRequest()
+}
 
 @Serializable
 data class LoginResponse(
