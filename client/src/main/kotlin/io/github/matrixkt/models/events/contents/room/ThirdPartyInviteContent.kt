@@ -1,6 +1,5 @@
 package io.github.matrixkt.models.events.contents.room
 
-import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -38,7 +37,7 @@ data class ThirdPartyInviteContent(
      */
     @SerialName("public_keys")
     val publicKeys: List<PublicKeys> = emptyList()
-) : Content() {
+) {
     @Serializable
     data class PublicKeys(
         /**

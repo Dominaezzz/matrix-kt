@@ -1,6 +1,5 @@
 package io.github.matrixkt.models.events.contents.room
 
-import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -34,7 +33,7 @@ data class CreateContent(
      * A reference to the room this room replaces, if the previous room was upgraded.
      */
     val predecessor: PreviousRoom? = null
-) : Content() {
+) {
     @Serializable
     data class PreviousRoom(
         /**

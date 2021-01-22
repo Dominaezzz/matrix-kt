@@ -1,6 +1,5 @@
 package io.github.matrixkt.models.events.contents.call
 
-import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -31,7 +30,7 @@ data class HangupContent(
      * One of: ["ice_failed", "invite_timeout"]
      */
     val reason: Reason? = null
-): Content() {
+) {
     @Serializable
     enum class Reason {
         @SerialName("ice_failed")

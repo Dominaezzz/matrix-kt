@@ -26,4 +26,4 @@ data class StickerContent(
      * The URL to the sticker image. This must be a valid ``mxc://`` URI.
      */
     val url: String
-) : Content()
+)

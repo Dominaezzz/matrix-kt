@@ -1,7 +1,6 @@
 package io.github.matrixkt.models.events.contents.room
 
 import io.github.matrixkt.models.EncryptedFile
-import io.github.matrixkt.models.events.contents.Content
 import io.github.matrixkt.models.events.contents.msginfo.*
 import io.github.matrixkt.utils.DiscriminatorChanger
 import kotlinx.serialization.*
@@ -21,7 +20,7 @@ import kotlinx.serialization.json.*
  */
 @SerialName("m.room.message")
 @Serializable(MessageContent.TheSerializer::class)
-abstract class MessageContent : Content() {
+abstract class MessageContent {
     /**
      * The textual representation of this message.
      */

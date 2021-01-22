@@ -1,6 +1,5 @@
 package io.github.matrixkt.models.events.contents.key.verification
 
-import io.github.matrixkt.models.events.contents.Content
 import io.github.matrixkt.utils.DiscriminatorChanger
 import kotlinx.serialization.*
 import kotlinx.serialization.encoding.Decoder
@@ -12,7 +11,7 @@ import kotlinx.serialization.encoding.Encoder
  */
 @SerialName("m.key.verification.accept")
 @Serializable(AcceptContent.TheSerializer::class)
-abstract class AcceptContent : Content() {
+abstract class AcceptContent {
     /**
      * An opaque identifier for the verification process. Must be the same as the one used for the m.key.verification.start message.
      */

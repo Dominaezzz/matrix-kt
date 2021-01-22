@@ -18,7 +18,7 @@ data class ReceiptContent(
      * The event ID is the ID of the event being acknowledged and not an ID for the receipt itself.
      */
     val content: Map<String, Receipts> = emptyMap()
-): Content(), Map<String, ReceiptContent.Receipts> by content {
+): Map<String, ReceiptContent.Receipts> by content {
     @Serializable
     data class Receipts(
         /**

@@ -15,4 +15,4 @@ data class IdentityServerContent(
      */
     @SerialName("base_url")
     val baseUrl: String? = null
-) : Content()
+)

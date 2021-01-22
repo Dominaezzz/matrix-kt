@@ -1,6 +1,5 @@
 package io.github.matrixkt.models.events.contents.room
 
-import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -94,7 +93,7 @@ data class PowerLevelsContent(
      * This is a mapping from key to power level for that notifications key.
      */
     val notifications: Notifications? = null
-) : Content() {
+) {
     @Serializable
     data class Notifications(
         /**

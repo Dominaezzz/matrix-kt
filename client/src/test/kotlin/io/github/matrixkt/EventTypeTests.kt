@@ -76,7 +76,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(AnswerContent.serializer())
+        val serializer = MessageEvent.serializer(AnswerContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(0, event.content.version)
@@ -123,7 +123,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(CandidatesContent.serializer())
+        val serializer = MessageEvent.serializer(CandidatesContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(0, event.content.version)
@@ -163,7 +163,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(HangupContent.serializer())
+        val serializer = MessageEvent.serializer(HangupContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(0, event.content.version)
@@ -203,7 +203,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(InviteContent.serializer())
+        val serializer = MessageEvent.serializer(InviteContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(0, event.content.version)
@@ -590,7 +590,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(RoomContent.serializer())
+        val serializer = StateEvent.serializer(RoomContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("#*:example.org", event.content.entity)
@@ -629,7 +629,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(ServerContent.serializer())
+        val serializer = StateEvent.serializer(ServerContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("*.example.org", event.content.entity)
@@ -668,7 +668,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(UserContent.serializer())
+        val serializer = StateEvent.serializer(UserContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("@alice*:example.org", event.content.entity)
@@ -1092,7 +1092,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(AliasesContent.serializer())
+        val serializer = StateEvent.serializer(AliasesContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(2, event.content.aliases.size)
@@ -1135,7 +1135,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(AvatarContent.serializer())
+        val serializer = StateEvent.serializer(AvatarContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(398, event.content.info?.height)
@@ -1178,7 +1178,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(CanonicalAliasContent.serializer())
+        val serializer = StateEvent.serializer(CanonicalAliasContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("#somewhere:localhost", event.content.alias)
@@ -1222,7 +1222,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(CreateContent.serializer())
+        val serializer = StateEvent.serializer(CreateContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("@example:example.org", event.content.creator)
@@ -1264,7 +1264,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(EncryptedContent.MegolmV1.serializer())
+        val serializer = MessageEvent.serializer(EncryptedContent.MegolmV1.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         // assertEquals("m.megolm.v1.aes-sha2", event.content.algorithm)
@@ -1279,7 +1279,7 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        val workaround = MessageEvent.serializer(EncryptedContent.serializer())
+        val workaround = MessageEvent.serializer(EncryptedContent.serializer(), UnsignedData.serializer())
         assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
@@ -1309,7 +1309,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(EncryptedContent.OlmV1.serializer())
+        val serializer = MessageEvent.serializer(EncryptedContent.OlmV1.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         // assertEquals("m.olm.v1.curve25519-aes-sha2", event.content.algorithm)
@@ -1324,7 +1324,7 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        val workaround = MessageEvent.serializer(EncryptedContent.serializer())
+        val workaround = MessageEvent.serializer(EncryptedContent.serializer(), UnsignedData.serializer())
         assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
@@ -1350,7 +1350,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(EncryptionContent.serializer())
+        val serializer = StateEvent.serializer(EncryptionContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.megolm.v1.aes-sha2", event.content.algorithm)
@@ -1387,7 +1387,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(GuestAccessContent.serializer())
+        val serializer = StateEvent.serializer(GuestAccessContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(GuestAccess.CAN_JOIN, event.content.guestAccess)
@@ -1422,7 +1422,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(HistoryVisibilityContent.serializer())
+        val serializer = StateEvent.serializer(HistoryVisibilityContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(HistoryVisibility.SHARED, event.content.historyVisibility)
@@ -1457,7 +1457,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(JoinRulesContent.serializer())
+        val serializer = StateEvent.serializer(JoinRulesContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(JoinRule.PUBLIC, event.content.joinRule)
@@ -1494,7 +1494,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(MemberContent.serializer())
+        val serializer = StateEvent.serializer(MemberContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(Membership.JOIN, event.content.membership)
@@ -1545,7 +1545,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(MemberContent.serializer())
+        val serializer = StateEvent.serializer(MemberContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(Membership.INVITE, event.content.membership)
@@ -1594,7 +1594,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(MessageContent.Audio.serializer())
+        val serializer = MessageEvent.serializer(MessageContent.Audio.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("Bee Gees - Stayin' Alive", event.content.body)
@@ -1610,7 +1610,7 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        val workaround = MessageEvent.serializer(MessageContent.serializer(), UnsignedData.serializer())
         assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
@@ -1636,7 +1636,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(MessageContent.Emote.serializer())
+        val serializer = MessageEvent.serializer(MessageContent.Emote.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("thinks this is an example emote", event.content.body)
@@ -1650,7 +1650,7 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        val workaround = MessageEvent.serializer(MessageContent.serializer(), UnsignedData.serializer())
         assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
@@ -1680,7 +1680,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(MessageContent.File.serializer())
+        val serializer = MessageEvent.serializer(MessageContent.File.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("something-important.doc", event.content.body)
@@ -1696,7 +1696,7 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        val workaround = MessageEvent.serializer(MessageContent.serializer(), UnsignedData.serializer())
         assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
@@ -1727,7 +1727,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(MessageContent.Image.serializer())
+        val serializer = MessageEvent.serializer(MessageContent.Image.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("filename.jpg", event.content.body)
@@ -1744,7 +1744,7 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        val workaround = MessageEvent.serializer(MessageContent.serializer(), UnsignedData.serializer())
         assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
@@ -1778,7 +1778,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(MessageContent.Location.serializer())
+        val serializer = MessageEvent.serializer(MessageContent.Location.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("Big Ben, London, UK", event.content.body)
@@ -1796,7 +1796,7 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        val workaround = MessageEvent.serializer(MessageContent.serializer(), UnsignedData.serializer())
         assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
@@ -1822,7 +1822,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(MessageContent.Notice.serializer())
+        val serializer = MessageEvent.serializer(MessageContent.Notice.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("This is an example notice", event.content.body)
@@ -1836,7 +1836,7 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        val workaround = MessageEvent.serializer(MessageContent.serializer(), UnsignedData.serializer())
         assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
@@ -1863,7 +1863,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(MessageContent.ServerNotice.serializer())
+        val serializer = MessageEvent.serializer(MessageContent.ServerNotice.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("Human-readable message to explain the notice", event.content.body)
@@ -1878,7 +1878,7 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        val workaround = MessageEvent.serializer(MessageContent.serializer(), UnsignedData.serializer())
         assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
@@ -1904,7 +1904,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(MessageContent.Text.serializer())
+        val serializer = MessageEvent.serializer(MessageContent.Text.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("This is an example text message", event.content.body)
@@ -1918,7 +1918,7 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        val workaround = MessageEvent.serializer(MessageContent.serializer(), UnsignedData.serializer())
         assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
@@ -1957,7 +1957,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(MessageContent.Video.serializer())
+        val serializer = MessageEvent.serializer(MessageContent.Video.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("Gangnam Style", event.content.body)
@@ -1980,7 +1980,7 @@ class EventTypeTests {
         assertEquals(1432735824653, event.originServerTimestamp)
         assertEquals(1234, event.unsigned?.age)
 
-        val workaround = MessageEvent.serializer(MessageContent.serializer())
+        val workaround = MessageEvent.serializer(MessageContent.serializer(), UnsignedData.serializer())
         assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
@@ -2004,7 +2004,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(FeedbackContent.serializer())
+        val serializer = MessageEvent.serializer(FeedbackContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("delivered", event.content.type)
@@ -2039,7 +2039,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(NameContent.serializer())
+        val serializer = StateEvent.serializer(NameContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("The room name", event.content.name)
@@ -2076,7 +2076,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(PinnedEventsContent.serializer())
+        val serializer = StateEvent.serializer(PinnedEventsContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(1, event.content.pinned.size)
@@ -2128,7 +2128,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(PowerLevelsContent.serializer())
+        val serializer = StateEvent.serializer(PowerLevelsContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals(50, event.content.ban)
@@ -2175,7 +2175,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(RedactionContent.serializer())
+        val serializer = MessageEvent.serializer(RedactionContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("Spamming", event.content.reason)
@@ -2216,7 +2216,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(ServerAclContent.serializer())
+        val serializer = StateEvent.serializer(ServerAclContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         // assertEquals(242352, event.age)
@@ -2265,7 +2265,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(ThirdPartyInviteContent.serializer())
+        val serializer = StateEvent.serializer(ThirdPartyInviteContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("Alice Margatroid", event.content.displayName)
@@ -2306,7 +2306,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(TombstoneContent.serializer())
+        val serializer = StateEvent.serializer(TombstoneContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("This room has been replaced", event.content.body)
@@ -2342,7 +2342,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = StateEvent.serializer(TopicContent.serializer())
+        val serializer = StateEvent.serializer(TopicContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("A room topic", event.content.topic)
@@ -2480,7 +2480,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = MessageEvent.serializer(StickerContent.serializer())
+        val serializer = MessageEvent.serializer(StickerContent.serializer(), UnsignedData.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("Landing", event.content.body)

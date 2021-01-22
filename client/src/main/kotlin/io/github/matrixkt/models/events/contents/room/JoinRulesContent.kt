@@ -1,6 +1,5 @@
 package io.github.matrixkt.models.events.contents.room
 
-import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -19,7 +18,7 @@ data class JoinRulesContent(
      */
     @SerialName("join_rule")
     val joinRule: JoinRule
-) : Content()
+)
 
 @Serializable
 enum class JoinRule {

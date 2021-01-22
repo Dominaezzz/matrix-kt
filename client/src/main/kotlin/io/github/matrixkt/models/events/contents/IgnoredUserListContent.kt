@@ -14,4 +14,4 @@ data class IgnoredUserListContent(
      */
     @SerialName("ignored_users")
     val ignoredUsers: Map<String, Unit>
-) : Content()
+)

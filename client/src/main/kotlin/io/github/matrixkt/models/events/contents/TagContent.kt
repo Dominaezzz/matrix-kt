@@ -13,7 +13,7 @@ data class TagContent(
      * The tags on the room and their contents.
      */
     val tags: Map<String, Tag> = emptyMap()
-) : Content() {
+) {
     @Serializable
     data class Tag(
         /**

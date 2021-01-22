@@ -14,4 +14,4 @@ data class TypingContent(
      */
     @SerialName("user_ids")
     val userIds: List<String>
-): Content()
+)

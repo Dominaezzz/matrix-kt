@@ -54,4 +54,4 @@ data class ForwardedRoomKeyContent(
      */
     @SerialName("forwarding_curve25519_key_chain")
     val forwardingCurve25519KeyChain: List<String>
-) : Content()
+)

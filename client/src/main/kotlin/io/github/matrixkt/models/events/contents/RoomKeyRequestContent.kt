@@ -9,7 +9,7 @@ import kotlinx.serialization.*
  */
 @SerialName("m.room_key_request")
 @Serializable(RoomKeyRequestContent.TheSerializer::class)
-sealed class RoomKeyRequestContent : Content() {
+sealed class RoomKeyRequestContent {
     // /**
     //  * One of: ["request", "request_cancellation"]
     //  */

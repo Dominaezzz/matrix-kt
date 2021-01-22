@@ -1,6 +1,5 @@
 package io.github.matrixkt.models.events.contents.room
 
-import io.github.matrixkt.models.events.contents.Content
 import io.github.matrixkt.models.events.contents.msginfo.ImageInfo
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -21,4 +20,4 @@ data class AvatarContent(
      * The URL to the image.
      */
     val url: String
-) : Content()
+)

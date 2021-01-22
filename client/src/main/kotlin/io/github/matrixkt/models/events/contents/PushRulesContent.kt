@@ -14,4 +14,4 @@ data class PushRulesContent(
      * The global ruleset
      */
     val global: RuleSet? = null
-) : Content()
+)

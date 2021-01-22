@@ -44,4 +44,4 @@ data class PresenceContent(
      */
     @SerialName("status_msg")
     val statusMessage: String? = null
-): Content()
+)

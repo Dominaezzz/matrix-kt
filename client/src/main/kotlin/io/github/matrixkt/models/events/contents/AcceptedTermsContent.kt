@@ -15,4 +15,4 @@ data class AcceptedTermsContent(
      * Should be appended to when the user agrees to new terms.
      */
     val accepted: List<String> = emptyList()
-) : Content()
+)

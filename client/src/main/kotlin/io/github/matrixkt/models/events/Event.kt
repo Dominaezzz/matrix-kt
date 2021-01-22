@@ -2,23 +2,18 @@
 
 package io.github.matrixkt.models.events
 
-import io.github.matrixkt.models.events.contents.*
-import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlin.reflect.KClass
 
-@Serializable(EventSerializer::class)
-sealed class Event<out T : Content> {
+sealed class Event<out Content> {
     /**
      * The fields in this object will vary depending on the type of event.
      * When interacting with the REST API, this is the HTTP body.
      */
-    abstract val content: T
+    abstract val content: Content
 
     /**
      * The type of event.
@@ -27,25 +22,8 @@ sealed class Event<out T : Content> {
     abstract val type: String
 }
 
-class EventSerializer<T : Content>(
-    private val contentSerializer: KSerializer<T>
-) : JsonContentPolymorphicSerializer<Event<T>>(Event::class as KClass<Event<T>>) {
-    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out Event<T>> {
-        require(element is JsonObject)
-        return if ("sender" in element) {
-            if ("roomId" in element) {
-                RoomEvent.serializer(contentSerializer)
-            } else {
-                EphemeralEvent.serializer(contentSerializer)
-            }
-        } else {
-            AccountEvent.serializer(contentSerializer)
-        }
-    }
-}
-
 @Serializable(RoomEventSerializer::class)
-sealed class RoomEvent<out T : Content> : Event<T>() {
+sealed class RoomEvent<out Content, out UnsignedData> : Event<Content>() {
     /**
      * The globally unique event identifier.
      */
@@ -77,24 +55,25 @@ sealed class RoomEvent<out T : Content> : Event<T>() {
     abstract val roomId: String
 }
 
-class RoomEventSerializer<T : Content>(
-    private val contentSerializer: KSerializer<T>
-) : JsonContentPolymorphicSerializer<RoomEvent<T>>(RoomEvent::class as KClass<RoomEvent<T>>) {
-    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out RoomEvent<T>> {
+class RoomEventSerializer<Content, UnsignedData>(
+    private val contentSerializer: KSerializer<Content>,
+    private val unsignedDataSerializer: KSerializer<UnsignedData>
+) : JsonContentPolymorphicSerializer<RoomEvent<Content, UnsignedData>>(RoomEvent::class as KClass<RoomEvent<Content, UnsignedData>>) {
+    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out RoomEvent<Content, UnsignedData>> {
         require(element is JsonObject)
         return if (element.containsKey("stateKey")) {
-            StateEvent.serializer(contentSerializer)
+            StateEvent.serializer(contentSerializer, unsignedDataSerializer)
         } else {
-            MessageEvent.serializer(contentSerializer)
+            MessageEvent.serializer(contentSerializer, unsignedDataSerializer)
         }
     }
 }
 
 @Serializable
-data class MessageEvent<out T : Content>(
+data class MessageEvent<out Content, out UnsignedData>(
     override val type: String,
 
-    override val content: T,
+    override val content: Content,
 
     @SerialName("event_id")
     override val eventId: String,
@@ -108,13 +87,13 @@ data class MessageEvent<out T : Content>(
 
     @SerialName("room_id")
     override val roomId: String
-) : RoomEvent<T>()
+) : RoomEvent<Content, UnsignedData>()
 
 @Serializable
-data class StateEvent<out T : Content>(
+data class StateEvent<out Content, out UnsignedData>(
     override val type: String,
 
-    override val content: T,
+    override val content: Content,
 
     @SerialName("event_id")
     override val eventId: String,
@@ -143,24 +122,24 @@ data class StateEvent<out T : Content>(
      * The previous content for this event. If there is no previous content, this key will be missing.
      */
     @SerialName("prev_content")
-    val prevContent: T? = null
-) : RoomEvent<T>()
+    val prevContent: Content? = null
+) : RoomEvent<Content, UnsignedData>()
 
 @Serializable
-data class EphemeralEvent<out T : Content>(
+data class EphemeralEvent<out Content>(
     override val type: String,
 
-    override val content: T,
+    override val content: Content,
 
     /**
      * Contains the fully-qualified ID of the user who sent this event.
      */
     val sender: String
-) : Event<T>()
+) : Event<Content>()
 
 @Serializable
-data class AccountEvent<out T : Content>(
+data class AccountEvent<out Content>(
     override val type: String,
 
-    override val content: T
-) : Event<T>()
+    override val content: Content
+) : Event<Content>()

@@ -1,6 +1,5 @@
 package io.github.matrixkt.models.events.contents.call
 
-import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -33,7 +32,7 @@ data class InviteContent(
      * They should also no longer show the call as awaiting an answer in the UI.
      */
     val lifetime: Long
-) : Content() {
+) {
     @Serializable
     data class Offer(
         /**

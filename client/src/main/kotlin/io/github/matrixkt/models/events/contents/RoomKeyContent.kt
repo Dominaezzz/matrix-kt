@@ -33,4 +33,4 @@ data class RoomKeyContent(
      */
     @SerialName("session_key")
     val sessionKey: String
-) : Content()
+)

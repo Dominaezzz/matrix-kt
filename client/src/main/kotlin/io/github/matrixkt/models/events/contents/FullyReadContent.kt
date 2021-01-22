@@ -15,4 +15,4 @@ data class FullyReadContent(
      */
     @SerialName("event_id")
     val eventId: String
-): Content()
+)

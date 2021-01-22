@@ -1,6 +1,5 @@
 package io.github.matrixkt.models.events.contents.room
 
-import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -16,7 +15,7 @@ data class GuestAccessContent(
      */
     @SerialName("guest_access")
     val guestAccess: GuestAccess
-) : Content()
+)
 
 @Serializable
 enum class GuestAccess {

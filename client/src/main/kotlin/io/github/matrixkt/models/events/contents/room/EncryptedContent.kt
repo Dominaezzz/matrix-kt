@@ -1,6 +1,5 @@
 package io.github.matrixkt.models.events.contents.room
 
-import io.github.matrixkt.models.events.contents.Content
 import io.github.matrixkt.utils.DiscriminatorChanger
 import kotlinx.serialization.*
 import kotlinx.serialization.encoding.Decoder
@@ -13,7 +12,7 @@ import kotlinx.serialization.encoding.Encoder
  */
 @SerialName("m.room.encrypted")
 @Serializable(EncryptedContent.TheSerializer::class)
-abstract class EncryptedContent : Content() {
+abstract class EncryptedContent {
     // /**
     //  * The encryption algorithm used to encrypt this event.
     //  * The value of this field determines which other properties will be present.

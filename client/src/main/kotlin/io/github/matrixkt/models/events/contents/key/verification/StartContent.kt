@@ -1,6 +1,5 @@
 package io.github.matrixkt.models.events.contents.key.verification
 
-import io.github.matrixkt.models.events.contents.Content
 import io.github.matrixkt.utils.DiscriminatorChanger
 import kotlinx.serialization.*
 import kotlinx.serialization.encoding.Decoder
@@ -15,7 +14,7 @@ import kotlinx.serialization.encoding.Encoder
  */
 @SerialName("m.key.verification.start")
 @Serializable(StartContent.TheSerializer::class)
-abstract class StartContent : Content() {
+abstract class StartContent {
     /**
      * The device ID which is initiating the process.
      */

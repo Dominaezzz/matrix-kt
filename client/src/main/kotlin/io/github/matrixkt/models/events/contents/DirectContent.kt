@@ -17,7 +17,7 @@ import kotlinx.serialization.encoding.Encoder
 @Serializable(DirectContent.TheSerializer::class)
 data class DirectContent(
     val content: Map<String, List<String>>
-) : Content(), Map<String, List<String>> by content {
+) : Map<String, List<String>> by content {
     @OptIn(ExperimentalSerializationApi::class)
     @Serializer(forClass = DirectContent::class)
     object TheSerializer : KSerializer<DirectContent> {

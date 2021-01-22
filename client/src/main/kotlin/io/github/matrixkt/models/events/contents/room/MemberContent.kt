@@ -1,6 +1,5 @@
 package io.github.matrixkt.models.events.contents.room
 
-import io.github.matrixkt.models.events.contents.Content
 import io.github.matrixkt.models.events.StrippedState
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -67,7 +66,7 @@ data class MemberContent(
      * Contains optional extra information about the event.
      */
     val unsigned: UnsignedData? = null
-) : Content() {
+) {
     @Serializable
     data class UnsignedData(
         /**

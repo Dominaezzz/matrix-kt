@@ -1,6 +1,5 @@
 package io.github.matrixkt.models.events.contents.key.verification
 
-import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -33,4 +32,4 @@ data class RequestContent(
      * If the request is in the future by more than 5 minutes or more than 10 minutes in the past, the message should be ignored by the receiver.
      */
     val timestamp: Long
-) : Content()
+)

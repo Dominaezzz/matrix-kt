@@ -1,6 +1,5 @@
 package io.github.matrixkt.models.events.contents.key.verification
 
-import io.github.matrixkt.models.events.contents.Content
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -28,4 +27,4 @@ data class MacContent(
      * The MAC of the comma-separated, sorted, list of key IDs given in the mac property, encoded as unpadded base64.
      */
     val keys: String
-) : Content()
+)
