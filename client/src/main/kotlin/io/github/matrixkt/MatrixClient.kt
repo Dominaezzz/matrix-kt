@@ -5,22 +5,18 @@ import io.github.matrixkt.models.*
 import io.github.matrixkt.utils.MatrixJson
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
+import io.ktor.client.call.*
 import io.ktor.client.engine.HttpClientEngine
-import io.ktor.client.features.HttpResponseValidator
-import io.ktor.client.features.defaultRequest
+import io.ktor.client.features.*
 import io.ktor.client.features.json.Json
 import io.ktor.client.features.json.serializer.KotlinxSerializer
-import io.ktor.client.statement.readBytes
 import io.ktor.http.*
 import io.ktor.utils.io.core.Closeable
-import io.ktor.utils.io.core.String
 
 class MatrixClient(engine: HttpClientEngine,
                    baseUrl: Url,
                    block: HttpClientConfig<*>.() -> Unit = {}) : Closeable {
     private val client = HttpClient(engine) {
-        expectSuccess = false
-
         defaultRequest {
             val builder = URLBuilder(baseUrl)
             builder.encodedPath += url.encodedPath
@@ -32,11 +28,11 @@ class MatrixClient(engine: HttpClientEngine,
         }
 
         HttpResponseValidator {
-            validateResponse {
-                if (it.status != HttpStatusCode.OK) {
-                    val errorJson = String(it.readBytes())
-                    throw MatrixJson.decodeFromString(MatrixError.serializer(), errorJson) // it.receive<MatrixError>()
-                }
+            expectSuccess = true
+
+            handleResponseException {
+                if (it !is ResponseException) return@handleResponseException
+                throw it.response.receive<MatrixError>()
             }
         }
 
