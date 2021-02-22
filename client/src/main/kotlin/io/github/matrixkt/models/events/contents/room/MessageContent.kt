@@ -166,7 +166,7 @@ abstract class MessageContent {
          * Required if the file is unencrypted.
          * The URL (typically [MXC URI](https://matrix.org/docs/spec/client_server/r0.5.0#mxc-uri)) to the image.
          */
-        val url: String,
+        val url: String? = null,
 
         /**
          * Required if the file is encrypted.
@@ -201,7 +201,7 @@ abstract class MessageContent {
          * Required if the file is unencrypted.
          * The URL (typically [MXC URI](https://matrix.org/docs/spec/client_server/r0.5.0#mxc-uri)) to the image.
          */
-        val url: String,
+        val url: String? = null,
 
         /**
          * Required if the file is encrypted.
@@ -231,7 +231,7 @@ abstract class MessageContent {
          * Required if the file is unencrypted.
          * The URL (typically [MXC URI](https://matrix.org/docs/spec/client_server/r0.5.0#mxc-uri)) to the image.
          */
-        val url: String,
+        val url: String? = null,
 
         /**
          * Required if the file is encrypted.
@@ -282,7 +282,7 @@ abstract class MessageContent {
          * Required if the file is unencrypted.
          * The URL (typically [MXC URI](https://matrix.org/docs/spec/client_server/r0.5.0#mxc-uri)) to the image.
          */
-        val url: String,
+        val url: String? = null,
 
         /**
          * Required if the file is encrypted.
