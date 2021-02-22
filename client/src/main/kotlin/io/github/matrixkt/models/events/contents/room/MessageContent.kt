@@ -6,8 +6,6 @@ import io.github.matrixkt.utils.DiscriminatorChanger
 import kotlinx.serialization.*
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.encoding.encodeStructure
-import kotlinx.serialization.json.*
 
 /**
  * This event is used when sending messages in a room.
@@ -293,12 +291,6 @@ abstract class MessageContent {
         val file: EncryptedFile? = null
     ) : MessageContent()
 
-    object Redacted : MessageContent() {
-        override val body: String get() = "(Redacted)"
-
-        override fun toString() = "Redacted"
-    }
-
     @OptIn(ExperimentalSerializationApi::class)
     @Serializer(forClass = MessageContent::class)
     object TheSerializer : KSerializer<MessageContent> {
@@ -306,22 +298,11 @@ abstract class MessageContent {
         private val secondDelegate = DiscriminatorChanger(firstDelegate, "msgtype")
 
         override fun serialize(encoder: Encoder, value: MessageContent) {
-            if (value is Redacted) {
-                encoder.encodeStructure(descriptor) {}
-            } else {
-                encoder.encodeSerializableValue(secondDelegate, value)
-            }
+            encoder.encodeSerializableValue(secondDelegate, value)
         }
 
         override fun deserialize(decoder: Decoder): MessageContent {
-            require(decoder is JsonDecoder)
-
-            val jsonObj = decoder.decodeJsonElement().jsonObject
-            return if (jsonObj.isEmpty()) {
-                Redacted
-            } else {
-                decoder.json.decodeFromJsonElement(secondDelegate, jsonObj)
-            }
+            return decoder.decodeSerializableValue(secondDelegate)
         }
     }
 }
