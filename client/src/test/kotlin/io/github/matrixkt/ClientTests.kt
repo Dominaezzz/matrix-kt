@@ -493,8 +493,8 @@ class ClientTests {
             val response = client.miscApi.getVersions()
             assertEquals(1, response.versions.size)
             assertEquals("r0.0.1", response.versions.single())
-            assertEquals(1, response.unstableFeatures!!.size)
-            assertTrue(response.unstableFeatures!!.getValue("org.example.my_feature"))
+            assertEquals(1, response.unstableFeatures.size)
+            assertTrue(response.unstableFeatures.getValue("org.example.my_feature"))
         }
     }
 
