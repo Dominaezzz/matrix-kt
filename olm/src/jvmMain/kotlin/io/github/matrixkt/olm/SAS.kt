@@ -10,6 +10,7 @@ import colm.internal.OlmLibrary.olm_sas_calculate_mac
 import colm.internal.OlmLibrary.olm_sas_calculate_mac_long_kdf
 import colm.internal.OlmLibrary.olm_sas_generate_bytes
 import colm.internal.OlmLibrary.olm_sas_get_pubkey
+import colm.internal.OlmLibrary.olm_sas_is_their_key_set
 import colm.internal.OlmLibrary.olm_sas_last_error
 import colm.internal.OlmLibrary.olm_sas_mac_length
 import colm.internal.OlmLibrary.olm_sas_pubkey_length
@@ -66,6 +67,12 @@ actual class SAS actual constructor(random: Random) {
             checkError(result)
         }
     }
+
+    /**
+     * Checks if their key was set.
+     */
+    actual val isTheirKeySet: Boolean
+        get() = olm_sas_is_their_key_set(ptr) != 0
 
     /**
      * Generate bytes to use for the short authentication string.

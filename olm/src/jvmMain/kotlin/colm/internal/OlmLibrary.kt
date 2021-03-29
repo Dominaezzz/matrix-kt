@@ -435,6 +435,8 @@ object OlmLibrary : Library {
         their_key_length: NativeSize
     ): NativeSize
 
+    external fun olm_sas_is_their_key_set(sas: OlmSAS?): Int
+
     external fun olm_sas_generate_bytes(
         sas: OlmSAS?,
         info: Pointer?,

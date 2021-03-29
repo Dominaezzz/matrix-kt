@@ -53,6 +53,11 @@ actual class SAS actual constructor(random: Random) {
     }
 
     /**
+     * Checks if their key was set.
+     */
+    actual val isTheirKeySet: Boolean get() = olm_sas_is_their_key_set(ptr) != 0
+
+    /**
      * Generate bytes to use for the short authentication string.
      *
      * @param[info] info extra information to mix in when generating the bytes, as per the Matrix spec.

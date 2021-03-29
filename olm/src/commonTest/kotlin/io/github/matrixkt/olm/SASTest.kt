@@ -1,8 +1,6 @@
 package io.github.matrixkt.olm
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class SASTest {
     @Test
@@ -13,10 +11,16 @@ class SASTest {
             val alicePKey = aliceSas.publicKey
             val bobPKey = bobSas.publicKey
 
+            assertFalse(aliceSas.isTheirKeySet)
+            assertFalse(bobSas.isTheirKeySet)
+
             println("#### Alice pub Key is $alicePKey")
             println("#### Bob pub Key is $bobPKey")
             aliceSas.setTheirPublicKey(bobPKey)
             bobSas.setTheirPublicKey(alicePKey)
+
+            assertTrue(aliceSas.isTheirKeySet)
+            assertTrue(bobSas.isTheirKeySet)
 
             val codeLength = 6
             val alice_sas = aliceSas.generateShortCode("SAS", codeLength)

@@ -20,6 +20,11 @@ expect class SAS(random: Random = Random.Default) {
     fun setTheirPublicKey(theirPublicKey: String)
 
     /**
+     * Checks if their key was set.
+     */
+    val isTheirKeySet: Boolean
+
+    /**
      * Generate bytes to use for the short authentication string.
      *
      * @param[info] info extra information to mix in when generating the bytes, as per the Matrix spec.
