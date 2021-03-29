@@ -123,6 +123,32 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
     }
 
     /**
+     * Generates a new fallback key. Only one previous fallback key is stored.
+     */
+    actual fun generateFallbackKey(random: Random) {
+        val randomLength = olm_account_generate_fallback_key_random_length(ptr)
+        val result = withRandomBuffer(randomLength, random) { randomBuffer ->
+            olm_account_generate_fallback_key(ptr, randomBuffer, randomLength)
+        }
+        checkError(result)
+    }
+
+    /**
+     * Get fallback key.
+     */
+    actual val fallbackKey: OneTimeKeys
+        get() {
+            val keysLength = olm_account_fallback_key_length(ptr)
+            val keysBytes = ByteArray(keysLength.convert())
+
+            val keysResult = olm_account_fallback_key(ptr, keysBytes.refTo(0), keysLength)
+            checkError(keysResult)
+
+            val keysStr = keysBytes.decodeToString()
+            return OlmJson.decodeFromString(OneTimeKeys.serializer(), keysStr)
+        }
+
+    /**
      * Sign a message with the ed25519 fingerprint key for this account.
      *
      * The signed message is returned by the method.

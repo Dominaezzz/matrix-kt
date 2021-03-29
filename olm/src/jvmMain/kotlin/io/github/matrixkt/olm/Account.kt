@@ -3,6 +3,10 @@ package io.github.matrixkt.olm
 import colm.internal.NativeSize
 import colm.internal.OlmAccount
 import colm.internal.OlmLibrary.olm_account
+import colm.internal.OlmLibrary.olm_account_fallback_key
+import colm.internal.OlmLibrary.olm_account_fallback_key_length
+import colm.internal.OlmLibrary.olm_account_generate_fallback_key
+import colm.internal.OlmLibrary.olm_account_generate_fallback_key_random_length
 import colm.internal.OlmLibrary.olm_account_generate_one_time_keys
 import colm.internal.OlmLibrary.olm_account_generate_one_time_keys_random_length
 import colm.internal.OlmLibrary.olm_account_identity_keys
@@ -141,6 +145,33 @@ actual class Account private constructor(internal val ptr: OlmAccount) {
         val result = olm_account_mark_keys_as_published(ptr)
         checkError(result)
     }
+
+    /**
+     * Generates a new fallback key. Only one previous fallback key is stored.
+     */
+    actual fun generateFallbackKey(random: Random) {
+        val randomLength = olm_account_generate_fallback_key_random_length(ptr)
+        val result = withRandomBuffer(randomLength, random) { randomBuffer ->
+            olm_account_generate_fallback_key(ptr, randomBuffer, randomLength)
+        }
+        checkError(result)
+    }
+
+    /**
+     * Get fallback key.
+     */
+    actual val fallbackKey: OneTimeKeys
+        get() {
+            val keysLength = olm_account_fallback_key_length(ptr)
+
+            val keysStr = withAllocation(keysLength.toLong()) {
+                val result = olm_account_fallback_key(ptr, it, keysLength)
+                checkError(result)
+                it.toKString(keysLength.toInt())
+            }
+
+            return OlmJson.decodeFromString(OneTimeKeys.serializer(), keysStr)
+        }
 
     /**
      * Sign a message with the ed25519 fingerprint key for this account.

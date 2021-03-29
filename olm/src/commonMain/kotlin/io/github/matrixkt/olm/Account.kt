@@ -67,6 +67,16 @@ expect class Account(random: Random = Random.Default) {
     fun markOneTimeKeysAsPublished()
 
     /**
+     * Generates a new fallback key. Only one previous fallback key is stored.
+     */
+    fun generateFallbackKey(random: Random = Random.Default)
+
+    /**
+     * Get fallback key.
+     */
+    val fallbackKey: OneTimeKeys
+
+    /**
      * Sign a message with the ed25519 fingerprint key for this account.
      *
      * The signed message is returned by the method.

@@ -22,6 +22,20 @@ class AccountTest {
         assertFalse(identityKeys.curve25519.isBlank())
     }
 
+    @Test
+    fun testGenerateFallbackKeys() {
+        withAccount {
+            // Test generated one time keys.
+            it.generateFallbackKey()
+
+            val oneTimeKeys = it.fallbackKey
+            val map = oneTimeKeys.curve25519
+
+            assertTrue(map.isNotEmpty())
+            println(oneTimeKeys)
+        }
+    }
+
     //****************************************************
     //***************** ONE TIME KEYS TESTS **************
     //****************************************************

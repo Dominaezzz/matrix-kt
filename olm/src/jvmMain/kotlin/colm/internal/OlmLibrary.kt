@@ -272,6 +272,26 @@ object OlmLibrary : Library {
         random_length: NativeSize
     ): NativeSize
 
+    external fun olm_account_generate_fallback_key_random_length(
+        account: OlmAccount?
+    ): NativeSize
+
+    external fun olm_account_generate_fallback_key(
+        account: OlmAccount?,
+        random: Pointer?,
+        random_length: NativeSize
+    ): NativeSize
+
+    external fun olm_account_fallback_key_length(
+        account: OlmAccount?
+    ): NativeSize
+
+    external fun olm_account_fallback_key(
+        account: OlmAccount?,
+        fallback_key: Pointer?,
+        fallback_key_size: NativeSize
+    ): NativeSize
+
     external fun olm_create_outbound_session_random_length(session: OlmSession?): NativeSize
 
     external fun olm_create_outbound_session(
