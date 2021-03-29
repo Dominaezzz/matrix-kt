@@ -1,5 +1,6 @@
 package io.github.matrixkt.olm
 
+import kotlinx.serialization.json.Json
 import kotlin.test.*
 
 
@@ -242,10 +243,10 @@ class SessionTest {
         val encryptedMsg3 = bobSession.encrypt(clearMsg3)
 
         // serialize alice session
-        val aliceSessionJson = OlmJson.encodeToString(SessionSerializer, aliceSession)
+        val aliceSessionJson = Json.encodeToString(SessionSerializer, aliceSession)
 
         // deserialize alice session
-        val aliceSessionDeserial = OlmJson.decodeFromString(SessionSerializer, aliceSessionJson)
+        val aliceSessionDeserial = Json.decodeFromString(SessionSerializer, aliceSessionJson)
 
         // de-serialized alice session decrypts bob's messages
         val decryptedMsg1 = aliceSessionDeserial.decrypt(encryptedMsg1)

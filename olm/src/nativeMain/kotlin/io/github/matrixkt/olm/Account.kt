@@ -2,6 +2,7 @@ package io.github.matrixkt.olm
 
 import colm.internal.*
 import kotlinx.cinterop.*
+import kotlinx.serialization.json.Json
 import platform.posix.size_t
 import kotlin.random.Random
 
@@ -51,7 +52,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
             checkError(keysResult)
 
             val identityKeysStr = identityKeysBytes.decodeToString()
-            return OlmJson.decodeFromString(IdentityKeys.serializer(), identityKeysStr)
+            return Json.decodeFromString(IdentityKeys.serializer(), identityKeysStr)
         }
 
     /**
@@ -102,7 +103,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
             checkError(keysResult)
 
             val keysStr = keysBytes.decodeToString()
-            return OlmJson.decodeFromString(OneTimeKeys.serializer(), keysStr)
+            return Json.decodeFromString(OneTimeKeys.serializer(), keysStr)
         }
 
     /**
@@ -145,7 +146,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
             checkError(keysResult)
 
             val keysStr = keysBytes.decodeToString()
-            return OlmJson.decodeFromString(OneTimeKeys.serializer(), keysStr)
+            return Json.decodeFromString(OneTimeKeys.serializer(), keysStr)
         }
 
     /**

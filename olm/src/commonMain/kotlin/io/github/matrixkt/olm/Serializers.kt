@@ -1,15 +1,10 @@
 package io.github.matrixkt.olm
 
 import kotlinx.serialization.*
-import kotlinx.serialization.builtins.MapSerializer
-import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.json.Json
 import kotlin.experimental.and
 import kotlin.random.Random
-
-internal val OlmJson = Json { allowStructuredMapKeys = true }
 
 private const val RANDOM_KEY_SIZE = 32
 

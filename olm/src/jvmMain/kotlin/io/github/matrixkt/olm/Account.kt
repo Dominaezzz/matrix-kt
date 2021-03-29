@@ -28,6 +28,7 @@ import colm.internal.OlmLibrary.olm_remove_one_time_keys
 import colm.internal.OlmLibrary.olm_unpickle_account
 import com.sun.jna.Native
 import com.sun.jna.Pointer
+import kotlinx.serialization.json.Json
 import kotlin.random.Random
 
 /**
@@ -75,7 +76,7 @@ actual class Account private constructor(internal val ptr: OlmAccount) {
                 it.toKString(identityKeysLength.toInt())
             }
 
-            return OlmJson.decodeFromString(IdentityKeys.serializer(), identityKeysStr)
+            return Json.decodeFromString(IdentityKeys.serializer(), identityKeysStr)
         }
 
     /**
@@ -126,7 +127,7 @@ actual class Account private constructor(internal val ptr: OlmAccount) {
                 it.toKString(keysLength.toInt())
             }
 
-            return OlmJson.decodeFromString(OneTimeKeys.serializer(), keysStr)
+            return Json.decodeFromString(OneTimeKeys.serializer(), keysStr)
         }
 
     /**
@@ -170,7 +171,7 @@ actual class Account private constructor(internal val ptr: OlmAccount) {
                 it.toKString(keysLength.toInt())
             }
 
-            return OlmJson.decodeFromString(OneTimeKeys.serializer(), keysStr)
+            return Json.decodeFromString(OneTimeKeys.serializer(), keysStr)
         }
 
     /**

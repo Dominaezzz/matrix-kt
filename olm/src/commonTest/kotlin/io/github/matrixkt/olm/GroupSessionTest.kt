@@ -1,5 +1,6 @@
 package io.github.matrixkt.olm
 
+import kotlinx.serialization.json.Json
 import kotlin.test.*
 
 
@@ -56,10 +57,10 @@ class GroupSessionTest {
         val outboundGroupSessionRef = OutboundGroupSession()
 
         // serialize alice session
-        val sessionJson = OlmJson.encodeToString(OutboundGroupSessionSerializer, outboundGroupSessionRef)
+        val sessionJson = Json.encodeToString(OutboundGroupSessionSerializer, outboundGroupSessionRef)
 
         // deserialize session
-        val outboundGroupSessionSerial = OlmJson.decodeFromString(OutboundGroupSessionSerializer, sessionJson)
+        val outboundGroupSessionSerial = Json.decodeFromString(OutboundGroupSessionSerializer, sessionJson)
         // get sessions keys
 
         // get sessions keys
@@ -96,10 +97,10 @@ class GroupSessionTest {
         val bobInboundGroupSessionRef = InboundGroupSession(sessionKeyRef)
 
         // serialize alice session
-        val sessionJson = OlmJson.encodeToString(InboundGroupSessionSerializer, bobInboundGroupSessionRef)
+        val sessionJson = Json.encodeToString(InboundGroupSessionSerializer, bobInboundGroupSessionRef)
 
         // deserialize session
-        val bobInboundGroupSessionSerial = OlmJson.decodeFromString(InboundGroupSessionSerializer, sessionJson)
+        val bobInboundGroupSessionSerial = Json.decodeFromString(InboundGroupSessionSerializer, sessionJson)
 
         // get sessions IDs
         val aliceSessionId = aliceOutboundGroupSession.sessionId

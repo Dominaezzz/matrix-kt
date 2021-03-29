@@ -1,5 +1,6 @@
 package io.github.matrixkt.olm
 
+import kotlinx.serialization.json.Json
 import kotlin.test.*
 
 class AccountTest {
@@ -98,10 +99,10 @@ class AccountTest {
             oneTimeKeysReference = accountRef.oneTimeKeys
 
             // serialize account
-            jsonStr = OlmJson.encodeToString(AccountSerializer, accountRef)
+            jsonStr = Json.encodeToString(AccountSerializer, accountRef)
         }
 
-        val account = OlmJson.decodeFromString(AccountSerializer, jsonStr)
+        val account = Json.decodeFromString(AccountSerializer, jsonStr)
         val idKeysDeserialized: IdentityKeys
         val oneTimeKeysDeserialized: OneTimeKeys
         try {
