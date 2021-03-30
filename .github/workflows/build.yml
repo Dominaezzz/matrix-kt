@@ -25,13 +25,13 @@ jobs:
 
       - name: 'Download Olm'
         run: |
-          curl -o olm-3.1.4.tar.bz2 https://gitlab.matrix.org/matrix-org/olm/-/archive/3.1.4/olm-3.1.4.tar.bz2
-          tar -xvf olm-3.1.4.tar.bz2
+          curl -o olm-3.2.2.tar.bz2 https://gitlab.matrix.org/matrix-org/olm/-/archive/3.2.2/olm-3.2.2.tar.bz2
+          tar -xvf olm-3.2.2.tar.bz2
         shell: bash
 
       - name: 'Build and install Olm (Unix)'
         run: |
-          cd olm-3.1.4
+          cd olm-3.2.2
           cmake .
           make
           sudo make install
@@ -40,7 +40,7 @@ jobs:
 
       - name: 'Build and install Olm (Windows)'
         run: |
-          cd olm-3.1.4
+          cd olm-3.2.2
           cmake -S . -B build -G "Visual Studio 16 2019" -A x64
           cmake --build build
         if: matrix.os == 'windows-latest'
@@ -50,7 +50,7 @@ jobs:
         with:
           arguments: 'build --stacktrace'
         env:
-          OLM_PATH: ${{ format('{0}\olm-3.1.4\build\Debug', github.workspace) }}
+          OLM_PATH: ${{ format('{0}\olm-3.2.2\build\Debug', github.workspace) }}
 
       - name: 'Publish to BinTray'
         uses: eskatos/gradle-command-action@v1
