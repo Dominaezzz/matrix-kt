@@ -34,7 +34,7 @@ subprojects {
             val vcs: String by project
 
             repositories {
-                maven("https://maven.pkg.github.com/Dominaezzz/${project.name}") {
+                maven("https://maven.pkg.github.com/Dominaezzz/${rootProject.name}") {
                     name = "GitHubPackages"
                     credentials {
                         username = System.getenv("GITHUB_USER")

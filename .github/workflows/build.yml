@@ -52,7 +52,7 @@ jobs:
         env:
           OLM_PATH: ${{ format('{0}\olm-3.2.2\build\Debug', github.workspace) }}
 
-      - name: 'Publish to BinTray'
+      - name: 'Publish'
         uses: eskatos/gradle-command-action@v1
         with:
           arguments: 'smartPublish --stacktrace'
