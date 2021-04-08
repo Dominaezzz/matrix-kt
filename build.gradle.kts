@@ -22,7 +22,6 @@ version = stdout.toString().trim()
 
 subprojects {
     repositories {
-        jcenter()
         mavenCentral()
     }
 
