@@ -27,9 +27,9 @@ class MatrixClient(engine: HttpClientEngine,
             serializer = KotlinxSerializer(MatrixJson)
         }
 
-        HttpResponseValidator {
-            expectSuccess = true
+        expectSuccess = true
 
+        HttpResponseValidator {
             handleResponseException {
                 if (it !is ResponseException) return@handleResponseException
                 throw it.response.receive<MatrixError>()

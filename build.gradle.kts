@@ -1,16 +1,17 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.konan.target.HostManager
 import java.io.ByteArrayOutputStream
 
 plugins {
-    kotlin("multiplatform") version "1.4.20" apply false
-    kotlin("plugin.serialization") version "1.4.20" apply false
+    kotlin("multiplatform") version "1.4.31" apply false
+    kotlin("plugin.serialization") version "1.4.31" apply false
     id("de.undercouch.download") version "4.0.4" apply false
 }
 
-val ktorVersion: String by extra("1.5.1")
-val serialVersion: String by extra("1.0.1")
-val coroutineVersion: String by extra("1.4.2-native-mt")
-val jnaVersion: String by extra("5.5.0")
+val ktorVersion: String by extra("1.5.3")
+val serialVersion: String by extra("1.1.0")
+val coroutineVersion: String by extra("1.4.3-native-mt")
+val jnaVersion: String by extra("5.8.0")
 
 val stdout = ByteArrayOutputStream()
 exec {
@@ -27,6 +28,16 @@ subprojects {
 
     group = "io.github.matrixkt"
     version = rootProject.version
+
+    plugins.withId("org.jetbrains.kotlin.multiplatform") {
+        configure<KotlinMultiplatformExtension> {
+            sourceSets.all {
+                languageSettings.apply {
+                    useExperimentalAnnotation("kotlin.RequiresOptIn")
+                }
+            }
+        }
+    }
 
     plugins.withId("maven-publish") {
         configure<PublishingExtension> {
