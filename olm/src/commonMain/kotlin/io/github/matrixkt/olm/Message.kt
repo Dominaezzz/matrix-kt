@@ -7,7 +7,7 @@ package io.github.matrixkt.olm
  *
  * Detailed implementation guide is available at [Implementing End-to-End Encryption in Matrix clients](http://matrix.org/docs/guides/e2e_implementation.html).
  */
-data class Message(
+public data class Message(
     /**
      * The encrypted message.
      */
@@ -18,10 +18,10 @@ data class Message(
      */
     val type: Long
 ) {
-    companion object {
+    public companion object {
         /** PRE KEY message type (used to establish new Olm session)  */
-        const val MESSAGE_TYPE_PRE_KEY = 0
+        public const val MESSAGE_TYPE_PRE_KEY: Int = 0
         /** Normal message type  */
-        const val MESSAGE_TYPE_MESSAGE = 1
+        public const val MESSAGE_TYPE_MESSAGE: Int = 1
     }
 }

@@ -14,7 +14,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.redaction")
 @Serializable
-data class RedactionContent(
+public data class RedactionContent(
     /**
      * The reason for the redaction, if any.
      */

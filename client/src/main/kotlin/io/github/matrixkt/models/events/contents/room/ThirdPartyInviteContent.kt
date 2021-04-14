@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.third_party_invite")
 @Serializable
-data class ThirdPartyInviteContent(
+public data class ThirdPartyInviteContent(
     /**
      * A user-readable string which represents the user who has been invited. This should not contain the user's third party ID, as otherwise when the invite is accepted it would leak the association between the matrix ID and the third party ID.
      */
@@ -39,7 +39,7 @@ data class ThirdPartyInviteContent(
     val publicKeys: List<PublicKeys> = emptyList()
 ) {
     @Serializable
-    data class PublicKeys(
+    public data class PublicKeys(
         /**
          * An optional URL which can be fetched, with querystring public_key=public_key, to validate whether the key has been revoked. The URL must return a JSON object containing a boolean property named 'valid'.
          * If this URL is absent, the key must be considered valid indefinitely.

@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class Presence {
+public enum class Presence {
     @SerialName("offline")
     OFFLINE,
     @SerialName("online")

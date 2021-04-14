@@ -13,4 +13,4 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.dummy")
 @Serializable
-class DummyContent
+public class DummyContent

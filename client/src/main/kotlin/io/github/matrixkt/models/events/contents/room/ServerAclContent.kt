@@ -45,7 +45,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.server_acl")
 @Serializable
-class ServerAclContent(
+public data class ServerAclContent(
     /**
      * True to allow server names that are IP address literals.
      * False to deny. Defaults to true if missing or otherwise not a boolean.

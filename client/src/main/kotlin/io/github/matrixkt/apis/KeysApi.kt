@@ -10,7 +10,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlin.reflect.KProperty0
 
-class KeysApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+public class KeysApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
     private inline val accessToken: String get() = accessTokenProp.get()
 
     /**
@@ -22,7 +22,7 @@ class KeysApi internal constructor(private val client: HttpClient, private val a
      *
      * **Requires auth**: Yes.
      */
-    suspend fun uploadKeys(keys: UploadKeysRequest): UploadKeysResponse {
+    public suspend fun uploadKeys(keys: UploadKeysRequest): UploadKeysResponse {
         return client.post(path = "_matrix/client/r0/keys/upload") {
             header("Authorization", "Bearer $accessToken")
             contentType(ContentType.Application.Json)
@@ -40,7 +40,7 @@ class KeysApi internal constructor(private val client: HttpClient, private val a
      * **Requires auth**: Yes.
      *
      */
-    suspend fun queryKeys(query: QueryKeysRequest): QueryKeysResponse {
+    public suspend fun queryKeys(query: QueryKeysRequest): QueryKeysResponse {
         return client.post(path = "_matrix/client/r0/keys/query") {
             header("Authorization", "Bearer $accessToken")
             contentType(ContentType.Application.Json)
@@ -57,7 +57,7 @@ class KeysApi internal constructor(private val client: HttpClient, private val a
      *
      * **Requires auth**: Yes.
      */
-    suspend fun claimKeys(query: ClaimKeysRequest): ClaimKeysResponse {
+    public suspend fun claimKeys(query: ClaimKeysRequest): ClaimKeysResponse {
         return client.post(path = "_matrix/client/r0/keys/claim") {
             header("Authorization", "Bearer $accessToken")
             contentType(ContentType.Application.Json)
@@ -88,7 +88,7 @@ class KeysApi internal constructor(private val client: HttpClient, private val a
      * Should be the ``next_batch`` field from a recent call to |/sync| - typically the most recent such call.
      * This may be used by the server as a hint to check its caches are up to date.
      */
-    suspend fun getKeysChanges(from: String, to: String): KeyChangesResponse {
+    public suspend fun getKeysChanges(from: String, to: String): KeyChangesResponse {
         return client.get {
             url {
                 encodedPath = "_matrix/client/r0/keys/changes"

@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.sticker")
 @Serializable
-data class StickerContent(
+public data class StickerContent(
     /**
      * A textual representation or associated description of the sticker image.
      * This could be the alt text of the original image, or a message

@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Timeline(
+public data class Timeline(
     /**
      * List of events.
      */

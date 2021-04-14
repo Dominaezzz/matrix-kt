@@ -4,10 +4,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Groupings(
+public class Groupings(
     /**
      * List of groups to request.
      */
     @SerialName("group_by")
-    val groupBy: List<Group> = emptyList()
+    public val groupBy: List<Group> = emptyList()
 )

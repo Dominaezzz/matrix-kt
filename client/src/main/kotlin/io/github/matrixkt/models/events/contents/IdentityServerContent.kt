@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.identity_server")
 @Serializable
-data class IdentityServerContent(
+public data class IdentityServerContent(
     /**
      * The URL of the identity server the user prefers to use, or ``null`` if the user does not want to use an identity server.
      * This value is similar in structure to the ``base_url`` for identity servers in the ``.well-known/matrix/client`` schema.

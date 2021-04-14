@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.key.verification.mac")
 @Serializable
-data class MacContent(
+public data class MacContent(
     /**
      * An opaque identifier for the verification process.
      * Must be the same as the one used for the `m.key.verification.start` message.

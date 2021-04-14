@@ -14,7 +14,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import kotlin.reflect.KProperty0
 
-class RoomApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+public class RoomApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
     private inline val accessToken: String get() = accessTokenProp.get()
 
     /**
@@ -46,7 +46,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      *
      * @return The created room's ID.
      */
-    suspend fun createRoom(params: CreateRoomRequest): String {
+    public suspend fun createRoom(params: CreateRoomRequest): String {
         val response = client.post<CreateRoomResponse>(path = "_matrix/client/r0/createRoom") {
             header("Authorization", "Bearer $accessToken")
 
@@ -66,7 +66,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[roomAlias] The room alias to set.
      * @param[roomId] The room ID to set.
      */
-    suspend fun setRoomAlias(roomAlias: String, roomId: String) {
+    public suspend fun setRoomAlias(roomAlias: String, roomId: String) {
         return client.put {
             url {
                 encodedPath = "_matrix/client/r0/directory/room/${roomAlias.encodeURLQueryComponent(encodeFull = true)}"
@@ -92,7 +92,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      *
      * @param[roomAlias] The room alias.
      */
-    suspend fun getRoomIdByAlias(roomAlias: String): ResolveRoomAliasResponse {
+    public suspend fun getRoomIdByAlias(roomAlias: String): ResolveRoomAliasResponse {
         return client.get {
             url("_matrix/client/r0/directory/room/${roomAlias.encodeURLQueryComponent(encodeFull = true)}")
             // path("_matrix", "client", "r0", "directory", "room", roomAlias)
@@ -113,7 +113,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      *
      * @param[roomAlias] The room alias to remove.
      */
-    suspend fun deleteRoomAlias(roomAlias: String) {
+    public suspend fun deleteRoomAlias(roomAlias: String) {
         return client.delete {
             url {
                 encodedPath = "_matrix/client/r0/directory/room/${roomAlias.encodeURLQueryComponent(encodeFull = true)}"
@@ -133,7 +133,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      *
      * @return The ID of each room in which the user has joined membership.
      */
-    suspend fun getJoinedRooms(): List<String> {
+    public suspend fun getJoinedRooms(): List<String> {
         val response = client.get<GetJoinedRoomsResponse>("_matrix/client/r0/joined_rooms") {
             header("Authorization", "Bearer $accessToken")
         }
@@ -159,7 +159,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[roomId] The room identifier (not alias) to which to invite the user.
      * @param[userId] The fully qualified user ID of the invitee.
      */
-    suspend fun inviteUser(roomId: String, userId: String) {
+    public suspend fun inviteUser(roomId: String, userId: String) {
         return client.post {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "invite")
@@ -205,7 +205,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[medium] The kind of address being passed in the address field, for example email.
      * @param[address] The invitee's third party identifier.
      */
-    suspend fun inviteBy3PID(roomId: String, idServer: String, idAccessToken: String, medium: String, address: String) {
+    public suspend fun inviteBy3PID(roomId: String, idServer: String, idAccessToken: String, medium: String, address: String) {
         return client.post {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "invite")
@@ -246,7 +246,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[roomId] The room identifier (not alias) to join.
      * @return The joined room ID.
      */
-    suspend fun joinRoomById(roomId: String, params: JoinRoomRequest): String {
+    public suspend fun joinRoomById(roomId: String, params: JoinRoomRequest): String {
         val response = client.post<JoinRoomResponse> {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "join")
@@ -283,7 +283,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[servers] The servers to attempt to join the room through. One of the servers must be participating in the room.
      * @return The joined room ID.
      */
-    suspend fun joinRoom(roomIdOrAlias: String, servers: List<String>, params: JoinRoomRequest): String {
+    public suspend fun joinRoom(roomIdOrAlias: String, servers: List<String>, params: JoinRoomRequest): String {
         val response = client.post<JoinRoomResponse> {
             url {
                 path("_matrix", "client", "r0", "join", roomIdOrAlias)
@@ -314,7 +314,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      *
      * @param[roomId] The room identifier to leave.
      */
-    suspend fun leaveRoom(roomId: String) {
+    public suspend fun leaveRoom(roomId: String) {
         return client.post {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "leave")
@@ -339,7 +339,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      *
      * @param[roomId] The room identifier to forget.
      */
-    suspend fun forgetRoom(roomId: String) {
+    public suspend fun forgetRoom(roomId: String) {
         return client.post {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "forget")
@@ -365,7 +365,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      *
      * @param[roomId] The room identifier (not alias) from which the user should be kicked.
      */
-    suspend fun kick(roomId: String, params: KickRequest) {
+    public suspend fun kick(roomId: String, params: KickRequest) {
         return client.post {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "kick")
@@ -391,7 +391,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      *
      * @param[roomId] The room identifier (not alias) from which the user should be banned.
      */
-    suspend fun ban(roomId: String, params: BanRequest) {
+    public suspend fun ban(roomId: String, params: BanRequest) {
         return client.post {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "ban")
@@ -418,7 +418,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[roomId] The room identifier (not alias) from which the user should be unbanned.
      * @param[userId] The fully qualified user ID of the user being unbanned.
      */
-    suspend fun unban(roomId: String, userId: String) {
+    public suspend fun unban(roomId: String, userId: String) {
         return client.post {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "unban")
@@ -445,7 +445,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[since] A pagination token from a previous request, allowing clients to get the next (or previous) batch of rooms. The direction of pagination is specified solely by which token is supplied, rather than via an explicit flag.
      * @param[server] The server to fetch the public room lists from. Defaults to the local server.
      */
-    suspend fun getPublicRooms(limit: Int? = null, since: String? = null, server: String? = null): PublicRoomsResponse {
+    public suspend fun getPublicRooms(limit: Int? = null, since: String? = null, server: String? = null): PublicRoomsResponse {
         return client.get("_matrix/client/r0/publicRooms") {
             parameter("limit", limit)
             parameter("since", since)
@@ -465,7 +465,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      *
      * @param[server] The server to fetch the public room lists from. Defaults to the local server.
      */
-    suspend fun queryPublicRooms(server: String? = null, params: SearchPublicRoomsRequest): PublicRoomsResponse {
+    public suspend fun queryPublicRooms(server: String? = null, params: SearchPublicRoomsRequest): PublicRoomsResponse {
         return client.post("_matrix/client/r0/publicRooms") {
             parameter("server", server)
 
@@ -487,7 +487,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[newVersion] The new version for the room.
      * @return The ID of the new room.
      */
-    suspend fun upgradeRoom(roomId: String, newVersion: String): String {
+    public suspend fun upgradeRoom(roomId: String, newVersion: String): String {
         val response = client.post<UpgradeRoomResponse> {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "upgrade")
@@ -512,7 +512,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[userId] The user who has started to type.
      * @param[roomId] The room in which the user is typing.
      */
-    suspend fun setTyping(userId: String, roomId: String, params: TypingRequest) {
+    public suspend fun setTyping(userId: String, roomId: String, params: TypingRequest) {
         return client.put {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "typing", userId)
@@ -536,7 +536,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[receiptType] The type of receipt to send. One of: ["m.read"]
      * @param[eventId] The event ID to acknowledge up to.
      */
-    suspend fun postReceipt(roomId: String, receiptType: String, eventId: String) {
+    public suspend fun postReceipt(roomId: String, receiptType: String, eventId: String) {
         return client.post {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "receipt", receiptType, eventId)
@@ -555,7 +555,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      *
      * @param[roomId] The room ID to set the read marker in for the user.
      */
-    suspend fun setReadMarker(roomId: String, params: ReadMarkersRequest) {
+    public suspend fun setReadMarker(roomId: String, params: ReadMarkersRequest) {
         return client.post {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "read_markers")
@@ -587,7 +587,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[notMembership] The kind of membership to exclude from the results.
      * Defaults to no filtering if unspecified. One of: ["join", "invite", "leave", "ban"]
      */
-    suspend fun getMembersByRoom(roomId: String, at: String? = null, membership: Membership? = null, notMembership: Membership? = null): GetMembersResponse {
+    public suspend fun getMembersByRoom(roomId: String, at: String? = null, membership: Membership? = null, notMembership: Membership? = null): GetMembersResponse {
         return client.get {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "members")
@@ -614,7 +614,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[roomId] The room to get the members of.
      * @return A map from user ID to a [RoomMember] object.
      */
-    suspend fun getJoinedMembersByRoom(roomId: String): Map<String, RoomMember> {
+    public suspend fun getJoinedMembersByRoom(roomId: String): Map<String, RoomMember> {
         val response = client.get<JoinedMembersResponse>{
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "joined_members")
@@ -647,7 +647,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[limit] The maximum number of events to return. Default: 10.
      * @param[filter] A JSON RoomEventFilter to filter returned events with.
      */
-    suspend fun getRoomEvents(roomId: String, from: String, to: String? = null, dir: Direction, limit: Long? = null, filter: String? = null): MessagesResponse {
+    public suspend fun getRoomEvents(roomId: String, from: String, to: String? = null, dir: Direction, limit: Long? = null, filter: String? = null): MessagesResponse {
         return client.get{
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "messages")
@@ -686,7 +686,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * When an empty string, the trailing slash on this endpoint is optional.
      * @return A unique identifier for the event.
      */
-    suspend fun setRoomStateWithKey(roomId: String, eventType: String, stateKey: String, eventContent: Any): String {
+    public suspend fun setRoomStateWithKey(roomId: String, eventType: String, stateKey: String, eventContent: Any): String {
         val response = client.put<SendStateEventResponse> {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "state", eventType, stateKey)
@@ -713,7 +713,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[eventType] The type of state to look up.
      * @param[stateKey] The key of the state to look up. Defaults to an empty string. When an empty string, the trailing slash on this endpoint is optional.
      */
-    suspend fun getRoomStateWithKey(roomId: String, eventType: String, stateKey: String): JsonObject {
+    public suspend fun getRoomStateWithKey(roomId: String, eventType: String, stateKey: String): JsonObject {
         return client.get {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "state", eventType, stateKey)
@@ -742,7 +742,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * Clients should generate an ID unique across requests with the same access token;
      * it will be used by the server to ensure idempotency of requests.
      */
-    suspend fun sendMessage(roomId: String, eventType: String, txnId: String, content: JsonObject): String {
+    public suspend fun sendMessage(roomId: String, eventType: String, txnId: String, content: JsonObject): String {
         val response = client.put<SendMessageEventResponse>{
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "send", eventType, txnId)
@@ -776,7 +776,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[reason] The reason for the event being redacted.
      * @return A unique identifier for the event.
      */
-    suspend fun redactEvent(roomId: String, eventId: String, txnId: String, reason: String? = null): String {
+    public suspend fun redactEvent(roomId: String, eventId: String, txnId: String, reason: String? = null): String {
         val response = client.put<SendMessageEventResponse>{
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "redact", eventId, txnId)
@@ -802,7 +802,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[score] The score to rate this content as where -100 is most offensive and 0 is inoffensive.
      * @param[reason] The reason the content is being reported. May be blank.
      */
-    suspend fun reportContent(roomId: String, eventId: String, score: Int, reason: String) {
+    public suspend fun reportContent(roomId: String, eventId: String, score: Int, reason: String) {
         return client.post {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "report", eventId)
@@ -829,7 +829,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[roomId] The ID of the room the event is in.
      * @param[eventId] The event ID to get.
      */
-    suspend fun getOneRoomEvent(roomId: String, eventId: String): MatrixEvent {
+    public suspend fun getOneRoomEvent(roomId: String, eventId: String): MatrixEvent {
         return client.get{
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "event", eventId)
@@ -848,7 +848,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      *
      * @param[roomId] The room to look up the state for.
      */
-    suspend fun getRoomState(roomId: String): List<MatrixEvent> {
+    public suspend fun getRoomState(roomId: String): List<MatrixEvent> {
         return client.get {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "state")
@@ -877,7 +877,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      *
      * See [Filtering](https://matrix.org/docs/spec/client_server/r0.6.0#filtering) for more information.
      */
-    suspend fun getEventContext(roomId: String, eventId: String, limit: Int? = null, filter: String? = null): EventContext {
+    public suspend fun getEventContext(roomId: String, eventId: String, limit: Int? = null, filter: String? = null): EventContext {
         return client.get {
             url {
                 path("_matrix", "client", "r0", "rooms", roomId, "context", eventId)
@@ -900,7 +900,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[roomId] The room ID.
      * @return The visibility of the room in the directory. One of: ["private", "public"]
      */
-    suspend fun getVisibility(roomId: String): RoomVisibility {
+    public suspend fun getVisibility(roomId: String): RoomVisibility {
         val response = client.get<VisibilityResponse> {
             url {
                 path("_matrix", "client", "r0", "directory", "list", "room", roomId)
@@ -922,7 +922,7 @@ class RoomApi internal constructor(private val client: HttpClient, private val a
      * @param[roomId] The room ID.
      * @param[visibility] The new visibility setting for the room. Defaults to 'public'. One of: ["private", "public"]
      */
-    suspend fun setVisibility(roomId: String, visibility: RoomVisibility) {
+    public suspend fun setVisibility(roomId: String, visibility: RoomVisibility) {
         return client.put {
             url {
                 path("_matrix", "client", "r0", "directory", "list", "room", roomId)

@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.history_visibility")
 @Serializable
-data class HistoryVisibilityContent(
+public data class HistoryVisibilityContent(
     /**
      * Who can see the room history. One of: ["invited", "joined", "shared", "world_readable"]
      */
@@ -17,7 +17,7 @@ data class HistoryVisibilityContent(
 )
 
 @Serializable
-enum class HistoryVisibility {
+public enum class HistoryVisibility {
     @SerialName("invited")
     INVITED,
 

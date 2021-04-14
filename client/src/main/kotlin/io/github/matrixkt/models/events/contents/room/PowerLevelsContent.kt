@@ -34,7 +34,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.power_levels")
 @Serializable
-data class PowerLevelsContent(
+public data class PowerLevelsContent(
     /**
      * The level required to ban a user.
      */
@@ -95,7 +95,7 @@ data class PowerLevelsContent(
     val notifications: Notifications? = null
 ) {
     @Serializable
-    data class Notifications(
+    public data class Notifications(
         /**
          * The level required to trigger an @room notification.
          * Defaults to 50 if unspecified.

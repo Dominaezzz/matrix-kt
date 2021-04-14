@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
 @Serializable
-data class Event(
+public data class Event(
     /**
      * The fields in this object will vary depending on the type of event.
      * When interacting with the REST API, this is the HTTP body.

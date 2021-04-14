@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.create")
 @Serializable
-data class CreateContent(
+public data class CreateContent(
     /**
      * The `user_id` of the room creator.
      * This is set by the homeserver.
@@ -35,7 +35,7 @@ data class CreateContent(
     val predecessor: PreviousRoom? = null
 ) {
     @Serializable
-    data class PreviousRoom(
+    public data class PreviousRoom(
         /**
          * The ID of the old room.
          */

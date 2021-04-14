@@ -2,8 +2,8 @@ package io.github.matrixkt.olm
 
 import kotlin.random.Random
 
-expect class PkEncryption(recipientKey: String) {
-    fun clear()
+public expect class PkEncryption(recipientKey: String) {
+    public fun clear()
 
-    fun encrypt(plaintext: String, random: Random = Random.Default): PkMessage
+    public fun encrypt(plaintext: String, random: Random = Random.Default): PkMessage
 }

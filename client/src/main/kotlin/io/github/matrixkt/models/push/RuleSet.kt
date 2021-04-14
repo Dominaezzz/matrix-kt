@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
  * The global ruleset.
  */
 @Serializable
-data class RuleSet(
+public data class RuleSet(
     val content: List<PushRule> = emptyList(),
     val override: List<PushRule> = emptyList(),
     val room: List<PushRule> = emptyList(),

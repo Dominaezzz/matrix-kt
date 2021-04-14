@@ -15,7 +15,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlin.reflect.KProperty0
 
-class MiscApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+public class MiscApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
     private inline val accessToken: String get() = accessTokenProp.get()
 
     /**
@@ -40,7 +40,7 @@ class MiscApi internal constructor(private val client: HttpClient, private val a
      *
      * **Requires auth**: No.
      */
-    suspend fun getVersions(): Versions {
+    public suspend fun getVersions(): Versions {
         return client.get("_matrix/client/versions")
     }
 
@@ -55,7 +55,7 @@ class MiscApi internal constructor(private val client: HttpClient, private val a
      *
      * **Requires auth**: No.
      */
-    suspend fun getWellKnown(): DiscoveryInformation {
+    public suspend fun getWellKnown(): DiscoveryInformation {
         return client.get(".well-known/matrix/client")
     }
 
@@ -66,7 +66,7 @@ class MiscApi internal constructor(private val client: HttpClient, private val a
      *
      * **Requires auth**: Yes.
      */
-    suspend fun getCapabilities(): GetCapabilitiesResponse {
+    public suspend fun getCapabilities(): GetCapabilitiesResponse {
         return client.get("_matrix/client/r0/capabilities") {
             header("Authorization", "Bearer $accessToken")
         }
@@ -81,7 +81,7 @@ class MiscApi internal constructor(private val client: HttpClient, private val a
      *
      * @param[nextBatch] The point to return events from.If given, this should be a next_batch result from a previous call to this endpoint.
      */
-    suspend fun search(nextBatch: String? = null, body: SearchRequest): Results {
+    public suspend fun search(nextBatch: String? = null, body: SearchRequest): Results {
         return client.post("_matrix/client/r0/search") {
             parameter("next_batch", nextBatch)
 
@@ -103,7 +103,7 @@ class MiscApi internal constructor(private val client: HttpClient, private val a
      * @param[limit] Limit on the number of events to return in this request.
      * @param[only] Allows basic filtering of events returned. Supply `highlight` to return only events where the notification had the highlight tweak set.
      */
-    suspend fun getNotifications(from: String? = null, limit: Int? = null, only: String? = null): NotificationsResponse {
+    public suspend fun getNotifications(from: String? = null, limit: Int? = null, only: String? = null): NotificationsResponse {
         return client.get("_matrix/client/r0/notifications") {
             parameter("from", from)
             parameter("limit", limit)

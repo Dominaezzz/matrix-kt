@@ -4,32 +4,32 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ThirdPartyIdentifier(
+public data class ThirdPartyIdentifier(
     /**
      * The medium of the third party identifier.
      */
-    val medium: Medium,
+    public val medium: Medium,
 
     /**
      * The third party identifier address.
      */
-    val address: String,
+    public val address: String,
 
     /**
      * The timestamp, in milliseconds, when the identifier was validated by the identity server.
      */
     @SerialName("validated_at")
-    val validatedAt: Long,
+    public val validatedAt: Long,
 
     /**
      * The timestamp, in milliseconds, when the homeserver associated the third party identifier with the user.
      */
     @SerialName("added_at")
-    val addedAt: Long
+    public val addedAt: Long
 )
 
 @Serializable
-enum class Medium {
+public enum class Medium {
     @SerialName("email")
     EMAIL,
     @SerialName("msisdn")

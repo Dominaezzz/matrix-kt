@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class PushRuleAction {
+public enum class PushRuleAction {
     @SerialName("notify")
     NOTIFY,
     @SerialName("dont_notify")

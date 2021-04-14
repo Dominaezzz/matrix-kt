@@ -15,8 +15,8 @@ import kotlin.random.Random
  *
  * Detailed implementation guide is available at [Implementing End-to-End Encryption in Matrix clients](http://matrix.org/docs/guides/e2e_implementation.html).
  */
-expect class Session {
-    fun clear()
+public expect class Session {
+    public fun clear()
 
     /**
      * Get the session identifier.
@@ -27,11 +27,11 @@ expect class Session {
      *
      * @return the session ID
      */
-    val sessionId: String
+    public val sessionId: String
 
-    val hasReceivedMessage: Boolean
+    public val hasReceivedMessage: Boolean
 
-    fun describe(): String
+    public fun describe(): String
 
     /**
      * Checks if the PRE_KEY([Message.MESSAGE_TYPE_PRE_KEY]) message is for this in-bound session.
@@ -41,7 +41,7 @@ expect class Session {
      * @param oneTimeKeyMsg PRE KEY message
      * @return true if the one time key matches.
      */
-    fun matchesInboundSession(oneTimeKeyMsg: String): Boolean
+    public fun matchesInboundSession(oneTimeKeyMsg: String): Boolean
 
     /**
      * Checks if the PRE_KEY([Message.MESSAGE_TYPE_PRE_KEY]) message is for this in-bound session based on the sender identity key.
@@ -52,7 +52,7 @@ expect class Session {
      * @param oneTimeKeyMsg PRE KEY message
      * @return this if operation succeed, null otherwise
      */
-    fun matchesInboundSessionFrom(theirIdentityKey: String, oneTimeKeyMsg: String): Boolean
+    public fun matchesInboundSessionFrom(theirIdentityKey: String, oneTimeKeyMsg: String): Boolean
 
     /**
      * Encrypt a message using the session.
@@ -62,7 +62,7 @@ expect class Session {
      * @param clearMsg message to encrypted
      * @return the encrypted message
      */
-    fun encrypt(clearMsg: String, random: Random = Random.Default): Message
+    public fun encrypt(clearMsg: String, random: Random = Random.Default): Message
 
     /**
      * Decrypt a message using the session.
@@ -71,7 +71,7 @@ expect class Session {
      * @param encryptedMsg message to decrypt
      * @return the decrypted message
      */
-    fun decrypt(encryptedMsg: Message): String
+    public fun decrypt(encryptedMsg: Message): String
 
     /**
      * Return a session as a base64 pickle.
@@ -81,9 +81,9 @@ expect class Session {
      * @param[key] encryption key
      * @return the session as base64 pickle
      */
-    fun pickle(key: ByteArray): String
+    public fun pickle(key: ByteArray): String
 
-    companion object {
+    public companion object {
         /**
          * Creates a new out-bound session for sending messages to a recipient
          * identified by an identity key and a one time key.
@@ -92,7 +92,7 @@ expect class Session {
          * @param theirIdentityKey the identity key of the recipient
          * @param theirOneTimeKey the one time key of the recipient
          */
-        fun createOutboundSession(account: Account, theirIdentityKey: String, theirOneTimeKey: String, random: Random = Random.Default): Session
+        public fun createOutboundSession(account: Account, theirIdentityKey: String, theirOneTimeKey: String, random: Random = Random.Default): Session
 
         /**
          * Create a new in-bound session for sending/receiving messages from an
@@ -102,7 +102,7 @@ expect class Session {
          * @param [account] the account to associate with this session
          * @param [oneTimeKeyMsg] PRE KEY message
          */
-        fun createInboundSession(account: Account, oneTimeKeyMsg: String): Session
+        public fun createInboundSession(account: Account, oneTimeKeyMsg: String): Session
 
         /**
          * Create a new in-bound session for sending/receiving messages from an
@@ -114,7 +114,7 @@ expect class Session {
          * @param theirIdentityKey the sender identity key
          * @param oneTimeKeyMsg PRE KEY message
          */
-        fun createInboundSessionFrom(account: Account, theirIdentityKey: String, oneTimeKeyMsg: String): Session
+        public fun createInboundSessionFrom(account: Account, theirIdentityKey: String, oneTimeKeyMsg: String): Session
 
         /**
          * Loads a session from a pickled bytes buffer.
@@ -123,6 +123,6 @@ expect class Session {
          * @param[key] key used to encrypt
          * @param[pickle] base64 string
          */
-        fun unpickle(key: ByteArray, pickle: String): Session
+        public fun unpickle(key: ByteArray, pickle: String): Session
     }
 }

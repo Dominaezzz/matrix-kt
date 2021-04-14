@@ -12,7 +12,7 @@ import kotlinx.serialization.encoding.Encoder
  */
 @SerialName("m.receipt")
 @Serializable(ReceiptContent.TheSerializer::class)
-data class ReceiptContent(
+public data class ReceiptContent(
     /**
      * The mapping of event ID to a collection of receipts for this event ID.
      * The event ID is the ID of the event being acknowledged and not an ID for the receipt itself.
@@ -20,7 +20,7 @@ data class ReceiptContent(
     val content: Map<String, Receipts> = emptyMap()
 ): Map<String, ReceiptContent.Receipts> by content {
     @Serializable
-    data class Receipts(
+    public data class Receipts(
         /**
          * A collection of users who have sent `m.read` receipts for this event.
          */
@@ -29,20 +29,20 @@ data class ReceiptContent(
     )
 
     @Serializable(Users.Serializer::class)
-    data class Users(
+    public data class Users(
         /**
          * The mapping of user ID to receipt. The user ID is the entity who sent this receipt.
          */
         val content: Map<String, Receipt> = emptyMap()
     ): Map<String, Receipt> by content {
-        object Serializer : InlineMapSerializer<String, Receipt, Users>(
+        public object Serializer : KSerializer<Users> by InlineMapSerializer(
             String.serializer(),
             Receipt.serializer(),
             ::Users)
     }
 
     @Serializable
-    data class Receipt(
+    public data class Receipt(
         /**
          * The timestamp the receipt was sent at.
          */
@@ -52,7 +52,7 @@ data class ReceiptContent(
 
     @OptIn(ExperimentalSerializationApi::class)
     @Serializer(forClass = ReceiptContent::class)
-    object TheSerializer : KSerializer<ReceiptContent> {
+    public object TheSerializer : KSerializer<ReceiptContent> {
         private val delegate = MapSerializer(String.serializer(), Receipts.serializer())
 
         override fun serialize(encoder: Encoder, value: ReceiptContent) {

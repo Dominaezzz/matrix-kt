@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Filter(
+public data class Filter(
     /**
      * List of event fields to include.
      * If this list is absent then all fields are included.

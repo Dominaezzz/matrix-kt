@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-abstract class AuthenticationData {
+public abstract class AuthenticationData {
     // /**
     //  * The login type that the client is attempting to complete.
     //  */
@@ -13,14 +13,14 @@ abstract class AuthenticationData {
     /**
      * The value of the session key given by the homeserver.
      */
-    abstract val session: String?
+    public abstract val session: String?
 
     /**
      * The client submits an identifier and secret password, both sent in plain-text.
      */
     @Serializable
     @SerialName("m.login.password")
-    data class Password(
+    public data class Password(
         /**
          * The value of the session key given by the homeserver.
          */
@@ -35,7 +35,7 @@ abstract class AuthenticationData {
      */
     @Serializable
     @SerialName("m.login.recaptcha")
-    data class GoogleRecaptcha(
+    public data class GoogleRecaptcha(
         /**
          * The value of the session key given by the homeserver.
          */
@@ -49,7 +49,7 @@ abstract class AuthenticationData {
      */
     @Serializable
     @SerialName("m.login.token")
-    data class Token(
+    public data class Token(
         /**
          * The value of the session key given by the homeserver.
          */
@@ -69,7 +69,7 @@ abstract class AuthenticationData {
      */
     @Serializable
     @SerialName("m.login.email.identity")
-    data class Email(
+    public data class Email(
         /**
          * The value of the session key given by the homeserver.
          */
@@ -84,7 +84,7 @@ abstract class AuthenticationData {
      */
     @Serializable
     @SerialName("m.login.msisdn")
-    data class MSISDN(
+    public data class MSISDN(
         /**
          * The value of the session key given by the homeserver.
          */
@@ -105,7 +105,7 @@ abstract class AuthenticationData {
      */
     @Serializable
     @SerialName("m.login.dummy")
-    data class Dummy(
+    public data class Dummy(
         /**
          * The value of the session key given by the homeserver.
          */

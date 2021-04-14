@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class RoomPreset {
+public enum class RoomPreset {
     @SerialName("private_chat")
     PRIVATE_CHAT,
 

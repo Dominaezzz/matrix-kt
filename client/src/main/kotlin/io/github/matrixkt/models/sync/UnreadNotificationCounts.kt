@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UnreadNotificationCounts(
+public data class UnreadNotificationCounts(
     /**
      * The number of unread notifications for this room with the highlight flag set.
      */

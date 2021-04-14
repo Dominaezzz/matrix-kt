@@ -5,7 +5,7 @@ import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-open class InlineMapSerializer<Key, Value, T : Map<Key, Value>>(
+internal open class InlineMapSerializer<Key, Value, T : Map<Key, Value>>(
     keySerializer: KSerializer<Key>,
     valueSerializer: KSerializer<Value>,
     private val ctor: (Map<Key, Value>) -> T

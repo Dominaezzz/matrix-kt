@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.topic")
 @Serializable
-data class TopicContent(
+public data class TopicContent(
     /**
      * The topic text.
      */

@@ -13,8 +13,8 @@ import kotlin.random.Random
  *
  * Detailed implementation guide is available at [Implementing End-to-End Encryption in Matrix clients](http://matrix.org/docs/guides/e2e_implementation.html).
  */
-actual class Account private constructor(internal val ptr: CPointer<OlmAccount>) {
-    actual constructor(random: Random): this(genericInit(::olm_account, ::olm_account_size)) {
+public actual class Account private constructor(internal val ptr: CPointer<OlmAccount>) {
+    public actual constructor(random: Random): this(genericInit(::olm_account, ::olm_account_size)) {
         try {
             val randomSize = olm_create_account_random_length(ptr)
             val result = withRandomBuffer(randomSize, random) { randomBuff ->
@@ -27,7 +27,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
         }
     }
 
-    actual fun clear() {
+    public actual fun clear() {
         olm_clear_account(ptr)
         nativeHeap.free(ptr)
     }
@@ -41,7 +41,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
      * }
      * @return identity keys dictionary if operation succeeds, null otherwise
      */
-    actual val identityKeys: IdentityKeys
+    public actual val identityKeys: IdentityKeys
         get() {
             // identity keys allocation
             val identityKeysLength = olm_account_identity_keys_length(ptr)
@@ -59,7 +59,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
      * Return the largest number of "one time keys" this account can store.
      * @return the max number of "one time keys", -1 otherwise
      */
-    actual val maxNumberOfOneTimeKeys: Long
+    public actual val maxNumberOfOneTimeKeys: Long
         get() {
             return olm_account_max_number_of_one_time_keys(ptr).convert()
         }
@@ -71,7 +71,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
      * The corresponding keys are retrieved by [oneTimeKeys].
      * @param numberOfKeys number of keys to generate
      */
-    actual fun generateOneTimeKeys(numberOfKeys: Long, random: Random) {
+    public actual fun generateOneTimeKeys(numberOfKeys: Long, random: Random) {
         // keys memory allocation
         val randomLength = olm_account_generate_one_time_keys_random_length(ptr, numberOfKeys.convert())
         val result = withRandomBuffer(randomLength, random) { randomBuffer ->
@@ -94,7 +94,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
      * Note: these keys are to be published on the server.
      * @return one time keys in string dictionary.
      */
-    actual val oneTimeKeys: OneTimeKeys
+    public actual val oneTimeKeys: OneTimeKeys
         get() {
             val keysLength = olm_account_one_time_keys_length(ptr)
             val keysBytes = ByteArray(keysLength.convert())
@@ -110,7 +110,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
      * Remove the "one time keys" that the session used from the account.
      * @param session session instance
      */
-    actual fun removeOneTimeKeys(session: Session) {
+    public actual fun removeOneTimeKeys(session: Session) {
         val result = olm_remove_one_time_keys(ptr, session.ptr)
         checkError(result)
     }
@@ -118,7 +118,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
     /**
      * Marks the current set of "one time keys" as being published.
      */
-    actual fun markOneTimeKeysAsPublished() {
+    public actual fun markOneTimeKeysAsPublished() {
         val result = olm_account_mark_keys_as_published(ptr)
         checkError(result)
     }
@@ -126,7 +126,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
     /**
      * Generates a new fallback key. Only one previous fallback key is stored.
      */
-    actual fun generateFallbackKey(random: Random) {
+    public actual fun generateFallbackKey(random: Random) {
         val randomLength = olm_account_generate_fallback_key_random_length(ptr)
         val result = withRandomBuffer(randomLength, random) { randomBuffer ->
             olm_account_generate_fallback_key(ptr, randomBuffer, randomLength)
@@ -137,7 +137,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
     /**
      * Get fallback key.
      */
-    actual val fallbackKey: OneTimeKeys
+    public actual val fallbackKey: OneTimeKeys
         get() {
             val keysLength = olm_account_fallback_key_length(ptr)
             val keysBytes = ByteArray(keysLength.convert())
@@ -156,7 +156,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
      * @param message message to sign
      * @return the signed message
      */
-    actual fun sign(message: String): String {
+    public actual fun sign(message: String): String {
         val messageToSign = message.encodeToByteArray()
         val messageLength = messageToSign.size
 
@@ -183,7 +183,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
      * @param[key] encryption key
      * @return the account as bytes buffer
      */
-    actual fun pickle(key: ByteArray): String {
+    public actual fun pickle(key: ByteArray): String {
         return genericPickle(ptr, key, ::olm_pickle_account_length, ::olm_pickle_account, ::checkError)
     }
 
@@ -191,7 +191,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
         genericCheckError(ptr, result, ::olm_account_last_error)
     }
 
-    actual companion object {
+    public actual companion object {
         /**
          * Loads an account from a pickled bytes buffer.
          *
@@ -200,7 +200,7 @@ actual class Account private constructor(internal val ptr: CPointer<OlmAccount>)
          * @param[key] key used to encrypt
          * @exception Exception the exception
          */
-        actual fun unpickle(key: ByteArray, pickle: String): Account {
+        public actual fun unpickle(key: ByteArray, pickle: String): Account {
             val obj = Account(genericInit(::olm_account, ::olm_account_size))
             try {
                 obj.run {

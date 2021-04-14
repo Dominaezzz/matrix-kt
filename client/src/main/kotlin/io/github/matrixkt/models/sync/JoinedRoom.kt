@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class JoinedRoom(
+public data class JoinedRoom(
     /**
      * Information about the room which clients may need to correctly render it to users.
      */

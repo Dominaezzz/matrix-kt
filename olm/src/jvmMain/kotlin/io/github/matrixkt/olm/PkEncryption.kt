@@ -15,7 +15,7 @@ import com.sun.jna.Native
 import com.sun.jna.Pointer
 import kotlin.random.Random
 
-actual class PkEncryption actual constructor(recipientKey: String) {
+public actual class PkEncryption actual constructor(recipientKey: String) {
     private val ptr = genericInit(::olm_pk_encryption, ::olm_pk_encryption_size)
 
     init {
@@ -30,12 +30,12 @@ actual class PkEncryption actual constructor(recipientKey: String) {
         }
     }
 
-    actual fun clear() {
+    public actual fun clear() {
         olm_clear_pk_encryption(ptr)
         Native.free(Pointer.nativeValue(ptr.pointer))
     }
 
-    actual fun encrypt(plaintext: String, random: Random): PkMessage {
+    public actual fun encrypt(plaintext: String, random: Random): PkMessage {
         return plaintext.withNativeRead { plaintextPtr, plaintextLen ->
             val cipherTextLength = olm_pk_ciphertext_length(ptr, plaintextLen)
             val macLength = olm_pk_mac_length(ptr)

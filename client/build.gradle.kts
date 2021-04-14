@@ -21,6 +21,8 @@ kotlin {
     iosArm64()
     iosX64()
 
+    explicitApi()
+
     sourceSets {
         commonMain {
             kotlin.srcDir("src/main/kotlin")

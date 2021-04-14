@@ -3,8 +3,8 @@ package io.github.matrixkt.olm
 /**
  * Olm SDK helper class.
  */
-expect class Utility() {
-    fun clear()
+public expect class Utility() {
+    public fun clear()
 
     /**
      * Verify an ed25519 signature.
@@ -14,7 +14,7 @@ expect class Utility() {
      * @param message the signed message
      * @param signature the base64-encoded message signature to be checked.
      */
-    fun verifyEd25519Signature(key: String, message: String, signature: String)
+    public fun verifyEd25519Signature(key: String, message: String, signature: String)
 
     /**
      * Compute the hash(SHA-256) value of the string given in parameter.
@@ -23,5 +23,5 @@ expect class Utility() {
      * @param input message to be hashed
      * @return hash value if operation succeed, null otherwise
      */
-    fun sha256(input: String): String
+    public fun sha256(input: String): String
 }

@@ -9,7 +9,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlin.reflect.KProperty0
 
-class PushApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+public class PushApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
     private inline val accessToken: String get() = accessTokenProp.get()
 
     /**
@@ -21,7 +21,7 @@ class PushApi internal constructor(private val client: HttpClient, private val a
      *
      * **Requires auth**: Yes.
      */
-    suspend fun getPushers(): List<Pusher> {
+    public suspend fun getPushers(): List<Pusher> {
         val response = client.get<Pushers>(path = "_matrix/client/r0/pushers") {
             header("Authorization", "Bearer $accessToken")
         }
@@ -38,7 +38,7 @@ class PushApi internal constructor(private val client: HttpClient, private val a
      *
      * @param[pusher] The pusher information.
      */
-    suspend fun postPusher(pusher: Pusher) {
+    public suspend fun postPusher(pusher: Pusher) {
         return client.put(path = "_matrix/client/r0/pushers/set") {
             header("Authorization", "Bearer $accessToken")
 
@@ -58,7 +58,7 @@ class PushApi internal constructor(private val client: HttpClient, private val a
      *
      * **Requires auth**: Yes.
      */
-    suspend fun getPushRules(): GetPushRulesResponse {
+    public suspend fun getPushRules(): GetPushRulesResponse {
         return client.get(path = "_matrix/client/r0/pushrules/") {
             header("Authorization", "Bearer $accessToken")
         }
@@ -77,7 +77,7 @@ class PushApi internal constructor(private val client: HttpClient, private val a
      * @param[kind] The kind of rule.
      * @param[ruleId] The identifier for the rule.
      */
-    suspend fun getPushRule(scope: String, kind: PushRuleKind, ruleId: String): PushRule {
+    public suspend fun getPushRule(scope: String, kind: PushRuleKind, ruleId: String): PushRule {
         return client.get {
             url {
                 path("_matrix", "client", "r0", "pushrules", scope, kind.name.toLowerCase(), ruleId)
@@ -99,7 +99,7 @@ class PushApi internal constructor(private val client: HttpClient, private val a
      * @param[kind] The kind of rule.
      * @param[ruleId] The identifier for the rule.
      */
-    suspend fun deletePushRule(scope: String, kind: PushRuleKind, ruleId: String) {
+    public suspend fun deletePushRule(scope: String, kind: PushRuleKind, ruleId: String) {
         return client.delete {
             url {
                 path("_matrix", "client", "r0", "pushrules", scope, kind.name.toLowerCase(), ruleId)
@@ -129,7 +129,7 @@ class PushApi internal constructor(private val client: HttpClient, private val a
      * given user defined rule.
      * It is not possible to add a rule relative to a predefined server rule.
      */
-    suspend fun setPushRule(scope: String, kind: PushRuleKind, ruleId: String, before: String? = null, after: String? = null, pushRule: SetPushRuleRequest) {
+    public suspend fun setPushRule(scope: String, kind: PushRuleKind, ruleId: String, before: String? = null, after: String? = null, pushRule: SetPushRuleRequest) {
         return client.put {
             url {
                 path("_matrix", "client", "r0", "pushrules", scope, kind.name.toLowerCase(), ruleId)
@@ -157,7 +157,7 @@ class PushApi internal constructor(private val client: HttpClient, private val a
      * @param[ruleId] The identifier for the rule.
      * @return Whether the push rule is enabled or not.
      */
-    suspend fun isPushRuleEnabled(scope: String, kind: PushRuleKind, ruleId: String): Boolean {
+    public suspend fun isPushRuleEnabled(scope: String, kind: PushRuleKind, ruleId: String): Boolean {
         val response = client.get<PushRuleEnabled> {
             url {
                 path("_matrix", "client", "r0", "pushrules", scope, kind.name.toLowerCase(), ruleId, "enabled")
@@ -181,7 +181,7 @@ class PushApi internal constructor(private val client: HttpClient, private val a
      * @param[kind] The kind of rule.
      * @param[ruleId] The identifier for the rule.
      */
-    suspend fun setPushRuleEnabled(scope: String, kind: PushRuleKind, ruleId: String, enabled: Boolean) {
+    public suspend fun setPushRuleEnabled(scope: String, kind: PushRuleKind, ruleId: String, enabled: Boolean) {
         return client.put {
             url {
                 path("_matrix", "client", "r0", "pushrules", scope, kind.name.toLowerCase(), ruleId, "enabled")
@@ -208,7 +208,7 @@ class PushApi internal constructor(private val client: HttpClient, private val a
      * @param[ruleId] The identifier for the rule.
      * @return The action(s) to perform for this rule.
      */
-    suspend fun getPushRuleActions(scope: String, kind: PushRuleKind, ruleId: String): List<String> {
+    public suspend fun getPushRuleActions(scope: String, kind: PushRuleKind, ruleId: String): List<String> {
         val response = client.get<PushRuleActions> {
             url {
                 path("_matrix", "client", "r0", "pushrules", scope, kind.name.toLowerCase(), ruleId, "actions")
@@ -234,7 +234,7 @@ class PushApi internal constructor(private val client: HttpClient, private val a
      * @param[ruleId] The identifier for the rule.
      * @param[actions] The action(s) to perform for this rule.
      */
-    suspend fun setPushRuleActions(scope: String, kind: PushRuleKind, ruleId: String, actions: List<String>) {
+    public suspend fun setPushRuleActions(scope: String, kind: PushRuleKind, ruleId: String, actions: List<String>) {
         return client.put {
             url {
                 path("_matrix", "client", "r0", "pushrules", scope, kind.name.toLowerCase(), ruleId, "actions")

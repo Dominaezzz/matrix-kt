@@ -10,7 +10,7 @@ import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import kotlin.reflect.KProperty0
 
-class EventApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+public class EventApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
     private inline val accessToken: String get() = accessTokenProp.get()
 
     /**
@@ -65,7 +65,7 @@ class EventApi internal constructor(private val client: HttpClient, private val 
      *
      * By default, this is 0, so the server will return immediately even if the response is empty.
      */
-    suspend fun sync(filter: String? = null, since: String? = null, fullState: Boolean? = null, setPresence: Presence? = null, timeout: Long? = null): SyncResponse {
+    public suspend fun sync(filter: String? = null, since: String? = null, fullState: Boolean? = null, setPresence: Presence? = null, timeout: Long? = null): SyncResponse {
         return client.get("_matrix/client/r0/sync") {
             parameter("filter", filter)
             parameter("since", since)
@@ -77,7 +77,7 @@ class EventApi internal constructor(private val client: HttpClient, private val 
         }
     }
 
-    suspend fun sync(filter: Filter, since: String? = null, fullState: Boolean? = null, setPresence: Presence? = null, timeout: Long? = null): SyncResponse {
+    public suspend fun sync(filter: Filter, since: String? = null, fullState: Boolean? = null, setPresence: Presence? = null, timeout: Long? = null): SyncResponse {
         return sync(
             MatrixJson.encodeToString(Filter.serializer(), filter),
             since, fullState, setPresence, timeout

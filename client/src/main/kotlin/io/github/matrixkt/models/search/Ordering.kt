@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class Ordering {
+public enum class Ordering {
     @SerialName("recent")
     RECENT,
 

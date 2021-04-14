@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.fully_read")
 @Serializable
-data class FullyReadContent(
+public data class FullyReadContent(
     /**
      * The event the user's read marker is located at in the room.
      */

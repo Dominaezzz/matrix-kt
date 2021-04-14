@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DiscoveryInformation(
+public data class DiscoveryInformation(
     /**
      * Used by clients to discover homeserver information.
      */

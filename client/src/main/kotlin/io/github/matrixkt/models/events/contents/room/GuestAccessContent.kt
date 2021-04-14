@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.guest_access")
 @Serializable
-data class GuestAccessContent(
+public data class GuestAccessContent(
     /**
      * Whether guests can join the room.
      */
@@ -18,7 +18,7 @@ data class GuestAccessContent(
 )
 
 @Serializable
-enum class GuestAccess {
+public enum class GuestAccess {
     @SerialName("can_join")
     CAN_JOIN,
 

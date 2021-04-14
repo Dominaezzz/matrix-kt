@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class HomeServerInformation(
+public data class HomeServerInformation(
     /**
      * The base URL for the homeserver for client-server connections.
      */

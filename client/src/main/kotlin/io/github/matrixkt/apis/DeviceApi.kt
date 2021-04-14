@@ -12,7 +12,7 @@ import io.ktor.http.contentType
 import kotlinx.serialization.json.*
 import kotlin.reflect.KProperty0
 
-class DeviceApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>){
+public class DeviceApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>){
     private inline val accessToken: String get() = accessTokenProp.get()
 
     /**
@@ -24,7 +24,7 @@ class DeviceApi internal constructor(private val client: HttpClient, private val
      *
      * @return A list of all registered devices for this user.
      */
-    suspend fun getDevices(): List<Device> {
+    public suspend fun getDevices(): List<Device> {
         val response = client.get<GetDevicesResponse>("_matrix/client/r0/devices") {
             header("Authorization", "Bearer $accessToken")
         }
@@ -40,7 +40,7 @@ class DeviceApi internal constructor(private val client: HttpClient, private val
      *
      * @param[deviceId] The device to retrieve.
      */
-    suspend fun getDevice(deviceId: String): Device {
+    public suspend fun getDevice(deviceId: String): Device {
         return client.get {
             url {
                 path("_matrix", "client", "r0", "devices", deviceId)
@@ -60,7 +60,7 @@ class DeviceApi internal constructor(private val client: HttpClient, private val
      * @param[deviceId] The device to update.
      * @param[displayName] The new display name for this device. If not given, the display name is unchanged.
      */
-    suspend fun updateDevice(deviceId: String, displayName: String) {
+    public suspend fun updateDevice(deviceId: String, displayName: String) {
         return client.put {
             url {
                 path("_matrix", "client", "r0", "devices", deviceId)
@@ -87,7 +87,7 @@ class DeviceApi internal constructor(private val client: HttpClient, private val
      * @param[deviceId] The device to delete.
      * @param[auth] Additional authentication information for the user-interactive authentication API.
      */
-    suspend fun deleteDevice(deviceId: String, auth: AuthenticationData? = null) {
+    public suspend fun deleteDevice(deviceId: String, auth: AuthenticationData? = null) {
         return client.delete {
             url {
                 path("_matrix", "client", "r0", "devices", deviceId)
@@ -116,7 +116,7 @@ class DeviceApi internal constructor(private val client: HttpClient, private val
      * @param[devices] The list of device IDs to delete.
      * @param[auth] Additional authentication information for the user-interactive authentication API.
      */
-    suspend fun deleteDevices(devices: List<String>, auth: AuthenticationData? = null) {
+    public suspend fun deleteDevices(devices: List<String>, auth: AuthenticationData? = null) {
         return client.post("_matrix/client/r0/delete_devices") {
             header("Authorization", "Bearer $accessToken")
             contentType(ContentType.Application.Json)
@@ -149,7 +149,7 @@ class DeviceApi internal constructor(private val client: HttpClient, private val
      * A map from user ID, to a map from device ID to message body.
      * The device ID may also be *, meaning all known devices for the user.
      */
-    suspend fun sendToDevice(eventType: String, txnId: String, messages: Map<String, Map<String, JsonElement>> = emptyMap()) {
+    public suspend fun sendToDevice(eventType: String, txnId: String, messages: Map<String, Map<String, JsonElement>> = emptyMap()) {
         return client.put {
             url {
                 path("_matrix", "client", "r0", "sendToDevice", eventType, txnId)

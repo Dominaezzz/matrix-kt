@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.push_rules")
 @Serializable
-data class PushRulesContent(
+public data class PushRulesContent(
     /**
      * The global ruleset
      */

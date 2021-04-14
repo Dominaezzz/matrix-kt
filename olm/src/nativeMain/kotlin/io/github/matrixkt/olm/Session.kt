@@ -17,10 +17,10 @@ import kotlin.random.Random
  *
  * Detailed implementation guide is available at [Implementing End-to-End Encryption in Matrix clients](http://matrix.org/docs/guides/e2e_implementation.html).
  */
-actual class Session private constructor() {
+public actual class Session private constructor() {
     internal val ptr = genericInit(::olm_session, ::olm_session_size)
 
-    actual fun clear() {
+    public actual fun clear() {
         olm_clear_session(ptr)
         nativeHeap.free(ptr)
     }
@@ -34,7 +34,7 @@ actual class Session private constructor() {
      * Public API for {@link #getSessionIdentifierJni()}.
      * @return the session ID
      */
-    actual val sessionId: String
+    public actual val sessionId: String
         get() {
             val sessionIdLength = olm_session_id_length(ptr)
             val id = ByteArray(sessionIdLength.convert())
@@ -43,10 +43,10 @@ actual class Session private constructor() {
             return id.decodeToString()
         }
 
-    actual val hasReceivedMessage: Boolean
+    public actual val hasReceivedMessage: Boolean
         get() = olm_session_has_received_message(ptr) != 0
 
-    actual fun describe(): String {
+    public actual fun describe(): String {
         // Magic number pulled from here https://gitlab.matrix.org/matrix-org/olm/-/blob/b482321213e6e896d0981c266bed12f4e1f67441/javascript/olm_post.js#L465
         val bufferSize = 256
         val desc = ByteArray(bufferSize)
@@ -61,7 +61,7 @@ actual class Session private constructor() {
      * @param oneTimeKeyMsg PRE KEY message
      * @return true if the one time key matches.
      */
-    actual fun matchesInboundSession(oneTimeKeyMsg: String): Boolean {
+    public actual fun matchesInboundSession(oneTimeKeyMsg: String): Boolean {
         require(oneTimeKeyMsg.isNotBlank())
 
         val result = oneTimeKeyMsg.withNativeRead { oneTimeKeyMsgPtr, oneTimeKeyMsgSize ->
@@ -78,7 +78,7 @@ actual class Session private constructor() {
      * @param oneTimeKeyMsg PRE KEY message
      * @return this if operation succeed, null otherwise
      */
-    actual fun matchesInboundSessionFrom(theirIdentityKey: String, oneTimeKeyMsg: String): Boolean {
+    public actual fun matchesInboundSessionFrom(theirIdentityKey: String, oneTimeKeyMsg: String): Boolean {
         val result = theirIdentityKey.withNativeRead { theirIdentityKeyPtr, theirIdentityKeySize ->
             oneTimeKeyMsg.withNativeRead { oneTimeKeyMsgPtr, oneTimeKeyMsgSize ->
                 olm_matches_inbound_session_from(
@@ -98,7 +98,7 @@ actual class Session private constructor() {
      * @param clearMsg message to encrypted
      * @return the encrypted message
      */
-    actual fun encrypt(clearMsg: String, random: Random): Message {
+    public actual fun encrypt(clearMsg: String, random: Random): Message {
         val messageType = olm_encrypt_message_type(ptr)
 
         return clearMsg.withNativeRead { clearMsgPtr, clearMsgSize ->
@@ -124,7 +124,7 @@ actual class Session private constructor() {
      * @param encryptedMsg message to decrypt
      * @return the decrypted message
      */
-    actual fun decrypt(encryptedMsg: Message): String {
+    public actual fun decrypt(encryptedMsg: Message): String {
         // olm_decrypt_max_plaintext_length and olm_decrypt destroy the input buffer
         // Hence the need for two `withNativeRead`s. Should optimize this later.
 
@@ -154,7 +154,7 @@ actual class Session private constructor() {
      * @param[key] encryption key
      * @return the session as bytes buffer
      */
-    actual fun pickle(key: ByteArray): String {
+    public actual fun pickle(key: ByteArray): String {
         return genericPickle(ptr, key, ::olm_pickle_session_length, ::olm_pickle_session, ::checkError)
     }
 
@@ -162,7 +162,7 @@ actual class Session private constructor() {
         genericCheckError(ptr, result, ::olm_session_last_error)
     }
 
-    actual companion object {
+    public actual companion object {
         private inline fun create(block: Session.() -> Unit): Session {
             val obj = Session()
             try {
@@ -182,7 +182,7 @@ actual class Session private constructor() {
          * @param theirIdentityKey the identity key of the recipient
          * @param theirOneTimeKey the one time key of the recipient
          */
-        actual fun createOutboundSession(account: Account, theirIdentityKey: String, theirOneTimeKey: String, random: Random): Session {
+        public actual fun createOutboundSession(account: Account, theirIdentityKey: String, theirOneTimeKey: String, random: Random): Session {
             require(theirIdentityKey.isNotBlank())
             require(theirOneTimeKey.isNotBlank())
             return create {
@@ -210,7 +210,7 @@ actual class Session private constructor() {
          * @param [account] the account to associate with this session
          * @param [oneTimeKeyMsg] PRE KEY message
          */
-        actual fun createInboundSession(account: Account, oneTimeKeyMsg: String): Session {
+        public actual fun createInboundSession(account: Account, oneTimeKeyMsg: String): Session {
             require(oneTimeKeyMsg.isNotBlank())
 
             return create {
@@ -231,7 +231,7 @@ actual class Session private constructor() {
          * @param theirIdentityKey the sender identity key
          * @param oneTimeKeyMsg PRE KEY message
          */
-        actual fun createInboundSessionFrom(account: Account, theirIdentityKey: String, oneTimeKeyMsg: String): Session {
+        public actual fun createInboundSessionFrom(account: Account, theirIdentityKey: String, oneTimeKeyMsg: String): Session {
             require(theirIdentityKey.isNotBlank())
             require(oneTimeKeyMsg.isNotBlank())
 
@@ -256,7 +256,7 @@ actual class Session private constructor() {
          * @param[key] key used to encrypt
          * @exception Exception the exception
          */
-        actual fun unpickle(key: ByteArray, pickle: String): Session {
+        public actual fun unpickle(key: ByteArray, pickle: String): Session {
             return create {
                 genericUnpickle(ptr, key, pickle, ::olm_unpickle_session, ::checkError)
             }

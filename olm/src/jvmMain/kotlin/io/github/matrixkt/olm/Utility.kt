@@ -14,10 +14,10 @@ import com.sun.jna.Pointer
 /**
  * Olm SDK helper class.
  */
-actual class Utility {
+public actual class Utility {
     private val ptr = genericInit(::olm_utility, ::olm_utility_size)
 
-    actual fun clear() {
+    public actual fun clear() {
         olm_clear_utility(ptr)
         Native.free(Pointer.nativeValue(ptr.pointer))
     }
@@ -30,7 +30,7 @@ actual class Utility {
      * @param message the signed message
      * @param signature the base64-encoded message signature to be checked.
      */
-    actual fun verifyEd25519Signature(key: String, message: String, signature: String) {
+    public actual fun verifyEd25519Signature(key: String, message: String, signature: String) {
         key.withNativeRead { keyPtr, keyLength ->
             message.withNativeRead { messagePtr, messageLength ->
                 signature.withNativeRead { signaturePtr, signatureLen ->
@@ -48,7 +48,7 @@ actual class Utility {
      * @param input message to be hashed
      * @return hash value if operation succeed, null otherwise
      */
-    actual fun sha256(input: String): String {
+    public actual fun sha256(input: String): String {
         val outputLength = olm_sha256_length(ptr)
         return withAllocation(outputLength.toLong()) { output ->
             input.withNativeRead { inputPtr, inputLen ->

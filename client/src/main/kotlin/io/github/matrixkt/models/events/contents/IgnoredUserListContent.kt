@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.ignored_user_list")
 @Serializable
-data class IgnoredUserListContent(
+public data class IgnoredUserListContent(
     /**
      * The map of users to ignore.
      */

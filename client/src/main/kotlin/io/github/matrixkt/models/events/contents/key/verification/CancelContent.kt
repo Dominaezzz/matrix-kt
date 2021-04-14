@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.key.verification.cancel")
 @Serializable
-data class CancelContent(
+public data class CancelContent(
     /**
      * The opaque identifier for the verification process/request.
      */

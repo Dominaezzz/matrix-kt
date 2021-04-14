@@ -20,7 +20,7 @@ import com.sun.jna.Native
 import com.sun.jna.Pointer
 import kotlin.random.Random
 
-actual class SAS actual constructor(random: Random) {
+public actual class SAS actual constructor(random: Random) {
     private val ptr = genericInit(::olm_sas, ::olm_sas_size)
 
     init {
@@ -36,7 +36,7 @@ actual class SAS actual constructor(random: Random) {
         }
     }
 
-    actual fun clear() {
+    public actual fun clear() {
         olm_clear_sas(ptr)
         Native.free(Pointer.nativeValue(ptr.pointer))
     }
@@ -46,7 +46,7 @@ actual class SAS actual constructor(random: Random) {
      *
      * @return The public key
      */
-    actual val publicKey: String
+    public actual val publicKey: String
         get() {
             val length = olm_sas_pubkey_length(ptr)
             return withAllocation(length.toLong()) {
@@ -61,7 +61,7 @@ actual class SAS actual constructor(random: Random) {
      *
      * @param theirPublicKey other user public key (base64 encoded with no padding)
      */
-    actual fun setTheirPublicKey(theirPublicKey: String) {
+    public actual fun setTheirPublicKey(theirPublicKey: String) {
         theirPublicKey.withNativeRead { theirPublicKeyPtr, theirPublicKeyLength ->
             val result = olm_sas_set_their_key(ptr, theirPublicKeyPtr, theirPublicKeyLength)
             checkError(result)
@@ -71,7 +71,7 @@ actual class SAS actual constructor(random: Random) {
     /**
      * Checks if their key was set.
      */
-    actual val isTheirKeySet: Boolean
+    public actual val isTheirKeySet: Boolean
         get() = olm_sas_is_their_key_set(ptr) != 0
 
     /**
@@ -81,7 +81,7 @@ actual class SAS actual constructor(random: Random) {
      * @param[numberOfBytes] The size of the short code to generate.
      * @return The generated short code.
      */
-    actual fun generateShortCode(info: String, numberOfBytes: Int): ByteArray {
+    public actual fun generateShortCode(info: String, numberOfBytes: Int): ByteArray {
         val shortBytes = ByteArray(numberOfBytes)
         shortBytes.withNativeWrite { output ->
             info.withNativeRead { infoPtr, infoLen ->
@@ -94,7 +94,7 @@ actual class SAS actual constructor(random: Random) {
         return shortBytes
     }
 
-    actual fun calculateMac(message: String, info: String): String {
+    public actual fun calculateMac(message: String, info: String): String {
         val macLength = olm_sas_mac_length(ptr)
         return withAllocation(macLength.toLong()) { macPtr ->
             message.withNativeRead { messagePtr, messageLen ->
@@ -111,7 +111,7 @@ actual class SAS actual constructor(random: Random) {
         }
     }
 
-    actual fun calculateMacLongKdf(message: String, info: String): String {
+    public actual fun calculateMacLongKdf(message: String, info: String): String {
         val macLength = olm_sas_mac_length(ptr)
 
         return withAllocation(macLength.toLong()) { macPtr ->

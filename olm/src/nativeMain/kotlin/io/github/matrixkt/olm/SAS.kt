@@ -5,7 +5,7 @@ import kotlinx.cinterop.*
 import platform.posix.size_t
 import kotlin.random.Random
 
-actual class SAS actual constructor(random: Random) {
+public actual class SAS actual constructor(random: Random) {
     private val ptr = genericInit(::olm_sas, ::olm_sas_size)
 
     init {
@@ -21,7 +21,7 @@ actual class SAS actual constructor(random: Random) {
         }
     }
 
-    actual fun clear() {
+    public actual fun clear() {
         olm_clear_sas(ptr)
         nativeHeap.free(ptr)
     }
@@ -31,7 +31,7 @@ actual class SAS actual constructor(random: Random) {
      *
      * @return The public key
      */
-    actual val publicKey: String
+    public actual val publicKey: String
         get() {
             val length = olm_sas_pubkey_length(ptr)
             val buffer = ByteArray(length.convert())
@@ -45,7 +45,7 @@ actual class SAS actual constructor(random: Random) {
      *
      * @param theirPublicKey other user public key (base64 encoded with no padding)
      */
-    actual fun setTheirPublicKey(theirPublicKey: String) {
+    public actual fun setTheirPublicKey(theirPublicKey: String) {
         theirPublicKey.withNativeRead { theirPublicKeyPtr, theirPublicKeyLength ->
             val result = olm_sas_set_their_key(ptr, theirPublicKeyPtr, theirPublicKeyLength)
             checkError(result)
@@ -55,7 +55,7 @@ actual class SAS actual constructor(random: Random) {
     /**
      * Checks if their key was set.
      */
-    actual val isTheirKeySet: Boolean get() = olm_sas_is_their_key_set(ptr) != 0
+    public actual val isTheirKeySet: Boolean get() = olm_sas_is_their_key_set(ptr) != 0
 
     /**
      * Generate bytes to use for the short authentication string.
@@ -64,7 +64,7 @@ actual class SAS actual constructor(random: Random) {
      * @param[numberOfBytes] The size of the short code to generate.
      * @return The generated short code.
      */
-    actual fun generateShortCode(info: String, numberOfBytes: Int): ByteArray {
+    public actual fun generateShortCode(info: String, numberOfBytes: Int): ByteArray {
         val shortBytes = ByteArray(numberOfBytes)
         info.withNativeRead { infoPtr, infoLen ->
             val result = olm_sas_generate_bytes(
@@ -75,7 +75,7 @@ actual class SAS actual constructor(random: Random) {
         return shortBytes
     }
 
-    actual fun calculateMac(message: String, info: String): String {
+    public actual fun calculateMac(message: String, info: String): String {
         val macLength = olm_sas_mac_length(ptr)
         val mac = ByteArray(macLength.convert())
 
@@ -92,7 +92,7 @@ actual class SAS actual constructor(random: Random) {
         return mac.decodeToString()
     }
 
-    actual fun calculateMacLongKdf(message: String, info: String): String {
+    public actual fun calculateMacLongKdf(message: String, info: String): String {
         val macLength = olm_sas_mac_length(ptr)
         val mac = ByteArray(macLength.convert())
 

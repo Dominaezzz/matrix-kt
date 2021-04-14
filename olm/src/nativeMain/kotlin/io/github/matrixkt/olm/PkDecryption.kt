@@ -5,16 +5,16 @@ import kotlinx.cinterop.*
 import platform.posix.size_t
 import kotlin.random.Random
 
-actual class PkDecryption {
+public actual class PkDecryption {
     private val ptr: CPointer<OlmPkDecryption>
-    actual val publicKey: String
+    public actual val publicKey: String
 
     private constructor(ptr: CPointer<OlmPkDecryption>, publicKey: String) {
         this.ptr = ptr
         this.publicKey = publicKey
     }
 
-    actual constructor(random: Random) {
+    public actual constructor(random: Random) {
         val publicKeyLength = olm_pk_key_length()
         val privateKeyLength = olm_pk_private_key_length()
         val publicKey = ByteArray(publicKeyLength.convert())
@@ -34,12 +34,12 @@ actual class PkDecryption {
         this.publicKey = publicKey.decodeToString()
     }
 
-    actual fun clear() {
+    public actual fun clear() {
         olm_clear_pk_decryption(ptr)
         nativeHeap.free(ptr)
     }
 
-    actual val privateKey: ByteArray
+    public actual val privateKey: ByteArray
         get() {
             val privateKeyLength = olm_pk_private_key_length()
             val privateKey = ByteArray(privateKeyLength.convert())
@@ -49,7 +49,7 @@ actual class PkDecryption {
             return privateKey
         }
 
-    actual fun decrypt(message: PkMessage): String {
+    public actual fun decrypt(message: PkMessage): String {
         return message.mac.withNativeRead { macPtr, macLen ->
             message.ephemeralKey.withNativeRead { ephemeralKeyPtr, ephemeralKeyLen ->
                 message.cipherText.withNativeRead { cipherTextPtr, cipherTextLen ->
@@ -70,7 +70,7 @@ actual class PkDecryption {
         }
     }
 
-    actual fun pickle(key: ByteArray): String {
+    public actual fun pickle(key: ByteArray): String {
         return genericPickle(ptr, key, ::olm_pickle_pk_decryption_length, ::olm_pickle_pk_decryption, ::checkError)
     }
 
@@ -78,7 +78,7 @@ actual class PkDecryption {
         genericCheckError(ptr, result, ::olm_pk_decryption_last_error)
     }
 
-    actual companion object {
+    public actual companion object {
         private inline fun create(block: (CPointer<OlmPkDecryption>, CValuesRef<*>, size_t) -> Unit): PkDecryption {
             val publicKeyLength = olm_pk_key_length()
             val publicKey = ByteArray(publicKeyLength.convert())
@@ -99,7 +99,7 @@ actual class PkDecryption {
             genericCheckError(ptr, result, ::olm_pk_decryption_last_error)
         }
 
-        actual fun unpickle(key: ByteArray, pickle: String): PkDecryption {
+        public actual fun unpickle(key: ByteArray, pickle: String): PkDecryption {
             return create { ptr, publicKey, publicKeyLength ->
                 genericUnpickle(ptr, key, pickle, { ptr, key, keyLen, pickle, pickleLen ->
                     olm_unpickle_pk_decryption(ptr, key, keyLen, pickle, pickleLen, publicKey, publicKeyLength)

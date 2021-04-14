@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room_key")
 @Serializable
-data class RoomKeyContent(
+public data class RoomKeyContent(
     /**
      * The encryption algorithm the key in this event is to be used with.
      * Must be 'm.megolm.v1.aes-sha2'.

@@ -39,18 +39,18 @@ private class PickleSerializer<T>(val pickle: T.(ByteArray) -> String, val unpic
 }
 
 
-object AccountSerializer : KSerializer<Account> by PickleSerializer(Account::pickle, Account.Companion::unpickle)
+public object AccountSerializer : KSerializer<Account> by PickleSerializer(Account::pickle, Account.Companion::unpickle)
 
-object SessionSerializer : KSerializer<Session> by PickleSerializer(Session::pickle, Session.Companion::unpickle)
+public object SessionSerializer : KSerializer<Session> by PickleSerializer(Session::pickle, Session.Companion::unpickle)
 
-object InboundGroupSessionSerializer : KSerializer<InboundGroupSession> by PickleSerializer(
+public object InboundGroupSessionSerializer : KSerializer<InboundGroupSession> by PickleSerializer(
     InboundGroupSession::pickle, InboundGroupSession.Companion::unpickle
 )
 
-object OutboundGroupSessionSerializer : KSerializer<OutboundGroupSession> by PickleSerializer(
+public object OutboundGroupSessionSerializer : KSerializer<OutboundGroupSession> by PickleSerializer(
     OutboundGroupSession::pickle, OutboundGroupSession.Companion::unpickle
 )
 
-object PkDecryptionSerializer : KSerializer<PkDecryption> by PickleSerializer(
+public object PkDecryptionSerializer : KSerializer<PkDecryption> by PickleSerializer(
     PkDecryption::pickle, PkDecryption.Companion::unpickle
 )

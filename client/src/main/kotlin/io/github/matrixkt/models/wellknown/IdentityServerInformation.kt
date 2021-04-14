@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class IdentityServerInformation(
+public data class IdentityServerInformation(
     /**
      * The base URL for the identity server for client-server connections.
      */

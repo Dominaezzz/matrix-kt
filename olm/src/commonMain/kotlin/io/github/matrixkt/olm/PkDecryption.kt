@@ -2,18 +2,18 @@ package io.github.matrixkt.olm
 
 import kotlin.random.Random
 
-expect class PkDecryption(random: Random = Random.Default) {
-    val publicKey: String
+public expect class PkDecryption(random: Random = Random.Default) {
+    public val publicKey: String
 
-    fun clear()
+    public fun clear()
 
-    val privateKey: ByteArray
+    public val privateKey: ByteArray
 
-    fun decrypt(message: PkMessage): String
+    public fun decrypt(message: PkMessage): String
 
-    fun pickle(key: ByteArray): String
+    public fun pickle(key: ByteArray): String
 
-    companion object {
-        fun unpickle(key: ByteArray, pickle: String): PkDecryption
+    public companion object {
+        public fun unpickle(key: ByteArray, pickle: String): PkDecryption
     }
 }

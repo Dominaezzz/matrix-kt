@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.typing")
 @Serializable
-data class TypingContent(
+public data class TypingContent(
     /**
      * The list of user IDs typing in this room, if any.
      */

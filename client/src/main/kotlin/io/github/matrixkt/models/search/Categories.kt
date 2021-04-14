@@ -4,10 +4,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Categories(
+public class Categories(
     /**
      * Mapping of category name to search criteria.
      */
     @SerialName("room_events")
-    val roomEvents: RoomEventsCriteria? = null
+    public val roomEvents: RoomEventsCriteria? = null
 )

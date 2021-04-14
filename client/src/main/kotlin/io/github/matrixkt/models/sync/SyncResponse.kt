@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SyncResponse(
+public data class SyncResponse(
     /**
      * The batch token to supply in the since param of the next `/sync` request.
      */

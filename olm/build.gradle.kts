@@ -53,6 +53,8 @@ kotlin {
         iosX64()
     }
 
+    explicitApi()
+
     sourceSets {
         commonMain {
             dependencies {

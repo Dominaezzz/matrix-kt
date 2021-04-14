@@ -16,7 +16,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.name")
 @Serializable
-data class NameContent(
+public data class NameContent(
     /**
      * The name of the room. This MUST NOT exceed 255 bytes.
      */

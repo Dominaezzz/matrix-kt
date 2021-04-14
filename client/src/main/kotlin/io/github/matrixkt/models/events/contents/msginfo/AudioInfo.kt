@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AudioInfo(
+public data class AudioInfo(
     /**
      * The duration of the audio in milliseconds.
      */

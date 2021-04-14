@@ -18,11 +18,11 @@ import kotlinx.serialization.encoding.Encoder
  */
 @SerialName("m.room.message")
 @Serializable(MessageContent.TheSerializer::class)
-abstract class MessageContent {
+public abstract class MessageContent {
     /**
      * The textual representation of this message.
      */
-    abstract val body: String
+    public abstract val body: String
 
 //    /**
 //     * The type of message, e.g. m.image, m.text
@@ -35,7 +35,7 @@ abstract class MessageContent {
      */
     @Serializable
     @SerialName("m.text")
-    data class Text(
+    public data class Text(
         /**
          * The body of the message.
          */
@@ -63,7 +63,7 @@ abstract class MessageContent {
      */
     @Serializable
     @SerialName("m.emote")
-    data class Emote(
+    public data class Emote(
         /**
          * The emote action to perform.
          */
@@ -92,7 +92,7 @@ abstract class MessageContent {
      */
     @Serializable
     @SerialName("m.notice")
-    data class Notice(
+    public data class Notice(
         /**
          * The notice text to send.
          */
@@ -117,7 +117,7 @@ abstract class MessageContent {
      */
     @Serializable
     @SerialName("m.server_notice")
-    data class ServerNotice(
+    public data class ServerNotice(
         /**
          * A human-readable description of the notice.
          */
@@ -149,7 +149,7 @@ abstract class MessageContent {
      */
     @Serializable
     @SerialName("m.image")
-    data class Image(
+    public data class Image(
         /**
          * A textual representation of the image.
          * This could be the alt text of the image, the filename of the image,
@@ -180,7 +180,7 @@ abstract class MessageContent {
      */
     @Serializable
     @SerialName("m.file")
-    data class File(
+    public data class File(
         /**
          * A human-readable description of the file.
          * This is recommended to be the filename of the original upload.
@@ -215,7 +215,7 @@ abstract class MessageContent {
      */
     @Serializable
     @SerialName("m.audio")
-    data class Audio(
+    public data class Audio(
         /**
          * A description of the audio e.g. 'Bee Gees - Stayin' Alive', or some
          * kind of content description for accessibility e.g. 'audio attachment'.
@@ -245,7 +245,7 @@ abstract class MessageContent {
      */
     @Serializable
     @SerialName("m.location")
-    data class Location(
+    public data class Location(
         /**
          * A description of the location e.g. 'Big Ben, London, UK', or some kind of
          * content description for accessibility e.g. 'location attachment'.
@@ -266,7 +266,7 @@ abstract class MessageContent {
      */
     @Serializable
     @SerialName("m.video")
-    data class Video(
+    public data class Video(
         /**
          * A description of the video e.g. 'Gangnam style', or some kind of
          * content description for accessibility e.g. 'video attachment'.
@@ -293,7 +293,7 @@ abstract class MessageContent {
 
     @OptIn(ExperimentalSerializationApi::class)
     @Serializer(forClass = MessageContent::class)
-    object TheSerializer : KSerializer<MessageContent> {
+    public object TheSerializer : KSerializer<MessageContent> {
         private val firstDelegate = PolymorphicSerializer(MessageContent::class)
         private val secondDelegate = DiscriminatorChanger(firstDelegate, "msgtype")
 

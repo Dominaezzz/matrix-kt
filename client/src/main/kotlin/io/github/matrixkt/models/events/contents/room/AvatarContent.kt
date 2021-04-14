@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.avatar")
 @Serializable
-data class AvatarContent(
+public data class AvatarContent(
     /**
      * Metadata about the image referred to in [url].
      */

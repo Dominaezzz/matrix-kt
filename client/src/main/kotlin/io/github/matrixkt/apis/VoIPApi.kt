@@ -6,7 +6,7 @@ import io.ktor.client.request.header
 import io.ktor.client.request.post
 import kotlin.reflect.KProperty0
 
-class VoIPApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+public class VoIPApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
     private inline val accessToken: String get() = accessTokenProp.get()
 
     /**
@@ -16,7 +16,7 @@ class VoIPApi internal constructor(private val client: HttpClient, private val a
      *
      * **Requires auth**: Yes.
      */
-    suspend fun getTurnServer(): TurnServerResponse {
+    public suspend fun getTurnServer(): TurnServerResponse {
         return client.post("_matrix/client/r0/voip/turnServer") {
             header("Authorization", "Bearer $accessToken")
         }

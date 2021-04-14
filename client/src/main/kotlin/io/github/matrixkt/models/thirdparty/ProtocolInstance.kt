@@ -5,26 +5,26 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
 @Serializable
-class ProtocolInstance(
+public class ProtocolInstance(
     /**
      * A human-readable description for the protocol, such as the name.
      */
-    val desc: String,
+    public val desc: String,
 
     /**
      * An optional content URI representing the protocol.
      * Overrides the one provided at the higher level [Protocol] object.
      */
-    val icon: String? = null,
+    public val icon: String? = null,
 
     /**
      * Preset values for [fields] the client may use to search by.
      */
-    val fields: JsonObject,
+    public val fields: JsonObject,
 
     /**
      * A unique identifier across all instances.
      */
     @SerialName("network_id")
-    val networkId: String
+    public val networkId: String
 )

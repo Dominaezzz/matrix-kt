@@ -6,7 +6,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.header
 import kotlin.reflect.KProperty0
 
-class AdminApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+public class AdminApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
     private inline val accessToken: String get() = accessTokenProp.get()
 
     /**
@@ -21,7 +21,7 @@ class AdminApi internal constructor(private val client: HttpClient, private val 
      *
      * @param[userId#] The user to look up.
      */
-    suspend fun getWhoIs(userId: String): WhoIsResponse {
+    public suspend fun getWhoIs(userId: String): WhoIsResponse {
         return client.get {
             url {
                 path("_matrix", "client", "r0", "admin", "whois", userId)

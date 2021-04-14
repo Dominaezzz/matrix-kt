@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class RoomVisibility {
+public enum class RoomVisibility {
     @SerialName("public")
     PUBLIC,
     @SerialName("private")

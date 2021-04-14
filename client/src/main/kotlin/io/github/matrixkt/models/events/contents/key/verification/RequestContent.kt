@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.key.verification.request")
 @Serializable
-data class RequestContent(
+public data class RequestContent(
     /**
      * The device ID which is initiating the request.
      */

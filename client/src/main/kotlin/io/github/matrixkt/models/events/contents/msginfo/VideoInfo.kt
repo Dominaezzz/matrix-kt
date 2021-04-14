@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class VideoInfo(
+public data class VideoInfo(
     /**
      * The duration of the video in milliseconds.
      */

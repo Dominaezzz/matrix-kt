@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
 @Serializable
-data class MatrixEvent(
+public data class MatrixEvent(
     /**
      * The type of event.
      * This SHOULD be namespaced similar to Java package naming conventions e.g. 'com.example.subdomain.event.type'

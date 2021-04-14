@@ -8,13 +8,14 @@ import io.github.matrixkt.models.push.PushRuleAction
 import io.github.matrixkt.models.push.RuleSet
 import io.github.matrixkt.models.wellknown.DiscoveryInformation
 import kotlinx.serialization.*
+import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.*
 
 @Serializable
-data class Invite3pid(
+public data class Invite3pid(
     /**
      * The hostname+port of the identity server which should be used for third party identifier lookups.
      */
@@ -33,7 +34,7 @@ data class Invite3pid(
 )
 
 @Serializable
-data class CreateRoomRequest(
+public data class CreateRoomRequest(
     /**
      * A `public` visibility indicates that the room will be shown in the published room list.
      * A `private` visibility will hide the room from the published room list.
@@ -129,7 +130,7 @@ data class CreateRoomRequest(
     val powerLevelContentOverride: JsonObject? = null
 ) {
     @Serializable
-    data class StateEvent(
+    public data class StateEvent(
         /**
          * The type of event to send.
          */
@@ -149,7 +150,7 @@ data class CreateRoomRequest(
 }
 
 @Serializable
-data class CreateRoomResponse(
+public data class CreateRoomResponse(
     /**
      * The created room's ID.
      */
@@ -158,7 +159,7 @@ data class CreateRoomResponse(
 )
 
 @Serializable
-data class CreateRoomAliasRequest(
+public data class CreateRoomAliasRequest(
     /**
      * The room ID to set.
      */
@@ -167,7 +168,7 @@ data class CreateRoomAliasRequest(
 )
 
 @Serializable
-data class ResolveRoomAliasResponse(
+public data class ResolveRoomAliasResponse(
     /**
      * 	The room ID for this room alias.
      */
@@ -181,7 +182,7 @@ data class ResolveRoomAliasResponse(
 )
 
 @Serializable
-data class GetJoinedRoomsResponse(
+public data class GetJoinedRoomsResponse(
     /**
      * The ID of each room in which the user has joined membership.
      */
@@ -190,7 +191,7 @@ data class GetJoinedRoomsResponse(
 )
 
 @Serializable
-data class InviteRequest(
+public data class InviteRequest(
     /**
      * The fully qualified user ID of the invitee.
      */
@@ -199,7 +200,7 @@ data class InviteRequest(
 )
 
 @Serializable
-data class JoinRoomRequest(
+public data class JoinRoomRequest(
     /**
      * A signature of an `m.third_party_invite` token to prove that this
      * user owns a third party identity which has been invited to the room.
@@ -209,7 +210,7 @@ data class JoinRoomRequest(
 )
 
 @Serializable
-data class ThirdPartySigned(
+public data class ThirdPartySigned(
     /**
      * The Matrix ID of the user who issued the invite.
      */
@@ -232,13 +233,13 @@ data class ThirdPartySigned(
 )
 
 @Serializable
-data class JoinRoomResponse(
+public data class JoinRoomResponse(
     @SerialName("room_id")
     val roomId: String
 )
 
 @Serializable
-data class KickRequest(
+public data class KickRequest(
     /**
      * The fully qualified user ID of the user being kicked.
      */
@@ -253,7 +254,7 @@ data class KickRequest(
 )
 
 @Serializable
-data class BanRequest(
+public data class BanRequest(
     /**
      * The fully qualified user ID of the user being banned.
      */
@@ -268,7 +269,7 @@ data class BanRequest(
 )
 
 @Serializable
-data class UnBanRequest(
+public data class UnBanRequest(
     /**
      * The fully qualified user ID of the user being unbanned.
      */
@@ -277,7 +278,7 @@ data class UnBanRequest(
 )
 
 @Serializable
-data class VisibilityResponse(
+public data class VisibilityResponse(
     /**
      * The visibility of the room in the directory. One of: ["private", "public"]
      */
@@ -285,7 +286,7 @@ data class VisibilityResponse(
 )
 
 @Serializable
-data class VisibilityRequest(
+public data class VisibilityRequest(
     /**
      * The new visibility setting for the room. Defaults to 'public'. One of: ["private", "public"]
      */
@@ -293,7 +294,7 @@ data class VisibilityRequest(
 )
 
 @Serializable
-data class PublicRoomsChunk(
+public data class PublicRoomsChunk(
     /**
      * Aliases of the room. May be empty.
      */
@@ -348,7 +349,7 @@ data class PublicRoomsChunk(
 )
 
 @Serializable
-data class PublicRoomsResponse(
+public data class PublicRoomsResponse(
     /**
      * A paginated chunk of public rooms.
      */
@@ -376,7 +377,7 @@ data class PublicRoomsResponse(
 )
 
 @Serializable
-data class SearchPublicRoomsRequest(
+public data class SearchPublicRoomsRequest(
     /**
      * Limit the number of results returned.
      */
@@ -407,7 +408,7 @@ data class SearchPublicRoomsRequest(
     val thirdPartyInstanceId: String? = null
 ) {
     @Serializable
-    data class Filter(
+    public data class Filter(
         @SerialName("generic_search_term")
         val genericSearchTerm: String? = null
     )
@@ -415,7 +416,7 @@ data class SearchPublicRoomsRequest(
 
 
 @Serializable
-data class UpgradeRoomRequest(
+public data class UpgradeRoomRequest(
     /**
      * The new version for the room.
      */
@@ -424,7 +425,7 @@ data class UpgradeRoomRequest(
 )
 
 @Serializable
-data class UpgradeRoomResponse(
+public data class UpgradeRoomResponse(
     /**
      * The ID of the new room.
      */
@@ -433,10 +434,10 @@ data class UpgradeRoomResponse(
 )
 
 @Serializable
-data class GetMembersResponse(val chunk: List<StateEvent<MemberContent, JsonObject>>)
+public data class GetMembersResponse(val chunk: List<StateEvent<MemberContent, JsonObject>>)
 
 @Serializable
-data class RoomMember(
+public data class RoomMember(
     /**
      * The display name of the user this object is representing.
      */
@@ -451,7 +452,7 @@ data class RoomMember(
 )
 
 @Serializable
-data class JoinedMembersResponse(
+public data class JoinedMembersResponse(
     /**
      * A map from user ID to a [RoomMember] object.
      */
@@ -459,7 +460,7 @@ data class JoinedMembersResponse(
 )
 
 @Serializable
-enum class Direction {
+public enum class Direction {
     @SerialName("f")
     F,
     @SerialName("b")
@@ -467,7 +468,7 @@ enum class Direction {
 }
 
 @Serializable
-data class MessagesResponse(
+public data class MessagesResponse(
     /**
      * 	The token the pagination starts from.
      * 	If `dir=b` this will be the token supplied in `from`.
@@ -501,7 +502,7 @@ data class MessagesResponse(
 )
 
 @Serializable
-data class SendStateEventResponse(
+public data class SendStateEventResponse(
     /**
      * A unique identifier for the event.
      */
@@ -510,7 +511,7 @@ data class SendStateEventResponse(
 )
 
 @Serializable
-data class SendMessageEventResponse(
+public data class SendMessageEventResponse(
     /**
      * A unique identifier for the event.
      */
@@ -519,7 +520,7 @@ data class SendMessageEventResponse(
 )
 
 @Serializable
-data class SearchUsersRequest(
+public data class SearchUsersRequest(
     /**
      * The term to search for.
      */
@@ -533,7 +534,7 @@ data class SearchUsersRequest(
 )
 
 @Serializable
-data class SearchUsersResponse(
+public data class SearchUsersResponse(
     /**
      * Ordered by rank and then whether or not profile info is available.
      */
@@ -545,7 +546,7 @@ data class SearchUsersResponse(
     val limited: Boolean
 ) {
     @Serializable
-    data class User(
+    public data class User(
         /**
          * The user's matrix user ID.
          */
@@ -567,7 +568,7 @@ data class SearchUsersResponse(
 }
 
 @Serializable
-data class SetDisplayNameRequest(
+public data class SetDisplayNameRequest(
     /**
      * The new display name for this user.
      */
@@ -576,7 +577,7 @@ data class SetDisplayNameRequest(
 )
 
 @Serializable
-data class GetDisplayNameResponse(
+public data class GetDisplayNameResponse(
     /**
      * The user's display name if they have set one, otherwise not present.
      */
@@ -585,7 +586,7 @@ data class GetDisplayNameResponse(
 )
 
 @Serializable
-data class SetAvatarUrlRequest(
+public data class SetAvatarUrlRequest(
     /**
      * The new avatar URL for this user.
      */
@@ -594,7 +595,7 @@ data class SetAvatarUrlRequest(
 )
 
 @Serializable
-data class GetAvatarUrlResponse(
+public data class GetAvatarUrlResponse(
     /**
      * The user's avatar URL if they have set one, otherwise not present.
      */
@@ -603,7 +604,7 @@ data class GetAvatarUrlResponse(
 )
 
 @Serializable
-data class GetUserProfileResponse(
+public data class GetUserProfileResponse(
     /**
      * The user's avatar URL if they have set one, otherwise not present.
      */
@@ -618,7 +619,7 @@ data class GetUserProfileResponse(
 )
 
 @Serializable
-data class UploadResponse(
+public data class UploadResponse(
     /**
      * The [MXC URI](https://matrix.org/docs/spec/client_server/r0.5.0#mxc-uri) to the uploaded content.
      */
@@ -627,7 +628,7 @@ data class UploadResponse(
 )
 
 @Serializable
-enum class ThumbnailMethod {
+public enum class ThumbnailMethod {
     @SerialName("crop")
     CROP,
     @SerialName("scale")
@@ -635,7 +636,7 @@ enum class ThumbnailMethod {
 }
 
 @Serializable
-data class UrlPreviewResponse(
+public data class UrlPreviewResponse(
     /**
      * The byte-size of the image. Omitted if there is no image attached.
      */
@@ -665,7 +666,7 @@ data class UrlPreviewResponse(
 )
 
 @Serializable
-data class ConfigResponse(
+public data class ConfigResponse(
     /**
      * The maximum size an upload can be in bytes.
      * Clients SHOULD use this as a guide when uploading content.
@@ -676,7 +677,7 @@ data class ConfigResponse(
 )
 
 @Serializable
-data class LoginFlow(
+public data class LoginFlow(
     /**
      * The login type. This is supplied as the type when logging in.
      */
@@ -684,7 +685,7 @@ data class LoginFlow(
 )
 
 @Serializable
-data class LoginFlowsResponse(
+public data class LoginFlowsResponse(
     /**
      * The homeserver's supported login types.
      */
@@ -692,7 +693,7 @@ data class LoginFlowsResponse(
 )
 
 @Serializable
-abstract class LoginRequest {
+public abstract class LoginRequest {
     // /**
     //  * The login type being used.
     //  * One of: ["m.login.password", "m.login.token"]
@@ -702,21 +703,21 @@ abstract class LoginRequest {
     /**
      * Identification information for the user.
      */
-    abstract val identifier: UserIdentifier?
+    public abstract val identifier: UserIdentifier?
 
     @SerialName("device_id")
-    abstract val deviceId: String?
+    public abstract val deviceId: String?
 
     /**
      * A display name to assign to the newly-created device.
      * Ignored if [deviceId] corresponds to a known device.
      */
     @SerialName("initial_device_display_name")
-    abstract val initialDeviceDisplayName: String?
+    public abstract val initialDeviceDisplayName: String?
 
     @SerialName("m.login.password")
     @Serializable
-    data class Password(
+    public data class Password(
         /**
          * Identification information for the user.
          */
@@ -740,7 +741,7 @@ abstract class LoginRequest {
 
     @SerialName("m.login.token")
     @Serializable
-    data class Token(
+    public data class Token(
         /**
          * Identification information for the user.
          */
@@ -764,7 +765,7 @@ abstract class LoginRequest {
 }
 
 @Serializable
-data class LoginResponse(
+public data class LoginResponse(
     /**
      * The fully-qualified Matrix ID that has been registered.
      */
@@ -805,7 +806,7 @@ data class LoginResponse(
 )
 
 @Serializable
-enum class RegistrationKind {
+public enum class RegistrationKind {
     @SerialName("guest")
     GUEST,
     @SerialName("user")
@@ -813,7 +814,7 @@ enum class RegistrationKind {
 }
 
 @Serializable
-data class RegisterRequest(
+public data class RegisterRequest(
     /**
      * Additional authentication information for the user-interactive authentication API.
      * Note that this information is not used to define how the registered user should be authenticated,
@@ -869,7 +870,7 @@ data class RegisterRequest(
 )
 
 @Serializable
-data class RegisterResponse(
+public data class RegisterResponse(
     /**
      * The fully-qualified Matrix user ID (MXID) that has been registered.
      *
@@ -908,7 +909,7 @@ data class RegisterResponse(
 )
 
 @Serializable
-data class ChangePasswordRequest(
+public data class ChangePasswordRequest(
     /**
      * The new password for the account.
      */
@@ -922,7 +923,7 @@ data class ChangePasswordRequest(
 )
 
 @Serializable
-data class DeactivateRequest(
+public data class DeactivateRequest(
     /**
      * Additional authentication information for the user-interactive authentication API.
      */
@@ -938,7 +939,7 @@ data class DeactivateRequest(
 )
 
 @Serializable
-data class DeactivateResponse(
+public data class DeactivateResponse(
     /**
      * An indicator as to whether or not the homeserver was able to unbind the user's 3PIDs from the identity server(s).
      * `success` indicates that all identifiers have been unbound from the identity server while
@@ -953,7 +954,7 @@ data class DeactivateResponse(
 
 
 @Serializable
-data class GetDevicesResponse(
+public data class GetDevicesResponse(
     /**
      * A list of all registered devices for this user.
      */
@@ -961,7 +962,7 @@ data class GetDevicesResponse(
 )
 
 @Serializable
-data class EncryptedFile(
+public data class EncryptedFile(
     /**
      * The URL to the file.
      */
@@ -993,7 +994,7 @@ data class EncryptedFile(
 )
 
 @Serializable
-data class JWK(
+public data class JWK(
     /**
      * Key type. Must be `oct`.
      */
@@ -1027,12 +1028,12 @@ data class JWK(
 )
 
 @Serializable
-data class SendToDeviceRequest(
+public data class SendToDeviceRequest(
     val messages: Map<String, Map<String, JsonElement>> = emptyMap()
 )
 
 @Serializable
-data class TurnServerResponse(
+public data class TurnServerResponse(
     /**
      * The username to use.
      */
@@ -1055,7 +1056,7 @@ data class TurnServerResponse(
 )
 
 @Serializable
-data class TypingRequest(
+public data class TypingRequest(
     /**
      * Whether the user is typing or not.
      * If `false`, the `timeout` key can be omitted.
@@ -1069,7 +1070,7 @@ data class TypingRequest(
 )
 
 @Serializable
-data class ReadMarkersRequest(
+public data class ReadMarkersRequest(
     /**
      * The event ID the read marker should be located at.
      * The event MUST belong to the room.
@@ -1086,7 +1087,7 @@ data class ReadMarkersRequest(
 )
 
 @Serializable
-data class SetPresenceRequest(
+public data class SetPresenceRequest(
     /**
      * The new presence state. One of: ["online", "offline", "unavailable"]
      */
@@ -1100,7 +1101,7 @@ data class SetPresenceRequest(
 )
 
 @Serializable
-data class GetPresenceResponse(
+public data class GetPresenceResponse(
     /**
      * This user's presence. One of: ["online", "offline", "unavailable"]
      */
@@ -1126,12 +1127,12 @@ data class GetPresenceResponse(
 )
 
 @Serializable
-data class Get3PidsResponse(
+public data class Get3PidsResponse(
     val threepids: List<ThirdPartyIdentifier>
 )
 
 @Serializable
-data class Add3PidRequest(
+public data class Add3PidRequest(
     /**
      * The third party credentials to associate with the account.
      */
@@ -1145,7 +1146,7 @@ data class Add3PidRequest(
 )
 
 @Serializable
-data class ThreePidCredentials(
+public data class ThreePidCredentials(
     /**
      * The client secret used in the session with the identity server.
      */
@@ -1165,7 +1166,7 @@ data class ThreePidCredentials(
 )
 
 @Serializable
-data class Remove3PidRequest(
+public data class Remove3PidRequest(
     /**
      * The identity server to unbind from.
      * If not provided, the homeserver MUST use the `idServer` the identifier was added through.
@@ -1187,7 +1188,7 @@ data class Remove3PidRequest(
 )
 
 @Serializable
-data class Remove3PidResponse(
+public data class Remove3PidResponse(
     /**
      * An indicator as to whether or not the homeserver was able to unbind the 3PID from the identity server.
      * `success` indicates that the indentity server has unbound the identifier whereas `no-support` indicates
@@ -1200,7 +1201,7 @@ data class Remove3PidResponse(
 )
 
 @Serializable
-enum class IdServerUnbindResult {
+public enum class IdServerUnbindResult {
     @SerialName("no-support")
     NO_SUPPORT,
     @SerialName("success")
@@ -1208,7 +1209,7 @@ enum class IdServerUnbindResult {
 }
 
 @Serializable
-data class WhoAmIResponse(
+public data class WhoAmIResponse(
     /**
      * The user id that owns the access token.
      */
@@ -1217,7 +1218,7 @@ data class WhoAmIResponse(
 )
 
 @Serializable
-data class Versions(
+public data class Versions(
     /**
      * The supported versions.
      */
@@ -1233,7 +1234,7 @@ data class Versions(
 )
 
 @Serializable
-data class GetCapabilitiesResponse(
+public data class GetCapabilitiesResponse(
     /**
      * The custom capabilities the server supports, using the Java package naming convention.
      */
@@ -1241,7 +1242,7 @@ data class GetCapabilitiesResponse(
 )
 
 @Serializable
-data class Capabilities(
+public data class Capabilities(
     /**
      * Capability to indicate if the user can change their password.
      */
@@ -1256,7 +1257,7 @@ data class Capabilities(
 )
 
 @Serializable
-data class ChangePasswordCapability(
+public data class ChangePasswordCapability(
     /**
      * True if the user can change their password, false otherwise.
      */
@@ -1264,7 +1265,7 @@ data class ChangePasswordCapability(
 )
 
 @Serializable
-data class RoomVersionsCapability(
+public data class RoomVersionsCapability(
     /**
      * The default room version the server is using for new rooms.
      */
@@ -1280,7 +1281,7 @@ data class RoomVersionsCapability(
  * The stability of the room version.
  */
 @Serializable
-enum class RoomVersionStability {
+public enum class RoomVersionStability {
     @SerialName("stable")
     STABLE,
     @SerialName("unstable")
@@ -1288,12 +1289,12 @@ enum class RoomVersionStability {
 }
 
 @Serializable
-data class GetPushRulesResponse(
+public data class GetPushRulesResponse(
     val global: RuleSet
 )
 
 @Serializable
-data class SetPushRuleRequest(
+public data class SetPushRuleRequest(
     /**
      * The action(s) to perform when the conditions for this rule are met.
      */
@@ -1313,7 +1314,7 @@ data class SetPushRuleRequest(
 )
 
 @Serializable
-data class PushRuleEnabled(
+public data class PushRuleEnabled(
     /**
      * Whether the push rule is enabled or not.
      */
@@ -1321,7 +1322,7 @@ data class PushRuleEnabled(
 )
 
 @Serializable
-data class PushRuleActions(
+public data class PushRuleActions(
     /**
      * The action(s) to perform for this rule.
      */
@@ -1329,7 +1330,7 @@ data class PushRuleActions(
 )
 
 @Serializable
-data class Pushers(
+public data class Pushers(
     /**
      * An array containing the current pushers for the user.
      */
@@ -1337,7 +1338,7 @@ data class Pushers(
 )
 
 @Serializable
-data class Pusher(
+public data class Pusher(
     /**
      * This is a unique identifier for this pusher. See ``/set`` for more detail.
      * Max length, 512 bytes.
@@ -1386,7 +1387,7 @@ data class Pusher(
     val data: Data
 ) {
     @Serializable
-    data class Data(
+    public data class Data(
         /**
          * Required if ``kind`` is ``http``.
          * The URL to use to send notifications to.
@@ -1401,7 +1402,7 @@ data class Pusher(
 }
 
 @Serializable
-data class UploadKeysRequest(
+public data class UploadKeysRequest(
     /**
      * Identity keys for the device.
      * May be absent if no new identity keys are required.
@@ -1421,7 +1422,7 @@ data class UploadKeysRequest(
 )
 
 @Serializable
-data class KeyObject(
+public data class KeyObject(
     /**
      * The key, encoded using unpadded base64.
      */
@@ -1433,8 +1434,8 @@ data class KeyObject(
     val signatures: Map<String, Map<String, String>>
 )
 
-object OneTimeKeySerializer : KSerializer<Any> {
-    override val descriptor = buildClassSerialDescriptor("OneTimeKey")
+public object OneTimeKeySerializer : KSerializer<Any> {
+    override val descriptor: SerialDescriptor = buildClassSerialDescriptor("OneTimeKey")
 
     override fun deserialize(decoder: Decoder): Any {
         if (decoder !is JsonDecoder) throw SerializationException("This class can be loaded only by Json")
@@ -1459,7 +1460,7 @@ object OneTimeKeySerializer : KSerializer<Any> {
 }
 
 @Serializable
-data class UploadKeysResponse(
+public data class UploadKeysResponse(
     /**
      * For each key algorithm, the number of unclaimed one-time keys
      * of that type currently held on the server for this device.
@@ -1469,7 +1470,7 @@ data class UploadKeysResponse(
 )
 
 @Serializable
-data class QueryKeysRequest(
+public data class QueryKeysRequest(
     /**
      * The time (in milliseconds) to wait when downloading keys from remote servers.
      * 10 seconds is the recommended default.
@@ -1493,7 +1494,7 @@ data class QueryKeysRequest(
 )
 
 @Serializable
-data class QueryKeysResponse(
+public data class QueryKeysResponse(
     /**
      * If any remote homeservers could not be reached, they are recorded here.
      * The names of the properties are the names of the unreachable servers.
@@ -1515,7 +1516,7 @@ data class QueryKeysResponse(
 )
 
 @Serializable
-data class UnsignedDeviceInfo(
+public data class UnsignedDeviceInfo(
     /**
      * The display name which the user set on the device.
      */
@@ -1524,7 +1525,7 @@ data class UnsignedDeviceInfo(
 )
 
 @Serializable
-data class ClaimKeysRequest(
+public data class ClaimKeysRequest(
     /**
      * The time (in milliseconds) to wait when downloading keys from remote servers.
      * 10 seconds is the recommended default.
@@ -1540,7 +1541,7 @@ data class ClaimKeysRequest(
 )
 
 @Serializable
-data class ClaimKeysResponse(
+public data class ClaimKeysResponse(
     /**
      * If any remote homeservers could not be reached, they are recorded here.
      * The names of the properties are the names of the unreachable servers.
@@ -1563,7 +1564,7 @@ data class ClaimKeysResponse(
  * The list of users who updated their devices.
  */
 @Serializable
-data class KeyChangesResponse(
+public data class KeyChangesResponse(
     /**
      * The Matrix User IDs of all users who updated their device identity keys.
      */
@@ -1577,7 +1578,7 @@ data class KeyChangesResponse(
 )
 
 @Serializable
-data class EventContext(
+public data class EventContext(
     /**
      * A token that can be used to paginate backwards with.
      */
@@ -1612,7 +1613,7 @@ data class EventContext(
 )
 
 @Serializable
-data class GetOpenIdResponse(
+public data class GetOpenIdResponse(
     /**
      * An access token the consumer may use to verify the identity of the person who generated the token.
      * This is given to the federation API GET /openid/userinfo to verify the user's identity.

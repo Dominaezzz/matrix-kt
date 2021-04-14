@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-abstract class UserIdentifier {
+public abstract class UserIdentifier {
 //    /**
 //     * The type of identification.
 //     * See [Identifier types](https://matrix.org/docs/spec/client_server/r0.5.0#identifier-types)
@@ -17,12 +17,12 @@ abstract class UserIdentifier {
      */
     @Serializable
     @SerialName("m.id.user")
-    data class Matrix(
+    public data class Matrix(
         /**
          * A client can identify a user using their Matrix ID.
          * This can either be the fully qualified Matrix user ID, or just the localpart of the user ID.
          */
-        val user: String
+        public val user: String
     ) : UserIdentifier()
 
     /**
@@ -34,16 +34,16 @@ abstract class UserIdentifier {
      */
     @Serializable
     @SerialName("m.id.thirdparty")
-    data class ThirdParty(
+    public data class ThirdParty(
         /**
          * The medium of the third party identifier.
          */
-        val medium: String,
+        public val medium: String,
 
         /**
          * The canonicalised third party address of the user.
          */
-        val address: String
+        public val address: String
     ) : UserIdentifier()
 
     /**
@@ -58,15 +58,15 @@ abstract class UserIdentifier {
      */
     @Serializable
     @SerialName("m.id.phone")
-    data class PhoneNumber(
+    public data class PhoneNumber(
         /**
          * The country that the phone number is from.
          */
-        val country: String,
+        public val country: String,
 
         /**
          * The phone number
          */
-        val phone: String
+        public val phone: String
     ) : UserIdentifier()
 }

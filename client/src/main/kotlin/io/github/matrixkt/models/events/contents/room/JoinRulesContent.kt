@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.join_rules")
 @Serializable
-data class JoinRulesContent(
+public data class JoinRulesContent(
     /**
      * The type of rules used for users wishing to join this room.
      * One of: ["public", "knock", "invite", "private"]
@@ -21,7 +21,7 @@ data class JoinRulesContent(
 )
 
 @Serializable
-enum class JoinRule {
+public enum class JoinRule {
     @SerialName("public")
     PUBLIC,
 

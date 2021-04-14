@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.pinned_events")
 @Serializable
-data class PinnedEventsContent(
+public data class PinnedEventsContent(
     /**
      * An ordered list of event IDs to pin.
      */

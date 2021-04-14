@@ -12,7 +12,7 @@ import kotlinx.serialization.encoding.Encoder
  */
 @SerialName("m.room.encrypted")
 @Serializable(EncryptedContent.TheSerializer::class)
-abstract class EncryptedContent {
+public abstract class EncryptedContent {
     // /**
     //  * The encryption algorithm used to encrypt this event.
     //  * The value of this field determines which other properties will be present.
@@ -27,17 +27,17 @@ abstract class EncryptedContent {
      * in the case of an Olm event.
      * For more details, see [Messaging Algorithms](https://matrix.org/docs/spec/client_server/r0.6.0#messaging-algorithms).
      */
-    abstract val ciphertext: Any
+    public abstract val ciphertext: Any
 
     /**
      * The Curve25519 key of the sender.
      */
     @SerialName("sender_key")
-    abstract val senderKey: String
+    public abstract val senderKey: String
 
     @SerialName("m.olm.v1.curve25519-aes-sha2")
     @Serializable
-    data class OlmV1(
+    public data class OlmV1(
         override val ciphertext: Map<String, CiphertextInfo>,
 
         @SerialName("sender_key")
@@ -46,7 +46,7 @@ abstract class EncryptedContent {
 
     @SerialName("m.megolm.v1.aes-sha2")
     @Serializable
-    data class MegolmV1(
+    public data class MegolmV1(
         override val ciphertext: String,
 
         @SerialName("sender_key")
@@ -67,7 +67,7 @@ abstract class EncryptedContent {
 
     @OptIn(ExperimentalSerializationApi::class)
     @Serializer(forClass = EncryptedContent::class)
-    object TheSerializer : KSerializer<EncryptedContent> {
+    public object TheSerializer : KSerializer<EncryptedContent> {
         private val firstDelegate = PolymorphicSerializer(EncryptedContent::class)
         private val secondDelegate = DiscriminatorChanger(firstDelegate, "algorithm")
 
@@ -81,7 +81,7 @@ abstract class EncryptedContent {
     }
 
     @Serializable
-    data class CiphertextInfo(
+    public data class CiphertextInfo(
         /**
          * The encrypted payload.
          */

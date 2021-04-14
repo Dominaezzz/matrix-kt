@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-enum class GroupKey {
+public enum class GroupKey {
     @SerialName("room_id")
     ROOM_ID,
 

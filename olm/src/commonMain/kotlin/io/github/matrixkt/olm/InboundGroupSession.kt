@@ -7,7 +7,7 @@ package io.github.matrixkt.olm
  *
  * Detailed implementation guide is available at [Implementing End-to-End Encryption in Matrix clients](http://matrix.org/docs/guides/e2e_implementation.html).
  */
-expect class InboundGroupSession
+public expect class InboundGroupSession
 /**
  * Create and save a new native session instance ID and start a new inbound group session.
  * The session key parameter is retrieved from an outbound group session.
@@ -15,32 +15,32 @@ expect class InboundGroupSession
  */
 constructor(sessionKey: String)
 {
-    fun clear()
+    public fun clear()
 
     /**
      * Retrieve the base64-encoded identifier for this inbound group session.
      * @return the session ID
      */
-    val sessionId: String
+    public val sessionId: String
 
     /**
      * Provides the first known index.
      * @return the first known index.
      */
-    val firstKnownIndex: Long
+    public val firstKnownIndex: Long
 
     /**
      * Tells if the session is verified.
      * @return true if the session is verified
      */
-    val isVerified: Boolean
+    public val isVerified: Boolean
 
     /**
      * Export the session from a message index as String.
      * @param messageIndex the message index
      * @return the session as String
      */
-    fun export(messageIndex: Long): String
+    public fun export(messageIndex: Long): String
 
     /**
      * Decrypt the message passed in parameter.
@@ -48,13 +48,13 @@ constructor(sessionKey: String)
      * @param message the message to be decrypted
      * @return the decrypted message information
      */
-    fun decrypt(message: String): GroupMessage
+    public fun decrypt(message: String): GroupMessage
 
-    fun pickle(key: ByteArray): String
+    public fun pickle(key: ByteArray): String
 
-    companion object {
-        fun import(sessionKey: String): InboundGroupSession
+    public companion object {
+        public fun import(sessionKey: String): InboundGroupSession
 
-        fun unpickle(key: ByteArray, pickle: String): InboundGroupSession
+        public fun unpickle(key: ByteArray, pickle: String): InboundGroupSession
     }
 }

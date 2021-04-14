@@ -34,7 +34,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.member")
 @Serializable
-data class MemberContent(
+public data class MemberContent(
     /**
      * The avatar URL for this user, if any. This is added by the homeserver.
      */
@@ -68,7 +68,7 @@ data class MemberContent(
     val unsigned: UnsignedData? = null
 ) {
     @Serializable
-    data class UnsignedData(
+    public data class UnsignedData(
         /**
          * A subset of the state of the room at the time of the invite, if `membership` is `invite`.
          * Note that this state is informational, and SHOULD NOT be trusted;
@@ -82,7 +82,7 @@ data class MemberContent(
     )
 
     @Serializable
-    data class Invite(
+    public data class Invite(
         /**
          * A name which can be displayed to represent the user instead of their third party identifier
          */
@@ -97,7 +97,7 @@ data class MemberContent(
     )
 
     @Serializable
-    data class Signed(
+    public data class Signed(
         /**
          * The invited matrix user ID. Must be equal to the user_id property of the event.
          */
@@ -116,7 +116,7 @@ data class MemberContent(
 }
 
 @Serializable
-enum class Membership {
+public enum class Membership {
     @SerialName("invite")
 	INVITE,
 

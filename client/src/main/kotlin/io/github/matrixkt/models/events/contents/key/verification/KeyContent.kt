@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.key.verification.key")
 @Serializable
-data class KeyContent(
+public data class KeyContent(
     /**
      * An opaque identifier for the verification process.
      * Must be the same as the one used for the `m.key.verification.start` message.

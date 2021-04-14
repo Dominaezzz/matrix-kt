@@ -3,7 +3,7 @@ package io.github.matrixkt.models.sync
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ToDevice(
+public data class ToDevice(
     /**
      * List of send-to-device messages.
      */

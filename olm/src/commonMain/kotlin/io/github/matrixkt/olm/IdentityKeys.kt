@@ -3,7 +3,7 @@ package io.github.matrixkt.olm
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class IdentityKeys(
+public data class IdentityKeys(
     /**
      * Curve25519 identity key is a public-key cryptographic system which can be used to establish a shared secret.
      * In Matrix, each device has a long-lived Curve25519 identity key which is used to establish

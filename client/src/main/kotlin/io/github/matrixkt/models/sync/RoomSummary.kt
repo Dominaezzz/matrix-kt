@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RoomSummary(
+public data class RoomSummary(
     /**
      * The users which can be used to generate a room name if the room does not have one.
      * Required if the room's `m.room.name` or `m.room.canonical_alias` state events are unset or empty.

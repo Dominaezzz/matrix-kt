@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.call.answer")
 @Serializable
-data class AnswerContent(
+public data class AnswerContent(
     /**
      * The ID of the call this event relates to.
      */
@@ -26,7 +26,7 @@ data class AnswerContent(
     val version: Long
 ) {
     @Serializable
-    data class Answer(
+    public data class Answer(
         /**
          * The type of session description. Must be 'answer'.
          */

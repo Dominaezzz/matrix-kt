@@ -22,8 +22,8 @@ import com.sun.jna.Native
 import com.sun.jna.Pointer
 import kotlin.random.Random
 
-actual class OutboundGroupSession private constructor(private val ptr: OlmOutboundGroupSession) {
-    actual constructor(random: Random): this(genericInit(::olm_outbound_group_session, ::olm_outbound_group_session_size)) {
+public actual class OutboundGroupSession private constructor(private val ptr: OlmOutboundGroupSession) {
+    public actual constructor(random: Random): this(genericInit(::olm_outbound_group_session, ::olm_outbound_group_session_size)) {
         try {
             val randomLength = olm_init_outbound_group_session_random_length(ptr)
             val result = withRandomBuffer(randomLength, random) { randomBuff ->
@@ -36,7 +36,7 @@ actual class OutboundGroupSession private constructor(private val ptr: OlmOutbou
         }
     }
 
-    actual fun clear() {
+    public actual fun clear() {
         olm_clear_outbound_group_session(ptr)
         Native.free(Pointer.nativeValue(ptr.pointer))
     }
@@ -45,7 +45,7 @@ actual class OutboundGroupSession private constructor(private val ptr: OlmOutbou
      * Retrieve the base64-encoded identifier for this outbound group session.
      * @return the session ID
      */
-    actual val sessionId: String
+    public actual val sessionId: String
         get() {
             val length = olm_outbound_group_session_id_length(ptr)
             return withAllocation(length.toLong()) { sessionId ->
@@ -62,7 +62,7 @@ actual class OutboundGroupSession private constructor(private val ptr: OlmOutbou
      * method returns the index for the next message.
      * @return current session index
      */
-    actual val messageIndex: Int get() = olm_outbound_group_session_message_index(ptr)
+    public actual val messageIndex: Int get() = olm_outbound_group_session_message_index(ptr)
 
     /**
      * Get the base64-encoded current ratchet key for this session.
@@ -71,7 +71,7 @@ actual class OutboundGroupSession private constructor(private val ptr: OlmOutbou
      * ratchet key that will be used for the next message.
      * @return outbound session key
      */
-    actual val sessionKey: String
+    public actual val sessionKey: String
         get() {
             val sessionKeyLength = olm_outbound_group_session_key_length(ptr)
             return withAllocation(sessionKeyLength.toLong()) { sessionKey ->
@@ -88,7 +88,7 @@ actual class OutboundGroupSession private constructor(private val ptr: OlmOutbou
      * @param plainText message to be encrypted
      * @return the encrypted message
      */
-    actual fun encrypt(plainText: String): String {
+    public actual fun encrypt(plainText: String): String {
         return plainText.withNativeRead { plainTextPtr, plainTextLength ->
             val encryptedMsgLength = olm_group_encrypt_message_length(ptr, plainTextLength)
 
@@ -101,7 +101,7 @@ actual class OutboundGroupSession private constructor(private val ptr: OlmOutbou
         }
     }
 
-    actual fun pickle(key: ByteArray): String {
+    public actual fun pickle(key: ByteArray): String {
         return genericPickle(ptr, key, ::olm_pickle_outbound_group_session_length, ::olm_pickle_outbound_group_session, ::checkError)
     }
 
@@ -109,7 +109,7 @@ actual class OutboundGroupSession private constructor(private val ptr: OlmOutbou
         genericCheckError(ptr, result, ::olm_outbound_group_session_last_error)
     }
 
-    actual companion object {
+    public actual companion object {
         private inline fun create(block: OutboundGroupSession.() -> Unit): OutboundGroupSession {
             val obj = OutboundGroupSession(genericInit(::olm_outbound_group_session, ::olm_outbound_group_session_size))
             try {
@@ -121,7 +121,7 @@ actual class OutboundGroupSession private constructor(private val ptr: OlmOutbou
             return obj
         }
 
-        actual fun unpickle(key: ByteArray, pickle: String): OutboundGroupSession {
+        public actual fun unpickle(key: ByteArray, pickle: String): OutboundGroupSession {
             return create {
                 genericUnpickle(ptr, key, pickle, ::olm_unpickle_outbound_group_session, ::checkError)
             }

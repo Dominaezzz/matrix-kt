@@ -5,7 +5,7 @@ import kotlinx.cinterop.*
 import platform.posix.size_t
 import kotlin.random.Random
 
-actual class PkEncryption actual constructor(recipientKey: String) {
+public actual class PkEncryption actual constructor(recipientKey: String) {
     private val ptr = genericInit(::olm_pk_encryption, ::olm_pk_encryption_size)
 
     init {
@@ -20,12 +20,12 @@ actual class PkEncryption actual constructor(recipientKey: String) {
         }
     }
 
-    actual fun clear() {
+    public actual fun clear() {
         olm_clear_pk_encryption(ptr)
         nativeHeap.free(ptr)
     }
 
-    actual fun encrypt(plaintext: String, random: Random): PkMessage {
+    public actual fun encrypt(plaintext: String, random: Random): PkMessage {
         return plaintext.withNativeRead { plaintextPtr, plaintextLen ->
             val cipherTextLength = olm_pk_ciphertext_length(ptr, plaintextLen.convert())
             val macLength = olm_pk_mac_length(ptr)

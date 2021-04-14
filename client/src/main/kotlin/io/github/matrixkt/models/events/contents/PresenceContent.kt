@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.presence")
 @Serializable
-data class PresenceContent(
+public data class PresenceContent(
     /**
      * The current avatar URL for this user, if any.
      */

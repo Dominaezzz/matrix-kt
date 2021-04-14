@@ -15,12 +15,12 @@ import kotlinx.serialization.encoding.Encoder
  */
 @SerialName("m.direct")
 @Serializable(DirectContent.TheSerializer::class)
-data class DirectContent(
+public data class DirectContent(
     val content: Map<String, List<String>>
 ) : Map<String, List<String>> by content {
     @OptIn(ExperimentalSerializationApi::class)
     @Serializer(forClass = DirectContent::class)
-    object TheSerializer : KSerializer<DirectContent> {
+    public object TheSerializer : KSerializer<DirectContent> {
         private val delegate = MapSerializer(String.serializer(), ListSerializer(String.serializer()))
 
         override fun serialize(encoder: Encoder, value: DirectContent) {

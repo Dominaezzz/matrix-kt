@@ -5,20 +5,20 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
 @Serializable
-class User(
+public class User(
     /**
      * A Matrix User ID represting a third party user.
      */
     @SerialName("userid")
-    val userId: String,
+    public val userId: String,
 
     /**
      * The protocol ID that the third party location is a part of.
      */
-    val protocol: String,
+    public val protocol: String,
 
     /**
      * Information used to identify this third party location.
      */
-    val fields: JsonObject
+    public val fields: JsonObject
 )

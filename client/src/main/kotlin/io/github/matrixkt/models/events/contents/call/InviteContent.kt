@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.call.invite")
 @Serializable
-data class InviteContent(
+public data class InviteContent(
     /**
      * A unique identifier for the call.
      */
@@ -34,7 +34,7 @@ data class InviteContent(
     val lifetime: Long
 ) {
     @Serializable
-    data class Offer(
+    public data class Offer(
         /**
          * The type of session description. Must be 'offer'.
          */

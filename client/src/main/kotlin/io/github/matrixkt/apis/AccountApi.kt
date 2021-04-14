@@ -9,7 +9,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import kotlin.reflect.KProperty0
 
-class AccountApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+public class AccountApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
     private inline val accessToken: String get() = accessTokenProp.get()
 
     /**
@@ -23,7 +23,7 @@ class AccountApi internal constructor(private val client: HttpClient, private va
      *
      * **Requires auth**: Yes.
      */
-    suspend fun getAccount3PIDs(): List<ThirdPartyIdentifier> {
+    public suspend fun getAccount3PIDs(): List<ThirdPartyIdentifier> {
         val response = client.get<Get3PidsResponse>("_matrix/client/r0/account/3pid") {
             header("Authorization", "Bearer $accessToken")
         }
@@ -37,7 +37,7 @@ class AccountApi internal constructor(private val client: HttpClient, private va
      *
      * **Requires auth**: Yes.
      */
-    suspend fun add3PID(params: Add3PidRequest) {
+    public suspend fun add3PID(params: Add3PidRequest) {
         return client.post("_matrix/client/r0/account/3pid") {
             header("Authorization", "Bearer $accessToken")
             contentType(ContentType.Application.Json)
@@ -53,7 +53,7 @@ class AccountApi internal constructor(private val client: HttpClient, private va
      *
      * **Requires auth**: Yes.
      */
-    suspend fun delete3pidFromAccount(params: Remove3PidRequest): Remove3PidResponse {
+    public suspend fun delete3pidFromAccount(params: Remove3PidRequest): Remove3PidResponse {
         return client.post("_matrix/client/r0/account/3pid/delete") {
             header("Authorization", "Bearer $accessToken")
             contentType(ContentType.Application.Json)
@@ -75,7 +75,7 @@ class AccountApi internal constructor(private val client: HttpClient, private va
      *
      * @return The user id that owns the access token.
      */
-    suspend fun getTokenOwner(): String {
+    public suspend fun getTokenOwner(): String {
         val response = client.get<WhoAmIResponse>("_matrix/client/r0/account/whoami") {
             header("Authorization", "Bearer $accessToken")
         }
@@ -99,7 +99,7 @@ class AccountApi internal constructor(private val client: HttpClient, private va
      *
      * **Requires auth**: Yes.
      */
-    suspend fun changePassword(params: ChangePasswordRequest) {
+    public suspend fun changePassword(params: ChangePasswordRequest) {
         return client.post(path = "_matrix/client/r0/account/password") {
             header("Authorization", "Bearer $accessToken")
             contentType(ContentType.Application.Json)
@@ -120,7 +120,7 @@ class AccountApi internal constructor(private val client: HttpClient, private va
      *
      * **Requires auth**: Yes.
      */
-    suspend fun deactivateAccount(params: DeactivateRequest): DeactivateResponse {
+    public suspend fun deactivateAccount(params: DeactivateRequest): DeactivateResponse {
         return client.post(path = "_matrix/client/r0/account/deactivate") {
             header("Authorization", "Bearer $accessToken")
             contentType(ContentType.Application.Json)
@@ -146,7 +146,7 @@ class AccountApi internal constructor(private val client: HttpClient, private va
      *
      * **Requires auth**: No.
      */
-    suspend fun requestTokenToResetPasswordEmail(params: EmailValidationRequest): TokenValidationResponse {
+    public suspend fun requestTokenToResetPasswordEmail(params: EmailValidationRequest): TokenValidationResponse {
         return client.post(path = "_matrix/client/r0/account/password/email/requestToken") {
             contentType(ContentType.Application.Json)
             body = params
@@ -171,7 +171,7 @@ class AccountApi internal constructor(private val client: HttpClient, private va
      *
      * **Requires auth**: No.
      */
-    suspend fun requestTokenToResetPasswordMSISDN(params: MSISDNValidationRequest): TokenValidationResponse {
+    public suspend fun requestTokenToResetPasswordMSISDN(params: MSISDNValidationRequest): TokenValidationResponse {
         return client.post(path = "_matrix/client/r0/account/password/msisdn/requestToken") {
             contentType(ContentType.Application.Json)
             body = params
@@ -190,7 +190,7 @@ class AccountApi internal constructor(private val client: HttpClient, private va
      *
      * **Requires auth**: No.
      */
-    suspend fun requestTokenTo3PIDEmail(params: EmailValidationRequest): TokenValidationResponse {
+    public suspend fun requestTokenTo3PIDEmail(params: EmailValidationRequest): TokenValidationResponse {
         return client.post("_matrix/client/r0/account/3pid/email/requestToken") {
             contentType(ContentType.Application.Json)
             body = params
@@ -209,7 +209,7 @@ class AccountApi internal constructor(private val client: HttpClient, private va
      *
      * **Requires auth**: No.
      */
-    suspend fun requestTokenTo3PIDMSISDN(params: MSISDNValidationRequest): TokenValidationResponse {
+    public suspend fun requestTokenTo3PIDMSISDN(params: MSISDNValidationRequest): TokenValidationResponse {
         return client.post("_matrix/client/r0/account/3pid/msisdn/requestToken") {
             contentType(ContentType.Application.Json)
             body = params

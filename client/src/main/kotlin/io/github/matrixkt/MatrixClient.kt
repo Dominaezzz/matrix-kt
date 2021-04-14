@@ -13,9 +13,9 @@ import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.http.*
 import io.ktor.utils.io.core.Closeable
 
-class MatrixClient(engine: HttpClientEngine,
-                   baseUrl: Url,
-                   block: HttpClientConfig<*>.() -> Unit = {}) : Closeable {
+public class MatrixClient(engine: HttpClientEngine,
+                          baseUrl: Url,
+                          block: HttpClientConfig<*>.() -> Unit = {}) : Closeable {
     private val client = HttpClient(engine) {
         defaultRequest {
             val builder = URLBuilder(baseUrl)
@@ -39,22 +39,22 @@ class MatrixClient(engine: HttpClientEngine,
         block()
     }
 
-    var accessToken: String = ""
+    public var accessToken: String = ""
 
-    val roomApi: RoomApi = RoomApi(client, ::accessToken)
-    val eventApi: EventApi = EventApi(client, ::accessToken)
-    val userApi: UserApi = UserApi(client, ::accessToken)
-    val contentApi: ContentApi = ContentApi(client, ::accessToken)
-    val authApi: AuthApi = AuthApi(client, ::accessToken)
-    val filterApi: FilterApi = FilterApi(client, ::accessToken)
-    val deviceApi: DeviceApi = DeviceApi(client, ::accessToken)
-    val voIPApi: VoIPApi = VoIPApi(client, ::accessToken)
-    val accountApi: AccountApi = AccountApi(client, ::accessToken)
-    val miscApi: MiscApi = MiscApi(client, ::accessToken)
-    val pushApi: PushApi = PushApi(client, ::accessToken)
-    val keysApi: KeysApi = KeysApi(client, ::accessToken)
-    val adminApi: AdminApi = AdminApi(client, ::accessToken)
-    val thirdPartyApi: ThirdPartyApi = ThirdPartyApi(client, ::accessToken)
+    public val roomApi: RoomApi = RoomApi(client, ::accessToken)
+    public val eventApi: EventApi = EventApi(client, ::accessToken)
+    public val userApi: UserApi = UserApi(client, ::accessToken)
+    public val contentApi: ContentApi = ContentApi(client, ::accessToken)
+    public val authApi: AuthApi = AuthApi(client, ::accessToken)
+    public val filterApi: FilterApi = FilterApi(client, ::accessToken)
+    public val deviceApi: DeviceApi = DeviceApi(client, ::accessToken)
+    public val voIPApi: VoIPApi = VoIPApi(client, ::accessToken)
+    public val accountApi: AccountApi = AccountApi(client, ::accessToken)
+    public val miscApi: MiscApi = MiscApi(client, ::accessToken)
+    public val pushApi: PushApi = PushApi(client, ::accessToken)
+    public val keysApi: KeysApi = KeysApi(client, ::accessToken)
+    public val adminApi: AdminApi = AdminApi(client, ::accessToken)
+    public val thirdPartyApi: ThirdPartyApi = ThirdPartyApi(client, ::accessToken)
 
     override fun close() {
         client.close()

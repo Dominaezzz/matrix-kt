@@ -11,7 +11,7 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import kotlin.reflect.KProperty0
 
-class UserApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+public class UserApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
     private inline val accessToken: String get() = accessTokenProp.get()
 
     /**
@@ -31,7 +31,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
      * @param[searchTerm] The term to search for.
      * @param[limit] The maximum number of results to return. Defaults to 10.
      */
-    suspend fun searchUserDirectory(searchTerm: String, limit: Long = 10): SearchUsersResponse {
+    public suspend fun searchUserDirectory(searchTerm: String, limit: Long = 10): SearchUsersResponse {
         return client.post("_matrix/client/r0/user_directory/search") {
             header("Authorization", "Bearer $accessToken")
             contentType(ContentType.Application.Json)
@@ -51,7 +51,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
      * @param[userId] The user whose display name to set.
      * @param[displayName] The new display name for this user.
      */
-    suspend fun setDisplayName(userId: String, displayName: String?) {
+    public suspend fun setDisplayName(userId: String, displayName: String?) {
         return client.put {
             url {
                 path("_matrix", "client", "r0", "profile", userId, "displayname")
@@ -74,7 +74,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
      * @param[userId] The user whose display name to get.
      * @return The user's display name if they have set one, otherwise not present.
      */
-    suspend fun getDisplayName(userId: String): String? {
+    public suspend fun getDisplayName(userId: String): String? {
         val response = client.get<GetDisplayNameResponse> {
             url {
                 path("_matrix", "client", "r0", "profile", userId, "displayname")
@@ -95,7 +95,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
      * @param[userId] The user whose avatar URL to set.
      * @param[avatarUrl] The new avatar URL for this user.
      */
-    suspend fun setAvatarUrl(userId: String, avatarUrl: String?) {
+    public suspend fun setAvatarUrl(userId: String, avatarUrl: String?) {
         return client.put {
             url {
                 path("_matrix", "client", "r0", "profile", userId, "avatar_url")
@@ -118,7 +118,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
      * @param[userId] The user whose avatar URL to get.
      * @return The user's avatar URL if they have set one, otherwise not present.
      */
-    suspend fun getAvatarUrl(userId: String): String? {
+    public suspend fun getAvatarUrl(userId: String): String? {
         val response = client.get<GetAvatarUrlResponse> {
             url {
                 path("_matrix", "client", "r0", "profile", userId, "avatar_url")
@@ -139,7 +139,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
      *
      * @param[userId] The user whose profile information to get.
      */
-    suspend fun getUserProfile(userId: String): GetUserProfileResponse {
+    public suspend fun getUserProfile(userId: String): GetUserProfileResponse {
         return client.get {
             url {
                 path("_matrix", "client", "r0", "profile", userId)
@@ -161,7 +161,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
      * @param[presence] The new presence state. One of: ["online", "offline", "unavailable"].
      * @param[statusMsg] The status message to attach to this state.
      */
-    suspend fun setPresence(userId: String, presence: Presence, statusMsg: String? = null) {
+    public suspend fun setPresence(userId: String, presence: Presence, statusMsg: String? = null) {
         return client.put {
             url {
                 path("_matrix", "client", "r0", "presence", userId, "status")
@@ -181,7 +181,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
      *
      * @param[userId] The user whose presence state to get.
      */
-    suspend fun getPresence(userId: String): GetPresenceResponse {
+    public suspend fun getPresence(userId: String): GetPresenceResponse {
         return client.get {
             url {
                 path("_matrix", "client", "r0", "presence", userId, "status")
@@ -202,7 +202,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
      * @param[userId] The ID of the user to set account_data for. The access token must be authorized to make requests for this user ID.
      * @param[type]	The event type of the account_data to set. Custom types should be namespaced to avoid clashes.
      */
-    suspend fun setAccountData(userId: String, type: String, content: JsonElement) {
+    public suspend fun setAccountData(userId: String, type: String, content: JsonElement) {
         return client.put {
             url {
                 path("_matrix", "client", "r0", "user", userId, "account_data", type)
@@ -224,7 +224,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
      * @param[userId] The ID of the user to get account_data for. The access token must be authorized to make requests for this user ID.
      * @param[type] The event type of the account_data to get. Custom types should be namespaced to avoid clashes.
      */
-    suspend fun getAccountData(userId: String, type: String): JsonElement {
+    public suspend fun getAccountData(userId: String, type: String): JsonElement {
         return client.get {
             url {
                 path("_matrix", "client", "r0", "user", userId, "account_data", type)
@@ -246,7 +246,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
      * @param[roomId] The ID of the room to set account_data on.
      * @param[type] The event type of the account_data to set. Custom types should be namespaced to avoid clashes.
      */
-    suspend fun setAccountDataPerRoom(userId: String, roomId: String, type: String, content: JsonElement) {
+    public suspend fun setAccountDataPerRoom(userId: String, roomId: String, type: String, content: JsonElement) {
         return client.put {
             url {
                 path("_matrix", "client", "r0", "user", userId, "rooms", roomId, "account_data", type)
@@ -269,7 +269,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
      * @param[roomId] The ID of the room to get account_data for.
      * @param[type] The event type of the account_data to get. Custom types should be namespaced to avoid clashes.
      */
-    suspend fun getAccountDataPerRoom(userId: String, roomId: String, type: String): JsonElement {
+    public suspend fun getAccountDataPerRoom(userId: String, roomId: String, type: String): JsonElement {
         return client.get {
             url {
                 path("_matrix", "client", "r0", "user", userId, "rooms", roomId, "account_data", type)
@@ -288,7 +288,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
      * @param[userId] The id of the user to get tags for. The access token must be authorized to make requests for this user ID.
      * @param[roomId] The ID of the room to get tags for.
      */
-    suspend fun getRoomTags(userId: String, roomId: String): TagContent {
+    public suspend fun getRoomTags(userId: String, roomId: String): TagContent {
         return client.get {
             url {
                 path("_matrix", "client", "r0", "user", userId, "rooms", roomId, "tags")
@@ -309,7 +309,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
      * @param[tag] The tag to add.
      * @param[order] A number in a range [0,1] describing a relative position of the room under the given tag.
      */
-    suspend fun setRoomTag(userId: String, roomId: String, tag: String, order: Double? = null) {
+    public suspend fun setRoomTag(userId: String, roomId: String, tag: String, order: Double? = null) {
         return client.put {
             url {
                 path("_matrix", "client", "r0", "user", userId, "rooms", roomId, "tags", tag)
@@ -332,7 +332,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
      * @param[roomId] The ID of the room to remove a tag from.
      * @param[tag] The tag to remove.
      */
-    suspend fun deleteRoomTag(userId: String, roomId: String, tag: String) {
+    public suspend fun deleteRoomTag(userId: String, roomId: String, tag: String) {
         return client.delete {
             url {
                 path("_matrix", "client", "r0", "user", userId, "rooms", roomId, "tags", tag)
@@ -353,7 +353,7 @@ class UserApi internal constructor(private val client: HttpClient, private val a
      *
      * @param[userId] The user to request and OpenID token for. Should be the user who is authenticated for the request.
      */
-    suspend fun requestOpenIdToken(userId: String): GetOpenIdResponse {
+    public suspend fun requestOpenIdToken(userId: String): GetOpenIdResponse {
         return client.post {
             url {
                 path("_matrix", "client", "r0", "user", userId, "openid", "request_token")

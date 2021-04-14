@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.canonical_alias")
 @Serializable
-data class CanonicalAliasContent(
+public data class CanonicalAliasContent(
     /**
      * The canonical alias for the room.
      * If not present, null, or empty the room should be considered to have no canonical alias.

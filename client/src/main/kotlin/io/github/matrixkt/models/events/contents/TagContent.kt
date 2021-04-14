@@ -8,14 +8,14 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.tag")
 @Serializable
-data class TagContent(
+public data class TagContent(
     /**
      * The tags on the room and their contents.
      */
     val tags: Map<String, Tag> = emptyMap()
 ) {
     @Serializable
-    data class Tag(
+    public data class Tag(
         /**
          * A number in a range [0,1] describing a relative position of the room under the given tag.
          */

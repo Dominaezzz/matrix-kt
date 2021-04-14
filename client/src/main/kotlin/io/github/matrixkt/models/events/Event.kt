@@ -8,43 +8,43 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlin.reflect.KClass
 
-sealed class Event<out Content> {
+public sealed class Event<out Content> {
     /**
      * The fields in this object will vary depending on the type of event.
      * When interacting with the REST API, this is the HTTP body.
      */
-    abstract val content: Content
+    public abstract val content: Content
 
     /**
      * The type of event.
      * This SHOULD be namespaced similar to Java package naming conventions e.g. 'com.example.subdomain.event.type'
      */
-    abstract val type: String
+    public abstract val type: String
 }
 
 @Serializable(RoomEventSerializer::class)
-sealed class RoomEvent<out Content, out UnsignedData> : Event<Content>() {
+public sealed class RoomEvent<out Content, out UnsignedData> : Event<Content>() {
     /**
      * The globally unique event identifier.
      */
     @SerialName("event_id")
-    abstract val eventId: String
+    public abstract val eventId: String
 
     /**
      * Contains the fully-qualified ID of the user who sent this event.
      */
-    abstract val sender: String
+    public abstract val sender: String
 
     /**
      * Timestamp in milliseconds on originating homeserver when this event was sent.
      */
     @SerialName("origin_server_ts")
-    abstract val originServerTimestamp: Long
+    public abstract val originServerTimestamp: Long
 
     /**
      * Contains optional extra information about the event.
      */
-    abstract val unsigned: UnsignedData?
+    public abstract val unsigned: UnsignedData?
 
     /**
      * The ID of the room associated with this event.
@@ -52,10 +52,10 @@ sealed class RoomEvent<out Content, out UnsignedData> : Event<Content>() {
      * despite being required everywhere else.
      */
     @SerialName("room_id")
-    abstract val roomId: String
+    public abstract val roomId: String
 }
 
-class RoomEventSerializer<Content, UnsignedData>(
+public class RoomEventSerializer<Content, UnsignedData>(
     private val contentSerializer: KSerializer<Content>,
     private val unsignedDataSerializer: KSerializer<UnsignedData>
 ) : JsonContentPolymorphicSerializer<RoomEvent<Content, UnsignedData>>(RoomEvent::class as KClass<RoomEvent<Content, UnsignedData>>) {
@@ -70,7 +70,7 @@ class RoomEventSerializer<Content, UnsignedData>(
 }
 
 @Serializable
-data class MessageEvent<out Content, out UnsignedData>(
+public data class MessageEvent<out Content, out UnsignedData>(
     override val type: String,
 
     override val content: Content,
@@ -90,7 +90,7 @@ data class MessageEvent<out Content, out UnsignedData>(
 ) : RoomEvent<Content, UnsignedData>()
 
 @Serializable
-data class StateEvent<out Content, out UnsignedData>(
+public data class StateEvent<out Content, out UnsignedData>(
     override val type: String,
 
     override val content: Content,
@@ -126,7 +126,7 @@ data class StateEvent<out Content, out UnsignedData>(
 ) : RoomEvent<Content, UnsignedData>()
 
 @Serializable
-data class EphemeralEvent<out Content>(
+public data class EphemeralEvent<out Content>(
     override val type: String,
 
     override val content: Content,
@@ -138,7 +138,7 @@ data class EphemeralEvent<out Content>(
 ) : Event<Content>()
 
 @Serializable
-data class AccountEvent<out Content>(
+public data class AccountEvent<out Content>(
     override val type: String,
 
     override val content: Content

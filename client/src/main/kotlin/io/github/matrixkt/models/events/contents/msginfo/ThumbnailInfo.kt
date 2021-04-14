@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ThumbnailInfo(
+public data class ThumbnailInfo(
     /**
      * The intended display height of the image in pixels.
      * This may differ from the intrinsic dimensions of the image file.

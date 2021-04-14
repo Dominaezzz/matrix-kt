@@ -13,7 +13,7 @@ import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.jsonPrimitive
 import kotlin.reflect.KProperty0
 
-class AuthApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+public class AuthApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
     private inline val accessToken: String get() = accessTokenProp.get()
 
     /**
@@ -24,7 +24,7 @@ class AuthApi internal constructor(private val client: HttpClient, private val a
      *
      * **Requires auth**: No.
      */
-    suspend fun getLoginFlows(): LoginFlowsResponse {
+    public suspend fun getLoginFlows(): LoginFlowsResponse {
         return client.get(path = "_matrix/client/r0/login")
     }
 
@@ -41,7 +41,7 @@ class AuthApi internal constructor(private val client: HttpClient, private val a
      *
      * **Requires auth**: No.
      */
-    suspend fun login(params: LoginRequest): LoginResponse {
+    public suspend fun login(params: LoginRequest): LoginResponse {
         return client.post(path = "_matrix/client/r0/login") {
             contentType(ContentType.Application.Json)
             body = params
@@ -57,7 +57,7 @@ class AuthApi internal constructor(private val client: HttpClient, private val a
      *
      * **Requires auth**: Yes.
      */
-    suspend fun logout() {
+    public suspend fun logout() {
         return client.post(path = "_matrix/client/r0/logout") {
             header("Authorization", "Bearer $accessToken")
         }
@@ -78,7 +78,7 @@ class AuthApi internal constructor(private val client: HttpClient, private val a
      *
      * **Requires auth**: Yes.
      */
-    suspend fun logoutAll() {
+    public suspend fun logoutAll() {
         return client.post(path = "_matrix/client/r0/logout/all") {
             header("Authorization", "Bearer $accessToken")
         }
@@ -122,7 +122,7 @@ class AuthApi internal constructor(private val client: HttpClient, private val a
      *
      * @param[kind] The kind of account to register. Defaults to user. One of: ["guest", "user"]
      */
-    suspend fun register(kind: RegistrationKind? = null, params: RegisterRequest): RegisterResponse {
+    public suspend fun register(kind: RegistrationKind? = null, params: RegisterRequest): RegisterResponse {
         return client.post(path = "_matrix/client/r0/register") {
             parameter("kind", kind)
             contentType(ContentType.Application.Json)
@@ -145,7 +145,7 @@ class AuthApi internal constructor(private val client: HttpClient, private val a
      *
      * **Requires auth**: No.
      */
-    suspend fun checkUsernameAvailability(username: String): Boolean {
+    public suspend fun checkUsernameAvailability(username: String): Boolean {
         val response = client.get<JsonObject>(path = "_matrix/client/r0/register/available") {
             parameter("username", username)
         }
@@ -163,7 +163,7 @@ class AuthApi internal constructor(private val client: HttpClient, private val a
      *
      * **Requires auth**: No.
      */
-    suspend fun requestTokenToRegisterEmail(params: EmailValidationRequest): TokenValidationResponse {
+    public suspend fun requestTokenToRegisterEmail(params: EmailValidationRequest): TokenValidationResponse {
         return client.post(path = "_matrix/client/r0/register/email/requestToken") {
             contentType(ContentType.Application.Json)
             body = params
@@ -181,7 +181,7 @@ class AuthApi internal constructor(private val client: HttpClient, private val a
      *
      * **Requires auth**: No.
      */
-    suspend fun requestTokenToRegisterMSISDN(params: MSISDNValidationRequest): TokenValidationResponse {
+    public suspend fun requestTokenToRegisterMSISDN(params: MSISDNValidationRequest): TokenValidationResponse {
         return client.post(path = "_matrix/client/r0/register/msisdn/requestToken") {
             contentType(ContentType.Application.Json)
             body = params

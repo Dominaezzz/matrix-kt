@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.call.candidates")
 @Serializable
-data class CandidatesContent(
+public data class CandidatesContent(
     /**
      * The ID of the call this event relates to.
      */
@@ -28,7 +28,7 @@ data class CandidatesContent(
     val version: Long
 ) {
     @Serializable
-    data class Candidate(
+    public data class Candidate(
         /**
          * The SDP media type this candidate is intended for.
          */

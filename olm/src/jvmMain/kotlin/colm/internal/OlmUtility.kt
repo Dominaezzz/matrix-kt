@@ -3,7 +3,7 @@ package colm.internal
 import com.sun.jna.Pointer
 import com.sun.jna.PointerType
 
-class OlmUtility : PointerType {
-    constructor(address: Pointer?) : super(address)
-    constructor() : super()
+public class OlmUtility : PointerType {
+    public constructor(address: Pointer?) : super(address)
+    public constructor() : super()
 }

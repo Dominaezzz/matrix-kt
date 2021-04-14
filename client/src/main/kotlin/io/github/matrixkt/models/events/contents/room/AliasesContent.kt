@@ -13,7 +13,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.aliases")
 @Serializable
-data class AliasesContent(
+public data class AliasesContent(
     /**
      * A list of room aliases.
      */

@@ -9,7 +9,7 @@ import io.ktor.client.request.header
 import io.ktor.client.request.parameter
 import kotlin.reflect.KProperty0
 
-class ThirdPartyApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+public class ThirdPartyApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
     private inline val accessToken: String get() = accessTokenProp.get()
 
     /**
@@ -22,7 +22,7 @@ class ThirdPartyApi internal constructor(private val client: HttpClient, private
      *
      * @return The protocols supported by the homeserver.
      */
-    suspend fun getProtocols(): Map<String, Protocol> {
+    public suspend fun getProtocols(): Map<String, Protocol> {
         return client.get("_matrix/client/r0/thirdparty/protocols") {
             header("Authorization", "Bearer $accessToken")
         }
@@ -38,7 +38,7 @@ class ThirdPartyApi internal constructor(private val client: HttpClient, private
      * @param[protocol] The name of the protocol.
      * @return The protocol was found and metadata returned.
      */
-    suspend fun getProtocolMetadata(protocol: String): Protocol {
+    public suspend fun getProtocolMetadata(protocol: String): Protocol {
         return client.get {
             url {
                 path("_matrix", "client", "r0", "thirdparty", "protocols", protocol)
@@ -62,7 +62,7 @@ class ThirdPartyApi internal constructor(private val client: HttpClient, private
      * @param[searchFields] One or more custom fields to help identify the third party location.
      *
      */
-    suspend fun queryLocationByProtocol(protocol: String, searchFields: Map<String, String> = emptyMap()): List<Location> {
+    public suspend fun queryLocationByProtocol(protocol: String, searchFields: Map<String, String> = emptyMap()): List<Location> {
         return client.get {
             url {
                 path("_matrix", "client", "r0", "thirdparty", "location", protocol)
@@ -86,7 +86,7 @@ class ThirdPartyApi internal constructor(private val client: HttpClient, private
      * @param[fields] One or more custom fields that are passed to the AS to help identify the user.
      * @return List of matched third party users.
      */
-    suspend fun queryUserByProtocol(protocol: String, fields: Map<String, String> = emptyMap()): List<User> {
+    public suspend fun queryUserByProtocol(protocol: String, fields: Map<String, String> = emptyMap()): List<User> {
         return client.get {
             url {
                 path("_matrix", "client", "r0", "thirdparty", "user", protocol)
@@ -109,7 +109,7 @@ class ThirdPartyApi internal constructor(private val client: HttpClient, private
      * @param[alias] The Matrix room alias to look up.
      * @return List of matched third party locations.
      */
-    suspend fun queryLocationByAlias(alias: String): List<Location> {
+    public suspend fun queryLocationByAlias(alias: String): List<Location> {
         return client.get("_matrix/client/r0/thirdparty/location") {
             parameter("alias", alias)
 
@@ -127,7 +127,7 @@ class ThirdPartyApi internal constructor(private val client: HttpClient, private
      * @param[userId] The Matrix User ID to look up.
      * @return List of matched third party users.
      */
-    suspend fun queryUserByID(userId: String): List<User> {
+    public suspend fun queryUserByID(userId: String): List<User> {
         return client.get("_matrix/client/r0/thirdparty/user") {
             parameter("userid", userId)
 

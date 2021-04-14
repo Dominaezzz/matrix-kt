@@ -3,7 +3,7 @@ package io.github.matrixkt.models.sync
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Rooms(
+public data class Rooms(
     /**
      * The rooms that the user has joined.
      */

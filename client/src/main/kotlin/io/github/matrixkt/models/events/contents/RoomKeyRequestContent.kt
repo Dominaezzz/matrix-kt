@@ -9,7 +9,7 @@ import kotlinx.serialization.*
  */
 @SerialName("m.room_key_request")
 @Serializable(RoomKeyRequestContent.TheSerializer::class)
-sealed class RoomKeyRequestContent {
+public sealed class RoomKeyRequestContent {
     // /**
     //  * One of: ["request", "request_cancellation"]
     //  */
@@ -19,7 +19,7 @@ sealed class RoomKeyRequestContent {
      * ID of the device requesting the key.
      */
     @SerialName("requesting_device_id")
-    abstract val requestingDeviceId: String
+    public abstract val requestingDeviceId: String
 
     /**
      * A random string uniquely identifying the request for a key.
@@ -27,17 +27,17 @@ sealed class RoomKeyRequestContent {
      * It should also reused in order to cancel a request.
      */
     @SerialName("request_id")
-    abstract val requestId: String
+    public abstract val requestId: String
 
     @OptIn(ExperimentalSerializationApi::class)
     @Serializer(forClass = RoomKeyRequestContent::class)
-    object TheSerializer : KSerializer<RoomKeyRequestContent> by DiscriminatorChanger(
+    public object TheSerializer : KSerializer<RoomKeyRequestContent> by DiscriminatorChanger(
         PolymorphicSerializer(RoomKeyRequestContent::class), "action"
     )
 
     @SerialName("request")
     @Serializable
-    data class Request(
+    public data class Request(
         /**
          * Information about the requested key.
          */
@@ -52,7 +52,7 @@ sealed class RoomKeyRequestContent {
 
     @SerialName("request_cancellation")
     @Serializable
-    data class Cancellation(
+    public data class Cancellation(
         @SerialName("requesting_device_id")
         override val requestingDeviceId: String,
 
@@ -61,7 +61,7 @@ sealed class RoomKeyRequestContent {
     ) : RoomKeyRequestContent()
 
     @Serializable
-    data class RequestedKeyInfo(
+    public data class RequestedKeyInfo(
         /**
          * The encryption algorithm the requested key in this event is to be used with.
          */

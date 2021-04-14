@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.call.hangup")
 @Serializable
-data class HangupContent(
+public data class HangupContent(
     /**
      * The ID of the call this event relates to.
      */
@@ -32,7 +32,7 @@ data class HangupContent(
     val reason: Reason? = null
 ) {
     @Serializable
-    enum class Reason {
+    public enum class Reason {
         @SerialName("ice_failed")
         ICE_FAILED,
 

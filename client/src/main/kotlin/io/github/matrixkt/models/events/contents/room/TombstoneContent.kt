@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.tombstone")
 @Serializable
-data class TombstoneContent(
+public data class TombstoneContent(
     /**
      * A server-defined message.
      */

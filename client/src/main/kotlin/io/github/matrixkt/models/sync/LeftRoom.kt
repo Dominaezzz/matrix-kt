@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LeftRoom(
+public data class LeftRoom(
     /**
      * The state updates for the room up to the start of the timeline.
      */

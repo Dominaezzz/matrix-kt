@@ -3,7 +3,7 @@ package io.github.matrixkt.models.sync
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class DeviceLists(
+public data class DeviceLists(
     /**
      * List of users who have updated their device identity keys, or who now share an encrypted room with the client since the previous sync response.
      */

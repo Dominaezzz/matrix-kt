@@ -4,10 +4,10 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class UserProfile(
+public class UserProfile(
     @SerialName("displayname")
-    val displayName: String? = null,
+    public val displayName: String? = null,
 
     @SerialName("avatar_url")
-    val avatarUrl: String? = null
+    public val avatarUrl: String? = null
 )

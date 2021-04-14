@@ -42,42 +42,42 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room_key.withheld")
 @Serializable
-data class Withheld(
+public data class Withheld(
     /**
      * The encryption algorithm for the key that this event is about.
      */
-    val algorithm: String,
+    public val algorithm: String,
 
     /**
      * Required if [code] is not ``m.no_olm``.
      * The room for the key that this event is about.
      */
     @SerialName("room_id")
-    val roomId: String?,
+    public val roomId: String?,
 
     /**
      * Required of [code] is not ``m.no_olm``.
      * The session ID of the key that this event is for.
      */
     @SerialName("session_id")
-    val sessionId: String?,
+    public val sessionId: String?,
 
     /**
      * The unpadded base64-encoded device curve25519 key of the event's sender.
      */
     @SerialName("sender_key")
-    val senderKey: String,
+    public val senderKey: String,
 
     /**
      * A machine-readable code for why the key was not sent.
      * Codes beginning with `m.` are reserved for codes defined in the Matrix specification.
      * Custom codes must use the Java package naming convention.
      */
-    val code: String,
+    public val code: String,
 
     /**
      * A human-readable reason for why the key was not sent.
      * The receiving client should only use this string if it does not understand the [code].
      */
-    val reason: String
+    public val reason: String
 )

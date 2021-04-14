@@ -2,27 +2,27 @@ package io.github.matrixkt.olm
 
 import kotlin.random.Random
 
-expect class SAS(random: Random = Random.Default) {
-    fun clear()
+public expect class SAS(random: Random = Random.Default) {
+    public fun clear()
 
     /**
      * Gets the Public Key encoded in Base64 with no padding.
      *
      * @return The public key
      */
-    val publicKey: String
+    public val publicKey: String
 
     /**
      * Sets the public key of other user.
      *
      * @param theirPublicKey other user public key (base64 encoded with no padding)
      */
-    fun setTheirPublicKey(theirPublicKey: String)
+    public fun setTheirPublicKey(theirPublicKey: String)
 
     /**
      * Checks if their key was set.
      */
-    val isTheirKeySet: Boolean
+    public val isTheirKeySet: Boolean
 
     /**
      * Generate bytes to use for the short authentication string.
@@ -31,9 +31,9 @@ expect class SAS(random: Random = Random.Default) {
      * @param[numberOfBytes] The size of the short code to generate.
      * @return The generated short code.
      */
-    fun generateShortCode(info: String, numberOfBytes: Int): ByteArray
+    public fun generateShortCode(info: String, numberOfBytes: Int): ByteArray
 
-    fun calculateMac(message: String, info: String): String
+    public fun calculateMac(message: String, info: String): String
 
-    fun calculateMacLongKdf(message: String, info: String): String
+    public fun calculateMacLongKdf(message: String, info: String): String
 }

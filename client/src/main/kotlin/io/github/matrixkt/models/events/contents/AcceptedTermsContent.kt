@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.accepted_terms")
 @Serializable
-data class AcceptedTermsContent(
+public data class AcceptedTermsContent(
     /**
      * The list of URLs the user has previously accepted.
      * Should be appended to when the user agrees to new terms.

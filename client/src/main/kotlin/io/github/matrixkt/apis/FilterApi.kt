@@ -11,7 +11,7 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlin.reflect.KProperty0
 
-class FilterApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
+public class FilterApi internal constructor(private val client: HttpClient, private val accessTokenProp: KProperty0<String>) {
     private inline val accessToken: String get() = accessTokenProp.get()
 
     /**
@@ -27,7 +27,7 @@ class FilterApi internal constructor(private val client: HttpClient, private val
      * Cannot start with a '{' as this character is used to determine if the filter
      * provided is inline JSON or a previously declared filter by homeservers on some APIs.
      */
-    suspend fun defineFilter(userId: String, filter: Filter): String {
+    public suspend fun defineFilter(userId: String, filter: Filter): String {
         val response = client.post<JsonObject> {
             url {
                 path("_matrix", "client", "r0", "user", userId, "filter")
@@ -50,7 +50,7 @@ class FilterApi internal constructor(private val client: HttpClient, private val
      * @param[userId] The user ID to download a filter for.
      * @param[filterId] The filter ID to download.
      */
-    suspend fun getFilter(userId: String, filterId: String): Filter {
+    public suspend fun getFilter(userId: String, filterId: String): Filter {
         return client.get {
             url {
                 path("_matrix", "client", "r0", "user", userId, "filter", filterId)

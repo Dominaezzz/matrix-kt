@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class InvitedRoom(
+public data class InvitedRoom(
     /**
      * The state of a room that the user has been invited to.
      * These state events may only have the `sender`, `type`, `state_key` and `content` keys present.

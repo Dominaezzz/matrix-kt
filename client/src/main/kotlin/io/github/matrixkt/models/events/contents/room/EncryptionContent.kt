@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.encryption")
 @Serializable
-data class EncryptionContent(
+public data class EncryptionContent(
     /**
      * The encryption algorithm to be used to encrypt messages sent in this room. Must be 'm.megolm.v1.aes-sha2'.
      */

@@ -21,7 +21,7 @@ import kotlinx.serialization.modules.contextual
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 
-val MatrixSerialModule = SerializersModule {
+public val MatrixSerialModule: SerializersModule = SerializersModule {
     contextual(AliasesContent.serializer())
     contextual(CanonicalAliasContent.serializer())
     contextual(CreateContent.serializer())
@@ -156,7 +156,7 @@ val MatrixSerialModule = SerializersModule {
     }
 }
 
-val MatrixJson = Json {
+public val MatrixJson: Json = Json {
     serializersModule = MatrixSerialModule
     allowStructuredMapKeys = true
 

@@ -13,10 +13,10 @@ import colm.internal.OlmLibrary.olm_pk_signing_size
 import com.sun.jna.Native
 import com.sun.jna.Pointer
 
-actual class PkSigning actual constructor(seed: ByteArray) {
+public actual class PkSigning actual constructor(seed: ByteArray) {
     private val ptr = genericInit(::olm_pk_signing, ::olm_pk_signing_size)
 
-    actual val publicKey: String
+    public actual val publicKey: String
 
     init {
         try {
@@ -36,12 +36,12 @@ actual class PkSigning actual constructor(seed: ByteArray) {
         }
     }
 
-    actual fun clear() {
+    public actual fun clear() {
         olm_clear_pk_signing(ptr)
         Native.free(Pointer.nativeValue(ptr.pointer))
     }
 
-    actual fun sign(message: String): String {
+    public actual fun sign(message: String): String {
         val signatureLength = olm_pk_signature_length()
         return message.withNativeRead { messagePtr, messageLen ->
             withAllocation(signatureLength.toLong()) {
@@ -57,7 +57,7 @@ actual class PkSigning actual constructor(seed: ByteArray) {
         genericCheckError(ptr, result, ::olm_pk_signing_last_error)
     }
 
-    actual companion object {
-        actual val seedLength: Long get() = olm_pk_signing_seed_length().toLong()
+    public actual companion object {
+        public actual val seedLength: Long get() = olm_pk_signing_seed_length().toLong()
     }
 }

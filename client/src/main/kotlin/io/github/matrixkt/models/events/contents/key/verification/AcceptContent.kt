@@ -11,12 +11,12 @@ import kotlinx.serialization.encoding.Encoder
  */
 @SerialName("m.key.verification.accept")
 @Serializable(AcceptContent.TheSerializer::class)
-abstract class AcceptContent {
+public abstract class AcceptContent {
     /**
      * An opaque identifier for the verification process. Must be the same as the one used for the m.key.verification.start message.
      */
     @SerialName("transaction_id")
-    abstract val transactionId: String
+    public abstract val transactionId: String
 
     // /**
     //  * The verification method to use.
@@ -25,7 +25,7 @@ abstract class AcceptContent {
 
     @SerialName("m.sas.v1")
     @Serializable
-    data class SasV1(
+    public data class SasV1(
         @SerialName("transaction_id")
         override val transactionId: String,
 
@@ -63,7 +63,7 @@ abstract class AcceptContent {
 
     @OptIn(ExperimentalSerializationApi::class)
     @Serializer(forClass = AcceptContent::class)
-    object TheSerializer : KSerializer<AcceptContent> {
+    public object TheSerializer : KSerializer<AcceptContent> {
         private val firstDelegate = PolymorphicSerializer(AcceptContent::class)
         private val secondDelegate = DiscriminatorChanger(firstDelegate, "method")
 

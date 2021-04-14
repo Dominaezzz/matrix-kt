@@ -14,12 +14,12 @@ import kotlinx.serialization.encoding.Encoder
  */
 @SerialName("m.key.verification.start")
 @Serializable(StartContent.TheSerializer::class)
-abstract class StartContent {
+public abstract class StartContent {
     /**
      * The device ID which is initiating the process.
      */
     @SerialName("from_device")
-    abstract val fromDevice: String
+    public abstract val fromDevice: String
 
     /**
      * An opaque identifier for the verification process.
@@ -27,7 +27,7 @@ abstract class StartContent {
      * Must be the same as the transaction_id given in the `m.key.verification.request` if this process is originating from a request.
      */
     @SerialName("transaction_id")
-    abstract val transactionId: String
+    public abstract val transactionId: String
 
     // /**
     //  * The verification method to use.
@@ -40,11 +40,11 @@ abstract class StartContent {
      * This field will never be present if the [method] verifies keys both ways.
      */
     @SerialName("next_method")
-    open val nextMethod: String? get() = null
+    public open val nextMethod: String? get() = null
 
     @SerialName("m.sas.v1")
     @Serializable
-    data class SasV1(
+    public data class SasV1(
         @SerialName("from_device")
         override val fromDevice: String,
 
@@ -78,7 +78,7 @@ abstract class StartContent {
 
     @OptIn(ExperimentalSerializationApi::class)
     @Serializer(forClass = StartContent::class)
-    object TheSerializer : KSerializer<StartContent> {
+    public object TheSerializer : KSerializer<StartContent> {
         private val firstDelegate = PolymorphicSerializer(StartContent::class)
         private val secondDelegate = DiscriminatorChanger(firstDelegate, "method")
 

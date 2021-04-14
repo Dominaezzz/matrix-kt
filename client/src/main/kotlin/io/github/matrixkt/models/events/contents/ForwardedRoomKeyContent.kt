@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.forwarded_room_key")
 @Serializable
-data class ForwardedRoomKeyContent(
+public data class ForwardedRoomKeyContent(
     /**
      * The encryption algorithm the key in this event is to be used with.
      */

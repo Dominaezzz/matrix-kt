@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LocationInfo(
+public data class LocationInfo(
     /**
      * 	The URL (typically [MXC URI](https://matrix.org/docs/spec/client_server/r0.5.0#mxc-uri)) to a thumbnail of the image.
      * 	Only present if the thumbnail is unencrypted.

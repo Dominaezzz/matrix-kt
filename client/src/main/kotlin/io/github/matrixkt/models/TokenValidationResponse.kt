@@ -4,13 +4,13 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TokenValidationResponse(
+public data class TokenValidationResponse(
     /**
      * The session ID.
      * Session IDs are opaque strings that must consist entirely of the characters `[0-9a-zA-Z.=_-]`.
      * Their length must not exceed 255 characters and they must not be empty.
      */
-    val sid: String,
+    public val sid: String,
 
     /**
      * An optional field containing a URL where the client must submit the validation token to,
@@ -23,5 +23,5 @@ data class TokenValidationResponse(
      * advertises this specification version in the `/versions` response (ie: r0.5.0).
      */
     @SerialName("submit_url")
-    val submitUrl: String? = null
+    public val submitUrl: String? = null
 )

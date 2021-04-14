@@ -5,11 +5,11 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonTransformingSerializer
 
-class DiscriminatorChanger<T : Any>(
+public class DiscriminatorChanger<T : Any>(
     delegateSerializer: KSerializer<T>,
-    private val classDiscriminator: String
+    private val classDiscriminator: String,
+    private val actualDiscriminator: String = "type"
 ) : JsonTransformingSerializer<T>(delegateSerializer) {
-    private val actualDiscriminator = "type"
 
     @ExperimentalStdlibApi
     override fun transformDeserialize(element: JsonElement): JsonElement {

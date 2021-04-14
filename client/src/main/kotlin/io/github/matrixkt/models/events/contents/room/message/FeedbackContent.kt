@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
  */
 @SerialName("m.room.message.feedback")
 @Serializable
-class FeedbackContent(
+public data class FeedbackContent(
     /**
      * The event that this feedback is related to.
      */
