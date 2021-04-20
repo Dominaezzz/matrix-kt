@@ -8,11 +8,7 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable(MatrixError.TheSerializer::class)
-public abstract class MatrixError : Exception() {
-    override var message: String?
-        get() = error
-        set(value) {}
-
+public abstract class MatrixError {
     public abstract val error: String?
 
     public object TheSerializer : KSerializer<MatrixError> by DiscriminatorChanger(

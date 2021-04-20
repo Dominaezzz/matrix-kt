@@ -23,6 +23,12 @@ import kotlin.test.*
 class ClientTests {
     private val baseUrl = Url("https://matrix-client.popular.org/more/stuff/here/")
 
+    private inline fun <reified T : MatrixError> assertFailsWith(message: String? = null, block: () -> Unit): T {
+        val e = assertFailsWith<MatrixException>(message, block).error
+        assertTrue(e is T)
+        return e
+    }
+
     @Test
     fun testCreateRoom() = runSuspendTest {
         val mockEngine = MockEngine {

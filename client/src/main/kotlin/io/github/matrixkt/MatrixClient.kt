@@ -32,7 +32,7 @@ public class MatrixClient(engine: HttpClientEngine,
         HttpResponseValidator {
             handleResponseException {
                 if (it !is ResponseException) return@handleResponseException
-                throw it.response.receive<MatrixError>()
+                throw MatrixException(it.response.receive())
             }
         }
 
