@@ -14,7 +14,8 @@ public data class MSISDNValidationRequest(
     public val clientSecret: String,
 
     /**
-     * The two-letter uppercase ISO country code that the number in [phoneNumber] should be parsed as if it were dialled from.
+     * The two-letter uppercase ISO-3166-1 alpha-2 country code that the
+     * number in [phoneNumber] should be parsed as if it were dialled from.
      */
     public val country: String,
 
@@ -25,28 +26,22 @@ public data class MSISDNValidationRequest(
     public val phoneNumber: String,
 
     /**
-     * The server will only send an email if the [sendAttempt] is a number greater than
-     * the most recent one which it has seen, scoped to that email + client_secret pair.
-     * This is to avoid repeatedly sending the same email in the case of request retries
-     * between the POSTing user and the identity server.
-     * The client should increment this value if they desire a new email (e.g. a reminder) to be sent.
-     * If they do not, the server should respond with success but not resend the email.
+     * The server will only send an SMS if the ``send_attempt`` is a
+     * number greater than the most recent one which it has seen,
+     * scoped to that [country] + [phoneNumber] + [clientSecret]
+     * triple. This is to avoid repeatedly sending the same SMS in
+     * the case of request retries between the POSTing user and the
+     * identity server. The client should increment this value if
+     * they desire a new SMS (e.g. a reminder) to be sent.
      */
     @SerialName("send_attempt")
-    public val sendAttempt: Int,
+    public val sendAttempt: Long,
 
     /**
-     * Optional. When the validation is completed, the identity server will redirect the user to this URL.
-     * This option is ignored when submitting 3PID validation information through a POST request.
+     * Optional. When the validation is completed, the identity server will
+     * redirect the user to this URL. This option is ignored when submitting
+     * 3PID validation information through a POST request.
      */
     @SerialName("next_link")
-    public val nextLink: String? = null,
-
-    /**
-     * The hostname of the identity server to communicate with.
-     * May optionally include a port.
-     * This parameter is ignored when the homeserver handles 3PID verification.
-     */
-    @SerialName("id_server")
-    public val idServer: String
+    public val nextLink: String? = null
 )

@@ -1,6 +1,6 @@
 package io.github.matrixkt.models.events.contents
 
-import io.github.matrixkt.models.push.RuleSet
+import io.github.matrixkt.models.push.Ruleset
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -13,5 +13,5 @@ public data class PushRulesContent(
     /**
      * The global ruleset
      */
-    val global: RuleSet? = null
+    val global: Ruleset? = null
 )

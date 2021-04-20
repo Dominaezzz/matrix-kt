@@ -1,0 +1,31 @@
+package io.github.matrixkt.api
+
+import io.github.matrixkt.models.events.contents.TagContent
+import io.github.matrixkt.utils.MatrixRpc
+import io.github.matrixkt.utils.RpcMethod
+import io.github.matrixkt.utils.resource.Resource
+import kotlinx.serialization.Serializable
+
+/**
+ * List the tags set by a user on a room.
+ */
+public class GetRoomTags(
+    public override val url: Url
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetRoomTags.Url, Any?, TagContent> {
+    public override val body: Any?
+        get() = null
+
+    @Resource("/_matrix/client/r0/user/{userId}/rooms/{roomId}/tags")
+    @Serializable
+    public class Url(
+        /**
+         * The id of the user to get tags for. The access token must be
+         * authorized to make requests for this user ID.
+         */
+        public val userId: String,
+        /**
+         * The ID of the room to get tags for.
+         */
+        public val roomId: String
+    )
+}

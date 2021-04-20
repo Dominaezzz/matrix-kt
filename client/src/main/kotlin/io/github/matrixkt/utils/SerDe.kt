@@ -1,7 +1,7 @@
 package io.github.matrixkt.utils
 
+import io.github.matrixkt.api.Login
 import io.github.matrixkt.models.AuthenticationData
-import io.github.matrixkt.models.LoginRequest
 import io.github.matrixkt.models.MatrixError
 import io.github.matrixkt.models.UserIdentifier
 import io.github.matrixkt.models.events.contents.*
@@ -150,9 +150,9 @@ public val MatrixSerialModule: SerializersModule = SerializersModule {
         subclass(MatrixError.CannotLeaveServerNoticeRoom.serializer())
     }
 
-    polymorphic(LoginRequest::class) {
-        subclass(LoginRequest.Password.serializer())
-        subclass(LoginRequest.Token.serializer())
+    polymorphic(Login.Body::class) {
+        subclass(Login.Body.Password.serializer())
+        subclass(Login.Body.Token.serializer())
     }
 }
 

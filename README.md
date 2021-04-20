@@ -36,18 +36,26 @@ dependencies {
 ## Sample
 ### Client
 ```kotlin
-val client = MatrixClient(Apache.create(), "matrix.org")
-client.accessToken = "Super secure Token"
+val client = HttpClient(Apache) {
+    MatrixConfig(baseUrl = Url("matrix.org"))
+}
+val accessToken = "Super secure Token"
 
 val roomId = "!QtykxKocfZaZOUrTwp:matrix.org"
 
-val content = json {
-    "msgtype" to "m.text"
-    "body" to "Hello World!"
-}
-val eventId = client.roomApi.sendMessage(roomId, "m.room.message", "nonce", content)
+val response = client.rpc(SendMessage(
+    SendMessage.Url(roomId, "m.room.message", "nonce"),
+    json {
+        "msgtype" to "m.text"
+        "body" to "Hello World!"
+    }
+), accessToken)
+val eventId = response.eventId
 
-client.roomApi.redactEvent(roomId, eventId, "nonce2", "Was a bot!")
+client.rpc(RedactEvent(
+    RedactEvent.Url(roomId, eventId, "nonce2"),
+    RedactEvent.Body(reason = "Was a bot!")
+), accessToken)
 ```
 
 ### Olm
