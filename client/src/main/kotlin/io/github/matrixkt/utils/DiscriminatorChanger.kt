@@ -1,37 +1,28 @@
 package io.github.matrixkt.utils
 
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonTransformingSerializer
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.*
 
 public class DiscriminatorChanger<T : Any>(
-    delegateSerializer: KSerializer<T>,
-    private val classDiscriminator: String,
-    private val actualDiscriminator: String = "type"
-) : JsonTransformingSerializer<T>(delegateSerializer) {
+    private val tSerializer: KSerializer<T>,
+    private val discriminator: String
+) : KSerializer<T> {
+    override val descriptor: SerialDescriptor get() = tSerializer.descriptor
 
-    @ExperimentalStdlibApi
-    override fun transformDeserialize(element: JsonElement): JsonElement {
-        require(element is JsonObject)
-
-        return JsonObject(buildMap<String, JsonElement> {
-            putAll(element)
-            val discriminatorValue = remove(classDiscriminator)
-            checkNotNull(discriminatorValue)
-            put(actualDiscriminator, discriminatorValue)
-        })
+    override fun serialize(encoder: Encoder, value: T) {
+        require(encoder is JsonEncoder)
+        val json = Json(encoder.json) { classDiscriminator = discriminator }
+        val element = json.encodeToJsonElement(tSerializer, value)
+        encoder.encodeJsonElement(element)
     }
 
-    @ExperimentalStdlibApi
-    override fun transformSerialize(element: JsonElement): JsonElement {
-        require(element is JsonObject)
-
-        return JsonObject(buildMap<String, JsonElement> {
-            putAll(element)
-            val discriminatorValue = remove(actualDiscriminator)
-            checkNotNull(discriminatorValue)
-            put(classDiscriminator, discriminatorValue)
-        })
+    override fun deserialize(decoder: Decoder): T {
+        require(decoder is JsonDecoder)
+        val element = decoder.decodeJsonElement()
+        val json = Json(decoder.json) { classDiscriminator = discriminator }
+        return json.decodeFromJsonElement(tSerializer, element)
     }
 }
