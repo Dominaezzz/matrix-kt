@@ -1,6 +1,6 @@
 package io.github.matrixkt.models.sync
 
-import io.github.matrixkt.models.events.MatrixEvent
+import io.github.matrixkt.models.events.SyncEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,7 +9,7 @@ public data class Timeline(
     /**
      * List of events.
      */
-    val events: List<MatrixEvent> = emptyList(),
+    val events: List<SyncEvent> = emptyList(),
 
     /**
      * 	True if the number of events returned was limited by the `limit` on the filter.

@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
 @Serializable
-public data class MatrixEvent(
+public data class SyncEvent(
     /**
      * The type of event.
      * This SHOULD be namespaced similar to Java package naming conventions e.g. 'com.example.subdomain.event.type'
@@ -46,7 +46,7 @@ public data class MatrixEvent(
      * despite being required everywhere else.
      */
     @SerialName("room_id")
-    val roomId: String,
+    val roomId: String? = null,
 
     /**
      * A unique key which defines the overwriting semantics for this piece of room state.
