@@ -7,21 +7,33 @@ package io.github.matrixkt.olm
  *
  * Detailed implementation guide is available at [Implementing End-to-End Encryption in Matrix clients](http://matrix.org/docs/guides/e2e_implementation.html).
  */
-public data class Message(
+public sealed class Message(
     /**
      * The encrypted message.
      */
-    val cipherText: String,
-
-    /**
-     * Defined by [MESSAGE_TYPE_MESSAGE] or [MESSAGE_TYPE_PRE_KEY]
-     */
-    val type: Long
+    public val cipherText: String
 ) {
+    /** PRE KEY message type (used to establish new Olm session)  */
+    public class PreKey(cipherText: String) : Message(cipherText)
+
+    /** Normal message type  */
+    public class Normal(cipherText: String) : Message(cipherText)
+
+    public val type: Long
+        get() {
+            return when (this) {
+                is PreKey -> 0L
+                is Normal -> 1L
+            }
+        }
+
     public companion object {
-        /** PRE KEY message type (used to establish new Olm session)  */
-        public const val MESSAGE_TYPE_PRE_KEY: Int = 0
-        /** Normal message type  */
-        public const val MESSAGE_TYPE_MESSAGE: Int = 1
+        public operator fun invoke(cipherText: String, type: Long): Message {
+            return when (type) {
+                0L -> PreKey(cipherText)
+                1L -> Normal(cipherText)
+                else -> throw NoSuchElementException("type = $type")
+            }
+        }
     }
 }
