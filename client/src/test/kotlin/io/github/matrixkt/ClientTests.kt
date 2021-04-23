@@ -8,6 +8,7 @@ import io.ktor.client.*
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.http.*
 import testutils.runSuspendTest
+import utils.respond
 import utils.respondJson
 import kotlin.test.*
 
@@ -27,12 +28,7 @@ class ClientTests {
                 addHandler {
                     assertEquals("${baseUrl}_matrix/client/r0/createRoom", it.url.toString())
 
-                    // language=json
-                    respondJson("""
-                        {
-                          "room_id": "!sefiuhWgwghwWgh:example.com"
-                        }
-                    """)
+                    respond(CreateRoom.Response("!sefiuhWgwghwWgh:example.com"))
                 }
             }
 
@@ -196,17 +192,12 @@ class ClientTests {
     fun testResolveRoom() = runSuspendTest {
         val mockEngine = MockEngine.create {
             addHandler {
-            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
-                // language=json
-                respondJson("""
-                    {
-                      "room_id": "!abnjk1jdasj98:capuchins.com",
-                      "servers": ["capuchins.com", "matrix.org", "another.com"]
-                    }
-                """)
+                respond(GetRoomIdByAlias.Response(
+                    roomId = "!abnjk1jdasj98:capuchins.com",
+                    servers = listOf("capuchins.com", "matrix.org", "another.com")
+                ))
             }
             addHandler {
-            	assertTrue(it.url.toString().startsWith(baseUrl.toString()))
                 // language=json
                 respondJson("""
                     {
@@ -251,14 +242,11 @@ class ClientTests {
         val client = HttpClient(MockEngine) {
             engine {
                 addHandler {
-                    // language=json
-                    respondJson("""
-                        {
-                          "user_id": "@cheeky_monkey:matrix.org",
-                          "access_token": "abc123",
-                          "device_id": "GHTYAJCE"
-                        }
-                    """)
+                    respond(Register.Response(
+                        userId = "@cheeky_monkey:matrix.org",
+                        accessToken = "abc123",
+                        deviceId = "GHTYAJCE"
+                    ))
                 }
                 addHandler {
                     // language=json

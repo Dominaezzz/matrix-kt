@@ -73,4 +73,9 @@ public object ResourcesFormat : SerialFormat {
         encoder.encodeSerializableValue(serializer, value)
         return encoder.parameters
     }
+
+    public fun <T> decodeFromParameters(deserializer: DeserializationStrategy<T>, parameters: Parameters): T {
+        val input = ParametersDecoder(serializersModule, parameters, emptyList())
+        return input.decodeSerializableValue(deserializer)
+    }
 }
