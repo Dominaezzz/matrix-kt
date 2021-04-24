@@ -1,5 +1,6 @@
 package io.github.matrixkt.api
 
+import io.github.matrixkt.models.Presence
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
 import io.github.matrixkt.utils.resource.Resource
@@ -40,6 +41,6 @@ public class GetPresence(
         /**
          * This user's presence.
          */
-        public val presence: String
+        public val presence: Presence
     )
 }

@@ -1,5 +1,6 @@
 package io.github.matrixkt.api
 
+import io.github.matrixkt.models.Presence
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
 import io.github.matrixkt.utils.resource.Resource
@@ -33,7 +34,7 @@ public class SetPresence(
         /**
          * The new presence state.
          */
-        public val presence: String,
+        public val presence: Presence,
         /**
          * The status message to attach to this state.
          */

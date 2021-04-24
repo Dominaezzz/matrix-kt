@@ -2,6 +2,7 @@ package io.github.matrixkt.api
 
 import io.github.matrixkt.models.events.StateEvent
 import io.github.matrixkt.models.events.contents.room.MemberContent
+import io.github.matrixkt.models.events.contents.room.Membership
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
 import io.github.matrixkt.utils.resource.Resource
@@ -38,13 +39,13 @@ public class GetMembersByRoom(
          * parameters create an 'or' condition: either the membership *is*
          * the same as ``membership`` **or** *is not* the same as ``not_membership``.
          */
-        public val membership: String? = null,
+        public val membership: Membership? = null,
         /**
          * The kind of membership to exclude from the results. Defaults to no
          * filtering if unspecified.
          */
         @SerialName("not_membership")
-        public val notMembership: String? = null
+        public val notMembership: Membership? = null
     )
 
     @Serializable

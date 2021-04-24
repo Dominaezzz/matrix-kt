@@ -1,5 +1,6 @@
 package io.github.matrixkt.api
 
+import io.github.matrixkt.models.sync.Presence
 import io.github.matrixkt.models.sync.SyncResponse
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
@@ -78,7 +79,7 @@ public class Sync(
          * client is marked as being idle.
          */
         @SerialName("set_presence")
-        public val setPresence: String? = null,
+        public val setPresence: Presence? = null,
         /**
          * The maximum time to wait, in milliseconds, before returning this
          * request. If no events (or other data) become available before this

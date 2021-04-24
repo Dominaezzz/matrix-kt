@@ -41,14 +41,6 @@ public data class SyncEvent(
     val unsigned: JsonObject? = null,
 
     /**
-     * The ID of the room associated with this event.
-     * Will not be present on events that arrive through `/sync`,
-     * despite being required everywhere else.
-     */
-    @SerialName("room_id")
-    val roomId: String? = null,
-
-    /**
      * A unique key which defines the overwriting semantics for this piece of room state.
      * This value is often a zero-length string.
      * The presence of this key makes this event a State Event.
