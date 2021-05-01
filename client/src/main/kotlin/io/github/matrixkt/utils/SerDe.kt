@@ -15,6 +15,7 @@ import io.github.matrixkt.models.events.contents.policy.rule.ServerContent
 import io.github.matrixkt.models.events.contents.policy.rule.UserContent
 import io.github.matrixkt.models.events.contents.room.*
 import io.github.matrixkt.models.events.contents.room.message.FeedbackContent
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
@@ -154,6 +155,10 @@ public val MatrixSerialModule: SerializersModule = SerializersModule {
         subclass(Login.Body.Password.serializer())
         subclass(Login.Body.Token.serializer())
     }
+
+    // Workaround for https://github.com/Dominaezzz/matrix-kt/issues/2
+    contextual(Login.Body.Password::class, Login.Body.serializer() as KSerializer<Login.Body.Password>)
+    contextual(Login.Body.Token::class, Login.Body.serializer() as KSerializer<Login.Body.Token>)
 }
 
 public val MatrixJson: Json = Json {
