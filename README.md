@@ -1,4 +1,3 @@
-[![Download](https://api.bintray.com/packages/dominaezzz/kotlin-native/matrix-kt/images/download.svg)](https://bintray.com/dominaezzz/kotlin-native/matrix-kt/_latestVersion)
 [![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](https://www.apache.org/licenses/LICENSE-2.0)
 [![](https://github.com/Dominaezzz/matrix-kt/workflows/Build/badge.svg)](https://github.com/Dominaezzz/matrix-kt/actions)
 
@@ -24,9 +23,14 @@ Kotlin multiplatform libraries for [Matrix](https://matrix.org/).
 ## Usage
 ```kotlin
 repositories {
-    maven("https://dl.bintray.com/dominaezzz/kotlin-native")
-    jcenter()
+    maven("https://maven.pkg.github.com/Dominaezzz/matrix-kt") {
+        credentials {
+            username = System.getenv("GITHUB_USER") // Your GitHub username.
+            password = System.getenv("GITHUB_TOKEN") // A GitHub token with `read:packages`.
+        }
+    }
 }
+
 dependencies {
     implementation("io.github.matrixkt:client:$version")
     implementation("io.github.matrixkt:olm:$version")
@@ -45,9 +49,9 @@ val roomId = "!QtykxKocfZaZOUrTwp:matrix.org"
 
 val response = client.rpc(SendMessage(
     SendMessage.Url(roomId, "m.room.message", "nonce"),
-    json {
-        "msgtype" to "m.text"
-        "body" to "Hello World!"
+    buildJsonObject {
+        put("msgtype", "m.text")
+        put("body", "Hello World!")
     }
 ), accessToken)
 val eventId = response.eventId
@@ -64,8 +68,8 @@ val account = Account()
 upload(account.identityKeys)
 val signature = account.sign("""{"key":"super secure key for security things"}""")
 
-val session = Sessions.createInboundSession(account, "PREKEY message")
-val message = session.decrypt(Message("oun02024f=ocnaowincd;53tnv024ok/7u", 0))
+val session = Session.createInboundSession(account, "PREKEY message")
+val message = session.decrypt(Message.PreKey("oun02024f=ocnaowincd;53tnv024ok/7u"))
 
 session.clear()
 account.clear()
