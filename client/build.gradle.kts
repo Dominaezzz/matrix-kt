@@ -29,7 +29,9 @@ kotlin {
             resources.srcDir("src/main/resources")
 
             dependencies {
+                implementation(kotlin("stdlib"))
                 api("org.jetbrains.kotlinx:kotlinx-serialization-core:$serialVersion")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:$serialVersion")
                 api("io.ktor:ktor-client-core:$ktorVersion")
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
@@ -42,30 +44,10 @@ kotlin {
             resources.srcDir("src/test/resources")
 
             dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
+                implementation(kotlin("test"))
 
                 implementation("io.ktor:ktor-client-mock:$ktorVersion")
                 implementation(project(":testutils"))
-            }
-        }
-        named("jvmMain") {
-            dependencies {
-            }
-        }
-        named("jvmTest") {
-            dependencies {
-                implementation(kotlin("test"))
-                implementation(kotlin("test-junit"))
-            }
-        }
-        named("jsMain") {
-            dependencies {
-            }
-        }
-        named("jsTest") {
-            dependencies {
-                implementation(kotlin("test-js"))
             }
         }
     }

@@ -3,14 +3,14 @@ import org.jetbrains.kotlin.konan.target.HostManager
 import java.io.ByteArrayOutputStream
 
 plugins {
-    kotlin("multiplatform") version "1.4.31" apply false
-    kotlin("plugin.serialization") version "1.4.31" apply false
+    kotlin("multiplatform") version "1.5.20" apply false
+    kotlin("plugin.serialization") version "1.5.20" apply false
     id("de.undercouch.download") version "4.0.4" apply false
 }
 
-val ktorVersion: String by extra("1.5.3")
-val serialVersion: String by extra("1.1.0")
-val coroutineVersion: String by extra("1.4.3-native-mt")
+val ktorVersion: String by extra("1.6.1")
+val serialVersion: String by extra("1.2.2")
+val coroutineVersion: String by extra("1.5.1-native-mt")
 val jnaVersion: String by extra("5.8.0")
 
 val stdout = ByteArrayOutputStream()
@@ -61,7 +61,7 @@ subprojects {
                     licenses {
                         license {
                             name.set("The Apache Software License, Version 2.0")
-                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                            url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
                             distribution.set("repo")
                         }
                     }
@@ -90,7 +90,7 @@ subprojects {
                             it.name.startsWith("publishJvm") ||
                             it.name.startsWith("publishMetadata") ||
                             it.name.startsWith("publishKotlinMultiplatform")
-                    else -> TODO("Unknown host")
+                    else -> error("Unknown host")
                 }
             }
         tasks.register("smartPublish") {

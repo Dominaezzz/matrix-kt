@@ -64,19 +64,12 @@ kotlin {
         }
         commonTest {
             dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
+                implementation(kotlin("test"))
             }
         }
         named("jvmMain") {
             dependencies {
                 implementation("net.java.dev.jna:jna:$jnaVersion")
-            }
-        }
-        named("jvmTest") {
-            dependencies {
-                implementation(kotlin("test"))
-                implementation(kotlin("test-junit"))
             }
         }
     }

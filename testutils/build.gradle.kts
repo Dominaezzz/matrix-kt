@@ -27,27 +27,7 @@ kotlin {
         }
         commonTest {
             dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-            }
-        }
-        named("jvmMain") {
-            dependencies {
-            }
-        }
-        named("jvmTest") {
-            dependencies {
                 implementation(kotlin("test"))
-                implementation(kotlin("test-junit"))
-            }
-        }
-        named("jsMain") {
-            dependencies {
-            }
-        }
-        named("jsTest") {
-            dependencies {
-                implementation(kotlin("test-js"))
             }
         }
         val nativeMain by creating {

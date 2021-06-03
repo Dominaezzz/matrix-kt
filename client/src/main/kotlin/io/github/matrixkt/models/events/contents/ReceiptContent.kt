@@ -4,6 +4,7 @@ import io.github.matrixkt.utils.InlineMapSerializer
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
@@ -50,10 +51,11 @@ public data class ReceiptContent(
         val timestamp: Long? = null
     )
 
-    @OptIn(ExperimentalSerializationApi::class)
-    @Serializer(forClass = ReceiptContent::class)
     public object TheSerializer : KSerializer<ReceiptContent> {
         private val delegate = MapSerializer(String.serializer(), Receipts.serializer())
+
+        override val descriptor: SerialDescriptor
+            get() = delegate.descriptor
 
         override fun serialize(encoder: Encoder, value: ReceiptContent) {
             encoder.encodeSerializableValue(delegate, value)
