@@ -8,6 +8,8 @@ Kotlin multiplatform libraries for [Matrix](https://matrix.org/).
 - [x] olm
 - [ ] SDK
 
+Join the support room at [#matrix-kt:matrix.org](https://matrix.to/#/#matrix-kt:matrix.org).
+
 # Supported platforms
 - JVM
 - Android
