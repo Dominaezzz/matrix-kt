@@ -8,7 +8,7 @@ public class NativeSize(value: Long = 0) : IntegerType(Native.SIZE_T_SIZE, value
     public constructor(value: Int) : this(value.toLong())
 
     override fun toByte(): Byte = toLong().toByte()
-    override fun toChar(): Char = toLong().toChar()
+    override fun toChar(): Char = toLong().toInt().toChar()
     override fun toShort(): Short = toLong().toShort()
 
     public companion object {

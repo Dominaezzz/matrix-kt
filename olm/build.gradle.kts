@@ -13,7 +13,7 @@ plugins {
 
 val serialVersion: String by rootProject.extra
 val jnaVersion: String by rootProject.extra
-val olmVersion = "3.2.2"
+val olmVersion = "3.2.4"
 
 val useSingleTarget: Boolean by extra(System.getProperty("idea.active") == "true")
 
