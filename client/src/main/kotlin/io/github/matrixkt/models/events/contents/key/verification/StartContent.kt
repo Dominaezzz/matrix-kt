@@ -1,7 +1,7 @@
 package io.github.matrixkt.models.events.contents.key.verification
 
-import io.github.matrixkt.utils.DiscriminatorChanger
 import kotlinx.serialization.*
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 /**
  * Begins a key verification process.
@@ -17,11 +17,6 @@ public interface StartContent {
     @SerialName("from_device")
     public val fromDevice: String
 
-    // /**
-    //  * The verification method to use.
-    //  */
-    // abstract val method: String
-
     /**
      * Optional method to use to verify the other user's key with.
      * Applicable when the [method] chosen only verifies one user's key.
@@ -30,8 +25,10 @@ public interface StartContent {
     @SerialName("next_method")
     public val nextMethod: String?
 
+    @OptIn(ExperimentalSerializationApi::class)
     @SerialName("m.key.verification.start")
-    @Serializable(ToDevice.TheSerializer::class)
+    @JsonClassDiscriminator("method")
+    @Serializable
     public abstract class ToDevice : StartContent {
         /**
          * An opaque identifier for the verification process.
@@ -40,12 +37,12 @@ public interface StartContent {
          */
         @SerialName("transaction_id")
         public abstract val transactionId: String
-
-        public object TheSerializer : KSerializer<ToDevice> by DiscriminatorChanger(PolymorphicSerializer(ToDevice::class), "method")
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     @SerialName("m.key.verification.start")
-    @Serializable(InRoom.TheSerializer::class)
+    @JsonClassDiscriminator("method")
+    @Serializable
     public abstract class InRoom : StartContent {
         /**
          * Indicates the `m.key.verification.request` that this message is related to.
@@ -53,8 +50,6 @@ public interface StartContent {
          */
         @SerialName("m.relates_to")
         public abstract val relatesTo: VerificationRelatesTo
-
-        public object TheSerializer : KSerializer<InRoom> by DiscriminatorChanger(PolymorphicSerializer(InRoom::class), "method")
     }
 
     public sealed interface SasV1 : StartContent {

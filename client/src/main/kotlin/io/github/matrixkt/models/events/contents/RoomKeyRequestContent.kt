@@ -1,20 +1,19 @@
 package io.github.matrixkt.models.events.contents
 
-import io.github.matrixkt.utils.DiscriminatorChanger
-import kotlinx.serialization.*
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 /**
  * This event type is used to request keys for end-to-end encryption.
  * It is sent as an unencrypted [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
  */
+@OptIn(ExperimentalSerializationApi::class)
 @SerialName("m.room_key_request")
-@Serializable(RoomKeyRequestContent.TheSerializer::class)
+@JsonClassDiscriminator("action")
+@Serializable
 public sealed class RoomKeyRequestContent {
-    // /**
-    //  * One of: ["request", "request_cancellation"]
-    //  */
-    // val action: String
-
     /**
      * ID of the device requesting the key.
      */
@@ -28,12 +27,6 @@ public sealed class RoomKeyRequestContent {
      */
     @SerialName("request_id")
     public abstract val requestId: String
-
-    @OptIn(ExperimentalSerializationApi::class)
-    @Serializer(forClass = RoomKeyRequestContent::class)
-    public object TheSerializer : KSerializer<RoomKeyRequestContent> by DiscriminatorChanger(
-        PolymorphicSerializer(RoomKeyRequestContent::class), "action"
-    )
 
     @SerialName("request")
     @Serializable

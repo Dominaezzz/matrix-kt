@@ -1,19 +1,14 @@
 package io.github.matrixkt.models
 
-import io.github.matrixkt.utils.DiscriminatorChanger
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.PolymorphicSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 
-@Serializable(MatrixError.TheSerializer::class)
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("errcode")
+@Serializable
 public abstract class MatrixError {
     public abstract val error: String?
-
-    public object TheSerializer : KSerializer<MatrixError> by DiscriminatorChanger(
-        PolymorphicSerializer(MatrixError::class), "errcode"
-    )
 
     /**
      * No resource was found for this request.

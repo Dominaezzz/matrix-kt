@@ -2,10 +2,8 @@ package io.github.matrixkt.models.events.contents.room
 
 import io.github.matrixkt.models.EncryptedFile
 import io.github.matrixkt.models.events.contents.msginfo.*
-import io.github.matrixkt.utils.DiscriminatorChanger
 import kotlinx.serialization.*
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 /**
  * This event is used when sending messages in a room.
@@ -16,19 +14,15 @@ import kotlinx.serialization.encoding.Encoder
  * For more information on `msgtypes`,
  * see [`m.room.message` msgtypes](https://matrix.org/docs/spec/client_server/r0.5.0#m-room-message-msgtypes).
  */
+@OptIn(ExperimentalSerializationApi::class)
 @SerialName("m.room.message")
-@Serializable(MessageContent.TheSerializer::class)
+@JsonClassDiscriminator("msgtype")
+@Serializable
 public abstract class MessageContent {
     /**
      * The textual representation of this message.
      */
     public abstract val body: String
-
-//    /**
-//     * The type of message, e.g. m.image, m.text
-//     */
-//    @SerialName("msgtype")
-//    abstract val msgType: String
 
     /**
      * This message is the most basic message and is used to represent text.
@@ -290,19 +284,4 @@ public abstract class MessageContent {
          */
         val file: EncryptedFile? = null
     ) : MessageContent()
-
-    @OptIn(ExperimentalSerializationApi::class)
-    @Serializer(forClass = MessageContent::class)
-    public object TheSerializer : KSerializer<MessageContent> {
-        private val firstDelegate = PolymorphicSerializer(MessageContent::class)
-        private val secondDelegate = DiscriminatorChanger(firstDelegate, "msgtype")
-
-        override fun serialize(encoder: Encoder, value: MessageContent) {
-            encoder.encodeSerializableValue(secondDelegate, value)
-        }
-
-        override fun deserialize(decoder: Decoder): MessageContent {
-            return decoder.decodeSerializableValue(secondDelegate)
-        }
-    }
 }

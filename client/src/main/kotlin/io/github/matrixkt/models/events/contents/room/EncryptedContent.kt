@@ -1,25 +1,18 @@
 package io.github.matrixkt.models.events.contents.room
 
-import io.github.matrixkt.utils.DiscriminatorChanger
 import kotlinx.serialization.*
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 /**
  * This event type is used when sending encrypted events.
  * It can be used either within a room (in which case it will have all of the [Room Event fields](https://matrix.org/docs/spec/client_server/r0.6.0#room-event-fields)),
  * or as a [to-device](https://matrix.org/docs/spec/client_server/r0.6.0#to-device) event.
  */
+@OptIn(ExperimentalSerializationApi::class)
 @SerialName("m.room.encrypted")
-@Serializable(EncryptedContent.TheSerializer::class)
+@JsonClassDiscriminator("algorithm" /* The encryption algorithm used to encrypt this event. */)
+@Serializable
 public abstract class EncryptedContent {
-    // /**
-    //  * The encryption algorithm used to encrypt this event.
-    //  * The value of this field determines which other properties will be present.
-    //  * One of: ["m.olm.v1.curve25519-aes-sha2", "m.megolm.v1.aes-sha2"]
-    //  */
-    // abstract val algorithm: String
-
     /**
      * The encrypted content of the event.
      * Either the encrypted payload itself, in the case of a Megolm event,
@@ -64,21 +57,6 @@ public abstract class EncryptedContent {
         @SerialName("session_id")
         val sessionId: String
     ) : EncryptedContent()
-
-    @OptIn(ExperimentalSerializationApi::class)
-    @Serializer(forClass = EncryptedContent::class)
-    public object TheSerializer : KSerializer<EncryptedContent> {
-        private val firstDelegate = PolymorphicSerializer(EncryptedContent::class)
-        private val secondDelegate = DiscriminatorChanger(firstDelegate, "algorithm")
-
-        override fun deserialize(decoder: Decoder): EncryptedContent {
-            return decoder.decodeSerializableValue(secondDelegate)
-        }
-
-        override fun serialize(encoder: Encoder, value: EncryptedContent) {
-            encoder.encodeSerializableValue(secondDelegate, value)
-        }
-    }
 
     @Serializable
     public data class CiphertextInfo(

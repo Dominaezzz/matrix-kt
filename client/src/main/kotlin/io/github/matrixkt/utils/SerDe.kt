@@ -88,7 +88,7 @@ public val EventSerialModule: SerializersModule = SerializersModule {
     contextual(SecretRequestContent.serializer())
     contextual(SecretSendContent.serializer())
 
-    polymorphic(MessageContent::class, MessageContent.serializer()) {
+    polymorphic(MessageContent::class) {
         subclass(MessageContent.Text.serializer())
         subclass(MessageContent.Emote.serializer())
         subclass(MessageContent.Notice.serializer())
@@ -100,7 +100,7 @@ public val EventSerialModule: SerializersModule = SerializersModule {
         subclass(MessageContent.ServerNotice.serializer())
     }
 
-    polymorphic(EncryptedContent::class, EncryptedContent.serializer()) {
+    polymorphic(EncryptedContent::class) {
         subclass(EncryptedContent.OlmV1.serializer())
         subclass(EncryptedContent.MegolmV1.serializer())
     }
@@ -119,16 +119,6 @@ public val EventSerialModule: SerializersModule = SerializersModule {
 
     polymorphic(AcceptContent.InRoom::class) {
         subclass(AcceptContent.SasV1.InRoom.serializer())
-    }
-
-    polymorphic(RoomKeyRequestContent::class) {
-        subclass(RoomKeyRequestContent.Request.serializer())
-        subclass(RoomKeyRequestContent.Cancellation.serializer())
-    }
-
-    polymorphic(SecretRequestContent::class) {
-        subclass(SecretRequestContent.Request.serializer())
-        subclass(SecretRequestContent.Cancellation.serializer())
     }
 
     polymorphic(KeyDescription::class) {
@@ -212,5 +202,4 @@ public val MatrixJson: Json = Json {
     encodeDefaults = false
     isLenient = true
     ignoreUnknownKeys = true
-    classDiscriminator = "type"
 }

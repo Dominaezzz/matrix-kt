@@ -4,8 +4,10 @@ import io.github.matrixkt.models.UserIdentifier
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
 import io.github.matrixkt.utils.resource.Resource
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
 import kotlinx.serialization.json.JsonObject
 
 /**
@@ -29,14 +31,10 @@ public class Login(
     @Serializable
     public class Url
 
+    @OptIn(ExperimentalSerializationApi::class)
+    @JsonClassDiscriminator("type")
     @Serializable
     public abstract class Body {
-        // /**
-        //  * The login type being used.
-        //  * One of: ["m.login.password", "m.login.token"]
-        //  */
-        // val type: String
-
         /**
          * Identification information for the user.
          */

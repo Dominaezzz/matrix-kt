@@ -1,17 +1,18 @@
 package io.github.matrixkt.models
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
 
+/**
+ * See [Identifier types](https://matrix.org/docs/spec/client_server/r0.5.0#identifier-types)
+ * for supported values and additional property descriptions.
+ */
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("type")
 @Serializable
 public abstract class UserIdentifier {
-//    /**
-//     * The type of identification.
-//     * See [Identifier types](https://matrix.org/docs/spec/client_server/r0.5.0#identifier-types)
-//     * for supported values and additional property descriptions.
-//     */
-//    abstract val type: String
-
     /**
      * The user is identified by their Matrix ID.
      */

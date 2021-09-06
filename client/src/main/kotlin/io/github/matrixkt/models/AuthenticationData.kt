@@ -1,15 +1,14 @@
 package io.github.matrixkt.models
 
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
 
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("type")
 @Serializable
 public abstract class AuthenticationData {
-    // /**
-    //  * The login type that the client is attempting to complete.
-    //  */
-    // abstract val type: String
-
     /**
      * The value of the session key given by the homeserver.
      */

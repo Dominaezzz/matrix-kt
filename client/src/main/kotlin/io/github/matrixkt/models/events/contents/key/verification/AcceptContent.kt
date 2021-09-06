@@ -1,19 +1,18 @@
 package io.github.matrixkt.models.events.contents.key.verification
 
-import io.github.matrixkt.utils.DiscriminatorChanger
-import kotlinx.serialization.*
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 /**
  * Accepts a previously sent `m.key.verification.start` message.
  */
 public interface AcceptContent {
-    // /**
-    //  * The verification method to use.
-    //  */
-    // abstract val method: String
-
+    @OptIn(ExperimentalSerializationApi::class)
     @SerialName("m.key.verification.accept")
-    @Serializable(ToDevice.TheSerializer::class)
+    @JsonClassDiscriminator("method")
+    @Serializable
     public abstract class ToDevice : AcceptContent {
         /**
          * An opaque identifier for the verification process.
@@ -21,12 +20,12 @@ public interface AcceptContent {
          */
         @SerialName("transaction_id")
         public abstract val transactionId: String
-
-        public object TheSerializer : KSerializer<ToDevice> by DiscriminatorChanger(PolymorphicSerializer(ToDevice::class), "method")
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     @SerialName("m.key.verification.start")
-    @Serializable(InRoom.TheSerializer::class)
+    @JsonClassDiscriminator("method")
+    @Serializable
     public abstract class InRoom : AcceptContent {
         /**
          * Indicates the `m.key.verification.request` that this message is related to.
@@ -34,8 +33,6 @@ public interface AcceptContent {
          */
         @SerialName("m.relates_to")
         public abstract val relatesTo: VerificationRelatesTo
-
-        public object TheSerializer : KSerializer<InRoom> by DiscriminatorChanger(PolymorphicSerializer(InRoom::class), "method")
     }
 
     public sealed interface SasV1 : AcceptContent {

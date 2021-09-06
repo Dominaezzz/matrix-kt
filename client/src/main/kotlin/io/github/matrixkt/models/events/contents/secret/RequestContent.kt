@@ -1,23 +1,17 @@
 package io.github.matrixkt.models.events.contents.secret
 
-import io.github.matrixkt.utils.DiscriminatorChanger
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.PolymorphicSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 /**
  * Sent by a client to request a secret from another device or to cancel a previous request.
  * It is sent as an unencrypted to-device event.
  */
+@OptIn(ExperimentalSerializationApi::class)
 @SerialName("m.secret.request")
-@Serializable(RequestContent.TheSerializer::class)
+@JsonClassDiscriminator("action")
+@Serializable
 public sealed class RequestContent {
-    // /**
-    //  * One of: ["request", "request_cancellation"]
-    //  */
-    // val action: String
-
     /**
      * The ID of the device requesting the secret.
      */
@@ -31,9 +25,6 @@ public sealed class RequestContent {
      */
     @SerialName("request_id")
     public abstract val requestId: String
-
-    public object TheSerializer : KSerializer<RequestContent> by DiscriminatorChanger(
-        PolymorphicSerializer(RequestContent::class), "action")
 
     @SerialName("request")
     @Serializable

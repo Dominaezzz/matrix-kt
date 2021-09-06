@@ -1,13 +1,12 @@
 package io.github.matrixkt.models.events.contents.secret_storage
 
-import io.github.matrixkt.utils.DiscriminatorChanger
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.PolymorphicSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
+import kotlinx.serialization.json.JsonClassDiscriminator
 
+@OptIn(ExperimentalSerializationApi::class)
 @SerialName("m.secret_storage.key.*")
-@Serializable(KeyDescription.TheSerializer::class)
+@JsonClassDiscriminator("algorithm")
+@Serializable
 public abstract class KeyDescription {
     /**
      * The name of the key.
@@ -15,12 +14,6 @@ public abstract class KeyDescription {
      * or “Default key” if the key is marked as the default key (see below).
      */
     public abstract val name: String?
-
-    // /**
-    //  * The encryption algorithm to be used for this key.
-    //  * Currently, only `m.secret_storage.v1.aes-hmac-sha2` is supported.
-    //  */
-    // val algorithm: String,
 
     /**
      * See [deriving keys from passphrases section](https://spec.matrix.org/v1.1/client-server-api/#deriving-keys-from-passphrases)
@@ -48,16 +41,12 @@ public abstract class KeyDescription {
          */
         val mac: String? = null,
     ) : KeyDescription()
-
-    public object TheSerializer : KSerializer<KeyDescription> by DiscriminatorChanger(
-        PolymorphicSerializer(KeyDescription::class), "algorithm"
-    )
 }
 
-@Serializable(Passphrase.TheSerializer::class)
+@OptIn(ExperimentalSerializationApi::class)
+@JsonClassDiscriminator("algorithm")
+@Serializable
 public abstract class Passphrase {
-    // val algorithm: String
-
     @SerialName("m.pbkdf2")
     @Serializable
     public data class PBKDF2(
@@ -76,7 +65,4 @@ public abstract class Passphrase {
          */
         val bits: Int = 256
     ) : Passphrase()
-
-    public object TheSerializer : KSerializer<Passphrase> by DiscriminatorChanger(
-        PolymorphicSerializer(Passphrase::class), "algorithm")
 }
