@@ -21,6 +21,10 @@ exec {
 
 version = stdout.toString().trim()
 
+repositories {
+    mavenCentral()
+}
+
 subprojects {
     repositories {
         mavenCentral()

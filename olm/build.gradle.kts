@@ -15,8 +15,6 @@ val serialVersion: String by rootProject.extra
 val jnaVersion: String by rootProject.extra
 val olmVersion = "3.2.4"
 
-val useSingleTarget: Boolean by extra(System.getProperty("idea.active") == "true")
-
 val downloadsDir = buildDir.resolve("downloads")
 val olmZip = downloadsDir.resolve("olm-$olmVersion.zip")
 val olmDir = downloadsDir.resolve("olm-$olmVersion")
@@ -40,18 +38,12 @@ if (HostManager.hostIsMingw) {
 
 kotlin {
     jvm()
-    if (useSingleTarget) {
-        if (HostManager.hostIsLinux) linuxX64()
-        if (HostManager.hostIsMac) macosX64()
-        if (HostManager.hostIsMingw) mingwX64()
-    } else {
-        linuxX64()
-        macosX64()
-        mingwX64()
-        iosArm32()
-        iosArm64()
-        iosX64()
-    }
+    linuxX64()
+    macosX64()
+    mingwX64()
+    iosArm32()
+    iosArm64()
+    iosX64()
 
     explicitApi()
 
@@ -72,6 +64,20 @@ kotlin {
                 implementation("net.java.dev.jna:jna:$jnaVersion")
             }
         }
+        val nativeMain by creating {
+            dependsOn(commonMain.get())
+        }
+        val nativeTest by creating {
+            dependsOn(commonTest.get())
+        }
+
+        for (target in targets.withType<KotlinNativeTarget>()) {
+            val main = getByName("${target.name}Main")
+            main.dependsOn(nativeMain)
+
+            val test = getByName("${target.name}Test")
+            test.dependsOn(nativeTest)
+        }
     }
 
     targets.withType<KotlinNativeTarget> {
@@ -85,12 +91,6 @@ kotlin {
                         includeDirs(olmDir.resolve("include"))
                     }
                 }
-                defaultSourceSet {
-                    kotlin.srcDir("src/nativeMain/kotlin")
-                    resources.srcDir("src/nativeMain/resources")
-                }
-                dependencies {
-                }
             }
             "test" {
                 binaries {
@@ -100,10 +100,6 @@ kotlin {
                     if (HostManager.hostIsMingw && olmPath != null) {
                         getTest(NativeBuildType.DEBUG).linkerOpts("-L${olmPath}", "-lolm")
                     }
-                }
-                defaultSourceSet {
-                    kotlin.srcDir("src/nativeTest/kotlin")
-                    resources.srcDir("src/nativeTest/resources")
                 }
             }
         }
