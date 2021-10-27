@@ -79,6 +79,9 @@ public actual class PkDecryption {
     }
 
     public actual companion object {
+        public actual val publicKeyLength: Long get() = olm_pk_key_length().convert()
+        public actual val privateKeyLength: Long get() = olm_pk_private_key_length().convert()
+
         private inline fun create(block: (CPointer<OlmPkDecryption>, CValuesRef<*>, size_t) -> Unit): PkDecryption {
             val publicKeyLength = olm_pk_key_length()
             val publicKey = ByteArray(publicKeyLength.convert())
@@ -97,6 +100,15 @@ public actual class PkDecryption {
 
         private fun checkError(ptr: CPointer<OlmPkDecryption>, result: size_t) {
             genericCheckError(ptr, result, ::olm_pk_decryption_last_error)
+        }
+
+        public actual fun fromPrivate(privateKey: ByteArray): PkDecryption {
+            return create { ptr, publicKey, publicKeyLength ->
+                val result = olm_pk_key_from_private(ptr,
+                    publicKey, publicKeyLength,
+                    privateKey.refTo(0), privateKey.size.convert())
+                checkError(ptr, result)
+            }
         }
 
         public actual fun unpickle(key: ByteArray, pickle: String): PkDecryption {
