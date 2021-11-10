@@ -63,12 +63,20 @@ public val MatrixSerialModule: SerializersModule = SerializersModule {
     contextual(TagContent.serializer())
     contextual(DirectContent.serializer())
     contextual(AcceptedTermsContent.serializer())
-    contextual(RequestContent.serializer())
-    contextual(StartContent.serializer())
-    contextual(CancelContent.serializer())
-    contextual(AcceptContent.serializer())
-    contextual(KeyContent.serializer())
-    contextual(MacContent.serializer())
+    contextual(RequestContent.ToDevice.serializer())
+    contextual(RequestContent.InRoom.serializer())
+    contextual(StartContent.ToDevice.serializer())
+    contextual(StartContent.InRoom.serializer())
+    contextual(DoneContent.ToDevice.serializer())
+    contextual(DoneContent.InRoom.serializer())
+    contextual(CancelContent.ToDevice.serializer())
+    contextual(CancelContent.InRoom.serializer())
+    contextual(AcceptContent.ToDevice.serializer())
+    contextual(AcceptContent.InRoom.serializer())
+    contextual(KeyContent.ToDevice.serializer())
+    contextual(KeyContent.InRoom.serializer())
+    contextual(MacContent.ToDevice.serializer())
+    contextual(MacContent.InRoom.serializer())
     contextual(IdentityServerContent.serializer())
     contextual(IgnoredUserListContent.serializer())
     contextual(PushRulesContent.serializer())
@@ -97,12 +105,20 @@ public val MatrixSerialModule: SerializersModule = SerializersModule {
         subclass(EncryptedContent.MegolmV1.serializer())
     }
 
-    polymorphic(StartContent::class, StartContent.serializer()) {
-        subclass(StartContent.SasV1.serializer())
+    polymorphic(StartContent.ToDevice::class) {
+        subclass(StartContent.SasV1.ToDevice.serializer())
     }
 
-    polymorphic(AcceptContent::class, AcceptContent.serializer()) {
-        subclass(AcceptContent.SasV1.serializer())
+    polymorphic(StartContent.InRoom::class) {
+        subclass(StartContent.SasV1.InRoom.serializer())
+    }
+
+    polymorphic(AcceptContent.ToDevice::class) {
+        subclass(AcceptContent.SasV1.ToDevice.serializer())
+    }
+
+    polymorphic(AcceptContent.InRoom::class) {
+        subclass(AcceptContent.SasV1.InRoom.serializer())
     }
 
     polymorphic(RoomKeyRequestContent::class) {

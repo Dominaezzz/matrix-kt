@@ -4,28 +4,20 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * Sends the ephemeral public key for a device to the partner device.
+ * Indicates that a verification process/request has completed successfully.
  */
-public sealed class KeyContent {
-    /**
-     * The device's ephemeral public key, encoded as unpadded base64.
-     */
-    public abstract val key: String
-
-    @SerialName("m.key.verification.key")
+public sealed class DoneContent {
+    @SerialName("m.key.verification.done")
     @Serializable
     public data class ToDevice(
         /**
          * The opaque identifier for the verification process/request.
-         * Must be the same as the one used for the `m.key.verification.start` message.
          */
         @SerialName("transaction_id")
         val transactionId: String,
+    ) : DoneContent()
 
-        override val key: String
-    ) : KeyContent()
-
-    @SerialName("m.key.verification.key")
+    @SerialName("m.key.verification.done")
     @Serializable
     public data class InRoom(
         /**
@@ -33,8 +25,6 @@ public sealed class KeyContent {
          * Note that for encrypted messages, this property should be in the unencrypted portion of the event.
          */
         @SerialName("m.relates_to")
-        val relatesTo: VerificationRelatesTo,
-
-        override val key: String
-    ) : KeyContent()
+        val relatesTo: VerificationRelatesTo
+    ) : DoneContent()
 }

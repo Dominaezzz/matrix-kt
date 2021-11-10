@@ -394,7 +394,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = AccountEvent.serializer(AcceptContent.serializer())
+        val serializer = AccountEvent.serializer(AcceptContent.ToDevice.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.key.verification.accept", event.type)
@@ -426,7 +426,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = AccountEvent.serializer(CancelContent.serializer())
+        val serializer = AccountEvent.serializer(CancelContent.ToDevice.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.key.verification.cancel", event.type)
@@ -450,7 +450,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = AccountEvent.serializer(KeyContent.serializer())
+        val serializer = AccountEvent.serializer(KeyContent.ToDevice.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.key.verification.key", event.type)
@@ -477,7 +477,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = AccountEvent.serializer(MacContent.serializer())
+        val serializer = AccountEvent.serializer(MacContent.ToDevice.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.key.verification.mac", event.type)
@@ -507,7 +507,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = AccountEvent.serializer(RequestContent.serializer())
+        val serializer = AccountEvent.serializer(RequestContent.ToDevice.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.key.verification.request", event.type)
@@ -547,7 +547,7 @@ class EventTypeTests {
                 }
                 """.trimIndent()
 
-        val serializer = AccountEvent.serializer(StartContent.SasV1.serializer())
+        val serializer = AccountEvent.serializer(StartContent.SasV1.ToDevice.serializer())
         val event = MatrixJson.decodeFromString(serializer, json)
 
         assertEquals("m.key.verification.start", event.type)
@@ -564,7 +564,7 @@ class EventTypeTests {
         assertEquals("decimal", event.content.shortAuthenticationString[0])
         assertEquals("emoji", event.content.shortAuthenticationString[1])
 
-        val workaround = AccountEvent.serializer(StartContent.serializer())
+        val workaround = AccountEvent.serializer(StartContent.ToDevice.serializer())
         assertEquals(MatrixJson.parseToJsonElement(json), MatrixJson.encodeToJsonElement(workaround, event))
     }
 
