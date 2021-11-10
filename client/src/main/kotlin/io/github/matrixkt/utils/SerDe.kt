@@ -15,12 +15,17 @@ import io.github.matrixkt.models.events.contents.policy.rule.ServerContent
 import io.github.matrixkt.models.events.contents.policy.rule.UserContent
 import io.github.matrixkt.models.events.contents.room.*
 import io.github.matrixkt.models.events.contents.room.message.FeedbackContent
+import io.github.matrixkt.models.events.contents.secret_storage.DefaultKeyContent
+import io.github.matrixkt.models.events.contents.secret_storage.KeyDescription
+import io.github.matrixkt.models.events.contents.secret_storage.Passphrase
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
+import io.github.matrixkt.models.events.contents.secret.RequestContent as SecretRequestContent
+import io.github.matrixkt.models.events.contents.secret.SendContent as SecretSendContent
 
 public val MatrixSerialModule: SerializersModule = SerializersModule {
     contextual(AliasesContent.serializer())
@@ -71,6 +76,9 @@ public val MatrixSerialModule: SerializersModule = SerializersModule {
     contextual(ServerContent.serializer())
     contextual(UserContent.serializer())
     contextual(FeedbackContent.serializer())
+    contextual(DefaultKeyContent.serializer())
+    contextual(SecretRequestContent.serializer())
+    contextual(SecretSendContent.serializer())
 
     polymorphic(MessageContent::class, MessageContent.serializer()) {
         subclass(MessageContent.Text.serializer())
@@ -100,6 +108,11 @@ public val MatrixSerialModule: SerializersModule = SerializersModule {
     polymorphic(RoomKeyRequestContent::class) {
         subclass(RoomKeyRequestContent.Request.serializer())
         subclass(RoomKeyRequestContent.Cancellation.serializer())
+    }
+
+    polymorphic(SecretRequestContent::class) {
+        subclass(SecretRequestContent.Request.serializer())
+        subclass(SecretRequestContent.Cancellation.serializer())
     }
 
     polymorphic(UserIdentifier::class) {
@@ -159,6 +172,14 @@ public val MatrixSerialModule: SerializersModule = SerializersModule {
     // Workaround for https://github.com/Dominaezzz/matrix-kt/issues/2
     contextual(Login.Body.Password::class, Login.Body.serializer() as KSerializer<Login.Body.Password>)
     contextual(Login.Body.Token::class, Login.Body.serializer() as KSerializer<Login.Body.Token>)
+
+    polymorphic(KeyDescription::class) {
+        subclass(KeyDescription.AesHmacSha2.serializer())
+    }
+
+    polymorphic(Passphrase::class) {
+        subclass(Passphrase.PBKDF2.serializer())
+    }
 }
 
 public val MatrixJson: Json = Json {
