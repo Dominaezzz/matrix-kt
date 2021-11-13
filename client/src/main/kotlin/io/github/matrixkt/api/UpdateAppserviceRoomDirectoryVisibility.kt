@@ -17,11 +17,11 @@ import kotlinx.serialization.Serializable
  * instead of a typical client's access_token. This API cannot be invoked by
  * users who are not identified as application services.
  */
-public class UpdateAppserviceRoomDirectoryVsibility(
+public class UpdateAppserviceRoomDirectoryVisibility(
     public override val url: Url,
     public override val body: Body
-) : MatrixRpc.WithAuth<RpcMethod.Put, UpdateAppserviceRoomDirectoryVsibility.Url,
-        UpdateAppserviceRoomDirectoryVsibility.Body,
+) : MatrixRpc.WithAuth<RpcMethod.Put, UpdateAppserviceRoomDirectoryVisibility.Url,
+        UpdateAppserviceRoomDirectoryVisibility.Body,
         Unit> {
     @Resource("/_matrix/client/r0/directory/list/appservice/{networkId}/{roomId}")
     @Serializable
