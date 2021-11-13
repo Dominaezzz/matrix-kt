@@ -16,8 +16,8 @@ public class ClaimKeys(
     /**
      * Query defining the keys to be claimed
      */
-    public override val body: Body? = null
-) : MatrixRpc.WithAuth<RpcMethod.Post, ClaimKeys.Url, ClaimKeys.Body?, ClaimKeys.Response> {
+    public override val body: Body
+) : MatrixRpc.WithAuth<RpcMethod.Post, ClaimKeys.Url, ClaimKeys.Body, ClaimKeys.Response> {
     @Resource("/_matrix/client/r0/keys/claim")
     @Serializable
     public class Url

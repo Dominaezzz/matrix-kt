@@ -25,9 +25,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetLocalAliases(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetLocalAliases.Url, Any?, GetLocalAliases.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetLocalAliases.Url, Nothing, GetLocalAliases.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/rooms/{roomId}/aliases")
     @Serializable

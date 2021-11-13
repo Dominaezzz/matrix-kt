@@ -12,9 +12,9 @@ import kotlinx.serialization.Serializable
  */
 public class Logout(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Post, Logout.Url, Any?, Unit> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Post, Logout.Url, Nothing, Unit> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/logout")
     @Serializable

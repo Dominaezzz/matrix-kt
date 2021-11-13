@@ -31,8 +31,8 @@ import kotlinx.serialization.json.JsonObject
  */
 public class SetRoomStateWithKey(
     public override val url: Url,
-    public override val body: JsonObject? = null
-) : MatrixRpc.WithAuth<RpcMethod.Put, SetRoomStateWithKey.Url, JsonObject?,
+    public override val body: JsonObject
+) : MatrixRpc.WithAuth<RpcMethod.Put, SetRoomStateWithKey.Url, JsonObject,
         SetRoomStateWithKey.Response> {
     @Resource("/_matrix/client/r0/rooms/{roomId}/state/{eventType}/{stateKey}")
     @Serializable

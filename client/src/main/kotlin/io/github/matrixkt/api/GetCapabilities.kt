@@ -12,9 +12,9 @@ import kotlinx.serialization.json.JsonObject
  */
 public class GetCapabilities(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetCapabilities.Url, Any?, GetCapabilities.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetCapabilities.Url, Nothing, GetCapabilities.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/capabilities")
     @Serializable

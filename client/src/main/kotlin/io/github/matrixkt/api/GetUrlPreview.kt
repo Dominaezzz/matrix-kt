@@ -18,9 +18,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetUrlPreview(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetUrlPreview.Url, Any?, GetUrlPreview.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetUrlPreview.Url, Nothing, GetUrlPreview.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/media/r0/preview_url")
     @Serializable

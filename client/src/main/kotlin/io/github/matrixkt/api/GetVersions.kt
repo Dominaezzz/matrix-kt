@@ -30,9 +30,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetVersions(
     public override val url: Url
-) : MatrixRpc<RpcMethod.Get, GetVersions.Url, Any?, GetVersions.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc<RpcMethod.Get, GetVersions.Url, Nothing, GetVersions.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/versions")
     @Serializable

@@ -15,9 +15,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetWhoIs(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetWhoIs.Url, Any?, GetWhoIs.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetWhoIs.Url, Nothing, GetWhoIs.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/admin/whois/{userId}")
     @Serializable

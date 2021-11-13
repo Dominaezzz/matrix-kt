@@ -20,8 +20,8 @@ import kotlinx.serialization.Serializable
  */
 public class SearchUserDirectory(
     public override val url: Url,
-    public override val body: Body? = null
-) : MatrixRpc.WithAuth<RpcMethod.Post, SearchUserDirectory.Url, SearchUserDirectory.Body?,
+    public override val body: Body
+) : MatrixRpc.WithAuth<RpcMethod.Post, SearchUserDirectory.Url, SearchUserDirectory.Body,
         SearchUserDirectory.Response> {
     @Resource("/_matrix/client/r0/user_directory/search")
     @Serializable

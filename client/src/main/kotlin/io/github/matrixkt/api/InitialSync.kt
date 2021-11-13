@@ -21,9 +21,9 @@ import kotlinx.serialization.json.JsonObject
 @Deprecated("This endpoint has been deprecated.")
 public class InitialSync(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, InitialSync.Url, Any?, InitialSync.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, InitialSync.Url, Nothing, InitialSync.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/initialSync")
     @Serializable

@@ -18,9 +18,9 @@ import kotlinx.serialization.Serializable
  */
 public class QueryLocationByProtocol(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, QueryLocationByProtocol.Url, Any?, List<Location>> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, QueryLocationByProtocol.Url, Nothing, List<Location>> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/thirdparty/location/{protocol}")
     @Serializable

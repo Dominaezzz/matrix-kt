@@ -20,9 +20,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetConfig(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetConfig.Url, Any?, GetConfig.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetConfig.Url, Nothing, GetConfig.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/media/r0/config")
     @Serializable

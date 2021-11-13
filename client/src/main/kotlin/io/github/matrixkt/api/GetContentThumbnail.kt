@@ -14,9 +14,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetContentThumbnail(
     public override val url: Url
-) : MatrixRpc<RpcMethod.Get, GetContentThumbnail.Url, Any?, ByteArray> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc<RpcMethod.Get, GetContentThumbnail.Url, Nothing, ByteArray> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/media/r0/thumbnail/{serverName}/{mediaId}")
     @Serializable

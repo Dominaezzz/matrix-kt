@@ -30,9 +30,9 @@ import kotlinx.serialization.Serializable
  */
 public class Sync(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, Sync.Url, Any?, SyncResponse> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, Sync.Url, Nothing, SyncResponse> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/sync")
     @Serializable

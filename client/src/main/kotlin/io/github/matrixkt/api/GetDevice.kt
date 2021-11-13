@@ -11,9 +11,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetDevice(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetDevice.Url, Any?, Device> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetDevice.Url, Nothing, Device> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/devices/{deviceId}")
     @Serializable

@@ -15,9 +15,9 @@ import kotlinx.serialization.json.JsonObject
  */
 public class GetMembersByRoom(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetMembersByRoom.Url, Any?, GetMembersByRoom.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetMembersByRoom.Url, Nothing, GetMembersByRoom.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/rooms/{roomId}/members")
     @Serializable

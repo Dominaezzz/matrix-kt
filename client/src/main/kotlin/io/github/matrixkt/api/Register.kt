@@ -51,8 +51,8 @@ import kotlinx.serialization.Serializable
  */
 public class Register(
     public override val url: Url,
-    public override val body: Body? = null
-) : MatrixRpc<RpcMethod.Post, Register.Url, Register.Body?, Register.Response> {
+    public override val body: Body
+) : MatrixRpc<RpcMethod.Post, Register.Url, Register.Body, Register.Response> {
     @Resource("/_matrix/client/r0/register")
     @Serializable
     public class Url(

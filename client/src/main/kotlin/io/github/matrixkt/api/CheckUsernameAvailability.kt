@@ -21,9 +21,9 @@ import kotlinx.serialization.Serializable
  */
 public class CheckUsernameAvailability(
     public override val url: Url
-) : MatrixRpc<RpcMethod.Get, CheckUsernameAvailability.Url, Any?, CheckUsernameAvailability.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc<RpcMethod.Get, CheckUsernameAvailability.Url, Nothing, CheckUsernameAvailability.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/register/available")
     @Serializable

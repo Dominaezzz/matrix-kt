@@ -13,9 +13,9 @@ import kotlinx.serialization.Serializable
  */
 public class RedirectToSSO(
     public override val url: Url
-) : MatrixRpc<RpcMethod.Get, RedirectToSSO.Url, Any?, Nothing> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc<RpcMethod.Get, RedirectToSSO.Url, Nothing, Nothing> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/login/sso/redirect")
     @Serializable

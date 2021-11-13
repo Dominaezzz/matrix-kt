@@ -14,9 +14,9 @@ import kotlinx.serialization.json.JsonElement
  */
 public class GetNotifications(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetNotifications.Url, Any?, GetNotifications.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetNotifications.Url, Nothing, GetNotifications.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/notifications")
     @Serializable

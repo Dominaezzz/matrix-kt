@@ -18,9 +18,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetAccount3PIDs(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetAccount3PIDs.Url, Any?, GetAccount3PIDs.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetAccount3PIDs.Url, Nothing, GetAccount3PIDs.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/account/3pid")
     @Serializable

@@ -11,9 +11,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetRoomState(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetRoomState.Url, Any?, List<MatrixEvent>> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetRoomState.Url, Nothing, List<MatrixEvent>> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/rooms/{roomId}/state")
     @Serializable

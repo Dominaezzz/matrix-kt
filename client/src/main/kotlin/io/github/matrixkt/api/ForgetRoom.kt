@@ -18,9 +18,9 @@ import kotlinx.serialization.Serializable
  */
 public class ForgetRoom(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Post, ForgetRoom.Url, Any?, Unit> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Post, ForgetRoom.Url, Nothing, Unit> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/rooms/{roomId}/forget")
     @Serializable

@@ -25,8 +25,8 @@ import kotlinx.serialization.Serializable
  */
 public class JoinRoomById(
     public override val url: Url,
-    public override val body: Body? = null
-) : MatrixRpc.WithAuth<RpcMethod.Post, JoinRoomById.Url, JoinRoomById.Body?, JoinRoomById.Response> {
+    public override val body: Body
+) : MatrixRpc.WithAuth<RpcMethod.Post, JoinRoomById.Url, JoinRoomById.Body, JoinRoomById.Response> {
     @Resource("/_matrix/client/r0/rooms/{roomId}/join")
     @Serializable
     public class Url(

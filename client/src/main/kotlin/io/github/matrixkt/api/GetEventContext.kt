@@ -18,9 +18,9 @@ import kotlinx.serialization.json.JsonElement
  */
 public class GetEventContext(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetEventContext.Url, Any?, GetEventContext.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetEventContext.Url, Nothing, GetEventContext.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/rooms/{roomId}/context/{eventId}")
     @Serializable

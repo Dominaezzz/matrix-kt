@@ -18,8 +18,8 @@ import kotlinx.serialization.Serializable
  */
 public class Add3PID(
     public override val url: Url,
-    public override val body: Body? = null
-) : MatrixRpc.WithAuth<RpcMethod.Post, Add3PID.Url, Add3PID.Body?, Unit> {
+    public override val body: Body
+) : MatrixRpc.WithAuth<RpcMethod.Post, Add3PID.Url, Add3PID.Body, Unit> {
     @Resource("/_matrix/client/r0/account/3pid/add")
     @Serializable
     public class Url

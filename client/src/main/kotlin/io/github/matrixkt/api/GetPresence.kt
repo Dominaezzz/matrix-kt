@@ -12,9 +12,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetPresence(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetPresence.Url, Any?, GetPresence.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetPresence.Url, Nothing, GetPresence.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/presence/{userId}/status")
     @Serializable

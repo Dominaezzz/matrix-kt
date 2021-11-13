@@ -10,9 +10,9 @@ import kotlinx.serialization.Serializable
  */
 public class DeleteRoomTag(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Delete, DeleteRoomTag.Url, Any?, Unit> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Delete, DeleteRoomTag.Url, Nothing, Unit> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/user/{userId}/rooms/{roomId}/tags/{tag}")
     @Serializable

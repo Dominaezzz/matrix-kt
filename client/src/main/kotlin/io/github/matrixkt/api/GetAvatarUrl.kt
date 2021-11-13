@@ -13,9 +13,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetAvatarUrl(
     public override val url: Url
-) : MatrixRpc<RpcMethod.Get, GetAvatarUrl.Url, Any?, GetAvatarUrl.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc<RpcMethod.Get, GetAvatarUrl.Url, Nothing, GetAvatarUrl.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/profile/{userId}/avatar_url")
     @Serializable

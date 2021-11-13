@@ -13,9 +13,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetProtocols(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetProtocols.Url, Any?, Map<String, Protocol>> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetProtocols.Url, Nothing, Map<String, Protocol>> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/thirdparty/protocols")
     @Serializable

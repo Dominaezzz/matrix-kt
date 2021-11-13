@@ -18,9 +18,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetKeysChanges(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetKeysChanges.Url, Any?, GetKeysChanges.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetKeysChanges.Url, Nothing, GetKeysChanges.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/keys/changes")
     @Serializable

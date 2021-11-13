@@ -17,8 +17,8 @@ import kotlinx.serialization.Serializable
  */
 public class Unbind3pidFromAccount(
     public override val url: Url,
-    public override val body: Body? = null
-) : MatrixRpc.WithAuth<RpcMethod.Post, Unbind3pidFromAccount.Url, Unbind3pidFromAccount.Body?,
+    public override val body: Body
+) : MatrixRpc.WithAuth<RpcMethod.Post, Unbind3pidFromAccount.Url, Unbind3pidFromAccount.Body,
         Unbind3pidFromAccount.Response> {
     @Resource("/_matrix/client/r0/account/3pid/unbind")
     @Serializable

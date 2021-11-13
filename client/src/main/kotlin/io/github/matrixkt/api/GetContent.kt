@@ -11,9 +11,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetContent(
     public override val url: Url
-) : MatrixRpc<RpcMethod.Get, GetContent.Url, Any?, ByteArray> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc<RpcMethod.Get, GetContent.Url, Nothing, ByteArray> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/media/r0/download/{serverName}/{mediaId}")
     @Serializable

@@ -12,9 +12,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetDisplayName(
     public override val url: Url
-) : MatrixRpc<RpcMethod.Get, GetDisplayName.Url, Any?, GetDisplayName.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc<RpcMethod.Get, GetDisplayName.Url, Nothing, GetDisplayName.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/profile/{userId}/displayname")
     @Serializable

@@ -25,8 +25,8 @@ import kotlinx.serialization.Serializable
  */
 public class DeactivateAccount(
     public override val url: Url,
-    public override val body: Body? = null
-) : MatrixRpc.WithAuth<RpcMethod.Post, DeactivateAccount.Url, DeactivateAccount.Body?, DeactivateAccount.Response> {
+    public override val body: Body
+) : MatrixRpc.WithAuth<RpcMethod.Post, DeactivateAccount.Url, DeactivateAccount.Body, DeactivateAccount.Response> {
     @Resource("/_matrix/client/r0/account/deactivate")
     @Serializable
     public class Url

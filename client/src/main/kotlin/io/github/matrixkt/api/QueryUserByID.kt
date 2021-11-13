@@ -11,9 +11,9 @@ import kotlinx.serialization.Serializable
  */
 public class QueryUserByID(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, QueryUserByID.Url, Any?, List<User>> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, QueryUserByID.Url, Nothing, List<User>> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/thirdparty/user")
     @Serializable

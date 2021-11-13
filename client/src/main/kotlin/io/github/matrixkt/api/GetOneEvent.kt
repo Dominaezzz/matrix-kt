@@ -18,9 +18,9 @@ import kotlinx.serialization.Serializable
 @Deprecated("This endpoint has been deprecated.")
 public class GetOneEvent(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetOneEvent.Url, Any?, MatrixEvent> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetOneEvent.Url, Nothing, MatrixEvent> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/events/{eventId}")
     @Serializable

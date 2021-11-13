@@ -11,9 +11,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetRoomVisibilityOnDirectory(
     public override val url: Url
-) : MatrixRpc<RpcMethod.Get, GetRoomVisibilityOnDirectory.Url, Any?, GetRoomVisibilityOnDirectory.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc<RpcMethod.Get, GetRoomVisibilityOnDirectory.Url, Nothing, GetRoomVisibilityOnDirectory.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/directory/list/room/{roomId}")
     @Serializable

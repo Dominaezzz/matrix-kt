@@ -12,9 +12,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetPushRule(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetPushRule.Url, Any?, PushRule> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetPushRule.Url, Nothing, PushRule> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/pushrules/{scope}/{kind}/{ruleId}")
     @Serializable

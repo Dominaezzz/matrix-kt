@@ -15,9 +15,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetPublicRooms(
     public override val url: Url
-) : MatrixRpc<RpcMethod.Get, GetPublicRooms.Url, Any?, GetPublicRooms.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc<RpcMethod.Get, GetPublicRooms.Url, Nothing, GetPublicRooms.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/publicRooms")
     @Serializable

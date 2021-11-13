@@ -14,9 +14,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetUserProfile(
     public override val url: Url
-) : MatrixRpc<RpcMethod.Get, GetUserProfile.Url, Any?, GetUserProfile.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc<RpcMethod.Get, GetUserProfile.Url, Nothing, GetUserProfile.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/profile/{userId}")
     @Serializable

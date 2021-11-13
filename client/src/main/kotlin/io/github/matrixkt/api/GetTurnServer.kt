@@ -11,9 +11,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetTurnServer(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetTurnServer.Url, Any?, GetTurnServer.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetTurnServer.Url, Nothing, GetTurnServer.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/voip/turnServer")
     @Serializable

@@ -20,9 +20,9 @@ import kotlinx.serialization.Serializable
  */
 public class LeaveRoom(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Post, LeaveRoom.Url, Any?, Unit> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Post, LeaveRoom.Url, Nothing, Unit> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/rooms/{roomId}/leave")
     @Serializable

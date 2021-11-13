@@ -12,9 +12,9 @@ import kotlinx.serialization.json.JsonObject
  */
 public class GetAccountData(
     public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Get, GetAccountData.Url, Any?, JsonObject> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc.WithAuth<RpcMethod.Get, GetAccountData.Url, Nothing, JsonObject> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/user/{userId}/account_data/{type}")
     @Serializable

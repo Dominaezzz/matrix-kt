@@ -17,8 +17,8 @@ import kotlinx.serialization.Serializable
  */
 public class Delete3pidFromAccount(
     public override val url: Url,
-    public override val body: Body? = null
-) : MatrixRpc.WithAuth<RpcMethod.Post, Delete3pidFromAccount.Url, Delete3pidFromAccount.Body?,
+    public override val body: Body
+) : MatrixRpc.WithAuth<RpcMethod.Post, Delete3pidFromAccount.Url, Delete3pidFromAccount.Body,
         Delete3pidFromAccount.Response> {
     @Resource("/_matrix/client/r0/account/3pid/delete")
     @Serializable

@@ -11,9 +11,9 @@ import kotlinx.serialization.Serializable
  */
 public class GetLoginFlows(
     public override val url: Url
-) : MatrixRpc<RpcMethod.Get, GetLoginFlows.Url, Any?, GetLoginFlows.Response> {
-    public override val body: Any?
-        get() = null
+) : MatrixRpc<RpcMethod.Get, GetLoginFlows.Url, Nothing, GetLoginFlows.Response> {
+    public override val body: Nothing
+        get() = TODO()
 
     @Resource("/_matrix/client/r0/login")
     @Serializable
