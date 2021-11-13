@@ -1,5 +1,6 @@
 package io.github.matrixkt.api
 
+import io.github.matrixkt.models.CrossSigningKey
 import io.github.matrixkt.models.DeviceKeys
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
@@ -52,7 +53,7 @@ public class QueryKeys(
          * Information on the queried devices. A map from user ID, to a
          * map from device ID to device information.  For each device,
          * the information returned will be the same as uploaded via
-         * ``/keys/upload``, with the addition of an ``unsigned``
+         * `/keys/upload`, with the addition of an `unsigned`
          * property.
          */
         @SerialName("device_keys")
@@ -64,8 +65,35 @@ public class QueryKeys(
          *
          * If the homeserver could be reached, but the user or device
          * was unknown, no failure is recorded. Instead, the corresponding
-         * user or device is missing from the ``device_keys`` result.
+         * user or device is missing from the `device_keys` result.
          */
-        public val failures: Map<String, JsonObject> = emptyMap()
+        public val failures: Map<String, JsonObject> = emptyMap(),
+        /**
+         * Information on the master cross-signing keys of the queried users.
+         * A map from user ID, to master key information.  For each key, the
+         * information returned will be the same as uploaded via
+         * `/keys/device_signing/upload`, along with the signatures
+         * uploaded via `/keys/signatures/upload` that the requesting user
+         * is allowed to see.
+         */
+        @SerialName("master_keys")
+        public val masterKeys: Map<String, CrossSigningKey>? = null,
+        /**
+         * Information on the self-signing keys of the queried users. A map
+         * from user ID, to self-signing key information.  For each key, the
+         * information returned will be the same as uploaded via
+         * `/keys/device_signing/upload`.
+         */
+        @SerialName("self_signing_keys")
+        public val selfSigningKeys: Map<String, CrossSigningKey>? = null,
+        /**
+         * Information on the user-signing key of the user making the
+         * request, if they queried their own device information. A map
+         * from user ID, to user-signing key information.  The
+         * information returned will be the same as uploaded via
+         * `/keys/device_signing/upload`.
+         */
+        @SerialName("user_signing_keys")
+        public val userSigningKeys: Map<String, CrossSigningKey>? = null
     )
 }

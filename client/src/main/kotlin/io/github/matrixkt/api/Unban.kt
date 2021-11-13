@@ -28,6 +28,11 @@ public class Unban(
     @Serializable
     public class Body(
         /**
+         * Optional reason to be included as the `reason` on the subsequent
+         * membership event.
+         */
+        public val reason: String? = null,
+        /**
          * The fully qualified user ID of the user being unbanned.
          */
         @SerialName("user_id")

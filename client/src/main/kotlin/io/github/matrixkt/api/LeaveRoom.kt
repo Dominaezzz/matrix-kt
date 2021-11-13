@@ -3,6 +3,7 @@ package io.github.matrixkt.api
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
 import io.github.matrixkt.utils.resource.Resource
+import kotlin.String
 import kotlinx.serialization.Serializable
 
 /**
@@ -19,11 +20,9 @@ import kotlinx.serialization.Serializable
  * they were previously allowed to see.
  */
 public class LeaveRoom(
-    public override val url: Url
-) : MatrixRpc.WithAuth<RpcMethod.Post, LeaveRoom.Url, Nothing, Unit> {
-    public override val body: Nothing
-        get() = TODO()
-
+    public override val url: Url,
+    public override val body: Body
+) : MatrixRpc.WithAuth<RpcMethod.Post, LeaveRoom.Url, LeaveRoom.Body, Unit> {
     @Resource("/_matrix/client/r0/rooms/{roomId}/leave")
     @Serializable
     public class Url(
@@ -31,5 +30,14 @@ public class LeaveRoom(
          * The room identifier to leave.
          */
         public val roomId: String
+    )
+
+    @Serializable
+    public class Body(
+        /**
+         * Optional reason to be included as the `reason` on the subsequent
+         * membership event.
+         */
+        public val reason: String? = null
     )
 }

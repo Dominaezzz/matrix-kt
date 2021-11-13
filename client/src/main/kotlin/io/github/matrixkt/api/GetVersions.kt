@@ -9,14 +9,12 @@ import kotlinx.serialization.Serializable
 /**
  * Gets the versions of the specification supported by the server.
  *
- * Values will take the form ``rX.Y.Z``.
- *
- * Only the latest ``Z`` value will be reported for each supported ``X.Y`` value.
- * i.e. if the server implements ``r0.0.0``, ``r0.0.1``, and ``r1.2.0``, it will report ``r0.0.1``
- * and ``r1.2.0``.
+ * Values will take the form `vX.Y` or `rX.Y.Z` in historical cases. See
+ * [the Specification Versioning](../#specification-versions) for more
+ * information.
  *
  * The server may additionally advertise experimental features it supports
- * through ``unstable_features``. These features should be namespaced and
+ * through `unstable_features`. These features should be namespaced and
  * may optionally include version information within their name if desired.
  * Features listed here are not for optionally toggling parts of the Matrix
  * specification and should only be used to advertise support for a feature

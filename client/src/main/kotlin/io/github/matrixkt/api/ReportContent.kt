@@ -31,11 +31,11 @@ public class ReportContent(
         /**
          * The reason the content is being reported. May be blank.
          */
-        public val reason: String,
+        public val reason: String? = null,
         /**
          * The score to rate this content as where -100 is most offensive
          * and 0 is inoffensive.
          */
-        public val score: Long
+        public val score: Long? = null
     )
 }

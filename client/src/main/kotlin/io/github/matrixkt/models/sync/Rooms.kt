@@ -17,5 +17,10 @@ public data class Rooms(
     /**
      * The rooms that the user has left or been banned from.
      */
-    val leave: Map<String, LeftRoom> = emptyMap()
+    val leave: Map<String, LeftRoom> = emptyMap(),
+
+    /**
+     * The rooms that the user has knocked upon, mapped as room ID to room information.
+     */
+    val knock: Map<String, KnockedRoom>? = emptyMap()
 )

@@ -36,6 +36,6 @@ public class SendToDevice(
          * device ID to message body. The device ID may also be `*`,
          * meaning all known devices for the user.
          */
-        public val messages: Map<String, Map<String, JsonObject>>? = null
+        public val messages: Map<String, Map<String, JsonObject>>
     )
 }

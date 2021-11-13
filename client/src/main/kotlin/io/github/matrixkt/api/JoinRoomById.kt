@@ -8,8 +8,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * *Note that this API requires a room ID, not alias.* ``/join/{roomIdOrAlias}`` *exists if you have
- * a room alias.*
+ * *Note that this API requires a room ID, not alias.*
+ * `/join/{roomIdOrAlias}` *exists if you have a room alias.*
  *
  * This API starts a user participating in a particular room, if that user
  * is allowed to participate in that room. After this call, the client is
@@ -17,11 +17,8 @@ import kotlinx.serialization.Serializable
  * events associated with the room until the user leaves the room.
  *
  * After a user has joined a room, the room will appear as an entry in the
- * response of the |/initialSync|_ and |/sync|_ APIs.
- *
- * If a ``third_party_signed`` was supplied, the homeserver must verify
- * that it matches a pending ``m.room.third_party_invite`` event in the
- * room, and perform key validity checking if required by the event.
+ * response of the [`/initialSync`](/client-server-api/#get_matrixclientv3initialsync)
+ * and [`/sync`](/client-server-api/#get_matrixclientv3sync) APIs.
  */
 public class JoinRoomById(
     public override val url: Url,
@@ -39,8 +36,14 @@ public class JoinRoomById(
     @Serializable
     public class Body(
         /**
-         * A signature of an ``m.third_party_invite`` token to prove that this user
-         * owns a third party identity which has been invited to the room.
+         * Optional reason to be included as the `reason` on the subsequent
+         * membership event.
+         */
+        public val reason: String? = null,
+        /**
+         * If supplied, the homeserver must verify that it matches a pending
+         * `m.room.third_party_invite` event in the room, and perform
+         * key validity checking if required by the event.
          */
         @SerialName("third_party_signed")
         public val thirdPartySigned: ThirdPartySigned? = null

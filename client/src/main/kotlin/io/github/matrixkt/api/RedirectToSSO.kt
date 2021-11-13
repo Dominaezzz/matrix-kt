@@ -9,7 +9,9 @@ import kotlinx.serialization.Serializable
  * A web-based Matrix client should instruct the user's browser to
  * navigate to this endpoint in order to log in via SSO.
  *
- * The server MUST respond with an HTTP redirect to the SSO interface.
+ * The server MUST respond with an HTTP redirect to the SSO interface,
+ * or present a page which lets the user select an IdP to continue
+ * with in the event multiple are supported by the server.
  */
 public class RedirectToSSO(
     public override val url: Url

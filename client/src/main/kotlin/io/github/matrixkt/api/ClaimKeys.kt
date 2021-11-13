@@ -46,7 +46,7 @@ public class ClaimKeys(
          *
          * If the homeserver could be reached, but the user or device
          * was unknown, no failure is recorded. Instead, the corresponding
-         * user or device is missing from the ``one_time_keys`` result.
+         * user or device is missing from the [oneTimeKeys] result.
          */
         public val failures: Map<String, JsonObject> = emptyMap(),
         /**
