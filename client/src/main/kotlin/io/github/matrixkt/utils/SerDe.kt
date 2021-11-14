@@ -27,7 +27,7 @@ import kotlinx.serialization.modules.subclass
 import io.github.matrixkt.models.events.contents.secret.RequestContent as SecretRequestContent
 import io.github.matrixkt.models.events.contents.secret.SendContent as SecretSendContent
 
-public val MatrixSerialModule: SerializersModule = SerializersModule {
+public val EventSerialModule: SerializersModule = SerializersModule {
     contextual(AliasesContent.serializer())
     contextual(CanonicalAliasContent.serializer())
     contextual(CreateContent.serializer())
@@ -131,6 +131,16 @@ public val MatrixSerialModule: SerializersModule = SerializersModule {
         subclass(SecretRequestContent.Cancellation.serializer())
     }
 
+    polymorphic(KeyDescription::class) {
+        subclass(KeyDescription.AesHmacSha2.serializer())
+    }
+
+    polymorphic(Passphrase::class) {
+        subclass(Passphrase.PBKDF2.serializer())
+    }
+}
+
+public val ClientServerSerialModule: SerializersModule = SerializersModule {
     polymorphic(UserIdentifier::class) {
         subclass(UserIdentifier.Matrix.serializer())
         subclass(UserIdentifier.PhoneNumber.serializer())
@@ -184,18 +194,15 @@ public val MatrixSerialModule: SerializersModule = SerializersModule {
         subclass(Login.Body.Password.serializer())
         subclass(Login.Body.Token.serializer())
     }
+}
+
+public val MatrixSerialModule: SerializersModule = SerializersModule {
+    include(EventSerialModule)
+    include(ClientServerSerialModule)
 
     // Workaround for https://github.com/Dominaezzz/matrix-kt/issues/2
     contextual(Login.Body.Password::class, Login.Body.serializer() as KSerializer<Login.Body.Password>)
     contextual(Login.Body.Token::class, Login.Body.serializer() as KSerializer<Login.Body.Token>)
-
-    polymorphic(KeyDescription::class) {
-        subclass(KeyDescription.AesHmacSha2.serializer())
-    }
-
-    polymorphic(Passphrase::class) {
-        subclass(Passphrase.PBKDF2.serializer())
-    }
 }
 
 public val MatrixJson: Json = Json {
