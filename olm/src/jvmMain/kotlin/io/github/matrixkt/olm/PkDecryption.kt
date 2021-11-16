@@ -130,8 +130,8 @@ public actual class PkDecryption {
 
         public actual fun unpickle(key: ByteArray, pickle: String): PkDecryption {
             return create { ptr, publicKey, publicKeyLength ->
-                genericUnpickle(ptr, key, pickle, { ptr, key, keyLen, pickle, pickleLen ->
-                    olm_unpickle_pk_decryption(ptr, key, keyLen, pickle, pickleLen, publicKey, publicKeyLength)
+                genericUnpickle(ptr, key, pickle, { _ptr, key, keyLen, pickle, pickleLen ->
+                    olm_unpickle_pk_decryption(_ptr, key, keyLen, pickle, pickleLen, publicKey, publicKeyLength)
                 }, { checkError(ptr, it) })
             }
         }
