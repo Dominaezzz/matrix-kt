@@ -3,10 +3,6 @@
 package io.github.matrixkt.models.events
 
 import kotlinx.serialization.*
-import kotlinx.serialization.json.JsonContentPolymorphicSerializer
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
-import kotlin.reflect.KClass
 
 public sealed class Event<out Content> {
     /**
@@ -22,55 +18,25 @@ public sealed class Event<out Content> {
     public abstract val type: String
 }
 
-@Serializable(RoomEventSerializer::class)
-public sealed class RoomEvent<out Content, out UnsignedData> : Event<Content>() {
-    /**
-     * The globally unique event identifier.
-     */
-    @SerialName("event_id")
-    public abstract val eventId: String
-
-    /**
-     * Contains the fully-qualified ID of the user who sent this event.
-     */
-    public abstract val sender: String
-
-    /**
-     * Timestamp in milliseconds on originating homeserver when this event was sent.
-     */
-    @SerialName("origin_server_ts")
-    public abstract val originServerTimestamp: Long
-
-    /**
-     * Contains optional extra information about the event.
-     */
-    public abstract val unsigned: UnsignedData?
-
-    /**
-     * The ID of the room associated with this event.
-     * Will not be present on events that arrive through `/sync`,
-     * despite being required everywhere else.
-     */
-    @SerialName("room_id")
-    public abstract val roomId: String
-}
-
-public class RoomEventSerializer<Content, UnsignedData>(
-    private val contentSerializer: KSerializer<Content>,
-    private val unsignedDataSerializer: KSerializer<UnsignedData>
-) : JsonContentPolymorphicSerializer<RoomEvent<Content, UnsignedData>>(RoomEvent::class as KClass<RoomEvent<Content, UnsignedData>>) {
-    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out RoomEvent<Content, UnsignedData>> {
-        require(element is JsonObject)
-        return if (element.containsKey("stateKey")) {
-            StateEvent.serializer(contentSerializer, unsignedDataSerializer)
-        } else {
-            MessageEvent.serializer(contentSerializer, unsignedDataSerializer)
-        }
+public fun <Content : Any, UnsignedData : Any> RoomEvent(
+    type: String,
+    content: Content,
+    eventId: String,
+    sender: String,
+    originServerTimestamp: Long,
+    unsigned: UnsignedData? = null,
+    roomId: String,
+    stateKey: String? = null,
+    prevContent: Content? = null
+): RoomEvent<Content, UnsignedData> {
+    return if (stateKey != null) {
+        StateEvent(type, content, eventId, sender, originServerTimestamp, unsigned, roomId, stateKey, prevContent)
+    } else {
+        MessageEvent(type, content, eventId, sender, originServerTimestamp, unsigned, roomId)
     }
 }
 
-@Serializable
-public data class MessageEvent<out Content, out UnsignedData>(
+private data class MessageEvent<Content, UnsignedData>(
     override val type: String,
 
     override val content: Content,
@@ -87,46 +53,16 @@ public data class MessageEvent<out Content, out UnsignedData>(
 
     @SerialName("room_id")
     override val roomId: String
-) : RoomEvent<Content, UnsignedData>()
-
-@Serializable
-public data class StateEvent<out Content, out UnsignedData>(
-    override val type: String,
-
-    override val content: Content,
-
-    @SerialName("event_id")
-    override val eventId: String,
-
-    override val sender: String,
-
-    @SerialName("origin_server_ts")
-    override val originServerTimestamp: Long,
-
-    override val unsigned: UnsignedData? = null,
-
-    @SerialName("room_id")
-    override val roomId: String,
-
-    /**
-     * A unique key which defines the overwriting semantics for this piece of room state.
-     * This value is often a zero-length string.
-     * The presence of this key makes this event a State Event.
-     * State keys starting with an @ are reserved for referencing user IDs, such as room members.
-     * With the exception of a few events, state events set with a given user's ID as the state key MUST only be set by that user.
-     */
+) : RoomEvent<Content, UnsignedData>() {
     @SerialName("state_key")
-    val stateKey: String,
+    override val stateKey: String? get() = null
 
-    /**
-     * The previous content for this event. If there is no previous content, this key will be missing.
-     */
     @SerialName("prev_content")
-    val prevContent: Content? = null
-) : RoomEvent<Content, UnsignedData>()
+    override val prevContent: Content? get() = null
+}
 
 @Serializable
-public data class EphemeralEvent<out Content>(
+public data class EphemeralEvent<Content>(
     override val type: String,
 
     override val content: Content,
@@ -137,9 +73,28 @@ public data class EphemeralEvent<out Content>(
     val sender: String
 ) : Event<Content>()
 
+// @Serializable
+public sealed class AccountEvent<out Content> : Event<Content>() {
+    @SerialName("room_id")
+    public abstract val roomId: String?
+}
+
 @Serializable
-public data class AccountEvent<out Content>(
+public data class GlobalAccountEvent<out Content>(
     override val type: String,
 
     override val content: Content
-) : Event<Content>()
+) : AccountEvent<Content>() {
+    @SerialName("room_id")
+    override val roomId: String? get() = null
+}
+
+@Serializable
+public data class RoomAccountEvent<out Content>(
+    override val type: String,
+
+    override val content: Content,
+
+    @SerialName("room_id")
+    override val roomId: String
+) : AccountEvent<Content>()
