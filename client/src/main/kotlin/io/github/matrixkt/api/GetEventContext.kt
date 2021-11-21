@@ -1,12 +1,13 @@
 package io.github.matrixkt.api
 
 import io.github.matrixkt.models.events.MatrixEvent
+import io.github.matrixkt.models.events.StateEvent
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
 import io.github.matrixkt.utils.resource.Resource
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 
 /**
  * This API returns a number of events that happened just before and
@@ -78,6 +79,6 @@ public class GetEventContext(
         /**
          * The state of the room at the last event returned.
          */
-        public val state: List<JsonElement> = emptyList()
+        public val state: List<StateEvent<JsonObject, JsonObject>> = emptyList()
     )
 }

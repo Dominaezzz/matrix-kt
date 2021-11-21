@@ -1,8 +1,9 @@
 package io.github.matrixkt.models.search
 
-import io.github.matrixkt.models.events.MatrixEvent
+import io.github.matrixkt.models.events.StateEvent
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 @Serializable
 public class ResultRoomEvents(
@@ -27,7 +28,7 @@ public class ResultRoomEvents(
      *
      * The string key is the room ID for which the State Event array belongs to.
      */
-    public val state: Map<String, MatrixEvent> = emptyMap(),
+    public val state: Map<String, StateEvent<JsonObject, JsonObject>> = emptyMap(),
 
     /**
      * Any groups that were requested.

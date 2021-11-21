@@ -2,10 +2,12 @@ package io.github.matrixkt.api
 
 import io.github.matrixkt.models.Direction
 import io.github.matrixkt.models.events.MatrixEvent
+import io.github.matrixkt.models.events.StateEvent
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
 import io.github.matrixkt.utils.resource.Resource
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 /**
  * This API returns a list of message and state events for a room. It uses
@@ -98,6 +100,6 @@ public class GetRoomEvents(
          * sent to the client in prior calls to this endpoint, assuming
          * the membership of those members has not changed.
          */
-        public val state: List<MatrixEvent> = emptyList()
+        public val state: List<StateEvent<JsonObject, JsonObject>> = emptyList()
     )
 }
