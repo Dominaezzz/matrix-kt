@@ -107,10 +107,12 @@ public val EventSerialModule: SerializersModule = SerializersModule {
 
     polymorphic(StartContent.ToDevice::class) {
         subclass(StartContent.SasV1.ToDevice.serializer())
+        subclass(StartContent.ReciprocateV1.ToDevice.serializer())
     }
 
     polymorphic(StartContent.InRoom::class) {
         subclass(StartContent.SasV1.InRoom.serializer())
+        subclass(StartContent.ReciprocateV1.InRoom.serializer())
     }
 
     polymorphic(AcceptContent.ToDevice::class) {

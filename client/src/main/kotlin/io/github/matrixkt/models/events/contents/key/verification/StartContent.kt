@@ -52,6 +52,9 @@ public interface StartContent {
         public abstract val relatesTo: VerificationRelatesTo
     }
 
+    /**
+     * Begins a SAS key verification process using the `m.sas.v1` method.
+     */
     public sealed interface SasV1 : StartContent {
         @SerialName("next_method")
         public override val nextMethod: String? get() = null
@@ -121,5 +124,43 @@ public interface StartContent {
             @SerialName("short_authentication_string")
             override val shortAuthenticationString: List<String>
         ) : SasV1, StartContent.InRoom()
+    }
+
+    /**
+     * Begins a key verification process using the `m.reciprocate.v1` method,
+     * after scanning a QR code.
+     */
+    public sealed interface ReciprocateV1 : StartContent {
+        @SerialName("next_method")
+        public override val nextMethod: String? get() = null
+
+        /**
+         * The shared secret from the QR code, encoded using unpadded base64.
+         */
+        public val secret: String
+
+        @SerialName("m.reciprocate.v1")
+        @Serializable
+        public data class ToDevice(
+            @SerialName("from_device")
+            override val fromDevice: String,
+
+            @SerialName("transaction_id")
+            override val transactionId: String,
+
+            override val secret: String
+        ) : ReciprocateV1, StartContent.ToDevice()
+
+        @SerialName("m.reciprocate.v1")
+        @Serializable
+        public data class InRoom(
+            @SerialName("from_device")
+            override val fromDevice: String,
+
+            @SerialName("m.relates_to")
+            override val relatesTo: VerificationRelatesTo,
+
+            override val secret: String
+        ) : ReciprocateV1, StartContent.InRoom()
     }
 }
