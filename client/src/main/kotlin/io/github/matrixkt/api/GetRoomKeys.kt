@@ -29,6 +29,6 @@ public class GetRoomKeys(
         /**
          * A map of room IDs to room key backup data.
          */
-        public val rooms: Map<String, RoomKeyBackup>? = null
+        public val rooms: Map<String, RoomKeyBackup>
     )
 }
