@@ -7,7 +7,7 @@ import io.github.matrixkt.utils.rpc
 import io.ktor.client.*
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.http.*
-import testutils.runSuspendTest
+import io.ktor.test.dispatcher.*
 import utils.respond
 import utils.respondJson
 import kotlin.test.*
@@ -22,7 +22,7 @@ class ClientTests {
     }
 
     @Test
-    fun testCreateRoom() = runSuspendTest {
+    fun testCreateRoom() = testSuspend {
         val client = HttpClient(MockEngine) {
             engine {
                 addHandler {
@@ -53,7 +53,7 @@ class ClientTests {
     }
 
     @Test
-    fun testJoinRoom() = runSuspendTest {
+    fun testJoinRoom() = testSuspend {
         val engine = MockEngine {
             // language=json
             respondJson("""
@@ -101,7 +101,7 @@ class ClientTests {
     }
 
     @Test
-    fun testGetThumbnail() = runSuspendTest {
+    fun testGetThumbnail() = testSuspend {
         val mockEngine = MockEngine.create {
             addHandler {
                 // language=json
@@ -189,7 +189,7 @@ class ClientTests {
     }
 
     @Test
-    fun testResolveRoom() = runSuspendTest {
+    fun testResolveRoom() = testSuspend {
         val mockEngine = MockEngine.create {
             addHandler {
                 respond(GetRoomIdByAlias.Response(
@@ -238,7 +238,7 @@ class ClientTests {
     }
 
     @Test
-    fun testRegister() = runSuspendTest {
+    fun testRegister() = testSuspend {
         val client = HttpClient(MockEngine) {
             engine {
                 addHandler {

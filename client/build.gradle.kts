@@ -46,8 +46,8 @@ kotlin {
             dependencies {
                 implementation(kotlin("test"))
 
+                implementation("io.ktor:ktor-test-dispatcher:$ktorVersion")
                 implementation("io.ktor:ktor-client-mock:$ktorVersion")
-                implementation(project(":testutils"))
             }
         }
     }
