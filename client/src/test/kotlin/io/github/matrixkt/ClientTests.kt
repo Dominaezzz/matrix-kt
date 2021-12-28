@@ -11,8 +11,9 @@ import io.ktor.client.engine.mock.MockEngine
 import io.ktor.http.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.put
 import utils.respond
-import utils.respondJson
 import kotlin.test.*
 
 class ClientTests {
@@ -58,14 +59,10 @@ class ClientTests {
     @Test
     fun testJoinRoom() = runTest {
         val engine = MockEngine {
-            // language=json
-            respondJson("""
-                {
-                  "errcode": "M_LIMIT_EXCEEDED",
-                  "error": "Too many requests",
-                  "retry_after_ms": 2000
-                }
-            """, HttpStatusCode.TooManyRequests)
+            respond<MatrixError>(
+                MatrixError.LimitExceeded("Too many requests", 2000L),
+                HttpStatusCode.TooManyRequests
+            )
         }
         val client = HttpClient(engine) {
             MatrixConfig(baseUrl)
@@ -107,41 +104,28 @@ class ClientTests {
     fun testGetThumbnail() = runTest {
         val mockEngine = MockEngine.create {
             addHandler {
-                // language=json
-                respondJson("""
-                    {
-                      "errcode": "M_UNKNOWN",
-                      "error": "Cannot generate thumbnails for the requested content"
-                    }
-                """, HttpStatusCode.BadRequest)
+                respond<MatrixError>(
+                    MatrixError.Unknown("Cannot generate thumbnails for the requested content"),
+                    HttpStatusCode.BadRequest
+                )
             }
             addHandler {
-                // language=json
-                respondJson("""
-                    {
-                      "errcode": "M_TOO_LARGE",
-                      "error": "Content is too large to thumbnail"
-                    }
-                """, HttpStatusCode.PayloadTooLarge)
+                respond<MatrixError>(
+                    MatrixError.TooLarge("Content is too large to thumbnail"),
+                    HttpStatusCode.PayloadTooLarge
+                )
             }
             addHandler {
-                // language=json
-                respondJson("""
-                    {
-                      "errcode": "M_LIMIT_EXCEEDED",
-                      "error": "Too many requests",
-                      "retry_after_ms": 2000
-                    }
-                """, HttpStatusCode.TooManyRequests)
+                respond<MatrixError>(
+                    MatrixError.LimitExceeded("Too many requests", 2000L),
+                    HttpStatusCode.TooManyRequests
+                )
             }
             addHandler {
-                // language=json
-                respondJson("""
-                    {
-                      "errcode": "M_TOO_LARGE",
-                      "error": "Content is too large to thumbnail"
-                    }
-                """, HttpStatusCode.BadGateway)
+                respond<MatrixError>(
+                    MatrixError.TooLarge("Content is too large to thumbnail"),
+                    HttpStatusCode.BadGateway
+                )
             }
         }
 
@@ -179,16 +163,6 @@ class ClientTests {
             }
             assertEquals("Content is too large to thumbnail", error.error)
         }
-
-        for (requestData in (mockEngine as MockEngine).requestHistory) {
-            assertEquals(
-                "https://matrix-client.popular.org/more/stuff/here/_matrix/media/r0/thumbnail/example.org/ascERGshawAWawugaAcauga?width=64&height=64&method=scale&allow_remote=false",
-                requestData.url.toString())
-            assertEquals("64", requestData.url.parameters["width"])
-            assertEquals("64", requestData.url.parameters["height"])
-            assertEquals("scale", requestData.url.parameters["method"])
-            assertEquals("false", requestData.url.parameters["allow_remote"])
-        }
     }
 
     @Test
@@ -201,13 +175,10 @@ class ClientTests {
                 ))
             }
             addHandler {
-                // language=json
-                respondJson("""
-                    {
-                      "errcode": "M_NOT_FOUND",
-                      "error": "Room alias #monkeys:matrix.org not found."
-                    }
-                """, HttpStatusCode.NotFound)
+                respond<MatrixError>(
+                    MatrixError.NotFound("Room alias #monkeys:matrix.org not found."),
+                    HttpStatusCode.NotFound
+                )
             }
         }
 
@@ -252,55 +223,45 @@ class ClientTests {
                     ))
                 }
                 addHandler {
-                    // language=json
-                    respondJson("""
-                        {
-                          "errcode": "M_USER_IN_USE",
-                          "error": "Desired user ID is already taken."
-                        }
-                    """, HttpStatusCode.BadRequest)
+                    respond<MatrixError>(
+                        MatrixError.UserInUse("Desired user ID is already taken."),
+                        HttpStatusCode.BadRequest
+                    )
                 }
                 addHandler {
-                    // language=json
-                    respondJson("""
-                        {
-                          "flows": [
-                            {
-                              "stages": [
+                    respond(
+                        AuthenticationResponse(
+                            flows = listOf(
+                                AuthenticationResponse.FlowInformation(
+                                    stages = listOf(
+                                        "example.type.foo"
+                                    )
+                                )
+                            ),
+                            params = mapOf(
+                                "example.type.baz" to buildJsonObject {
+                                    put("example_key", "foobar")
+                                }
+                            ),
+                            session = "xxxxxxyz",
+                            completed = listOf(
                                 "example.type.foo"
-                              ]
-                            }
-                          ],
-                          "params": {
-                            "example.type.baz": {
-                              "example_key": "foobar"
-                            }
-                          },
-                          "session": "xxxxxxyz",
-                          "completed": [
-                            "example.type.foo"
-                          ]
-                        }
-                    """, HttpStatusCode.Unauthorized)
+                            )
+                        ),
+                        HttpStatusCode.Unauthorized
+                    )
                 }
                 addHandler {
-                    // language=json
-                    respondJson("""
-                        {
-                          "errcode": "M_FORBIDDEN",
-                          "error": "Registration is disabled"
-                        }
-                    """, HttpStatusCode.Forbidden)
+                    respond<MatrixError>(
+                        MatrixError.Forbidden("Registration is disabled"),
+                        HttpStatusCode.Forbidden
+                    )
                 }
                 addHandler {
-                    // language=json
-                    respondJson("""
-                        {
-                          "errcode": "M_LIMIT_EXCEEDED",
-                          "error": "Too many requests",
-                          "retry_after_ms": 2000
-                        }
-                    """, HttpStatusCode.TooManyRequests)
+                    respond<MatrixError>(
+                        MatrixError.LimitExceeded("Too many requests", 2000L),
+                        HttpStatusCode.TooManyRequests
+                    )
                 }
             }
 
