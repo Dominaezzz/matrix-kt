@@ -17,19 +17,19 @@ internal suspend inline fun <reified Method : RpcMethod, reified Location : Any,
     location: Location,
     block: HttpRequestBuilder.() -> Unit = {}
 ): ResponseBody {
-    try {
-        return request(location) {
-            method = RpcMethod.fromType<Method>()
+    val response = request(location) {
+        method = RpcMethod.fromType<Method>()
 
-            block()
+        block()
 
-            // This is done after `block()` because users cannot be trusted.
-            // It needs to be true for the `try`/`catch` to work as expected.
-            // If you want to this to be false, copy this method and do your own thing.
-            expectSuccess = true
-        }.body()
-    } catch (e: ResponseException) {
-        throw MatrixException(e.response.body())
+        // This is done after `block()` because users cannot be trusted.
+        // If you want to this to be different, copy this method and do your own thing.
+        expectSuccess = false
+    }
+    if (response.status.isSuccess()) {
+        return response.body()
+    } else {
+        throw MatrixException(response.body())
     }
 }
 
