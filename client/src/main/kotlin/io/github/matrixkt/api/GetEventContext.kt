@@ -4,7 +4,7 @@ import io.github.matrixkt.models.events.MatrixEvent
 import io.github.matrixkt.models.events.StateEvent
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
-import io.github.matrixkt.utils.resource.Resource
+import io.ktor.resources.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject

@@ -4,10 +4,9 @@ import io.github.matrixkt.models.DeviceKeys
 import io.github.matrixkt.models.OneTimeKeySerializer
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
-import io.github.matrixkt.utils.resource.Resource
+import io.ktor.resources.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
 
 /**
  * Publishes end-to-end encryption keys for the device.

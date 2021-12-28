@@ -2,7 +2,7 @@ package io.github.matrixkt.api
 
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
-import io.github.matrixkt.utils.resource.Resource
+import io.ktor.resources.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -24,7 +24,7 @@ public class RequestOpenIdToken(
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, RequestOpenIdToken.Url, RequestOpenIdToken.Body, RequestOpenIdToken.Response>
         {
-    @Resource("/_matrix/client/r0/user/{userId}/openid/request_token")
+            @Resource("/_matrix/client/r0/user/{userId}/openid/request_token")
     @Serializable
     public class Url(
         /**

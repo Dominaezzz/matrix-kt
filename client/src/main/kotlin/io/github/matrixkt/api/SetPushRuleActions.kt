@@ -3,7 +3,7 @@ package io.github.matrixkt.api
 import io.github.matrixkt.models.push.PushRuleKind
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
-import io.github.matrixkt.utils.resource.Resource
+import io.ktor.resources.*
 import kotlinx.serialization.Serializable
 
 /**
@@ -18,7 +18,7 @@ public class SetPushRuleActions(
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Put, SetPushRuleActions.Url, SetPushRuleActions.Body, Unit>
         {
-    @Resource("/_matrix/client/r0/pushrules/{scope}/{kind}/{ruleId}/actions")
+            @Resource("/_matrix/client/r0/pushrules/{scope}/{kind}/{ruleId}/actions")
     @Serializable
     public class Url(
         /**
