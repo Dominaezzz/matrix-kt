@@ -78,14 +78,9 @@ public suspend inline fun <reified Method : RpcMethod, reified Location : Any, r
 }
 
 @Suppress("FunctionName")
-public fun HttpClientConfig<*>.MatrixConfig(baseUrl: Url, json: Json = MatrixJson) {
+public fun HttpClientConfig<*>.MatrixConfig(baseUrl: String, json: Json = MatrixJson) {
     defaultRequest {
-        val builder = URLBuilder(baseUrl)
-        if (url.encodedPath.startsWith('/')) {
-            builder.encodedPath = builder.encodedPath.removeSuffix("/")
-        }
-        builder.encodedPath += url.encodedPath
-        url.takeFrom(builder)
+        url(baseUrl.removeSuffix("/") + "/")
     }
 
     install(ContentNegotiation) {

@@ -16,7 +16,7 @@ import utils.respondJson
 import kotlin.test.*
 
 class ClientTests {
-    private val baseUrl = Url("https://matrix-client.popular.org/more/stuff/here/")
+    private val baseUrl = Url("https://matrix-client.popular.org/more/stuff/here/").toString()
 
     private inline fun <reified T : MatrixError> assertFailsWith(message: String? = null, block: () -> Unit): T {
         val e = assertFailsWith<MatrixException>(message, block).error
