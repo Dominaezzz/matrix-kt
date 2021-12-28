@@ -4,11 +4,11 @@ import io.github.matrixkt.models.MatrixException
 import io.github.matrixkt.utils.resource.href
 import io.ktor.client.*
 import io.ktor.client.call.*
-import io.ktor.client.features.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 import kotlin.jvm.JvmName
 
@@ -28,19 +28,19 @@ internal suspend inline fun <reified Method : RpcMethod, reified Location, reifi
             // It needs to be true for the `try`/`catch` to work as expected.
             // If you want to this to be false, copy this method and do your own thing.
             expectSuccess = true
-        }
+        }.body()
     } catch (e: ResponseException) {
-        throw MatrixException(e.response.receive())
+        throw MatrixException(e.response.body())
     }
 }
 
-public suspend inline fun <reified Method : RpcMethod, reified Location, RequestBody : Any, reified ResponseBody> HttpClient.rpc(
+public suspend inline fun <reified Method : RpcMethod, reified Location, reified RequestBody : Any, reified ResponseBody> HttpClient.rpc(
     rpcObject: MatrixRpc<Method, Location, RequestBody, ResponseBody>,
     block: HttpRequestBuilder.() -> Unit = {}
 ): ResponseBody {
     return baseRpc<Method, Location, ResponseBody>(rpcObject.url) {
         contentType(ContentType.Application.Json)
-        body = rpcObject.body
+        setBody(rpcObject.body)
         block()
     }
 }
@@ -53,7 +53,7 @@ public suspend inline fun <reified Method : RpcMethod, reified Location, reified
     return baseRpc<Method, Location, ResponseBody>(rpcObject.url, block)
 }
 
-public suspend inline fun <reified Method : RpcMethod, reified Location, RequestBody : Any, reified ResponseBody> HttpClient.rpc(
+public suspend inline fun <reified Method : RpcMethod, reified Location, reified RequestBody : Any, reified ResponseBody> HttpClient.rpc(
     rpcObject: MatrixRpc.WithAuth<Method, Location, RequestBody, ResponseBody>,
     accessToken: String,
     block: HttpRequestBuilder.() -> Unit = {}
@@ -61,7 +61,7 @@ public suspend inline fun <reified Method : RpcMethod, reified Location, Request
     return baseRpc<Method, Location, ResponseBody>(rpcObject.url) {
         header(HttpHeaders.Authorization, "Bearer $accessToken")
         contentType(ContentType.Application.Json)
-        body = rpcObject.body
+        setBody(rpcObject.body)
         block()
     }
 }
@@ -89,7 +89,7 @@ public fun HttpClientConfig<*>.MatrixConfig(baseUrl: Url, json: Json = MatrixJso
         url.takeFrom(builder)
     }
 
-    Json {
-        serializer = KotlinxSerializer(json)
+    install(ContentNegotiation) {
+        json(json)
     }
 }

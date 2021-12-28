@@ -50,7 +50,7 @@ public inline fun <reified T> href(
         }
     }
 
-    urlBuilder.path(updatedParts)
+    urlBuilder.path(*updatedParts.toTypedArray())
 
     val queryArgs = parameters.filter { key, _ -> !usedForPathParameterNames.contains(key) }
     urlBuilder.parameters.appendAll(queryArgs)

@@ -8,7 +8,7 @@ plugins {
     id("de.undercouch.download") version "4.1.2" apply false
 }
 
-val ktorVersion: String by extra("1.6.5")
+val ktorVersion: String by extra("2.0.0")
 val serialVersion: String by extra("1.3.1")
 val coroutineVersion: String by extra("1.5.2-native-mt")
 val jnaVersion: String by extra("5.9.0")
