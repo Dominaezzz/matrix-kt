@@ -1,6 +1,6 @@
 package io.github.matrixkt.api
 
-import io.github.matrixkt.models.events.MatrixEvent
+import io.github.matrixkt.models.events.SyncEvent
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
 import io.ktor.resources.*
@@ -47,7 +47,7 @@ public class GetNotifications(
         /**
          * The Event object for the event that triggered the notification.
          */
-        public val event: MatrixEvent,
+        public val event: SyncEvent,
         /**
          * The profile tag of the rule that matched this event.
          */
