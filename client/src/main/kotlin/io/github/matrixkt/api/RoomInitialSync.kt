@@ -1,11 +1,14 @@
 package io.github.matrixkt.api
 
+import io.github.matrixkt.models.RoomVisibility
+import io.github.matrixkt.models.events.MatrixEvent
+import io.github.matrixkt.models.events.StateEvent
+import io.github.matrixkt.models.events.contents.room.Membership
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
 import io.ktor.resources.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 
 /**
@@ -48,16 +51,6 @@ public class RoomInitialSync(
     )
 
     @Serializable
-    public class RoomEvent(
-        /**
-         * The ID of the room associated with this event. Will not be present on events
-         * that arrive through ``/sync``, despite being required everywhere else.
-         */
-        @SerialName("room_id")
-        public val roomId: String
-    )
-
-    @Serializable
     public class PaginationChunk(
         /**
          * If the user is a member of the room this will be a
@@ -66,7 +59,7 @@ public class RoomInitialSync(
          * messages that preceeded them leaving. This array
          * will consist of at most ``limit`` elements.
          */
-        public val chunk: List<RoomEvent>,
+        public val chunk: List<MatrixEvent>,
         /**
          * A token which correlates to the last value in ``chunk``.
          * Used for pagination.
@@ -89,7 +82,7 @@ public class RoomInitialSync(
         /**
          * The user's membership state in this room.
          */
-        public val membership: String? = null,
+        public val membership: Membership? = null,
         /**
          * The pagination chunk for this room.
          */
@@ -105,11 +98,11 @@ public class RoomInitialSync(
          * user has left the room this will be the state of the
          * room when they left it.
          */
-        public val state: List<JsonElement>? = null,
+        public val state: List<StateEvent<JsonObject, JsonObject>>? = null,
         /**
          * Whether this room is visible to the ``/publicRooms`` API
          * or not."
          */
-        public val visibility: String? = null
+        public val visibility: RoomVisibility? = null
     )
 }

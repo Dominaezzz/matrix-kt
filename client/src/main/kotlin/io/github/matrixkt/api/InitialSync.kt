@@ -1,11 +1,16 @@
 package io.github.matrixkt.api
 
+import io.github.matrixkt.models.RoomVisibility
+import io.github.matrixkt.models.events.MatrixEvent
+import io.github.matrixkt.models.events.StateEvent
+import io.github.matrixkt.models.events.UnsignedData
+import io.github.matrixkt.models.events.contents.room.MemberContent
+import io.github.matrixkt.models.events.contents.room.Membership
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
 import io.ktor.resources.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 
 /**
@@ -56,125 +61,6 @@ public class InitialSync(
     )
 
     @Serializable
-    public class Signed(
-        /**
-         * The invited matrix user ID. Must be equal to the user_id property of the event.
-         */
-        public val mxid: String,
-        /**
-         * A single signature from the verifying server, in the format specified by the Signing
-         * Events section of the server-server API.
-         */
-        public val signatures: Map<String, Map<String, String>>,
-        /**
-         * The token property of the containing third_party_invite object.
-         */
-        public val token: String
-    )
-
-    @Serializable
-    public class Invite(
-        /**
-         * A name which can be displayed to represent the user instead of their third party
-         * identifier
-         */
-        @SerialName("display_name")
-        public val displayName: String,
-        /**
-         * A block of content which has been signed, which servers can use to verify the event.
-         * Clients should ignore this.
-         */
-        public val signed: Signed
-    )
-
-    @Serializable
-    public class StrippedState(
-        /**
-         * The ``content`` for the event.
-         */
-        public val content: JsonObject,
-        /**
-         * The ``sender`` for the event.
-         */
-        public val sender: String,
-        /**
-         * The ``state_key`` for the event.
-         */
-        @SerialName("state_key")
-        public val stateKey: String,
-        /**
-         * The ``type`` for the event.
-         */
-        public val type: String
-    )
-
-    @Serializable
-    public class UnsignedData(
-        /**
-         * A subset of the state of the room at the time of the invite, if ``membership`` is
-         * ``invite``. Note that this state is informational, and SHOULD NOT be trusted; once the
-         * client has joined the room, it SHOULD fetch the live state from the server and discard the
-         * invite_room_state. Also, clients must not rely on any particular state being present here;
-         * they SHOULD behave properly (with possibly a degraded but not a broken experience) in the
-         * absence of any particular events here. If they are set on the room, at least the state for
-         * ``m.room.avatar``, ``m.room.canonical_alias``, ``m.room.join_rules``, and ``m.room.name``
-         * SHOULD be included.
-         */
-        @SerialName("invite_room_state")
-        public val inviteRoomState: List<StrippedState>? = null
-    )
-
-    @Serializable
-    public class EventContent(
-        /**
-         * The avatar URL for this user, if any.
-         */
-        @SerialName("avatar_url")
-        public val avatarUrl: String? = null,
-        /**
-         * Flag indicating if the room containing this event was created with the intention of being
-         * a direct chat. See `Direct Messaging`_.
-         */
-        @SerialName("is_direct")
-        public val isDirect: Boolean? = null,
-        /**
-         * The membership state of the user.
-         */
-        public val membership: String,
-        @SerialName("third_party_invite")
-        public val thirdPartyInvite: Invite? = null,
-        /**
-         * Contains optional extra information about the event.
-         */
-        public val unsigned: UnsignedData? = null
-    )
-
-    @Serializable
-    public class InviteEvent(
-        public val content: EventContent? = null,
-        /**
-         * The ``user_id`` this membership event relates to. In all cases except for when
-         * ``membership`` is
-         * ``join``, the user ID sending the event does not need to match the user ID in the
-         * ``state_key``,
-         * unlike other events. Regular authorisation rules still apply.
-         */
-        @SerialName("state_key")
-        public val stateKey: String? = null,
-        public val type: String? = null
-    )
-
-    @Serializable
-    public class RoomEvent(
-        /**
-         * The ID of the room associated with this event. Will not be present on events
-         * that arrive through ``/sync``, despite being required everywhere else.
-         */
-        @SerialName("room_id")
-        public val roomId: String
-    )
-
-    @Serializable
     public class PaginationChunk(
         /**
          * If the user is a member of the room this will be a
@@ -183,7 +69,7 @@ public class InitialSync(
          * messages that preceeded them leaving. This array
          * will consist of at most ``limit`` elements.
          */
-        public val chunk: List<RoomEvent>,
+        public val chunk: List<MatrixEvent>,
         /**
          * A token which correlates to the last value in ``chunk``.
          * Used for pagination.
@@ -207,11 +93,11 @@ public class InitialSync(
         /**
          * The invite event if ``membership`` is ``invite``
          */
-        public val invite: InviteEvent? = null,
+        public val invite: StateEvent<MemberContent, UnsignedData>? = null,
         /**
          * The user's membership state in this room.
          */
-        public val membership: String,
+        public val membership: Membership,
         /**
          * The pagination chunk for this room.
          */
@@ -227,12 +113,12 @@ public class InitialSync(
          * user has left the room this will be the state of the
          * room when they left it.
          */
-        public val state: List<JsonElement>? = null,
+        public val state: List<StateEvent<JsonObject, JsonObject>>? = null,
         /**
          * Whether this room is visible to the ``/publicRooms`` API
          * or not."
          */
-        public val visibility: String? = null
+        public val visibility: RoomVisibility? = null
     )
 
     @Serializable
