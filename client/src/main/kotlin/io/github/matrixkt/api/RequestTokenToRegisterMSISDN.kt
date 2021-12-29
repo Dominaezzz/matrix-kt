@@ -17,7 +17,7 @@ public class RequestTokenToRegisterMSISDN(
     public override val url: Url,
     public override val body: MSISDNValidationRequest
 ) : MatrixRpc<RpcMethod.Post, RequestTokenToRegisterMSISDN.Url, MSISDNValidationRequest, TokenValidationResponse> {
-    @Resource("/_matrix/client/r0/register/msisdn/requestToken")
+    @Resource("_matrix/client/r0/register/msisdn/requestToken")
     @Serializable
     public class Url
 }

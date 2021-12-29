@@ -22,7 +22,7 @@ public class ForgetRoom(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/rooms/{roomId}/forget")
+    @Resource("_matrix/client/r0/rooms/{roomId}/forget")
     @Serializable
     public class Url(
         /**

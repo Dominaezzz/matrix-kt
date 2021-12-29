@@ -16,7 +16,7 @@ public class GetContentOverrideName(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/media/r0/download/{serverName}/{mediaId}/{fileName}")
+    @Resource("_matrix/media/r0/download/{serverName}/{mediaId}/{fileName}")
     @Serializable
     public class Url(
         /**

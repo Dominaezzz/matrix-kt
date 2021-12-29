@@ -23,7 +23,7 @@ public class SearchUserDirectory(
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, SearchUserDirectory.Url, SearchUserDirectory.Body,
         SearchUserDirectory.Response> {
-    @Resource("/_matrix/client/r0/user_directory/search")
+    @Resource("_matrix/client/r0/user_directory/search")
     @Serializable
     public class Url
 

@@ -15,7 +15,7 @@ public class GetPushRuleActions(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/pushrules/{scope}/{kind}/{ruleId}/actions")
+    @Resource("_matrix/client/r0/pushrules/{scope}/{kind}/{ruleId}/actions")
     @Serializable
     public class Url(
         /**

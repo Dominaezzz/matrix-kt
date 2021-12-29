@@ -22,7 +22,7 @@ public class GetUrlPreview(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/media/r0/preview_url")
+    @Resource("_matrix/media/r0/preview_url")
     @Serializable
     public class Url(
         /**

@@ -19,7 +19,7 @@ public class GetPublicRooms(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/publicRooms")
+    @Resource("_matrix/client/r0/publicRooms")
     @Serializable
     public class Url(
         /**

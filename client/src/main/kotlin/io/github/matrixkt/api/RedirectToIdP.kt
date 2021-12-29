@@ -19,7 +19,7 @@ public class RedirectToIdP(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/login/sso/redirect/{idpId}")
+    @Resource("_matrix/client/r0/login/sso/redirect/{idpId}")
     @Serializable
     public class Url(
         /**

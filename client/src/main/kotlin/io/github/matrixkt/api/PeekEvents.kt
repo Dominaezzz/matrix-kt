@@ -25,7 +25,7 @@ public class PeekEvents(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/events ")
+    @Resource("_matrix/client/r0/events ")
     @Serializable
     public class Url(
         /**

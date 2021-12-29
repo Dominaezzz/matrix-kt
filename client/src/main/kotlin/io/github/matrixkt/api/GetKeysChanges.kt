@@ -22,7 +22,7 @@ public class GetKeysChanges(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/keys/changes")
+    @Resource("_matrix/client/r0/keys/changes")
     @Serializable
     public class Url(
         /**

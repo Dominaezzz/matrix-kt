@@ -29,7 +29,7 @@ public class GetLocalAliases(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/rooms/{roomId}/aliases")
+    @Resource("_matrix/client/r0/rooms/{roomId}/aliases")
     @Serializable
     public class Url(
         /**

@@ -18,7 +18,7 @@ public class ClaimKeys(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, ClaimKeys.Url, ClaimKeys.Body, ClaimKeys.Response> {
-    @Resource("/_matrix/client/r0/keys/claim")
+    @Resource("_matrix/client/r0/keys/claim")
     @Serializable
     public class Url
 

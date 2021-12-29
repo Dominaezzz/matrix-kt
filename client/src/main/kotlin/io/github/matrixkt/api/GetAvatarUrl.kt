@@ -17,7 +17,7 @@ public class GetAvatarUrl(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/profile/{userId}/avatar_url")
+    @Resource("_matrix/client/r0/profile/{userId}/avatar_url")
     @Serializable
     public class Url(
         /**

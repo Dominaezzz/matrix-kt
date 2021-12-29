@@ -20,7 +20,7 @@ public class QueryPublicRooms(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, QueryPublicRooms.Url, QueryPublicRooms.Body, QueryPublicRooms.Response> {
-    @Resource("/_matrix/client/r0/publicRooms")
+    @Resource("_matrix/client/r0/publicRooms")
     @Serializable
     public class Url(
         /**

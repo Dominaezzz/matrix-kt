@@ -24,7 +24,7 @@ public class RequestOpenIdToken(
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, RequestOpenIdToken.Url, RequestOpenIdToken.Body, RequestOpenIdToken.Response>
         {
-            @Resource("/_matrix/client/r0/user/{userId}/openid/request_token")
+            @Resource("_matrix/client/r0/user/{userId}/openid/request_token")
     @Serializable
     public class Url(
         /**

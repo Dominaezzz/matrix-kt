@@ -23,7 +23,7 @@ public class LogoutAll(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/logout/all")
+    @Resource("_matrix/client/r0/logout/all")
     @Serializable
     public class Url
 }

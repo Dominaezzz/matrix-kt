@@ -17,7 +17,7 @@ public class SetAvatarUrl(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Put, SetAvatarUrl.Url, SetAvatarUrl.Body, Unit> {
-    @Resource("/_matrix/client/r0/profile/{userId}/avatar_url")
+    @Resource("_matrix/client/r0/profile/{userId}/avatar_url")
     @Serializable
     public class Url(
         /**

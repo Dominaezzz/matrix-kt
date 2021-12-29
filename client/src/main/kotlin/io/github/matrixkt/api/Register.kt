@@ -53,7 +53,7 @@ public class Register(
     public override val url: Url,
     public override val body: Body
 ) : MatrixRpc<RpcMethod.Post, Register.Url, Register.Body, Register.Response> {
-    @Resource("/_matrix/client/r0/register")
+    @Resource("_matrix/client/r0/register")
     @Serializable
     public class Url(
         /**

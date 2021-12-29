@@ -21,7 +21,7 @@ public class GetRoomStateWithKey(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/rooms/{roomId}/state/{eventType}/{stateKey}")
+    @Resource("_matrix/client/r0/rooms/{roomId}/state/{eventType}/{stateKey}")
     @Serializable
     public class Url(
         /**

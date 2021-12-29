@@ -16,7 +16,7 @@ public class SetRoomAlias(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Put, SetRoomAlias.Url, SetRoomAlias.Body, Unit> {
-    @Resource("/_matrix/client/r0/directory/room/{roomAlias}")
+    @Resource("_matrix/client/r0/directory/room/{roomAlias}")
     @Serializable
     public class Url(
         /**

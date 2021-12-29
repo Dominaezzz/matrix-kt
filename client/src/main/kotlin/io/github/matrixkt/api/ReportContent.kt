@@ -13,7 +13,7 @@ public class ReportContent(
     public override val url: Url,
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, ReportContent.Url, ReportContent.Body, Unit> {
-    @Resource("/_matrix/client/r0/rooms/{roomId}/report/{eventId}")
+    @Resource("_matrix/client/r0/rooms/{roomId}/report/{eventId}")
     @Serializable
     public class Url(
         /**

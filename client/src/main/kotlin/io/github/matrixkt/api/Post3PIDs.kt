@@ -24,7 +24,7 @@ public class Post3PIDs(
     public override val url: Url,
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, Post3PIDs.Url, Post3PIDs.Body, Post3PIDs.Response> {
-    @Resource("/_matrix/client/r0/account/3pid")
+    @Resource("_matrix/client/r0/account/3pid")
     @Serializable
     public class Url
 

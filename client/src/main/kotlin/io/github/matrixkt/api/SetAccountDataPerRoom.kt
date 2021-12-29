@@ -18,7 +18,7 @@ public class SetAccountDataPerRoom(
      */
     public override val body: JsonObject
 ) : MatrixRpc.WithAuth<RpcMethod.Put, SetAccountDataPerRoom.Url, JsonObject, Unit> {
-    @Resource("/_matrix/client/r0/user/{userId}/rooms/{roomId}/account_data/{type}")
+    @Resource("_matrix/client/r0/user/{userId}/rooms/{roomId}/account_data/{type}")
     @Serializable
     public class Url(
         /**

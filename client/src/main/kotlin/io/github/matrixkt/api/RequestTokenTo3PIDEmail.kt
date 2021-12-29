@@ -21,7 +21,7 @@ public class RequestTokenTo3PIDEmail(
     public override val body: EmailValidationRequest
 ) : MatrixRpc<RpcMethod.Post, RequestTokenTo3PIDEmail.Url, EmailValidationRequest,
         TokenValidationResponse> {
-    @Resource("/_matrix/client/r0/account/3pid/email/requestToken")
+    @Resource("_matrix/client/r0/account/3pid/email/requestToken")
     @Serializable
     public class Url
 }

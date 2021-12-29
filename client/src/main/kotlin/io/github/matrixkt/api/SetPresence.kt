@@ -20,7 +20,7 @@ public class SetPresence(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Put, SetPresence.Url, SetPresence.Body, Unit> {
-    @Resource("/_matrix/client/r0/presence/{userId}/status")
+    @Resource("_matrix/client/r0/presence/{userId}/status")
     @Serializable
     public class Url(
         /**

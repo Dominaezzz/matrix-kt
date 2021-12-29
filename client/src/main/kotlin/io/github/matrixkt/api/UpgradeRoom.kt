@@ -16,7 +16,7 @@ public class UpgradeRoom(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, UpgradeRoom.Url, UpgradeRoom.Body, UpgradeRoom.Response> {
-    @Resource("/_matrix/client/r0/rooms/{roomId}/upgrade")
+    @Resource("_matrix/client/r0/rooms/{roomId}/upgrade")
     @Serializable
     public class Url(
         /**

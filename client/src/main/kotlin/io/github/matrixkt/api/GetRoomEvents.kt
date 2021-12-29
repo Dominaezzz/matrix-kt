@@ -22,7 +22,7 @@ public class GetRoomEvents(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/rooms/{roomId}/messages")
+    @Resource("_matrix/client/r0/rooms/{roomId}/messages")
     @Serializable
     public class Url(
         /**

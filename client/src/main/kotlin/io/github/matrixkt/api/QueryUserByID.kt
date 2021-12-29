@@ -15,7 +15,7 @@ public class QueryUserByID(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/thirdparty/user")
+    @Resource("_matrix/client/r0/thirdparty/user")
     @Serializable
     public class Url(
         /**

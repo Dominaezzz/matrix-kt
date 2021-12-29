@@ -15,7 +15,7 @@ public class DeleteRoomKeys(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/room_keys/keys")
+    @Resource("_matrix/client/r0/room_keys/keys")
     @Serializable
     public class Url(
         /**

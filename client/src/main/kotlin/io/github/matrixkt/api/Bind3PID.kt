@@ -19,7 +19,7 @@ public class Bind3PID(
     public override val url: Url,
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, Bind3PID.Url, Bind3PID.Body, Unit> {
-    @Resource("/_matrix/client/r0/account/3pid/bind")
+    @Resource("_matrix/client/r0/account/3pid/bind")
     @Serializable
     public class Url
 

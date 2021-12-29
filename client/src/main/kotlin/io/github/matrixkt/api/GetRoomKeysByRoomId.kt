@@ -15,7 +15,7 @@ public class GetRoomKeysByRoomId(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/room_keys/keys/{roomId}")
+    @Resource("_matrix/client/r0/room_keys/keys/{roomId}")
     @Serializable
     public class Url(
         /**

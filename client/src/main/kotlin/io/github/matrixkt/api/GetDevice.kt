@@ -15,7 +15,7 @@ public class GetDevice(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/devices/{deviceId}")
+    @Resource("_matrix/client/r0/devices/{deviceId}")
     @Serializable
     public class Url(
         /**

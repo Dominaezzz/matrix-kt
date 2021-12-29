@@ -25,7 +25,7 @@ public class CheckUsernameAvailability(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/register/available")
+    @Resource("_matrix/client/r0/register/available")
     @Serializable
     public class Url(
         /**

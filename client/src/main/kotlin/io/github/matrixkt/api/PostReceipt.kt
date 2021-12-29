@@ -18,7 +18,7 @@ public class PostReceipt(
      */
     public override val body: JsonObject
 ) : MatrixRpc.WithAuth<RpcMethod.Post, PostReceipt.Url, JsonObject, Unit> {
-    @Resource("/_matrix/client/r0/rooms/{roomId}/receipt/{receiptType}/{eventId}")
+    @Resource("_matrix/client/r0/rooms/{roomId}/receipt/{receiptType}/{eventId}")
     @Serializable
     public class Url(
         /**

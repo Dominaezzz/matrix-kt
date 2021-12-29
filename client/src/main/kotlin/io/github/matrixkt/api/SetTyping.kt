@@ -18,7 +18,7 @@ public class SetTyping(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Put, SetTyping.Url, SetTyping.Body, Unit> {
-    @Resource("/_matrix/client/r0/rooms/{roomId}/typing/{userId}")
+    @Resource("_matrix/client/r0/rooms/{roomId}/typing/{userId}")
     @Serializable
     public class Url(
         /**

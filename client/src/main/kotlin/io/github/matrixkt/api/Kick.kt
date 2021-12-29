@@ -20,7 +20,7 @@ public class Kick(
     public override val url: Url,
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, Kick.Url, Kick.Body, Unit> {
-    @Resource("/_matrix/client/r0/rooms/{roomId}/kick")
+    @Resource("_matrix/client/r0/rooms/{roomId}/kick")
     @Serializable
     public class Url(
         /**

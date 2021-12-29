@@ -15,7 +15,7 @@ public class GetProtocolMetadata(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/thirdparty/protocol/{protocol}")
+    @Resource("_matrix/client/r0/thirdparty/protocol/{protocol}")
     @Serializable
     public class Url(
         /**

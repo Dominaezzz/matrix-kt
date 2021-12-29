@@ -27,7 +27,7 @@ public class KnockRoom(
     public override val url: Url,
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, KnockRoom.Url, KnockRoom.Body, KnockRoom.Response> {
-    @Resource("/_matrix/client/r0/knock/{roomIdOrAlias}")
+    @Resource("_matrix/client/r0/knock/{roomIdOrAlias}")
     @Serializable
     public class Url(
         /**

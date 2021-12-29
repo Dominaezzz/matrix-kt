@@ -19,7 +19,7 @@ public class GetRoomIdByAlias(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/directory/room/{roomAlias}")
+    @Resource("_matrix/client/r0/directory/room/{roomAlias}")
     @Serializable
     public class Url(
         /**

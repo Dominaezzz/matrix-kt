@@ -15,7 +15,7 @@ public class DeleteRoomKeysVersion(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/room_keys/version/{version}")
+    @Resource("_matrix/client/r0/room_keys/version/{version}")
     @Serializable
     public class Url(
         /**

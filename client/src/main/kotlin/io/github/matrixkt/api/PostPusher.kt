@@ -18,7 +18,7 @@ public class PostPusher(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, PostPusher.Url, PostPusher.Body, Unit> {
-    @Resource("/_matrix/client/r0/pushers/set")
+    @Resource("_matrix/client/r0/pushers/set")
     @Serializable
     public class Url
 

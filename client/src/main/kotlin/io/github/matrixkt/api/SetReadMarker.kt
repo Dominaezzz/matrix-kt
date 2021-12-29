@@ -17,7 +17,7 @@ public class SetReadMarker(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, SetReadMarker.Url, SetReadMarker.Body, Unit> {
-    @Resource("/_matrix/client/r0/rooms/{roomId}/read_markers")
+    @Resource("_matrix/client/r0/rooms/{roomId}/read_markers")
     @Serializable
     public class Url(
         /**

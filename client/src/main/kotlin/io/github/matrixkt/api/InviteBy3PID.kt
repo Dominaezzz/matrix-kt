@@ -56,7 +56,7 @@ public class InviteBy3PID(
     public override val url: Url,
     public override val body: Invite3pid
 ) : MatrixRpc.WithAuth<RpcMethod.Post, InviteBy3PID.Url, Invite3pid, Unit> {
-    @Resource("/_matrix/client/r0/rooms/{roomId}/invite")
+    @Resource("_matrix/client/r0/rooms/{roomId}/invite")
     @Serializable
     public class Url(
         /**

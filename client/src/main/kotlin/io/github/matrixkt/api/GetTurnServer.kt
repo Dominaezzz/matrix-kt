@@ -15,7 +15,7 @@ public class GetTurnServer(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/voip/turnServer")
+    @Resource("_matrix/client/r0/voip/turnServer")
     @Serializable
     public class Url
 

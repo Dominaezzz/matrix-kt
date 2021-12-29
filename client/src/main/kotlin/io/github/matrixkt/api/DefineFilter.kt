@@ -19,7 +19,7 @@ public class DefineFilter(
      */
     public override val body: Filter
 ) : MatrixRpc.WithAuth<RpcMethod.Post, DefineFilter.Url, Filter, DefineFilter.Response> {
-    @Resource("/_matrix/client/r0/user/{userId}/filter")
+    @Resource("_matrix/client/r0/user/{userId}/filter")
     @Serializable
     public class Url(
         /**

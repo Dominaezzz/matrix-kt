@@ -34,7 +34,7 @@ public class SetRoomStateWithKey(
     public override val body: JsonObject
 ) : MatrixRpc.WithAuth<RpcMethod.Put, SetRoomStateWithKey.Url, JsonObject,
         SetRoomStateWithKey.Response> {
-    @Resource("/_matrix/client/r0/rooms/{roomId}/state/{eventType}/{stateKey}")
+    @Resource("_matrix/client/r0/rooms/{roomId}/state/{eventType}/{stateKey}")
     @Serializable
     public class Url(
         /**

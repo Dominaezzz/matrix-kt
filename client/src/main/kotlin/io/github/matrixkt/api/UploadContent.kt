@@ -16,7 +16,7 @@ public class UploadContent(
      */
     public override val body: ByteArray
 ) : MatrixRpc.WithAuth<RpcMethod.Post, UploadContent.Url, ByteArray, UploadContent.Response> {
-    @Resource("/_matrix/media/r0/upload")
+    @Resource("_matrix/media/r0/upload")
     @Serializable
     public class Url(
         /**

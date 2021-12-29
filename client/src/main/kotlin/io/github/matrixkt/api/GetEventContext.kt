@@ -23,7 +23,7 @@ public class GetEventContext(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/rooms/{roomId}/context/{eventId}")
+    @Resource("_matrix/client/r0/rooms/{roomId}/context/{eventId}")
     @Serializable
     public class Url(
         /**

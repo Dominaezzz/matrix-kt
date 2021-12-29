@@ -16,7 +16,7 @@ public class GetCapabilities(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/capabilities")
+    @Resource("_matrix/client/r0/capabilities")
     @Serializable
     public class Url
 

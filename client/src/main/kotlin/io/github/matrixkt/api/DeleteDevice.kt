@@ -15,7 +15,7 @@ public class DeleteDevice(
     public override val url: Url,
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Delete, DeleteDevice.Url, DeleteDevice.Body, Unit> {
-    @Resource("/_matrix/client/r0/devices/{deviceId}")
+    @Resource("_matrix/client/r0/devices/{deviceId}")
     @Serializable
     public class Url(
         /**

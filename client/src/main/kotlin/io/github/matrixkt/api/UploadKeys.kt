@@ -18,7 +18,7 @@ public class UploadKeys(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, UploadKeys.Url, UploadKeys.Body, UploadKeys.Response> {
-    @Resource("/_matrix/client/r0/keys/upload")
+    @Resource("_matrix/client/r0/keys/upload")
     @Serializable
     public class Url
 

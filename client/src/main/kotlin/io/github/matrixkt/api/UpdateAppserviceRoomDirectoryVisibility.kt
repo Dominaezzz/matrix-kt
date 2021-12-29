@@ -23,7 +23,7 @@ public class UpdateAppserviceRoomDirectoryVisibility(
 ) : MatrixRpc.WithAuth<RpcMethod.Put, UpdateAppserviceRoomDirectoryVisibility.Url,
         UpdateAppserviceRoomDirectoryVisibility.Body,
         Unit> {
-    @Resource("/_matrix/client/r0/directory/list/appservice/{networkId}/{roomId}")
+    @Resource("_matrix/client/r0/directory/list/appservice/{networkId}/{roomId}")
     @Serializable
     public class Url(
         /**

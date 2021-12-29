@@ -32,7 +32,7 @@ public class GetVersions(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/versions")
+    @Resource("_matrix/client/versions")
     @Serializable
     public class Url
 

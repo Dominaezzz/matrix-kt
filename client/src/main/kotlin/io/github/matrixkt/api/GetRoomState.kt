@@ -16,7 +16,7 @@ public class GetRoomState(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/rooms/{roomId}/state")
+    @Resource("_matrix/client/r0/rooms/{roomId}/state")
     @Serializable
     public class Url(
         /**

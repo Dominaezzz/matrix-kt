@@ -18,7 +18,7 @@ public class GetUserProfile(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/profile/{userId}")
+    @Resource("_matrix/client/r0/profile/{userId}")
     @Serializable
     public class Url(
         /**

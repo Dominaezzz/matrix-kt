@@ -14,7 +14,7 @@ public class SendToDevice(
     public override val url: Url,
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Put, SendToDevice.Url, SendToDevice.Body, Unit> {
-    @Resource("/_matrix/client/r0/sendToDevice/{eventType}/{txnId}")
+    @Resource("_matrix/client/r0/sendToDevice/{eventType}/{txnId}")
     @Serializable
     public class Url(
         /**

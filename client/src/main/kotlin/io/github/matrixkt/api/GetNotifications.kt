@@ -18,7 +18,7 @@ public class GetNotifications(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/notifications")
+    @Resource("_matrix/client/r0/notifications")
     @Serializable
     public class Url(
         /**

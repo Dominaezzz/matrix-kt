@@ -16,7 +16,7 @@ public class Logout(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/logout")
+    @Resource("_matrix/client/r0/logout")
     @Serializable
     public class Url
 }

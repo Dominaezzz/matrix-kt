@@ -17,7 +17,7 @@ public class PostRoomKeysVersion(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, PostRoomKeysVersion.Url, PostRoomKeysVersion.Body, PostRoomKeysVersion.Response> {
-    @Resource("/_matrix/client/r0/room_keys/version")
+    @Resource("_matrix/client/r0/room_keys/version")
     @Serializable
     public class Url
 

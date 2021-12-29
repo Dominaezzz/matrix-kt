@@ -16,7 +16,7 @@ public class Unban(
     public override val url: Url,
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, Unban.Url, Unban.Body, Unit> {
-    @Resource("/_matrix/client/r0/rooms/{roomId}/unban")
+    @Resource("_matrix/client/r0/rooms/{roomId}/unban")
     @Serializable
     public class Url(
         /**

@@ -16,7 +16,7 @@ public class GetAccountData(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/user/{userId}/account_data/{type}")
+    @Resource("_matrix/client/r0/user/{userId}/account_data/{type}")
     @Serializable
     public class Url(
         /**

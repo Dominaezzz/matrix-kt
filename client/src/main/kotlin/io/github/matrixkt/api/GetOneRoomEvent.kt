@@ -16,7 +16,7 @@ public class GetOneRoomEvent(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/rooms/{roomId}/event/{eventId}")
+    @Resource("_matrix/client/r0/rooms/{roomId}/event/{eventId}")
     @Serializable
     public class Url(
         /**

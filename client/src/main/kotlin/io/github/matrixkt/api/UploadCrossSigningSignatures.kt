@@ -17,7 +17,7 @@ public class UploadCrossSigningSignatures(
      */
     public override val body: Map<String, Map<String, JsonObject>>
 ) : MatrixRpc.WithAuth<RpcMethod.Post, UploadCrossSigningSignatures.Url, Map<String, Map<String, JsonObject>>, UploadCrossSigningSignatures.Response> {
-    @Resource("/_matrix/client/r0/keys/signatures/upload")
+    @Resource("_matrix/client/r0/keys/signatures/upload")
     @Serializable
     public class Url
 

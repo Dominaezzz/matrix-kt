@@ -27,7 +27,7 @@ public class Login(
     public override val url: Url,
     public override val body: Body
 ) : MatrixRpc<RpcMethod.Post, Login.Url, Login.Body, Login.Response> {
-    @Resource("/_matrix/client/r0/login")
+    @Resource("_matrix/client/r0/login")
     @Serializable
     public class Url
 

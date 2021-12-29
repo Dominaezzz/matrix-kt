@@ -16,7 +16,7 @@ public class GetDisplayName(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/profile/{userId}/displayname")
+    @Resource("_matrix/client/r0/profile/{userId}/displayname")
     @Serializable
     public class Url(
         /**

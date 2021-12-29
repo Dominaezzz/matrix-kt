@@ -23,7 +23,7 @@ public class RedactEvent(
     public override val url: Url,
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Put, RedactEvent.Url, RedactEvent.Body, RedactEvent.Response> {
-    @Resource("/_matrix/client/r0/rooms/{roomId}/redact/{eventId}/{txnId}")
+    @Resource("_matrix/client/r0/rooms/{roomId}/redact/{eventId}/{txnId}")
     @Serializable
     public class Url(
         /**

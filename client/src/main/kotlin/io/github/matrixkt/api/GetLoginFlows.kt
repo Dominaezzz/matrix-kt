@@ -15,7 +15,7 @@ public class GetLoginFlows(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/login")
+    @Resource("_matrix/client/r0/login")
     @Serializable
     public class Url
 

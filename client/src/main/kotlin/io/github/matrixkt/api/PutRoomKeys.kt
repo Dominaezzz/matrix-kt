@@ -17,7 +17,7 @@ public class PutRoomKeys(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Put, PutRoomKeys.Url, PutRoomKeys.Body, RoomKeysUpdateResponse> {
-    @Resource("/_matrix/client/r0/room_keys/keys")
+    @Resource("_matrix/client/r0/room_keys/keys")
     @Serializable
     public class Url(
         /**

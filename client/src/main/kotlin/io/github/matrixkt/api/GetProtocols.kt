@@ -17,7 +17,7 @@ public class GetProtocols(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/thirdparty/protocols")
+    @Resource("_matrix/client/r0/thirdparty/protocols")
     @Serializable
     public class Url
 }

@@ -21,7 +21,7 @@ public class SetRoomVisibilityOnDirectory(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Put, SetRoomVisibilityOnDirectory.Url, SetRoomVisibilityOnDirectory.Body, Unit> {
-    @Resource("/_matrix/client/r0/directory/list/room/{roomId}")
+    @Resource("_matrix/client/r0/directory/list/room/{roomId}")
     @Serializable
     public class Url(
         /**

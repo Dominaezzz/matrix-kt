@@ -16,7 +16,7 @@ public class QueryLocationByAlias(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/thirdparty/location")
+    @Resource("_matrix/client/r0/thirdparty/location")
     @Serializable
     public class Url(
         /**

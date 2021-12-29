@@ -27,7 +27,7 @@ public class DeactivateAccount(
     public override val url: Url,
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, DeactivateAccount.Url, DeactivateAccount.Body, DeactivateAccount.Response> {
-    @Resource("/_matrix/client/r0/account/deactivate")
+    @Resource("_matrix/client/r0/account/deactivate")
     @Serializable
     public class Url
 

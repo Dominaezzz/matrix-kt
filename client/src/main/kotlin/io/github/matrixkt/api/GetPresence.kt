@@ -16,7 +16,7 @@ public class GetPresence(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/presence/{userId}/status")
+    @Resource("_matrix/client/r0/presence/{userId}/status")
     @Serializable
     public class Url(
         /**

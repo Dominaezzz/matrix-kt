@@ -21,7 +21,7 @@ public class SetPushRule(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Put, SetPushRule.Url, SetPushRule.Body, Unit> {
-    @Resource("/_matrix/client/r0/pushrules/{scope}/{kind}/{ruleId}")
+    @Resource("_matrix/client/r0/pushrules/{scope}/{kind}/{ruleId}")
     @Serializable
     public class Url(
         /**

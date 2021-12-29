@@ -18,7 +18,7 @@ public class GetContentThumbnail(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/media/r0/thumbnail/{serverName}/{mediaId}")
+    @Resource("_matrix/media/r0/thumbnail/{serverName}/{mediaId}")
     @Serializable
     public class Url(
         /**

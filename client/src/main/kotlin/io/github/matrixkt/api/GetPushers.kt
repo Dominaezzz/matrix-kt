@@ -15,7 +15,7 @@ public class GetPushers(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/pushers")
+    @Resource("_matrix/client/r0/pushers")
     @Serializable
     public class Url
 

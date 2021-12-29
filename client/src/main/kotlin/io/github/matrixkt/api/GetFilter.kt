@@ -15,7 +15,7 @@ public class GetFilter(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/user/{userId}/filter/{filterId}")
+    @Resource("_matrix/client/r0/user/{userId}/filter/{filterId}")
     @Serializable
     public class Url(
         /**

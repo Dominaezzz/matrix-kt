@@ -24,7 +24,7 @@ public class GetConfig(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/media/r0/config")
+    @Resource("_matrix/media/r0/config")
     @Serializable
     public class Url
 

@@ -22,7 +22,7 @@ public class GetOneEvent(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/events/{eventId}")
+    @Resource("_matrix/client/r0/events/{eventId}")
     @Serializable
     public class Url(
         /**

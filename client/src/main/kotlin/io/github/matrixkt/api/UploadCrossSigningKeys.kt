@@ -21,7 +21,7 @@ public class UploadCrossSigningKeys(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, UploadCrossSigningKeys.Url, UploadCrossSigningKeys.Body, Unit> {
-    @Resource("/_matrix/client/r0/keys/device_signing/upload")
+    @Resource("_matrix/client/r0/keys/device_signing/upload")
     @Serializable
     public class Url
 

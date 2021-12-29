@@ -19,7 +19,7 @@ public class RedirectToSSO(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/login/sso/redirect")
+    @Resource("_matrix/client/r0/login/sso/redirect")
     @Serializable
     public class Url(
         /**

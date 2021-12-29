@@ -34,7 +34,7 @@ public class Sync(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/sync")
+    @Resource("_matrix/client/r0/sync")
     @Serializable
     public class Url(
         /**

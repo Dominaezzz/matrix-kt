@@ -24,7 +24,7 @@ public class RoomInitialSync(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/rooms/{roomId}/initialSync")
+    @Resource("_matrix/client/r0/rooms/{roomId}/initialSync")
     @Serializable
     public class Url(
         /**

@@ -20,7 +20,7 @@ public class SendMessage(
     public override val url: Url,
     public override val body: JsonObject
 ) : MatrixRpc.WithAuth<RpcMethod.Put, SendMessage.Url, JsonObject, SendMessage.Response> {
-    @Resource("/_matrix/client/r0/rooms/{roomId}/send/{eventType}/{txnId}")
+    @Resource("_matrix/client/r0/rooms/{roomId}/send/{eventType}/{txnId}")
     @Serializable
     public class Url(
         /**

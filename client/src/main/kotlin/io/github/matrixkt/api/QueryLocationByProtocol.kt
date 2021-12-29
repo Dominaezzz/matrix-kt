@@ -22,7 +22,7 @@ public class QueryLocationByProtocol(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/thirdparty/location/{protocol}")
+    @Resource("_matrix/client/r0/thirdparty/location/{protocol}")
     @Serializable
     public class Url(
         /**

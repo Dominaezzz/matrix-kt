@@ -19,7 +19,7 @@ public class GetWhoIs(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/admin/whois/{userId}")
+    @Resource("_matrix/client/r0/admin/whois/{userId}")
     @Serializable
     public class Url(
         /**

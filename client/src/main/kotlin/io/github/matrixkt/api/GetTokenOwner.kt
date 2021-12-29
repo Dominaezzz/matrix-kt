@@ -22,7 +22,7 @@ public class GetTokenOwner(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/account/whoami")
+    @Resource("_matrix/client/r0/account/whoami")
     @Serializable
     public class Url
 

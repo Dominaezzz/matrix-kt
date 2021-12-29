@@ -26,7 +26,7 @@ public class ChangePassword(
     public override val url: Url,
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, ChangePassword.Url, ChangePassword.Body, Unit> {
-    @Resource("/_matrix/client/r0/account/password")
+    @Resource("_matrix/client/r0/account/password")
     @Serializable
     public class Url
 

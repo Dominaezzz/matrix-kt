@@ -16,7 +16,7 @@ public class UpdateDevice(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Put, UpdateDevice.Url, UpdateDevice.Body, Unit> {
-    @Resource("/_matrix/client/r0/devices/{deviceId}")
+    @Resource("_matrix/client/r0/devices/{deviceId}")
     @Serializable
     public class Url(
         /**

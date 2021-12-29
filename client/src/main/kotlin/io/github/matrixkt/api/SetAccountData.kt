@@ -18,7 +18,7 @@ public class SetAccountData(
      */
     public override val body: JsonObject
 ) : MatrixRpc.WithAuth<RpcMethod.Put, SetAccountData.Url, JsonObject, Unit> {
-    @Resource("/_matrix/client/r0/user/{userId}/account_data/{type}")
+    @Resource("_matrix/client/r0/user/{userId}/account_data/{type}")
     @Serializable
     public class Url(
         /**

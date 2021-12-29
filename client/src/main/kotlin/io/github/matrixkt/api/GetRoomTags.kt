@@ -15,7 +15,7 @@ public class GetRoomTags(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/user/{userId}/rooms/{roomId}/tags")
+    @Resource("_matrix/client/r0/user/{userId}/rooms/{roomId}/tags")
     @Serializable
     public class Url(
         /**

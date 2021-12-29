@@ -19,7 +19,7 @@ public class QueryKeys(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, QueryKeys.Url, QueryKeys.Body, QueryKeys.Response> {
-    @Resource("/_matrix/client/r0/keys/query")
+    @Resource("_matrix/client/r0/keys/query")
     @Serializable
     public class Url
 

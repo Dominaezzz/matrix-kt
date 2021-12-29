@@ -16,7 +16,7 @@ public class SetDisplayName(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Put, SetDisplayName.Url, SetDisplayName.Body, Unit> {
-    @Resource("/_matrix/client/r0/profile/{userId}/displayname")
+    @Resource("_matrix/client/r0/profile/{userId}/displayname")
     @Serializable
     public class Url(
         /**

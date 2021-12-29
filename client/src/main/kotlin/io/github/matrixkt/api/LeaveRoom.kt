@@ -23,7 +23,7 @@ public class LeaveRoom(
     public override val url: Url,
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, LeaveRoom.Url, LeaveRoom.Body, Unit> {
-    @Resource("/_matrix/client/r0/rooms/{roomId}/leave")
+    @Resource("_matrix/client/r0/rooms/{roomId}/leave")
     @Serializable
     public class Url(
         /**

@@ -61,7 +61,7 @@ public class CreateRoom(
      */
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, CreateRoom.Url, CreateRoom.Body, CreateRoom.Response> {
-    @Resource("/_matrix/client/r0/createRoom")
+    @Resource("_matrix/client/r0/createRoom")
     @Serializable
     public class Url
 

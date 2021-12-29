@@ -18,7 +18,7 @@ public class Ban(
     public override val url: Url,
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, Ban.Url, Ban.Body, Unit> {
-    @Resource("/_matrix/client/r0/rooms/{roomId}/ban")
+    @Resource("_matrix/client/r0/rooms/{roomId}/ban")
     @Serializable
     public class Url(
         /**

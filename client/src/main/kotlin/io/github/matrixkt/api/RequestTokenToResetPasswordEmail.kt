@@ -32,7 +32,7 @@ public class RequestTokenToResetPasswordEmail(
     public override val url: Url,
     public override val body: EmailValidationRequest
 ) : MatrixRpc<RpcMethod.Post, RequestTokenToResetPasswordEmail.Url, EmailValidationRequest, TokenValidationResponse> {
-    @Resource("/_matrix/client/r0/account/password/email/requestToken")
+    @Resource("_matrix/client/r0/account/password/email/requestToken")
     @Serializable
     public class Url
 }

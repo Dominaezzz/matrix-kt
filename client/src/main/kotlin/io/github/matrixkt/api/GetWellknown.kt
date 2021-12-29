@@ -22,7 +22,7 @@ public class GetWellknown(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/.well-known/matrix/client")
+    @Resource(".well-known/matrix/client")
     @Serializable
     public class Url
 }

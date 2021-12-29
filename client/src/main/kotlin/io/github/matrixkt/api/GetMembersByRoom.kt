@@ -19,7 +19,7 @@ public class GetMembersByRoom(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/rooms/{roomId}/members")
+    @Resource("_matrix/client/r0/rooms/{roomId}/members")
     @Serializable
     public class Url(
         /**

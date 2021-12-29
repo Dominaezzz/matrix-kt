@@ -22,7 +22,7 @@ public class GetAccount3PIDs(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/account/3pid")
+    @Resource("_matrix/client/r0/account/3pid")
     @Serializable
     public class Url
 

@@ -23,7 +23,7 @@ public class JoinRoom(
     public override val url: Url,
     public override val body: Body
 ) : MatrixRpc.WithAuth<RpcMethod.Post, JoinRoom.Url, JoinRoom.Body, JoinRoom.Response> {
-    @Resource("/_matrix/client/r0/join/{roomIdOrAlias}")
+    @Resource("_matrix/client/r0/join/{roomIdOrAlias}")
     @Serializable
     public class Url(
         /**

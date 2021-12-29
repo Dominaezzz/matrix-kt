@@ -17,7 +17,7 @@ public class QueryUserByProtocol(
     public override val body: Nothing
         get() = TODO()
 
-    @Resource("/_matrix/client/r0/thirdparty/user/{protocol}")
+    @Resource("_matrix/client/r0/thirdparty/user/{protocol}")
     @Serializable
     public class Url(
         /**

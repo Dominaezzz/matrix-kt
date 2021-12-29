@@ -17,7 +17,7 @@ public class RequestTokenToRegisterEmail(
     public override val url: Url,
     public override val body: EmailValidationRequest
 ) : MatrixRpc<RpcMethod.Post, RequestTokenToRegisterEmail.Url, EmailValidationRequest, TokenValidationResponse> {
-    @Resource("/_matrix/client/r0/register/email/requestToken")
+    @Resource("_matrix/client/r0/register/email/requestToken")
     @Serializable
     public class Url
 }
