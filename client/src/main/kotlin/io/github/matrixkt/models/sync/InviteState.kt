@@ -1,6 +1,6 @@
 package io.github.matrixkt.models.sync
 
-import io.github.matrixkt.models.events.StrippedState
+import io.github.matrixkt.events.StrippedState
 import kotlinx.serialization.Serializable
 
 @Serializable

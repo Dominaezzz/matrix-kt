@@ -33,6 +33,7 @@ kotlin {
 
             dependencies {
                 implementation(kotlin("stdlib"))
+                api(project(":events"))
                 api("org.jetbrains.kotlinx:kotlinx-serialization-core:$serialVersion")
                 api("org.jetbrains.kotlinx:kotlinx-serialization-json:$serialVersion")
                 api("io.ktor:ktor-client-core:$ktorVersion")

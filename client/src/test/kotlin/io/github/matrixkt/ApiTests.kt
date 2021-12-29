@@ -5,9 +5,9 @@ import io.github.matrixkt.models.Device
 import io.github.matrixkt.models.Invite3pid
 import io.github.matrixkt.models.MSISDNValidationRequest
 import io.github.matrixkt.models.events.MatrixEvent
-import io.github.matrixkt.models.events.contents.TagContent
 import io.github.matrixkt.models.filter.Filter
-import io.github.matrixkt.models.push.PushRule
+import io.github.matrixkt.events.contents.TagContent
+import io.github.matrixkt.events.push.PushRule
 import io.github.matrixkt.models.search.Results
 import io.github.matrixkt.models.sync.SyncResponse
 import io.github.matrixkt.utils.MatrixJson

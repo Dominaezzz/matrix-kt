@@ -1,6 +1,6 @@
 package io.github.matrixkt.api
 
-import io.github.matrixkt.models.events.contents.TagContent
+import io.github.matrixkt.events.contents.TagContent
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
 import io.ktor.resources.*

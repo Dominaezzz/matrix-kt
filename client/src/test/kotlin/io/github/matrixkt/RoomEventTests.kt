@@ -1,8 +1,8 @@
 package io.github.matrixkt
 
 import io.github.matrixkt.models.events.*
-import io.github.matrixkt.models.events.contents.call.HangupContent
-import io.github.matrixkt.models.events.contents.room.CanonicalAliasContent
+import io.github.matrixkt.events.contents.call.HangupContent
+import io.github.matrixkt.events.contents.room.CanonicalAliasContent
 import io.github.matrixkt.utils.MatrixJson
 import kotlinx.serialization.json.*
 import kotlin.test.Test

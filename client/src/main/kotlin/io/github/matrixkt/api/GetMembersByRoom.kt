@@ -1,8 +1,8 @@
 package io.github.matrixkt.api
 
 import io.github.matrixkt.models.events.StateEvent
-import io.github.matrixkt.models.events.contents.room.MemberContent
-import io.github.matrixkt.models.events.contents.room.Membership
+import io.github.matrixkt.events.contents.room.MemberContent
+import io.github.matrixkt.events.contents.room.Membership
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
 import io.ktor.resources.*

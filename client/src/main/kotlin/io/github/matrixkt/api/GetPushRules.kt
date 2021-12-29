@@ -1,6 +1,6 @@
 package io.github.matrixkt.api
 
-import io.github.matrixkt.models.push.Ruleset
+import io.github.matrixkt.events.push.Ruleset
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
 import io.ktor.resources.*

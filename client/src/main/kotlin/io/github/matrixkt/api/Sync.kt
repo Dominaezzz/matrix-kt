@@ -1,6 +1,6 @@
 package io.github.matrixkt.api
 
-import io.github.matrixkt.models.Presence
+import io.github.matrixkt.events.Presence
 import io.github.matrixkt.models.sync.SyncResponse
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod

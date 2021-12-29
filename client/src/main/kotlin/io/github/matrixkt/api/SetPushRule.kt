@@ -1,6 +1,6 @@
 package io.github.matrixkt.api
 
-import io.github.matrixkt.models.push.PushCondition
+import io.github.matrixkt.events.push.PushCondition
 import io.github.matrixkt.utils.MatrixRpc
 import io.github.matrixkt.utils.RpcMethod
 import io.ktor.resources.*
