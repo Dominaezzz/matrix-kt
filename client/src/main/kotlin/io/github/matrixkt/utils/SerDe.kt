@@ -191,10 +191,6 @@ public val ClientServerSerialModule: SerializersModule = SerializersModule {
 public val MatrixSerialModule: SerializersModule = SerializersModule {
     include(EventSerialModule)
     include(ClientServerSerialModule)
-
-    // Workaround for https://github.com/Dominaezzz/matrix-kt/issues/2
-    contextual(Login.Body.Password::class, Login.Body.serializer() as KSerializer<Login.Body.Password>)
-    contextual(Login.Body.Token::class, Login.Body.serializer() as KSerializer<Login.Body.Token>)
 }
 
 public val MatrixJson: Json = Json {
