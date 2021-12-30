@@ -18,7 +18,7 @@ import io.github.matrixkt.events.contents.policy.rule.ServerContent
 import io.github.matrixkt.events.contents.policy.rule.UserContent
 import io.github.matrixkt.events.contents.room.*
 import io.github.matrixkt.events.contents.room.message.FeedbackContent
-import io.github.matrixkt.utils.EventSerialModule
+import io.github.matrixkt.events.EventSerialModule
 import kotlinx.serialization.json.*
 import kotlin.test.Test
 import kotlin.test.assertEquals

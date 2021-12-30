@@ -1,6 +1,4 @@
-@file:JvmName("EventsSerDe")
-
-package io.github.matrixkt.utils
+package io.github.matrixkt.events
 
 import io.github.matrixkt.events.contents.*
 import io.github.matrixkt.events.contents.call.AnswerContent
@@ -20,7 +18,6 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
-import kotlin.jvm.JvmName
 import io.github.matrixkt.events.contents.secret.RequestContent as SecretRequestContent
 import io.github.matrixkt.events.contents.secret.SendContent as SecretSendContent
 

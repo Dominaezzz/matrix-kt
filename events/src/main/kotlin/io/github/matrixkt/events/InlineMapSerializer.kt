@@ -1,4 +1,4 @@
-package io.github.matrixkt.utils
+package io.github.matrixkt.events
 
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.MapSerializer

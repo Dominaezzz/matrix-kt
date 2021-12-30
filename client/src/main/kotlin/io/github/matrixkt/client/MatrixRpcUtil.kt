@@ -1,6 +1,7 @@
-package io.github.matrixkt.utils
+package io.github.matrixkt.client
 
-import io.github.matrixkt.client.MatrixException
+import io.github.matrixkt.clientserver.MatrixRpc
+import io.github.matrixkt.clientserver.RpcMethod
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*

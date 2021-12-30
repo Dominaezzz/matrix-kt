@@ -1,12 +1,11 @@
-@file:JvmName("ClientSerDe")
+package io.github.matrixkt.client
 
-package io.github.matrixkt.utils
-
+import io.github.matrixkt.clientserver.ClientServerSerialModule
 import io.github.matrixkt.clientserver.api.Login
+import io.github.matrixkt.events.EventSerialModule
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
-import kotlin.jvm.JvmName
 
 public val MatrixSerialModule: SerializersModule = SerializersModule {
     include(EventSerialModule)

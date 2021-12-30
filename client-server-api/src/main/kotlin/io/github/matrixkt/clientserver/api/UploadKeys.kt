@@ -2,8 +2,8 @@ package io.github.matrixkt.clientserver.api
 
 import io.github.matrixkt.clientserver.models.DeviceKeys
 import io.github.matrixkt.clientserver.models.OneTimeKeySerializer
-import io.github.matrixkt.utils.MatrixRpc
-import io.github.matrixkt.utils.RpcMethod
+import io.github.matrixkt.clientserver.MatrixRpc
+import io.github.matrixkt.clientserver.RpcMethod
 import io.ktor.resources.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

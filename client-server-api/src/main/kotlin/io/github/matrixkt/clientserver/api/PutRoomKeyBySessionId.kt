@@ -2,8 +2,8 @@ package io.github.matrixkt.clientserver.api
 
 import io.github.matrixkt.clientserver.models.keybackup.KeyBackupData
 import io.github.matrixkt.clientserver.models.keybackup.RoomKeysUpdateResponse
-import io.github.matrixkt.utils.MatrixRpc
-import io.github.matrixkt.utils.RpcMethod
+import io.github.matrixkt.clientserver.MatrixRpc
+import io.github.matrixkt.clientserver.RpcMethod
 import io.ktor.resources.*
 import kotlinx.serialization.Serializable
 

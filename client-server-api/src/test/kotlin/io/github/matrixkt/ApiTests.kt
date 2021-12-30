@@ -10,7 +10,7 @@ import io.github.matrixkt.events.contents.TagContent
 import io.github.matrixkt.events.push.PushRule
 import io.github.matrixkt.clientserver.models.search.Results
 import io.github.matrixkt.clientserver.models.sync.SyncResponse
-import io.github.matrixkt.utils.EventSerialModule
+import io.github.matrixkt.clientserver.ClientServerSerialModule
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -20,7 +20,7 @@ import kotlin.test.Test
 class ApiTests {
     @Suppress("PrivatePropertyName")
     private val MatrixJson = Json {
-        serializersModule = EventSerialModule
+        serializersModule = ClientServerSerialModule
         ignoreUnknownKeys = true
     }
 

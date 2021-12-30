@@ -3,7 +3,6 @@ package io.github.matrixkt
 import io.github.matrixkt.clientserver.models.events.*
 import io.github.matrixkt.events.contents.call.HangupContent
 import io.github.matrixkt.events.contents.room.CanonicalAliasContent
-import io.github.matrixkt.utils.EventSerialModule
 import kotlinx.serialization.json.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -11,10 +10,7 @@ import kotlin.test.assertTrue
 
 class RoomEventTests {
     @Suppress("PrivatePropertyName")
-    private val MatrixJson = Json {
-        serializersModule = EventSerialModule
-        ignoreUnknownKeys = true
-    }
+    private val MatrixJson = Json
 
     @Test
     fun testSerializationOfRoomEvent() {

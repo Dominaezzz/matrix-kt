@@ -1,6 +1,6 @@
 package io.github.matrixkt.events.contents
 
-import io.github.matrixkt.utils.InlineMapSerializer
+import io.github.matrixkt.events.InlineMapSerializer
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.MapSerializer
 import kotlinx.serialization.builtins.serializer

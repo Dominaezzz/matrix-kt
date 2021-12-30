@@ -2,7 +2,6 @@ package io.github.matrixkt
 
 import io.github.matrixkt.clientserver.models.events.SyncEvent
 import io.github.matrixkt.clientserver.models.events.SyncStateEvent
-import io.github.matrixkt.utils.EventSerialModule
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.*
 import kotlin.test.Test
@@ -11,10 +10,7 @@ import kotlin.test.assertTrue
 
 class SyncEventTests {
     @Suppress("PrivatePropertyName")
-    private val MatrixJson = Json {
-        serializersModule = EventSerialModule
-        ignoreUnknownKeys = true
-    }
+    private val MatrixJson = Json
 
     @Test
     fun testSerialization() {
@@ -87,7 +83,6 @@ class SyncEventTests {
                     "key": "value"
                 },
                 "event_id": "${'$'}143273582443PhrSn:example.org",
-                "room_id": "!jEsUZKDJdhlrceRyVU:example.org",
                 "sender": "@example:example.org",
                 "origin_server_ts": 1432735824653,
                 "unsigned": {

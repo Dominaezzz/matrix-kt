@@ -1,4 +1,4 @@
-package io.github.matrixkt.utils
+package io.github.matrixkt.clientserver
 
 public interface MatrixRpc<Method : RpcMethod, Location, RequestBody : Any, ResponseBody> {
     public val url: Location

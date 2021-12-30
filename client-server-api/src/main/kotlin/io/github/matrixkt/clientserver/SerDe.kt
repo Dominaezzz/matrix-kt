@@ -1,6 +1,4 @@
-@file:JvmName("ClientServerSerDe")
-
-package io.github.matrixkt.utils
+package io.github.matrixkt.clientserver
 
 import io.github.matrixkt.clientserver.api.Login
 import io.github.matrixkt.clientserver.models.AuthenticationData

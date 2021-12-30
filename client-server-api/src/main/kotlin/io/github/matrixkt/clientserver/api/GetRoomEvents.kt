@@ -3,8 +3,8 @@ package io.github.matrixkt.clientserver.api
 import io.github.matrixkt.clientserver.models.Direction
 import io.github.matrixkt.clientserver.models.events.MatrixEvent
 import io.github.matrixkt.clientserver.models.events.StateEvent
-import io.github.matrixkt.utils.MatrixRpc
-import io.github.matrixkt.utils.RpcMethod
+import io.github.matrixkt.clientserver.MatrixRpc
+import io.github.matrixkt.clientserver.RpcMethod
 import io.ktor.resources.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject

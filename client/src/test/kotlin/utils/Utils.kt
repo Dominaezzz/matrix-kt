@@ -1,6 +1,6 @@
 package utils
 
-import io.github.matrixkt.utils.MatrixJson
+import io.github.matrixkt.client.MatrixJson
 import io.ktor.client.engine.mock.MockRequestHandleScope
 import io.ktor.client.engine.mock.respond
 import io.ktor.http.ContentType

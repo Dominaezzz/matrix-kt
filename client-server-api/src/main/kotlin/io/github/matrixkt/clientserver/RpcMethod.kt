@@ -1,4 +1,4 @@
-package io.github.matrixkt.utils
+package io.github.matrixkt.clientserver
 
 import io.ktor.http.*
 import kotlin.reflect.KClass

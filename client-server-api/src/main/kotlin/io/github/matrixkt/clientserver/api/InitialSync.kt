@@ -6,8 +6,8 @@ import io.github.matrixkt.clientserver.models.RoomVisibility
 import io.github.matrixkt.clientserver.models.events.MatrixEvent
 import io.github.matrixkt.clientserver.models.events.StateEvent
 import io.github.matrixkt.clientserver.models.events.UnsignedData
-import io.github.matrixkt.utils.MatrixRpc
-import io.github.matrixkt.utils.RpcMethod
+import io.github.matrixkt.clientserver.MatrixRpc
+import io.github.matrixkt.clientserver.RpcMethod
 import io.ktor.resources.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
