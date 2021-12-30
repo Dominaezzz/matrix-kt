@@ -59,7 +59,7 @@ public suspend inline fun <reified Method : RpcMethod, reified Location, reified
     block: HttpRequestBuilder.() -> Unit = {}
 ): ResponseBody {
     return baseRpc<Method, Location, ResponseBody>(rpcObject.url) {
-        header(HttpHeaders.Authorization, "Bearer $accessToken")
+        bearerAuth(accessToken)
         contentType(ContentType.Application.Json)
         setBody(rpcObject.body)
         block()
@@ -73,7 +73,7 @@ public suspend inline fun <reified Method : RpcMethod, reified Location, reified
     block: HttpRequestBuilder.() -> Unit = {}
 ): ResponseBody {
     return baseRpc<Method, Location, ResponseBody>(rpcObject.url) {
-        header(HttpHeaders.Authorization, "Bearer $accessToken")
+        bearerAuth(accessToken)
         block()
     }
 }
