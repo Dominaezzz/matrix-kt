@@ -1,6 +1,6 @@
 package io.github.matrixkt.utils
 
-import io.github.matrixkt.models.MatrixException
+import io.github.matrixkt.client.MatrixException
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*

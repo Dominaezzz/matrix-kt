@@ -2,8 +2,9 @@
 
 package io.github.matrixkt
 
-import io.github.matrixkt.api.*
-import io.github.matrixkt.models.*
+import io.github.matrixkt.client.MatrixException
+import io.github.matrixkt.clientserver.api.*
+import io.github.matrixkt.clientserver.models.*
 import io.github.matrixkt.utils.MatrixConfig
 import io.github.matrixkt.utils.rpc
 import io.ktor.client.*
