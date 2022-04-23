@@ -36,7 +36,7 @@ public fun <Content : Any, UnsignedData : Any> RoomEvent(
     }
 }
 
-private data class MessageEvent<Content, UnsignedData>(
+internal data class MessageEvent<Content, UnsignedData>(
     override val type: String,
 
     override val content: Content,
