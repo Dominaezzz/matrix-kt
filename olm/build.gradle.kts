@@ -95,7 +95,12 @@ kotlin {
             "test" {
                 binaries {
                     if (HostManager.hostIsLinux || HostManager.hostIsMac) {
-                        getTest(NativeBuildType.DEBUG).linkerOpts("-L/usr/lib", "-L/usr/local/lib", "-lolm")
+                        getTest(NativeBuildType.DEBUG).linkerOpts(
+                            "-L/usr/lib",
+                            "-L/usr/local/lib",
+                            "-L/usr/local/lib/x86_64-linux-gnu",
+                            "-lolm",
+                        )
                     }
                     if (HostManager.hostIsMingw && olmPath != null) {
                         getTest(NativeBuildType.DEBUG).linkerOpts("-L${olmPath}", "-lolm")
@@ -117,14 +122,14 @@ kotlin {
 tasks {
     // Setup search paths for libolm at runtime for tests
     named<Test>("jvmTest") {
-        environment("LD_LIBRARY_PATH", "/usr/local/lib")
+        environment("LD_LIBRARY_PATH", "/usr/local/lib:/usr/local/lib/x86_64-linux-gnu")
         if (HostManager.hostIsMingw && olmPath != null) {
             systemProperty("java.library.path", olmPath)
             systemProperty("jna.library.path", olmPath)
         }
     }
     withType<KotlinNativeHostTest> {
-        environment("LD_LIBRARY_PATH", "/usr/local/lib")
+        environment("LD_LIBRARY_PATH", "/usr/local/lib:/usr/local/lib/x86_64-linux-gnu")
         if (HostManager.hostIsMingw && olmPath != null) {
             environment("Path", olmPath)
         }
