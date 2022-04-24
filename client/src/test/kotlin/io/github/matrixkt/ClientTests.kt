@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package io.github.matrixkt
 
 import io.github.matrixkt.api.*
@@ -7,7 +9,8 @@ import io.github.matrixkt.utils.rpc
 import io.ktor.client.*
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.http.*
-import io.ktor.test.dispatcher.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import utils.respond
 import utils.respondJson
 import kotlin.test.*
@@ -22,7 +25,7 @@ class ClientTests {
     }
 
     @Test
-    fun testCreateRoom() = testSuspend {
+    fun testCreateRoom() = runTest {
         val client = HttpClient(MockEngine) {
             engine {
                 addHandler {
@@ -53,7 +56,7 @@ class ClientTests {
     }
 
     @Test
-    fun testJoinRoom() = testSuspend {
+    fun testJoinRoom() = runTest {
         val engine = MockEngine {
             // language=json
             respondJson("""
@@ -101,7 +104,7 @@ class ClientTests {
     }
 
     @Test
-    fun testGetThumbnail() = testSuspend {
+    fun testGetThumbnail() = runTest {
         val mockEngine = MockEngine.create {
             addHandler {
                 // language=json
@@ -189,7 +192,7 @@ class ClientTests {
     }
 
     @Test
-    fun testResolveRoom() = testSuspend {
+    fun testResolveRoom() = runTest {
         val mockEngine = MockEngine.create {
             addHandler {
                 respond(GetRoomIdByAlias.Response(
@@ -238,7 +241,7 @@ class ClientTests {
     }
 
     @Test
-    fun testRegister() = testSuspend {
+    fun testRegister() = runTest {
         val client = HttpClient(MockEngine) {
             engine {
                 addHandler {
