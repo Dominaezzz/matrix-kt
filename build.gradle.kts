@@ -111,11 +111,13 @@ subprojects {
     }
 
     plugins.withId("signing") {
-        ext["signing.keyId"] = System.getenv("SIGNING_KEY_ID")
-        ext["signing.password"] = System.getenv("SIGNING_PASSWORD")
-        ext["signing.key"] = System.getenv("SIGNING_KEY")
-
         configure<SigningExtension> {
+            useInMemoryPgpKeys(
+                System.getenv("SIGNING_KEY_ID"),
+                System.getenv("SIGNING_KEY"),
+                System.getenv("SIGNING_PASSWORD")
+            )
+
             sign(extensions.findByType<PublishingExtension>()!!.publications)
         }
     }
