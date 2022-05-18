@@ -19,6 +19,7 @@ jobs:
 
       - name: 'Install dependencies'
         run: |
+          sudo sed -i 's/azure.archive.ubuntu.com/archive.ubuntu.com/' /etc/apt/sources.list
           sudo apt-get update
           sudo apt-get install gcc-multilib g++-multilib
         if: matrix.os == 'ubuntu-latest'
