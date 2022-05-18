@@ -19,6 +19,7 @@ exec {
     standardOutput = stdout
 }
 
+group = "io.github.dominaezzz.matrixkt"
 version = stdout.toString().trim()
 
 repositories {
@@ -30,7 +31,7 @@ subprojects {
         mavenCentral()
     }
 
-    group = "io.github.matrixkt"
+    group = rootProject.group
     version = rootProject.version
 
     plugins.withId("org.jetbrains.kotlin.multiplatform") {
@@ -48,11 +49,18 @@ subprojects {
             val vcs: String by project
 
             repositories {
-                maven("https://maven.pkg.github.com/Dominaezzz/${rootProject.name}") {
-                    name = "GitHubPackages"
+                // maven("https://maven.pkg.github.com/Dominaezzz/${rootProject.name}") {
+                //     name = "GitHubPackages"
+                //     credentials {
+                //         username = System.getenv("GITHUB_USER")
+                //         password = System.getenv("GITHUB_TOKEN")
+                //     }
+                // }
+                maven("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                    name = "sonatype"
                     credentials {
-                        username = System.getenv("GITHUB_USER")
-                        password = System.getenv("GITHUB_TOKEN")
+                        username = System.getenv("OSSRH_USERNAME")
+                        password = System.getenv("OSSRH_PASSWORD")
                     }
                 }
             }
@@ -99,6 +107,16 @@ subprojects {
             }
         tasks.register("smartPublish") {
             dependsOn(publishTasks)
+        }
+    }
+
+    plugins.withId("signing") {
+        ext["signing.keyId"] = System.getenv("SIGNING_KEY_ID")
+        ext["signing.password"] = System.getenv("SIGNING_PASSWORD")
+        ext["signing.key"] = System.getenv("SIGNING_KEY")
+
+        configure<SigningExtension> {
+            sign(extensions.findByType<PublishingExtension>()!!.publications)
         }
     }
 }

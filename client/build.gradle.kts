@@ -4,6 +4,7 @@ plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
     `maven-publish`
+    signing
 }
 
 val ktorVersion: String by rootProject.extra

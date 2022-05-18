@@ -8,6 +8,7 @@ plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
     `maven-publish`
+    signing
     id("de.undercouch.download")
 }
 
