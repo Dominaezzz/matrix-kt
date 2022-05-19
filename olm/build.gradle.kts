@@ -31,10 +31,8 @@ val extractOlm by tasks.registering(Copy::class) {
 }
 
 val olmPath: String? = System.getenv("OLM_PATH")
-if (HostManager.hostIsMingw) {
-    if (olmPath == null) {
-        println("{OLM_PATH} was not specified.")
-    }
+if (olmPath == null) {
+    println("{OLM_PATH} was not specified.")
 }
 
 kotlin {
@@ -95,15 +93,7 @@ kotlin {
             }
             "test" {
                 binaries {
-                    if (HostManager.hostIsLinux || HostManager.hostIsMac) {
-                        getTest(NativeBuildType.DEBUG).linkerOpts(
-                            "-L/usr/lib",
-                            "-L/usr/local/lib",
-                            "-L/usr/local/lib/x86_64-linux-gnu",
-                            "-lolm",
-                        )
-                    }
-                    if (HostManager.hostIsMingw && olmPath != null) {
+                    if (olmPath != null) {
                         getTest(NativeBuildType.DEBUG).linkerOpts("-L${olmPath}", "-lolm")
                     }
                 }
@@ -123,16 +113,22 @@ kotlin {
 tasks {
     // Setup search paths for libolm at runtime for tests
     named<Test>("jvmTest") {
-        environment("LD_LIBRARY_PATH", "/usr/local/lib:/usr/local/lib/x86_64-linux-gnu")
-        if (HostManager.hostIsMingw && olmPath != null) {
-            systemProperty("java.library.path", olmPath)
-            systemProperty("jna.library.path", olmPath)
+        if (olmPath != null) {
+            if (HostManager.hostIsMingw) {
+                systemProperty("java.library.path", olmPath)
+                systemProperty("jna.library.path", olmPath)
+            } else {
+                environment("LD_LIBRARY_PATH", olmPath)
+            }
         }
     }
     withType<KotlinNativeHostTest> {
-        environment("LD_LIBRARY_PATH", "/usr/local/lib:/usr/local/lib/x86_64-linux-gnu")
-        if (HostManager.hostIsMingw && olmPath != null) {
-            environment("Path", olmPath)
+        if (olmPath != null) {
+            if (HostManager.hostIsMingw) {
+                environment("Path", olmPath)
+            } else {
+                environment("LD_LIBRARY_PATH", olmPath)
+            }
         }
     }
 }
