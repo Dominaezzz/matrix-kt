@@ -68,7 +68,7 @@ subprojects {
             publications.withType<MavenPublication> {
                 pom {
                     name.set(project.name)
-                    description.set(project.description)
+                    description.set("Kotlin Multiplatform Library for Matrix")
                     url.set(vcs)
                     licenses {
                         license {
