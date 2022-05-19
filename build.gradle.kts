@@ -45,6 +45,11 @@ subprojects {
     }
 
     plugins.withId("maven-publish") {
+        // Stub javadoc until I look into Dokka
+        val javadocJar by tasks.registering(Jar::class) {
+            archiveClassifier.set("javadoc")
+        }
+
         configure<PublishingExtension> {
             val vcs: String by project
 
@@ -66,6 +71,8 @@ subprojects {
             }
 
             publications.withType<MavenPublication> {
+                artifact(javadocJar.get())
+
                 pom {
                     name.set(project.name)
                     description.set("Kotlin Multiplatform Library for Matrix")
