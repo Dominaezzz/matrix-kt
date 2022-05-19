@@ -25,17 +25,12 @@ Join the support room at [#matrix-kt:matrix.org](https://matrix.to/#/#matrix-kt:
 ## Usage
 ```kotlin
 repositories {
-    maven("https://maven.pkg.github.com/Dominaezzz/matrix-kt") {
-        credentials {
-            username = System.getenv("GITHUB_USER") // Your GitHub username.
-            password = System.getenv("GITHUB_TOKEN") // A GitHub token with `read:packages`.
-        }
-    }
+    mavenCentral()
 }
 
 dependencies {
-    implementation("io.github.matrixkt:client:$version")
-    implementation("io.github.matrixkt:olm:$version")
+    implementation("io.github.dominaezzz.matrixkt:client:$version")
+    implementation("io.github.dominaezzz.matrixkt:olm:$version")
 }
 ```
 
