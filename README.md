@@ -71,3 +71,15 @@ val message = session.decrypt(Message.PreKey("oun02024f=ocnaowincd;53tnv024ok/7u
 session.clear()
 account.clear()
 ```
+
+#### JS
+
+Javascript has a special prerequisites.
+Before being able to use the matrix-kt lib you need to initiate the olm library.
+
+```js
+require("@matrix-org/olm").init()
+```
+
+Please read the olm [documentation](https://gitlab.matrix.org/matrix-org/olm/-/tree/master/javascript#olm) for further instructions on initiating the
+olm library.

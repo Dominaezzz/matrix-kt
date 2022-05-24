@@ -38,6 +38,10 @@ if (HostManager.hostIsMingw) {
 }
 
 kotlin {
+    js(IR) {
+        nodejs()
+        browser()
+    }
     jvm()
     linuxX64()
     macosX64()
@@ -65,6 +69,13 @@ kotlin {
                 implementation("net.java.dev.jna:jna:$jnaVersion")
             }
         }
+
+        named("jsMain") {
+            dependencies {
+                implementation(npm("@matrix-org/olm", olmVersion))
+            }
+        }
+
         val nativeMain by creating {
             dependsOn(commonMain.get())
         }
