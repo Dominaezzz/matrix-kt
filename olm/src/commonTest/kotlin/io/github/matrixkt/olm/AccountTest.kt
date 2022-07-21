@@ -3,15 +3,15 @@ package io.github.matrixkt.olm
 import kotlinx.serialization.json.Json
 import kotlin.test.*
 
-class AccountTest {
+class AccountTest : BaseTest {
     @Test
-    fun testCreateAndReleaseAccount() {
+    fun testCreateAndReleaseAccount() = runTest {
         val account = Account()
         account.clear()
     }
 
     @Test
-    fun testAccountIdentityKeys() {
+    fun testAccountIdentityKeys() = runTest {
         val identityKeys = withAccount { it.identityKeys }
 
         println("Identity keys: $identityKeys")
@@ -24,7 +24,7 @@ class AccountTest {
     }
 
     @Test
-    fun testGenerateFallbackKeys() {
+    fun testGenerateFallbackKeys() = runTest {
         withAccount {
             // Test generated one time keys.
             it.generateFallbackKey()
@@ -42,14 +42,14 @@ class AccountTest {
     //****************************************************
 
     @Test
-    fun testMaxOneTimeKeys() {
+    fun testMaxOneTimeKeys() = runTest {
         val maxOneTimeKeys = withAccount { it.maxNumberOfOneTimeKeys }
 
         assertTrue(maxOneTimeKeys > 0)
     }
 
     @Test
-    fun testGenerateOneTimeKeys() {
+    fun testGenerateOneTimeKeys() = runTest {
         withAccount {
             // Test generated one time keys.
             it.generateOneTimeKeys(GENERATION_ONE_TIME_KEYS_NUMBER)
@@ -64,14 +64,14 @@ class AccountTest {
     }
 
     @Test
-    fun testMarkOneTimeKeysAsPublished() {
+    fun testMarkOneTimeKeysAsPublished() = runTest {
         withAccount {
             it.markOneTimeKeysAsPublished()
         }
     }
 
     @Test
-    fun testSignMessage() {
+    fun testSignMessage() = runTest {
         val clearMsg = "Super secret! Maybe spoilers..."
 
         val signedMsg = withAccount {
@@ -87,7 +87,7 @@ class AccountTest {
     // ********************************************************
 
     @Test
-    fun testSerialization() {
+    fun testSerialization() = runTest {
         val jsonStr: String
         val idKeysReference: IdentityKeys
         val oneTimeKeysReference: OneTimeKeys
@@ -125,7 +125,7 @@ class AccountTest {
     // ****************************************************
 
     @Test
-    fun testGenerateOneTimeKeysError() {
+    fun testGenerateOneTimeKeysError() = runTest {
         // keys number = 0 => no error
 
         withAccount {
@@ -144,7 +144,7 @@ class AccountTest {
      * This test validates random series are provide enough random values.
      */
     @Test
-    fun testMultipleAccountCreation() {
+    fun testMultipleAccountCreation() = runTest {
         val identityKey1 = withAccount { it.identityKeys }
         val identityKey2 = withAccount { it.identityKeys }
         val identityKey3 = withAccount { it.identityKeys }

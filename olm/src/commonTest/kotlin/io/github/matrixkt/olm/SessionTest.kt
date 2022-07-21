@@ -4,7 +4,7 @@ import kotlinx.serialization.json.Json
 import kotlin.test.*
 
 
-class SessionTest {
+class SessionTest: BaseTest {
     /**
      * Basic test:
      * - alice creates an account
@@ -74,7 +74,7 @@ class SessionTest {
      * - bob decrypts the encrypted message
      */
     @Test
-    fun test02AliceToBobBackAndForth() {
+    fun test02AliceToBobBackAndForth() = runTest {
         // creates alice & bob accounts
         val aliceAccount = Account()
         val bobAccount = Account()
@@ -144,7 +144,7 @@ class SessionTest {
     }
 
     @Test
-    fun test04MatchInboundSession() {
+    fun test04MatchInboundSession() = runTest {
         // ACCOUNTS CREATION
         val aliceAccount = Account()
         val bobAccount = Account()
@@ -198,7 +198,7 @@ class SessionTest {
      * comparison (encrypt vs )
      */
     @Test
-    fun test05SessionSerialization() {
+    fun test05SessionSerialization() = runTest {
         val ONE_TIME_KEYS_NUMBER = 1L
 
         // creates alice & bob accounts
@@ -274,7 +274,7 @@ class SessionTest {
     // ****************************************************
 
     @Test
-    fun test06SanityCheckErrors() {
+    fun test06SanityCheckErrors() = runTest {
         val ONE_TIME_KEYS_NUMBER = 5L
 
         // ALICE & BOB ACCOUNTS CREATION

@@ -6,9 +6,9 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 
-class PkTest {
+class PkTest: BaseTest {
     @Test
-    fun test01EncryptAndDecrypt() {
+    fun test01EncryptAndDecrypt() = runTest {
         val decryption = PkDecryption()
         val encryption = PkEncryption(decryption.publicKey)
 
@@ -27,7 +27,7 @@ class PkTest {
     }
 
     @Test
-    fun test02PrivateKey() {
+    fun test02PrivateKey() = runTest {
         val privateKey = byteArrayOf(
             0x77.toByte(), 0x07.toByte(), 0x6D.toByte(), 0x0A.toByte(),
             0x73.toByte(), 0x18.toByte(), 0xA5.toByte(), 0x7D.toByte(),
@@ -49,7 +49,7 @@ class PkTest {
     }
 
     @Test
-    fun test03Signing() {
+    fun test03Signing() = runTest {
         val seed = Random.nextBytes(PkSigning.seedLength.toInt()) // Check this PkSigning.generateSeed()
         val signing = PkSigning(seed)
 

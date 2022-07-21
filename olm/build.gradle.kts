@@ -37,10 +37,18 @@ if (HostManager.hostIsMingw) {
     }
 }
 
+var kotlinCoroutines = "1.6.1"
+
 kotlin {
     js(IR) {
-        nodejs()
-        browser()
+        nodejs ()
+        browser {
+            testTask {
+                useKarma {
+                    useChromeHeadless()
+                }
+            }
+        }
     }
     jvm()
     linuxX64()
@@ -62,6 +70,7 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(kotlin("test"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinCoroutines}-native-mt")
             }
         }
         named("jvmMain") {

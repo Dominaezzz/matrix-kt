@@ -2,9 +2,9 @@ package io.github.matrixkt.olm
 
 import kotlin.test.*
 
-class SASTest {
+class SASTest: BaseTest {
     @Test
-    fun testSASCode() {
+    fun testSASCode() = runTest {
         val aliceSas = SAS()
         val bobSas = SAS()
         try {

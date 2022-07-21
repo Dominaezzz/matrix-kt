@@ -4,7 +4,8 @@ import kotlin.test.Test
 import kotlin.test.assertFails
 import kotlin.test.assertFalse
 
-class UtilityTest {
+class UtilityTest: BaseTest {
+
     /**
      * Test the signing API
      */
@@ -49,7 +50,7 @@ class UtilityTest {
     }
 
     @Test
-    fun test02sha256() {
+    fun test02sha256() = runTest {
         val utility = Utility()
 
         val msgToHash = "The quick brown fox jumps over the lazy dog"
