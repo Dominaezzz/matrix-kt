@@ -15,7 +15,7 @@ class SessionTest: BaseTest {
      * - bob decrypts the encrypted message with its session
      */
     @Test
-    fun test01AliceToBob() {
+    fun test01AliceToBob() = runTest {
         val ONE_TIME_KEYS_NUMBER = 5L
 
         // ALICE & BOB ACCOUNTS CREATION
