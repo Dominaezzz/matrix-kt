@@ -1,6 +1,21 @@
 package io.github.matrixkt.olm
 
 import org.khronos.webgl.Uint8Array
+import kotlin.js.Promise
+
+public class Options {
+    public lateinit var locateFile: () -> String?;
+}
+
+public external interface DecryptedMessage {
+    public var plaintext: String
+    public var message_index: Int
+}
+
+public external interface EncryptedMessage {
+    public var body: String
+    public var type: Int
+}
 
 @JsModule("@matrix-org/olm")
 @JsNonModule
@@ -40,7 +55,7 @@ public external class JsOlm {
         public fun has_received_message(): Boolean;
         public fun matches_inbound(one_time_key_message: String): Boolean;
         public fun matches_inbound_from(identity_key: String, one_time_key_message: String): Boolean;
-        public fun encrypt(plaintext: String): Message;
+        public fun encrypt(plaintext: String): EncryptedMessage;
         public fun decrypt(message_type: Int, message: String): String;
         public fun describe(): String;
     }
@@ -53,13 +68,10 @@ public external class JsOlm {
         public fun sign(message: String): String;
     }
     public companion object {
-        public suspend fun init(options: Options): JsOlm;
+        public fun init(options: Options = definedExternally): Promise<Unit>;
         public val PRIVATE_KEY_LENGTH: Long;
     }
 
-    public class Options {
-        public val locateFile: () -> String;
-    }
     public class InboundGroupSession {
         public constructor();
         public fun pickle(key: String): String;
@@ -71,7 +83,7 @@ public external class JsOlm {
         public fun import_session(session_key: String): String;
 
         public fun export_session(message_index: Long): String;
-        public fun decrypt(message: String): GroupMessage;
+        public fun decrypt(message: String): DecryptedMessage;
         public fun unpickle(key: Uint8Array, pickle: String);
         public fun unpickle(key: String, pickle: String);
     }

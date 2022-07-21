@@ -71,7 +71,8 @@ public actual class Session private constructor(internal val ptr: JsOlm.Session 
      * @return the encrypted message
      */
     public actual fun encrypt(clearMsg: String, random: Random): Message {
-        return ptr.encrypt(clearMsg)
+        var message = ptr.encrypt(clearMsg)
+        return Message(message.body, message.type.toLong())
     }
 
     /**

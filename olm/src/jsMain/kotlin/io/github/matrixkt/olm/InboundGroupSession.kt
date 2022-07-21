@@ -52,7 +52,8 @@ public actual class InboundGroupSession private constructor(private val ptr: JsO
      * @return the decrypted message information
      */
     public actual fun decrypt(message: String): GroupMessage {
-      return ptr.decrypt(message)
+        var decrypted = ptr.decrypt(message)
+        return GroupMessage(decrypted.plaintext, decrypted.message_index.toLong())
     }
 
     public actual fun pickle(key: ByteArray): String {
