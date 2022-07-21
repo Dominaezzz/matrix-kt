@@ -3,8 +3,9 @@ package io.github.matrixkt.olm
 import org.khronos.webgl.Uint8Array
 import kotlin.js.Promise
 
-public class Options {
-    public lateinit var locateFile: () -> String?;
+public external interface Options {
+    @JsName("locateFile")
+    public var locateFile: () -> String;
 }
 
 public external interface DecryptedMessage {

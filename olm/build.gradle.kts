@@ -84,7 +84,13 @@ kotlin {
                 implementation(npm("@matrix-org/olm", olmVersion))
             }
         }
-
+        named("jsTest") {
+            dependencies {
+                implementation(npm("crypto-browserify", "3.12.0"))
+                implementation(npm("stream-browserify", "3.0.0"))
+                implementation(npm("buffer/", "6.0.3"))
+            }
+        }
         val nativeMain by creating {
             dependsOn(commonMain.get())
         }
