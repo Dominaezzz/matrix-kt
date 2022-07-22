@@ -10,7 +10,7 @@ debug(`karma basePath: ${basePath}`);
 debug(`karma wasmPath: ${wasmPath}`);
 
 config.proxies = {
-    "/olm.wasm": path.resolve(wasmPath, 'olm.wasm')
+    "/olm.wasm": '/' + "absolute" + path.resolve(wasmPath, 'olm.wasm')
 }
 
 config.files = [
