@@ -15,6 +15,7 @@ plugins {
 val serialVersion: String by rootProject.extra
 val jnaVersion: String by rootProject.extra
 val olmVersion = "3.2.12"
+val coroutineVersion: String by rootProject.extra
 
 val downloadsDir = buildDir.resolve("downloads")
 val olmZip = downloadsDir.resolve("olm-$olmVersion.zip")
@@ -36,8 +37,6 @@ if (HostManager.hostIsMingw) {
         println("{OLM_PATH} was not specified.")
     }
 }
-
-var kotlinCoroutines = "1.6.1"
 
 kotlin {
     js(IR) {
@@ -70,7 +69,7 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(kotlin("test"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinCoroutines}-native-mt")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutineVersion}")
             }
         }
         named("jvmMain") {
