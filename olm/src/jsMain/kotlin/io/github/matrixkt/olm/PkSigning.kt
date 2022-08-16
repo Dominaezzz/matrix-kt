@@ -28,7 +28,9 @@ public actual class PkSigning actual constructor(seed: ByteArray) {
     public actual companion object {
         public actual val seedLength: Long
           get() {
-              val seedRandom = JsOlm.PkSigning().generate_seed()
+              val pksign = JsOlm.PkSigning()
+              val seedRandom = pksign.generate_seed()
+              pksign.free()
               return seedRandom.length.toLong()
         }
     }
