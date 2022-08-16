@@ -115,11 +115,11 @@ public actual class Session private constructor(internal val ptr: JsOlm.Session 
             val jsSession = JsOlm.Session()
             try {
                 jsSession.create_outbound(account.ptr, theirIdentityKey, theirOneTimeKey)
-                return Session(jsSession)
             } catch (e: Exception) {
                 jsSession.free()
                 throw e
             }
+            return Session(jsSession)
         }
 
         /**
@@ -135,11 +135,11 @@ public actual class Session private constructor(internal val ptr: JsOlm.Session 
             val jsSession = JsOlm.Session()
             try {
                 jsSession.create_inbound(account.ptr, oneTimeKeyMsg)
-                return Session(jsSession)
             } catch (e: Exception) {
                 jsSession.free()
                 throw e
             }
+            return Session(jsSession)
         }
 
         /**
@@ -158,11 +158,11 @@ public actual class Session private constructor(internal val ptr: JsOlm.Session 
             val jsSession = JsOlm.Session()
             try {
                 jsSession.create_inbound_from(account.ptr, theirIdentityKey, oneTimeKeyMsg)
-                return Session(jsSession)
             } catch (e: Exception) {
                 jsSession.free()
                 throw e
             }
+            return Session(jsSession)
         }
 
         /**
@@ -177,11 +177,11 @@ public actual class Session private constructor(internal val ptr: JsOlm.Session 
             val session = JsOlm.Session()
             try {
                 session.unpickle(key, pickle)
-                return Session(session)
             } catch (e: Exception) {
                 session.free()
                 throw e
             }
+            return Session(session)
         }
     }
 }
