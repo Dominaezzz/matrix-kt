@@ -22,7 +22,7 @@ public actual class SAS actual constructor(random: Random) {
      * @param theirPublicKey other user public key (base64 encoded with no padding)
      */
     public actual fun setTheirPublicKey(theirPublicKey: String) {
-      ptr.set_their_key(theirPublicKey)
+        ptr.set_their_key(theirPublicKey)
     }
 
     /**
