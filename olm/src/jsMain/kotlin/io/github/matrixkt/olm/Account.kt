@@ -102,7 +102,7 @@ public actual open class Account(internal val ptr: JsOlm.Account) {
         return ptr.sign(message)
     }
 
-    public actual fun clear () {
+    public actual fun clear() {
        ptr.free();
     }
 
