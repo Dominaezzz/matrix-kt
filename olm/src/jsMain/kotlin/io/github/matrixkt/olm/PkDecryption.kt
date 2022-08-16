@@ -77,6 +77,7 @@ public actual class PkDecryption {
             val pkdec = JsOlm.PkDecryption()
             try {
                 val privateKey: ByteArray = pkdec.unpickle(key.toString(), pickle).encodeToByteArray()
+                pkdec.free()
                 return fromPrivate(privateKey)
             } catch (e: Exception) {
                 pkdec.free()
