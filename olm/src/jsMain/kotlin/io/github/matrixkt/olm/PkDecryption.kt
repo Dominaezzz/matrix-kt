@@ -57,7 +57,7 @@ public actual class PkDecryption {
                 }
             }
 
-        public actual val privateKeyLength: Long get() = JsOlm.PRIVATE_KEY_LENGTH;
+        public actual val privateKeyLength: Long get() = JsOlm.PRIVATE_KEY_LENGTH.toLong();
 
         public actual fun fromPrivate(privateKey: ByteArray): PkDecryption {
             val pkdec = JsOlm.PkDecryption()

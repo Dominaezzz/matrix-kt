@@ -76,7 +76,7 @@ public external class JsOlm {
     }
     public companion object {
         public fun init(options: Options = definedExternally): Promise<Unit>;
-        public val PRIVATE_KEY_LENGTH: Long;
+        public val PRIVATE_KEY_LENGTH: Int;
     }
 
     public class InboundGroupSession {
