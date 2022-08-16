@@ -30,7 +30,7 @@ public actual class Session private constructor(internal val ptr: JsOlm.Session 
      * @return the session ID
      */
     public actual val sessionId: String
-      get() = ptr.session_id()
+        get() = ptr.session_id()
 
 
     public actual val hasReceivedMessage: Boolean
