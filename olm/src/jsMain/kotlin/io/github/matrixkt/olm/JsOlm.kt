@@ -18,6 +18,12 @@ public external interface EncryptedMessage {
     public var type: Int
 }
 
+public external interface OlmPkMessage {
+    public var ephemeral: String
+    public var mac: String
+    public var ciphertext: String
+}
+
 @JsModule("@matrix-org/olm")
 @JsNonModule
 public external class JsOlm {
@@ -120,7 +126,7 @@ public external class JsOlm {
         public fun constructor();
         public fun free();
         public fun set_recipient_key(key: String);
-        public fun encrypt(plaintext: String): PkMessage;
+        public fun encrypt(plaintext: String): OlmPkMessage;
     }
 
     public class SAS {

@@ -19,7 +19,8 @@ public actual class PkEncryption actual constructor(recipientKey: String) {
     }
 
     public actual fun encrypt(plaintext: String, random: Random): PkMessage {
-        return ptr.encrypt(plaintext)
+        val message = ptr.encrypt(plaintext)
+        return PkMessage(message.ciphertext, message.mac, message.ephemeral)
     }
 
 }
