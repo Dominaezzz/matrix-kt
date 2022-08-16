@@ -11,7 +11,7 @@ public actual class InboundGroupSession private constructor(private val ptr: JsO
         }
     }
 
-    public actual fun clear () {
+    public actual fun clear() {
         ptr.free();
     }
 
