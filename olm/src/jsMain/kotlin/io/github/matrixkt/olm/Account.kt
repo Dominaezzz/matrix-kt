@@ -26,7 +26,7 @@ public actual open class Account(internal val ptr: JsOlm.Account) {
      */
     public actual val maxNumberOfOneTimeKeys: Long
         get() {
-            return ptr.max_number_of_one_time_keys()
+            return ptr.max_number_of_one_time_keys().toLong()
         }
 
     /**

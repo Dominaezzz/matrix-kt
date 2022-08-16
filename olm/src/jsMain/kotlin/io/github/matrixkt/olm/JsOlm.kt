@@ -27,7 +27,7 @@ public external class JsOlm {
         public fun create();
         public fun identity_keys(): String;
         public fun mark_keys_as_published();
-        public fun max_number_of_one_time_keys(): Long;
+        public fun max_number_of_one_time_keys(): Int;
         public fun generate_one_time_keys(number_of_keys: Long);
         public fun one_time_keys(): String;
         public fun remove_one_time_keys(session: Session);
