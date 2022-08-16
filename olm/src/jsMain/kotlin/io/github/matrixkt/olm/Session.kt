@@ -96,7 +96,8 @@ public actual class Session private constructor(internal val ptr: JsOlm.Session 
      * @return the session as bytes buffer
      */
     public actual fun pickle(key: ByteArray): String {
-        return ptr.pickle(key)
+
+        return ptr.pickle(key.toString())
     }
 
     public actual companion object {
@@ -176,7 +177,7 @@ public actual class Session private constructor(internal val ptr: JsOlm.Session 
         public actual fun unpickle(key: ByteArray, pickle: String): Session {
             val session = JsOlm.Session()
             try {
-                session.unpickle(key, pickle)
+                session.unpickle(key.toString(), pickle)
             } catch (e: Exception) {
                 session.free()
                 throw e
