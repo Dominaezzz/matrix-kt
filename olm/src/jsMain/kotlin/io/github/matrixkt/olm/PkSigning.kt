@@ -26,12 +26,11 @@ public actual class PkSigning actual constructor(seed: ByteArray) {
     }
 
     public actual companion object {
-        public actual val seedLength: Long
-          get() {
-              val pksign = JsOlm.PkSigning()
-              val seedRandom = pksign.generate_seed()
-              pksign.free()
-              return seedRandom.length.toLong()
+        public actual val seedLength: Long by lazy {
+          val pksign = JsOlm.PkSigning()
+          val seedRandom = pksign.generate_seed()
+          pksign.free()
+          seedRandom.length.toLong()
         }
     }
 }

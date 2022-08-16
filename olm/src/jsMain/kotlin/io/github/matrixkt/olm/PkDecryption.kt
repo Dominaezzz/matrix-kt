@@ -42,20 +42,19 @@ public actual class PkDecryption {
     }
 
     public actual companion object {
-        public actual val publicKeyLength: Long
-            get() {
-                // There is no equivalent in matrix-org/olm so we need to do it this way
-                val pkdec = JsOlm.PkDecryption()
-                val pubKey: String
-                try {
-                    pubKey = pkdec.generate_key()
-                    pkdec.free()
-                    return pubKey.length.toLong()
-                } catch (e: Exception) {
-                    pkdec.free()
-                    throw e
-                }
+        public actual val  publicKeyLength: Long by lazy {
+            // There is no equivalent in matrix-org/olm so we need to do it this way
+            val pkdec = JsOlm.PkDecryption()
+            val pubKey: String
+            try {
+                pubKey = pkdec.generate_key()
+                pkdec.free()
+            } catch (e: Exception) {
+                pkdec.free()
+                throw e
             }
+            pubKey.length.toLong()
+        }
 
         public actual val privateKeyLength: Long get() = JsOlm.PRIVATE_KEY_LENGTH.toLong();
 
