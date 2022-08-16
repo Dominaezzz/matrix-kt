@@ -12,11 +12,6 @@ public actual class PkDecryption {
         this.publicKey = publicKey
     }
 
-    private constructor(ptr: JsOlm.PkDecryption) {
-        this.ptr = ptr
-        this.publicKey = ""
-    }
-
     public actual constructor(random: Random) {
         ptr = JsOlm.PkDecryption()
         try {
