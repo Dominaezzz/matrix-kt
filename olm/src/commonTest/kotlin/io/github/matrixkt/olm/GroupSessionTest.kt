@@ -215,7 +215,7 @@ class GroupSessionTest: BaseTest {
         }
 
         assertNotEquals(0, EXPECTED_ERROR_MESSAGE.length)
-        assertEquals(EXPECTED_ERROR_MESSAGE, exception.message)
+        assertTrue(exception.message!!.contains(EXPECTED_ERROR_MESSAGE))
 
         bobInboundGroupSession.clear()
     }
