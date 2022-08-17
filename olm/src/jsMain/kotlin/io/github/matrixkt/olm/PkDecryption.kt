@@ -28,9 +28,7 @@ public actual class PkDecryption {
 
     public actual val privateKey: ByteArray
         get() {
-            val key: Uint8Array = ptr.get_private_key()
-            val t: String = key.toString()
-            return t.encodeToByteArray()
+            return ptr.get_private_key().toByteArray()
         }
 
     public actual fun decrypt(message: PkMessage): String {

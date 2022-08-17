@@ -38,7 +38,7 @@ public actual class SAS actual constructor(random: Random) {
      * @return The generated short code.
      */
     public actual fun generateShortCode(info: String, numberOfBytes: Int): ByteArray {
-        return ptr.generate_bytes(info, numberOfBytes).toString().encodeToByteArray()
+        return ptr.generate_bytes(info, numberOfBytes).toByteArray()
     }
 
     public actual fun calculateMac(message: String, info: String): String {

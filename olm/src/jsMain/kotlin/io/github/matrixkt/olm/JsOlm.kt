@@ -1,6 +1,7 @@
 package io.github.matrixkt.olm
 
 import org.khronos.webgl.Uint8Array
+import org.khronos.webgl.get
 import kotlin.js.Promise
 
 public external interface Options {
@@ -148,4 +149,12 @@ public external class JsOlm {
         public fun ed25519_verify(key: String, message: Uint8Array, signature: String);
     }
 
+}
+
+public fun Uint8Array.toByteArray() : ByteArray {
+    var result = ByteArray(this.byteLength)
+    for (i in 0..this.byteLength) {
+        result[i] = this[i]
+    }
+    return result
 }
