@@ -30,7 +30,7 @@ public actual class PkSigning actual constructor(seed: ByteArray) {
           val pksign = JsOlm.PkSigning()
           val seedRandom = pksign.generate_seed()
           pksign.free()
-          seedRandom.length.toLong()
+          seedRandom.byteLength.toLong()
         }
     }
 }
