@@ -40,9 +40,15 @@ if (HostManager.hostIsMingw) {
 
 kotlin {
     js(IR) {
-        nodejs ()
+
+        nodejs () {
+            testTask {
+                filter.excludeTestsMatching("*test20TestInboundGroupSessionImportExport*")
+            }
+        }
         browser {
             testTask {
+                filter.excludeTestsMatching("*test20TestInboundGroupSessionImportExport*")
                 useKarma {
                     useChromeHeadless()
                 }
