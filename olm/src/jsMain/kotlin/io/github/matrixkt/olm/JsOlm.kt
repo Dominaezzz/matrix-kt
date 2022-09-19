@@ -153,9 +153,5 @@ public external class JsOlm {
 }
 
 public fun Uint8Array.toByteArray() : ByteArray {
-    var result = ByteArray(this.byteLength)
-    for (i in 0..this.byteLength) {
-        result[i] = this[i]
-    }
-    return result
+    return ByteArray(this.byteLength) { this[it] }
 }
