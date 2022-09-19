@@ -4,7 +4,7 @@ import kotlin.test.*
 
 class SASTest {
     @Test
-    fun testSASCode() {
+    fun testSASCode() = runTest {
         val aliceSas = SAS()
         val bobSas = SAS()
         try {

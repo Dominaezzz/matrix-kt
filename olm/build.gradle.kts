@@ -38,6 +38,21 @@ if (HostManager.hostIsMingw) {
 }
 
 kotlin {
+    js(IR) {
+        nodejs {
+            testTask {
+                filter.excludeTestsMatching("*test20TestInboundGroupSessionImportExport*")
+            }
+        }
+        browser {
+            testTask {
+                filter.excludeTestsMatching("*test20TestInboundGroupSessionImportExport*")
+                useKarma {
+                    useChromeHeadless()
+                }
+            }
+        }
+    }
     jvm()
     linuxX64()
     macosX64()
@@ -63,6 +78,19 @@ kotlin {
         named("jvmMain") {
             dependencies {
                 implementation("net.java.dev.jna:jna:$jnaVersion")
+            }
+        }
+
+        named("jsMain") {
+            dependencies {
+                implementation(npm("@matrix-org/olm", olmVersion))
+            }
+        }
+        named("jsTest") {
+            dependencies {
+                implementation(npm("crypto-browserify", "3.12.0"))
+                implementation(npm("stream-browserify", "3.0.0"))
+                implementation(npm("buffer/", "6.0.3"))
             }
         }
         val nativeMain by creating {

@@ -14,7 +14,7 @@ class GroupSessionTest {
      * - decrypted message is identical to original alice message
      */
     @Test
-    fun testDecryptMessage() {
+    fun testDecryptMessage() = runTest {
         val aliceOutSession = OutboundGroupSession()
         try {
             assertEquals(0, aliceOutSession.messageIndex)
@@ -52,7 +52,7 @@ class GroupSessionTest {
     }
 
     @Test
-    fun testSerializeOutboundSession() {
+    fun testSerializeOutboundSession() = runTest {
         // create one OUTBOUND GROUP SESSION
         val outboundGroupSessionRef = OutboundGroupSession()
 
@@ -86,7 +86,7 @@ class GroupSessionTest {
     }
 
     @Test
-    fun test16SerializeInboundSession() {
+    fun test16SerializeInboundSession() = runTest {
         // alice creates OUTBOUND GROUP SESSION
         val aliceOutboundGroupSession = OutboundGroupSession()
 
@@ -125,7 +125,7 @@ class GroupSessionTest {
      * This test validates random series are provide enough random values.
      */
     @Test
-    fun test17MultipleOutboundSession() {
+    fun test17MultipleOutboundSession() = runTest {
         val outboundGroupSession1 = OutboundGroupSession()
         val outboundGroupSession2 = OutboundGroupSession()
         val outboundGroupSession3 = OutboundGroupSession()
@@ -181,7 +181,7 @@ class GroupSessionTest {
      * This issue is described in details here: https://github.com/eclipsesource/J2V8/issues/142
      */
     @Test
-    fun test18TestBadCharacterCrashInDecrypt() {
+    fun test18TestBadCharacterCrashInDecrypt() = runTest {
         // values taken from a "real life" crash case
         val sessionKeyRef = "AgAAAAycZE6AekIctJWYxd2AWLOY15YmxZODm/WkgbpWkyycp6ytSp/R+wo84jRrzBNWmv6ySLTZ9R0EDOk9VI2eZyQ6Efdwyo1mAvrWvTkZl9yALPdkOIVHywyG65f1SNiLrnsln3hgsT1vUrISGyKtsljoUgQpr3JDPEhD0ilAi63QBjhnGCW252b+7nF+43rb6O6lwm93LaVwe2341Gdp6EkhTUvetALezEqDOtKN00wVqAbq0RQAnUJIowxHbMswg+FyoR1K1oCjnVEoF23O9xlAn5g1XtuBZP3moJlR2lwsBA"
         val msgToDecryptWithEmoji = "AwgNEpABpjs+tYF+0y8bWtzAgYAC3N55p5cPJEEiGPU1kxIHSY7f2aG5Fj4wmcsXUkhDv0UePj922kgf+Q4dFsPHKq2aVA93n8DJAQ/FRfcM98B9E6sKCZ/PsCF78uBvF12Aaq9D3pUHBopdd7llUfVq29d5y6ZwX5VDoqV2utsATkKjXYV9CbfZuvvBMQ30ZLjEtyUUBJDY9K4FxEFcULytA/IkVnATTG9ERuLF/yB6ukSFR+iUWRYAmtuOuU0k9BvaqezbGqNoK5Grlkes+dYX6/0yUObumcw9/iAI"
@@ -201,7 +201,7 @@ class GroupSessionTest {
      * expected.
      */
     @Test
-    fun test19TestErrorMessageReturnedInDecrypt() {
+    fun test19TestErrorMessageReturnedInDecrypt() = runTest {
         val EXPECTED_ERROR_MESSAGE = "INVALID_BASE64"
 
         val sessionKeyRef         = "AgAAAAycZE6AekIctJWYxd2AWLOY15YmxZODm/WkgbpWkyycp6ytSp/R+wo84jRrzBNWmv6ySLTZ9R0EDOk9VI2eZyQ6Efdwyo1mAvrWvTkZl9yALPdkOIVHywyG65f1SNiLrnsln3hgsT1vUrISGyKtsljoUgQpr3JDPEhD0ilAi63QBjhnGCW252b+7nF+43rb6O6lwm93LaVwe2341Gdp6EkhTUvetALezEqDOtKN00wVqAbq0RQAnUJIowxHbMswg+FyoR1K1oCjnVEoF23O9xlAn5g1XtuBZP3moJlR2lwsBA"
@@ -215,7 +215,7 @@ class GroupSessionTest {
         }
 
         assertNotEquals(0, EXPECTED_ERROR_MESSAGE.length)
-        assertEquals(EXPECTED_ERROR_MESSAGE, exception.message)
+        assertTrue(exception.message!!.contains(EXPECTED_ERROR_MESSAGE))
 
         bobInboundGroupSession.clear()
     }
@@ -224,7 +224,7 @@ class GroupSessionTest {
      * Test the import/export functions.
      */
     @Test
-    fun test20TestInboundGroupSessionImportExport() {
+    fun test20TestInboundGroupSessionImportExport() = runTest {
         val sessionKey = "AgAAAAAwMTIzNDU2Nzg5QUJERUYwMTIzNDU2Nzg5QUJDREVGMDE" +
                                 "yMzQ1Njc4OUFCREVGMDEyMzQ1Njc4OUFCQ0RFRjAxMjM0NTY3OD" +
                                 "lBQkRFRjAxMjM0NTY3ODlBQkNERUYwMTIzNDU2Nzg5QUJERUYwM" +
