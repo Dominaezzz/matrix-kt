@@ -40,7 +40,7 @@ public actual class PkDecryption {
     }
 
     public actual companion object {
-        public actual val  publicKeyLength: Long by lazy {
+        public actual val publicKeyLength: Long by lazy {
             // There is no equivalent in matrix-org/olm so we need to do it this way
             val pkdec = JsOlm.PkDecryption()
             val pubKey: String
