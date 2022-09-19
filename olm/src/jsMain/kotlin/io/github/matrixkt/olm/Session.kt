@@ -96,7 +96,6 @@ public actual class Session private constructor(internal val ptr: JsOlm.Session 
      * @return the session as bytes buffer
      */
     public actual fun pickle(key: ByteArray): String {
-
         return ptr.pickle(key.toString())
     }
 
