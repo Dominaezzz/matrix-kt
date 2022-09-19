@@ -4,7 +4,7 @@ import kotlinx.serialization.json.Json
 import kotlin.test.*
 
 
-class SessionTest: BaseTest {
+class SessionTest {
     /**
      * Basic test:
      * - alice creates an account

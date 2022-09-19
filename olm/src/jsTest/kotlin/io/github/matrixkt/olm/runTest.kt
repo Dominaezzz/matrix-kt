@@ -4,4 +4,4 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.promise
 
 
-actual fun BaseTest.runTest(block: () -> Unit): dynamic = JsOlm.init().then { block() }
+actual fun runTest(block: () -> Unit): dynamic = JsOlm.init().then { block() }

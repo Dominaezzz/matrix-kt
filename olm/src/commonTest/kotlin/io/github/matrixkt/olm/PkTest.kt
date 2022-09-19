@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 
-class PkTest: BaseTest {
+class PkTest {
     @Test
     fun test01EncryptAndDecrypt() = runTest {
         val decryption = PkDecryption()

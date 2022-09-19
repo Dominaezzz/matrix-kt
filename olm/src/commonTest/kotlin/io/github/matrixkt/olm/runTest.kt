@@ -1,3 +1,3 @@
 package io.github.matrixkt.olm
 
-expect fun BaseTest.runTest(block: () -> Unit)
+expect fun runTest(block: () -> Unit)

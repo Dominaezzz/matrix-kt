@@ -3,7 +3,7 @@ package io.github.matrixkt.olm
 import kotlinx.serialization.json.Json
 import kotlin.test.*
 
-class AccountTest : BaseTest {
+class AccountTest {
     @Test
     fun testCreateAndReleaseAccount() = runTest {
         val account = Account()

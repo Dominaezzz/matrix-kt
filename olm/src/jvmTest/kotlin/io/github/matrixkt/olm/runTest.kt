@@ -1,3 +1,3 @@
 package io.github.matrixkt.olm
 
-actual fun BaseTest.runTest(block: () -> Unit) { block() }
+actual fun runTest(block: () -> Unit) { block() }

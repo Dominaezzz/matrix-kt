@@ -4,7 +4,7 @@ import kotlin.test.Test
 import kotlin.test.assertFails
 import kotlin.test.assertFalse
 
-class UtilityTest: BaseTest {
+class UtilityTest {
 
     /**
      * Test the signing API

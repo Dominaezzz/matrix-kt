@@ -4,7 +4,7 @@ import kotlinx.serialization.json.Json
 import kotlin.test.*
 
 
-class GroupSessionTest: BaseTest {
+class GroupSessionTest {
     /**
      * Basic test:
      * - alice creates an outbound group session
