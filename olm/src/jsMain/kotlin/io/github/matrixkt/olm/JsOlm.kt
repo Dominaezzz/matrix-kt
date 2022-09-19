@@ -75,6 +75,7 @@ public external class JsOlm {
         public fun generate_seed(): Uint8Array;
         public fun sign(message: String): String;
     }
+
     public companion object {
         public fun init(options: Options = definedExternally): Promise<Unit>;
         public val PRIVATE_KEY_LENGTH: Int;
