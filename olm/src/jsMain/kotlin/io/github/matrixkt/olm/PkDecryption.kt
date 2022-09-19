@@ -43,13 +43,10 @@ public actual class PkDecryption {
         public actual val publicKeyLength: Long by lazy {
             // There is no equivalent in matrix-org/olm so we need to do it this way
             val pkdec = JsOlm.PkDecryption()
-            val pubKey: String
-            try {
-                pubKey = pkdec.generate_key()
+            val pubKey = try {
+                pkdec.generate_key()
+            } finally {
                 pkdec.free()
-            } catch (e: Exception) {
-                pkdec.free()
-                throw e
             }
             pubKey.length.toLong()
         }
