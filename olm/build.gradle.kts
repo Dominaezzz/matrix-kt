@@ -15,7 +15,6 @@ plugins {
 val serialVersion: String by rootProject.extra
 val jnaVersion: String by rootProject.extra
 val olmVersion = "3.2.12"
-val coroutineVersion: String by rootProject.extra
 
 val downloadsDir = buildDir.resolve("downloads")
 val olmZip = downloadsDir.resolve("olm-$olmVersion.zip")
@@ -74,7 +73,6 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(kotlin("test"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutineVersion}")
             }
         }
         named("jvmMain") {
