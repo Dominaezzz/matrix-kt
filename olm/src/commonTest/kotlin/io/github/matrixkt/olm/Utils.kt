@@ -4,6 +4,8 @@ import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
+expect fun runTest(block: () -> Unit)
+
 @OptIn(ExperimentalContracts::class)
 inline fun <T> withAccount(block: (Account) -> T): T {
     contract {
