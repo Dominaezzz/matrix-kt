@@ -15,7 +15,7 @@ class SessionTest {
      * - bob decrypts the encrypted message with its session
      */
     @Test
-    fun test01AliceToBob() = runTest {
+    fun test01AliceToBob() = withOlmInit {
         val ONE_TIME_KEYS_NUMBER = 5L
 
         // ALICE & BOB ACCOUNTS CREATION
@@ -74,7 +74,7 @@ class SessionTest {
      * - bob decrypts the encrypted message
      */
     @Test
-    fun test02AliceToBobBackAndForth() = runTest {
+    fun test02AliceToBobBackAndForth() = withOlmInit {
         // creates alice & bob accounts
         val aliceAccount = Account()
         val bobAccount = Account()
@@ -144,7 +144,7 @@ class SessionTest {
     }
 
     @Test
-    fun test04MatchInboundSession() = runTest {
+    fun test04MatchInboundSession() = withOlmInit {
         // ACCOUNTS CREATION
         val aliceAccount = Account()
         val bobAccount = Account()
@@ -198,7 +198,7 @@ class SessionTest {
      * comparison (encrypt vs )
      */
     @Test
-    fun test05SessionSerialization() = runTest {
+    fun test05SessionSerialization() = withOlmInit {
         val ONE_TIME_KEYS_NUMBER = 1L
 
         // creates alice & bob accounts
@@ -274,7 +274,7 @@ class SessionTest {
     // ****************************************************
 
     @Test
-    fun test06SanityCheckErrors() = runTest {
+    fun test06SanityCheckErrors() = withOlmInit {
         val ONE_TIME_KEYS_NUMBER = 5L
 
         // ALICE & BOB ACCOUNTS CREATION
