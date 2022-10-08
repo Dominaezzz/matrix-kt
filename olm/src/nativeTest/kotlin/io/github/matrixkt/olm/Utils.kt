@@ -1,6 +1,5 @@
 package io.github.matrixkt.olm
 
-
-actual fun runTest(block: () -> Unit) {
+actual inline fun runTest(crossinline block: () -> Unit) {
     block()
 }
